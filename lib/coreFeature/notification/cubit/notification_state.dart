@@ -4,7 +4,7 @@
  * @Email: km.muzahid@gmail.com
  */
 import 'package:equatable/equatable.dart';
-import 'package:mygarage/coreFeature/notification/model/notification_model.dart';
+import 'package:pinlink/coreFeature/notification/model/notification_model.dart';
 
 class NotificationState extends Equatable {
   const NotificationState({

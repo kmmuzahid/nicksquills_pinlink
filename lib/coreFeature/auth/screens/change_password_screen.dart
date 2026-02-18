@@ -6,12 +6,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:mygarage/common_widgets/common_widget.dart';
-import 'package:mygarage/config/route/app_router.dart';
-import 'package:mygarage/config/route/app_router.gr.dart';
-import 'package:mygarage/constant/constants.dart';
-import 'package:mygarage/coreFeature/notification/notification_button.dart';
-import 'package:mygarage/gen/assets.gen.dart';
+import 'package:pinlink/common_widgets/appbar/appbar_simple.dart';
+import 'package:pinlink/common_widgets/common_widget.dart';
+import 'package:pinlink/config/color/app_color.dart';
+import 'package:pinlink/config/route/app_router.dart';
+import 'package:pinlink/config/route/app_router.gr.dart';
+import 'package:pinlink/constant/app_string.dart';
+import 'package:pinlink/constant/constants.dart';
+import 'package:pinlink/coreFeature/notification/notification_button.dart';
 
 @RoutePage()
 class ChangePasswordScreen extends StatelessWidget {
@@ -19,63 +21,65 @@ class ChangePasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const CommonAppBar(title: "Change Password", actions: [NotificationIconWidget()]),
+    return Scaffold( 
+      appBar: AppBarSimple(
+        title: AppString.change_password,
+        actions: const [NotificationIconWidget()],
+      ),
       body: Padding(
         padding: Constants.bodyPadding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            40.height,
-            CommonImage(size: 80, src: Assets.images.appIcon.path).center,
-            const CommonText(
-              text: "Set Your Password",
-              textColor: Colors.white,
+            40.height, 
+            CommonText(
+              text: AppString.set_your_password,
+              textColor: Colors.black,
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ).center,
-            const CommonText(
-              text: "In order to keep your account safe you need to create a strong password.",
+            CommonText(
+              text:
+                  AppString.in_order_to_keep_your_account_safe_you_need_to_create_a_strong_password,
               maxLines: 2,
               textAlign: TextAlign.center,
-              textColor: Colors.white,
+              textColor: AppColor.textGray,
               fontSize: 16,
             ),
             20.height,
 
             // Password Field
-            buildLabel("Current password"),
+            BuildLabel(AppString.current_password),
             CommonTextField(
-              hintText: "Enter current password here...",
+              hintText: AppString.enter_current_password_here,
               validationType: ValidationType.validatePassword,
               prefixIcon: const Icon(Icons.lock_outline),
               onSaved: (value, controller) {},
             ),
             10.height,
-            buildLabel("New password"),
+            BuildLabel(AppString.new_password),
             CommonTextField(
-              hintText: "Enter new password here...",
+              hintText: AppString.enter_new_password_here,
               validationType: ValidationType.validatePassword,
               prefixIcon: const Icon(Icons.lock_outline),
               onSaved: (value, controller) {},
             ),
             10.height,
-            buildLabel("Confirm new password"),
+            BuildLabel(AppString.confirm_new_password),
             CommonTextField(
-              hintText: "Enter confirm new password here...",
+              hintText: AppString.enter_confirm_new_password_here,
               validationType: ValidationType.validatePassword,
               prefixIcon: const Icon(Icons.lock_outline),
               onSaved: (value, controller) {},
             ),
-            30.height,
+            40.height,
 
             CommonButton(
               onTap: () {
                 appRouter.replaceAll([const LoginRoute()]);
               },
-              titleText: "Change Password",
-              buttonWidth: double.infinity,
-              buttonRadius: 40,
+              titleText: AppString.change_password_button,
+              buttonWidth: double.infinity, 
             ),
           ],
         ),

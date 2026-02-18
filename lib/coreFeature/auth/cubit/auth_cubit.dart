@@ -3,13 +3,14 @@
  * @Date: 2026-01-07 14:10:08
  * @Email: km.muzahid@gmail.com
  */
-import 'package:mygarage/config/bloc/safe_cubit.dart';
-import 'package:mygarage/config/route/app_router.dart';
-import 'package:mygarage/config/route/app_router.gr.dart'
-    show LoginRoute, NavigationRoute, OnboardingRoute;
-import 'package:mygarage/config/storage/storage_key.dart';
-import 'package:mygarage/coreFeature/auth/cubit/auth_state.dart';
-import 'package:mygarage/coreFeature/auth/repository/auth_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pinlink/config/bloc/safe_cubit.dart';
+import 'package:pinlink/config/route/app_router.dart';
+import 'package:pinlink/config/route/app_router.gr.dart' show LoginRoute, OnboardingRoute;
+import 'package:pinlink/config/storage/storage_key.dart';
+import 'package:pinlink/coreFeature/auth/cubit/auth_state.dart';
+import 'package:pinlink/coreFeature/auth/repository/auth_repository.dart';
+import 'package:pinlink/coreFeature/navigation/cubit/navigation_cubit.dart';
 
 class AuthCubit extends SafeCubit<AuthState> {
   AuthCubit() : super(const AuthState());
@@ -20,14 +21,18 @@ class AuthCubit extends SafeCubit<AuthState> {
     // await StorageService.instance.clearDb();
     await Future.delayed(_delaySplash);
 
-    final accessToken = await StorageService.instance.accessToken;
-    final refreshToken = await StorageService.instance.refreshToken;
-    if ((accessToken?.isNotEmpty ?? false) && (refreshToken?.isNotEmpty ?? false)) {
-      emit(AuthState(accessToken: accessToken!, refreshToken: refreshToken!));
-      appRouter.replaceAll([const NavigationRoute()]);
-    } else {
-      appRouter.replace(const OnboardingRoute());
-    }
+    final roleData = await StorageService.instance.role;
+
+    appRouter.replace(const OnboardingRoute());
+
+    // final accessToken = await StorageService.instance.accessToken;
+    // final refreshToken = await StorageService.instance.refreshToken;
+    // if ((accessToken?.isNotEmpty ?? false) && (refreshToken?.isNotEmpty ?? false)) {
+    //   emit(AuthState(accessToken: accessToken!, refreshToken: refreshToken!, role: Role.));
+    //   appRouter.replaceAll([const NavigationRoute()]);
+    // } else {
+    //   appRouter.replace(const OnboardingRoute());
+    // }
   }
 
   Future<void> updateTokens(String accessToken, String refreshToken) async {
@@ -36,19 +41,22 @@ class AuthCubit extends SafeCubit<AuthState> {
     StorageService.instance.refreshToken = refreshToken;
   }
 
-  void logout() async {
-    final result = await _authRepository.logout(
-      refreshToken: state.refreshToken,
-      accessToken: state.accessToken,
-    );
-    if (result.isSuccess) {
-      clearTokens();
-    }
+  Future<void> logout() async {
+    // final result = await _authRepository.logout(
+    //   refreshToken: state.refreshToken,
+    //   accessToken: state.accessToken,
+    // );
+    // if (result.isSuccess) {
+    //   clearTokens();
+    // }
+
+    clearTokens();
   }
 
-  void clearTokens() async {
+  Future<void> clearTokens() async {
     await StorageService.instance.clearDb();
     emit(const AuthState());
     appRouter.replaceAll([const LoginRoute()]);
+    appRouter.navigatorKey.currentContext?.read<NavigationCubit>().changeIndex(0);
   }
 }

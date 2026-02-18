@@ -5,9 +5,10 @@
  */
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:mygarage/config/color/app_color.dart';
-import 'package:mygarage/config/route/app_router.dart';
-import 'package:mygarage/config/route/app_router.gr.dart';
+import 'package:pinlink/config/color/app_color.dart';
+import 'package:pinlink/config/route/app_router.dart';
+import 'package:pinlink/config/route/app_router.gr.dart';
+import 'package:pinlink/constant/app_string.dart';
 
 class AccountDeleteWidget extends StatelessWidget {
   const AccountDeleteWidget({super.key});
@@ -16,15 +17,15 @@ class AccountDeleteWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColor.surfaceColor,
+        color: AppColor.background,
         borderRadius: BorderRadius.circular(8),
       ),
       padding: const EdgeInsets.all(16),
       child: Column(
         mainAxisSize: .min,
         children: [
-          const CommonText(
-            text: "Are you sure you want to delete your account?",
+          CommonText(
+            text: AppString.are_you_sure_you_want_to_delete_your_account.capitalize,
             maxLines: 2,
             textColor: Colors.red,
             fontSize: 20,
@@ -32,24 +33,24 @@ class AccountDeleteWidget extends StatelessWidget {
           ),
           10.height,
 
-          const CommonText(
-            text:
-                "Please be aware that Deleted account cannot be undone. All your data will be lost.",
+          CommonText(
+            text: AppString
+                .please_be_aware_that_deleted_account_cannot_be_undone_all_your_data_will_be_lost,
             maxLines: 2,
-            textColor: Colors.white,
+            textColor: AppColor.textGray,
             fontSize: 16,
           ),
 
           10.height,
-          const CommonText(
-            text: "Enter your password to confirm.",
+          CommonText(
+            text: AppString.enter_your_password_to_confirm,
             textColor: Colors.white,
             fontSize: 14,
           ).start,
           8.height,
           CommonTextField(
             borderColor: AppColor.background,
-            hintText: "Enter your password",
+            hintText: AppString.enter_your_password,
             validationType: ValidationType.validatePassword,
             prefixIcon: const Icon(Icons.lock_outline),
             suffixIcon: const Icon(Icons.visibility_off_outlined), 
@@ -60,22 +61,25 @@ class AccountDeleteWidget extends StatelessWidget {
           Row(
             children: [
               CommonButton(
-                titleText: "Cancel",
+                titleText: AppString.no,
+                titleColor: AppColor.primary,
+                buttonWidth: 100,
                 onTap: () {
                   navigatorRouterKey.currentState?.pop();
                 },
-                buttonColor: Colors.transparent,
+                buttonColor: AppColor.background,
                 borderColor: AppColor.outlineColor,
               ),
 
               const Spacer(),
               CommonButton(
-                titleText: "Delete",
+                titleText: AppString.yes,
+                buttonWidth: 100,
                 onTap: () {
                   appRouter.replace(const LoginRoute());
                 },
-                titleColor: Colors.red,
-                buttonColor: Colors.transparent,
+                titleColor: Colors.white,
+                buttonColor: Colors.red,
                 borderColor: Colors.red,
               ),
             ],

@@ -5,7 +5,7 @@
  */
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:mygarage/gen/assets.gen.dart';
+import 'package:pinlink/gen/assets.gen.dart';
 
 class CommonLogo extends StatelessWidget {
   const CommonLogo({super.key});

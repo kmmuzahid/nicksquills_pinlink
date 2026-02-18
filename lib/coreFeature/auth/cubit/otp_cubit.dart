@@ -5,9 +5,9 @@
  */
 import 'dart:async';
 
-import 'package:mygarage/config/bloc/safe_cubit.dart';
-import 'package:mygarage/coreFeature/auth/cubit/otp_state.dart';
-import 'package:mygarage/coreFeature/auth/repository/auth_repository.dart';
+import 'package:pinlink/config/bloc/safe_cubit.dart';
+import 'package:pinlink/coreFeature/auth/cubit/otp_state.dart';
+import 'package:pinlink/coreFeature/auth/repository/auth_repository.dart';
 
 class OtpCubit extends SafeCubit<OtpState> {
   OtpCubit() : super(const OtpState());

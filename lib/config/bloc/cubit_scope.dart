@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mygarage/config/bloc/safe_cubit.dart';
+import 'package:pinlink/config/bloc/safe_cubit.dart';
 
 class CubitScope<T extends SafeCubit<S>, S> extends StatelessWidget {
   const CubitScope({required this.create, required this.builder, super.key});

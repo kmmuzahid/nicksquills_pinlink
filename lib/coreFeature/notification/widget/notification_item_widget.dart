@@ -5,6 +5,7 @@
  */
 import 'package:core_kit/text/common_text.dart';
 import 'package:flutter/material.dart';
+import 'package:pinlink/config/color/app_color.dart';
 
 class NotificationItemWidget extends StatelessWidget {
   final String title;
@@ -35,7 +36,7 @@ class NotificationItemWidget extends StatelessWidget {
         padding: const EdgeInsets.all(14),
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         decoration: BoxDecoration(
-          color: isUnread ? theme.cardColor : theme.colorScheme.primary.withOpacity(.06),
+          color: Colors.white,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
@@ -48,7 +49,11 @@ class NotificationItemWidget extends StatelessWidget {
                 color: theme.colorScheme.primary.withOpacity(.15),
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, color: theme.colorScheme.primary, size: 22),
+              child: Icon(
+                icon,
+                color: isUnread ? AppColor.textGray : theme.colorScheme.primary,
+                size: 22,
+              ),
             ),
 
             const SizedBox(width: 12),
@@ -64,6 +69,7 @@ class NotificationItemWidget extends StatelessWidget {
                           text: title,
                           maxLines: 1,
                           style: theme.textTheme.titleMedium?.copyWith(
+                            color: !isUnread ? Colors.black : AppColor.textGray,
                             fontWeight: isUnread ? FontWeight.w600 : FontWeight.w500,
                           ),
                         ),
@@ -71,7 +77,10 @@ class NotificationItemWidget extends StatelessWidget {
 
                       CommonText(
                         text: time,
-                        style: theme.textTheme.bodySmall?.copyWith(fontSize: 12),
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: !isUnread ? Colors.black : AppColor.textGray,
+                          fontSize: 12,
+                        ),
                       ),
                     ],
                   ),
@@ -83,7 +92,7 @@ class NotificationItemWidget extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.textTheme.bodySmall?.color,
+                      color: !isUnread ? Colors.black : AppColor.textGray,
                     ),
                   ),
                 ],

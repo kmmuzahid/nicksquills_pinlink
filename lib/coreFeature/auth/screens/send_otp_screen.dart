@@ -7,11 +7,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mygarage/config/bloc/cubit_scope.dart';
-import 'package:mygarage/config/color/app_color.dart';
-import 'package:mygarage/coreFeature/auth/cubit/otp_cubit.dart';
-import 'package:mygarage/coreFeature/auth/widgets/otp_input_widget.dart';
-import 'package:mygarage/coreFeature/auth/widgets/otp_send_widget.dart';
+import 'package:pinlink/common_widgets/appbar/appbar_gradient_expanded.dart';
+import 'package:pinlink/config/bloc/cubit_scope.dart';
+import 'package:pinlink/config/color/app_color.dart';
+import 'package:pinlink/constant/app_string.dart';
+import 'package:pinlink/coreFeature/auth/cubit/otp_cubit.dart';
+import 'package:pinlink/coreFeature/auth/widgets/otp_input_widget.dart';
+import 'package:pinlink/coreFeature/auth/widgets/otp_send_widget.dart';
 
 @RoutePage()
 class SendOtpScreen extends StatelessWidget {
@@ -27,7 +29,7 @@ class SendOtpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: const CommonAppBar(),
+    appBar: AppBarGradientExpanded(),
     body: Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: CubitScope(
@@ -43,19 +45,28 @@ class SendOtpScreen extends StatelessWidget {
             children: [
               50.height,
               if (!showSendToField && !state.isOtpSent && !state.isResend)
+               ...[
                 CommonText(
-                  text: 'Enter your registered email to reset your password.',
-                  style: getTheme.textTheme.bodyLarge,
+                  text: AppString.forget_password.toUpperCase(),
+                  fontSize: 18,
+
+                  alignment: MainAxisAlignment.center,
+                ),
+                CommonText(
+                  text: AppString.enter_your_email_account_to_rest_your_password,
+                  fontSize: 16,
+                  textColor: AppColor.textGray,
                   isDescription: true,
                   alignment: MainAxisAlignment.center,
                 ),
+              ],
 
               if (state.isOtpSent || state.isResend) ...[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CommonText(
-                      text: 'Enter verification code',
+                      text: AppString.otp_verification.toUpperCase(),
                       style: getTheme.textTheme.bodyLarge,
                       alignment: MainAxisAlignment.center,
                     ),
@@ -70,15 +81,23 @@ class SendOtpScreen extends StatelessWidget {
                 ),
               ],
               if (state.isOtpSent)
+                ...[
                 CommonText(
                   text:
-                      'Verification code has been sent to ${username.isNotEmpty ? username : state.username}',
-                  fontSize: 12,
+                      '${AppString.verification_code_has_been_sent_to} ${username.isNotEmpty ? username : state.username}',
+                  fontSize: 14,
                   textColor: AppColor.textSecondary,
                   isDescription: true,
                   alignment: MainAxisAlignment.center,
                 ),
               20.height,
+                CommonText(
+                  text: AppString.enter_verification_code,
+                  textColor: AppColor.textGray,
+                  fontSize: 12,
+                ).start,
+              ],
+              4.height,
               AnimatedCrossFade(
                 firstChild: OtpSend(
                   username: showSendToField ? username : null,

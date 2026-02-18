@@ -1,5 +1,10 @@
 /*
  * @Author: Km Muzahid
+ * @Date: 2026-02-01 09:37:24
+ * @Email: km.muzahid@gmail.com
+ */
+/*
+ * @Author: Km Muzahid
  * @Date: 2026-01-12 16:57:56
  * @Email: km.muzahid@gmail.com
  */
@@ -7,14 +12,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mygarage/common_widgets/build_circular_icon.dart';
-import 'package:mygarage/config/bloc/cubit_scope_value.dart';
-import 'package:mygarage/config/color/app_color.dart';
-import 'package:mygarage/coreFeature/navigation/cubit/navigation_cubit.dart';
-import 'package:mygarage/coreFeature/navigation/cubit/navigation_state.dart';
-import 'package:mygarage/coreFeature/navigation/widget/drawer_widget.dart';
-import 'package:mygarage/coreFeature/notification/notification_button.dart';
-import 'package:mygarage/gen/assets.gen.dart';
+import 'package:pinlink/config/bloc/cubit_scope_value.dart';
+import 'package:pinlink/config/color/app_color.dart';
+import 'package:pinlink/coreFeature/navigation/cubit/navigation_cubit.dart';
+import 'package:pinlink/coreFeature/navigation/cubit/navigation_state.dart';
+import 'package:pinlink/coreFeature/navigation/nav_utils/navigator_item.dart';
+import 'package:pinlink/coreFeature/profile/screens/profile_screen.dart';
+import 'package:pinlink/gen/assets.gen.dart';
 
 final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
@@ -22,51 +26,86 @@ final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 class NavigationScreen extends StatelessWidget {
   const NavigationScreen({super.key});
 
+  List<NavigatorItem> getpage() {
+    final evItems = <NavigatorItem>[
+      NavigatorItem(imagePath: Assets.navigators.social, screen: Container()),
+      NavigatorItem(imagePath: Assets.navigators.leaderboard, screen: Container()),
+      NavigatorItem(imagePath: Assets.navigators.addCourse, screen: Container()),
+      NavigatorItem(imagePath: Assets.navigators.map, screen: Container()),
+      NavigatorItem(imagePath: Assets.navigators.profile, screen: const ProfileScreen()),
+    ];
+
+    return evItems;
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
+
     return CubitScopeValue(
       cubit: context.read<NavigationCubit>(),
       builder: (context, cubit, state) {
+        var title = '';
+        if (state.currentIndex == 0) {
+          title = 'Friends Feed';
+        } else if (state.currentIndex == 1) {
+          title = 'Leaderboard';
+        } else if (state.currentIndex == 2) {
+          title = 'Add Courses';
+        } else if (state.currentIndex == 3) {
+          title = 'Golf Map';
+        } else if (state.currentIndex == 4) {
+          title = 'Profile';
+        }
         return Scaffold(
           key: scaffoldKey,
-          body: SafeArea(
-            top: true,
-            bottom: false,
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    20.width,
-                    CommonImage(src: Assets.images.appIcon.path, size: 48),
-                    const Spacer(),
-                    const NotificationIconWidget(),
-                    10.width,
-                    buildCircularButton(
-                      child: const Icon(Icons.menu, color: Colors.white, size: 28),
-                      onTap: () {
-                        scaffoldKey.currentState?.openDrawer();
-                      },
-                    ),
-                  ],
-                ),
-                Divider(color: AppColor.outlineColor),
-                Expanded(child: state.pages[state.currentIndex]),
-              ],
+          // appBar: AppBarSimple(
+          //   title: title,
+          //   hideBack: true,
+          //   disableBack: true,
+          //   actions: [const NotificationIconWidget()],
+          // ),
+          backgroundColor: AppColor.background,
+          body: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 350),
+            transitionBuilder: (child, animation) {
+              return SlideTransition(
+                position: Tween(
+                  begin: const Offset(0.2, 0),
+                  end: Offset.zero,
+                ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
+                child: FadeTransition(opacity: animation, child: child),
+              );
+            },
+            child: KeyedSubtree(
+              key: ValueKey(state.currentIndex),
+              child: currentPage(state.currentIndex),
             ),
           ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: state.currentIndex,
             backgroundColor: AppColor.background,
             onTap: (index) => cubit.changeIndex(index),
-            items: [
-              _navBuilder(index: 0, image: Assets.images.category, state: state),
-              _navBuilder(index: 4, image: Assets.images.profile, state: state),
-            ],
+            items: getpage()
+                .asMap()
+                .map(
+                  (index, value) => MapEntry(
+                    index,
+                    _navBuilder(index: index, image: value.imagePath, state: state),
+                  ),
+                )
+                .values
+                .toList(),
           ),
-          drawer: const DrawerWidget(),
+          // drawer: const DrawerWidget(),
         );
       },
     );
+  }
+
+  Widget currentPage(int index) {
+    final screen = getpage()[index].screen;
+    AppLogger.info('Switched to -> ${screen.runtimeType.toString()}', tag: 'Navigation');
+    return screen;
   }
 
   BottomNavigationBarItem _navBuilder({
@@ -75,24 +114,45 @@ class NavigationScreen extends StatelessWidget {
     required NavigationState state,
   }) {
     final isSelected = index == state.currentIndex;
-    final color = isSelected ? AppColor.primary : Colors.grey;
-    final icon = Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        CommonImage(size: 25, fill: BoxFit.contain, src: image, imageColor: color),
-        const SizedBox(height: 4),
-        AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeInOut,
-          height: 2,
-          width: isSelected ? 20 : 0,
-          decoration: BoxDecoration(
-            color: isSelected ? color : Colors.transparent,
-            borderRadius: BorderRadius.circular(1),
+
+    final icon = AnimatedScale(
+      scale: isSelected ? 1.05 : 1.0,
+      duration: const Duration(milliseconds: 260),
+      curve: Curves.easeOutBack,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 280),
+        padding: isSelected ? const EdgeInsets.all(8) : EdgeInsets.zero,
+        margin: const EdgeInsets.only(top: 2),
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(25),
+            topRight: Radius.circular(25),
+            bottomLeft: Radius.circular(25),
           ),
+          gradient: LinearGradient(
+            colors: isSelected
+                ? [AppColor.secondary, AppColor.primary]
+                : [AppColor.background, AppColor.background],
+          ),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: AppColor.primary.withOpacity(0.35),
+                    blurRadius: 12,
+                    offset: const Offset(0, 6),
+                  ),
+                ]
+              : [],
         ),
-      ],
+        child: CommonImage(
+          size: isSelected ? 25 : 30,
+          fill: BoxFit.contain,
+          src: image,
+          imageColor: isSelected ? Colors.white : Colors.grey,
+        ),
+      ),
     );
+
     return BottomNavigationBarItem(label: '', icon: icon);
   }
 }

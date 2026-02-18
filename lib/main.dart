@@ -5,9 +5,9 @@
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mygarage/config/bloc/app_bloc_observer.dart';
-import 'package:mygarage/config/dependency/dependency_injection.dart';
-import 'package:mygarage/my_app..dart';
+import 'package:pinlink/config/bloc/app_bloc_observer.dart';
+import 'package:pinlink/config/dependency/dependency_injection.dart';
+import 'package:pinlink/my_app..dart';
 
   
 

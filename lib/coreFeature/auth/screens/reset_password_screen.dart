@@ -7,13 +7,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mygarage/common_widgets/common_widget.dart';
-import 'package:mygarage/config/bloc/cubit_scope.dart';
-import 'package:mygarage/constant/constants.dart';
-import 'package:mygarage/coreFeature/auth/cubit/auth_cubit.dart';
-import 'package:mygarage/coreFeature/auth/cubit/auth_flow_cubit.dart';
-import 'package:mygarage/coreFeature/auth/entity/forget_pass_entity.dart';
-import 'package:mygarage/gen/assets.gen.dart';
+import 'package:pinlink/common_widgets/common_widget.dart';
+import 'package:pinlink/config/bloc/cubit_scope.dart';
+import 'package:pinlink/constant/constants.dart';
+import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
+import 'package:pinlink/coreFeature/auth/cubit/auth_flow_cubit.dart';
+import 'package:pinlink/coreFeature/auth/entity/forget_pass_entity.dart';
+import 'package:pinlink/gen/assets.gen.dart';
 
 @RoutePage()
 class ResetPasswordScreen extends StatelessWidget {
@@ -45,7 +45,7 @@ class ResetPasswordScreen extends StatelessWidget {
                 ).center,
 
                 // Password Field
-                buildLabel("Password"),
+                const BuildLabel("Password"),
                 CommonTextField(
                   hintText: "Enter password here...",
                   validationType: ValidationType.validatePassword,
@@ -53,7 +53,7 @@ class ResetPasswordScreen extends StatelessWidget {
                   onSaved: (value, controller) => entity.password = value,
                 ),
                 10.height,
-                buildLabel("Confirm Password"),
+                const BuildLabel("Confirm Password"),
                 CommonTextField(
                   hintText: "Enter confirm password here...",
                   originalPassword: () => entity.password ?? '',

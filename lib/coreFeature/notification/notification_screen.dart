@@ -7,9 +7,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mygarage/config/bloc/cubit_scope_value.dart';
-import 'package:mygarage/coreFeature/notification/cubit/notification_cubit.dart';
-import 'package:mygarage/coreFeature/notification/widget/notification_item_widget.dart';
+import 'package:pinlink/common_widgets/appbar/appbar_simple.dart';
+import 'package:pinlink/config/bloc/cubit_scope_value.dart';
+import 'package:pinlink/constant/app_string.dart';
+import 'package:pinlink/coreFeature/notification/cubit/notification_cubit.dart';
+import 'package:pinlink/coreFeature/notification/widget/notification_item_widget.dart';
 
 @RoutePage()
 class NotificationScreen extends StatelessWidget {
@@ -19,14 +21,12 @@ class NotificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CommonAppBar(
-        title: 'Notification',
-        onBackPress: () {
-          context.read<NotificationCubit>().getUnreadCount();
-        },
+      appBar: AppBarSimple(
+        title: AppString.notifications,
+        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.checklist_rtl))],
       ),
       body: CubitScopeValue(
-        cubit: context.read<NotificationCubit>(),
+        cubit: context.read<NotificationCubit>()..init(),
         builder: (context, cubit, state) {
           return SmartListLoader(
             itemCount: state.notifications.length,

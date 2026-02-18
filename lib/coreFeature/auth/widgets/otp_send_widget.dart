@@ -6,8 +6,8 @@
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mygarage/config/bloc/cubit_scope_value.dart';
-import 'package:mygarage/coreFeature/auth/cubit/otp_cubit.dart';
+import 'package:pinlink/config/bloc/cubit_scope_value.dart';
+import 'package:pinlink/coreFeature/auth/cubit/otp_cubit.dart';
 
 class OtpSend extends StatefulWidget {
   const OtpSend({super.key, this.username, required this.isSignUp, required this.cubit});
@@ -41,7 +41,7 @@ class _OtpSendState extends State<OtpSend> {
             //   child: CommonPhoneNumberTextFiled(controller: controller, countryChange: (value) {}),
             // ),
             // 12.height,
-            40.height,
+            10.height,
             const Align(
               alignment: Alignment.centerLeft,
               child: CommonText(text: 'Email Address', textColor: Colors.white, fontSize: 14),
@@ -61,8 +61,7 @@ class _OtpSendState extends State<OtpSend> {
               builder: (context, cubit, state) {
                 return CommonButton(
                   titleText: 'Send OTP',
-                  isLoading: state.isLoading,
-                  buttonRadius: 40,
+                  isLoading: state.isLoading, 
                   buttonWidth: double.infinity,
                   titleSize: 12,
                   titleWeight: FontWeight.w500,

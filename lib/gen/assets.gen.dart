@@ -28,21 +28,82 @@ class $AssetsImagesGen {
   AssetGenImage get appIcon =>
       const AssetGenImage('assets/images/app_icon.png');
 
-  /// File path: assets/images/back.svg
-  String get back => 'assets/images/back.svg';
+  /// File path: assets/images/apple.png
+  AssetGenImage get apple => const AssetGenImage('assets/images/apple.png');
 
-  /// File path: assets/images/category.svg
-  String get category => 'assets/images/category.svg';
+  /// File path: assets/images/auth_background.svg
+  String get authBackground => 'assets/images/auth_background.svg';
 
-  /// File path: assets/images/profile.svg
-  String get profile => 'assets/images/profile.svg';
+  /// File path: assets/images/background.svg
+  String get background => 'assets/images/background.svg';
 
-  /// File path: assets/images/sample_1.png
-  AssetGenImage get sample1 =>
-      const AssetGenImage('assets/images/sample_1.png');
+  /// File path: assets/images/google.svg
+  String get google => 'assets/images/google.svg';
+
+  /// File path: assets/images/onBoardingNextButtonPrefix.svg
+  String get onBoardingNextButtonPrefix =>
+      'assets/images/onBoardingNextButtonPrefix.svg';
+
+  /// File path: assets/images/onboarding_1.png
+  AssetGenImage get onboarding1 =>
+      const AssetGenImage('assets/images/onboarding_1.png');
+
+  /// File path: assets/images/onboarding_2.png
+  AssetGenImage get onboarding2 =>
+      const AssetGenImage('assets/images/onboarding_2.png');
+
+  /// File path: assets/images/onboarding_3.png
+  AssetGenImage get onboarding3 =>
+      const AssetGenImage('assets/images/onboarding_3.png');
+
+  /// File path: assets/images/onboarding_4.png
+  AssetGenImage get onboarding4 =>
+      const AssetGenImage('assets/images/onboarding_4.png');
+
+  /// File path: assets/images/sp_image_1.png
+  AssetGenImage get spImage1 =>
+      const AssetGenImage('assets/images/sp_image_1.png');
+
+  /// File path: assets/images/splash.png
+  AssetGenImage get splash => const AssetGenImage('assets/images/splash.png');
 
   /// List of all assets
-  List<dynamic> get values => [appIcon, back, category, profile, sample1];
+  List<dynamic> get values => [
+    appIcon,
+    apple,
+    authBackground,
+    background,
+    google,
+    onBoardingNextButtonPrefix,
+    onboarding1,
+    onboarding2,
+    onboarding3,
+    onboarding4,
+    spImage1,
+    splash,
+  ];
+}
+
+class $AssetsNavigatorsGen {
+  const $AssetsNavigatorsGen();
+
+  /// File path: assets/navigators/add_course.svg
+  String get addCourse => 'assets/navigators/add_course.svg';
+
+  /// File path: assets/navigators/leaderboard.svg
+  String get leaderboard => 'assets/navigators/leaderboard.svg';
+
+  /// File path: assets/navigators/map.svg
+  String get map => 'assets/navigators/map.svg';
+
+  /// File path: assets/navigators/profile.svg
+  String get profile => 'assets/navigators/profile.svg';
+
+  /// File path: assets/navigators/social.svg
+  String get social => 'assets/navigators/social.svg';
+
+  /// List of all assets
+  List<String> get values => [addCourse, leaderboard, map, profile, social];
 }
 
 class Assets {
@@ -50,6 +111,7 @@ class Assets {
 
   static const $AssetsIconGen icon = $AssetsIconGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const $AssetsNavigatorsGen navigators = $AssetsNavigatorsGen();
 }
 
 class AssetGenImage {

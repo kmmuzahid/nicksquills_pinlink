@@ -1,4 +1,4 @@
-name: mygarage
+name: pinlink
 description: "A new Flutter project."
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
@@ -9,19 +9,19 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  # core_kit:
-  #   path: C:\Users\KmMuzahid\Documents\others\core_kit
   core_kit:
-    git:
-      url: https://github.com/kmmuzahid/flutter_core_kit.git
-      ref: 1.0.11
+    path: C:\Users\KmMuzahid\Documents\others\core_kit
+  # core_kit:
+  #   git:
+  #     url: https://github.com/kmmuzahid/flutter_core_kit.git
+  #     ref: 1.0.11
 
   cupertino_icons: 
   auto_route: 
   flutter_bloc: 
   get_it: 
   flutter_secure_storage: 
-  equatable:
+  equatable: 
 
 
 dev_dependencies:
@@ -34,8 +34,8 @@ dev_dependencies:
   flutter_gen_runner: 
   intl_utils:   # to generate from arb
   flutter_auto_size_text:
-  change_app_package_name: 
   pin_code_fields:
+  change_app_package_name: ^1.5.0
 
 
 flutter_icons:
@@ -49,3 +49,4 @@ flutter:
   assets:
     - assets/images/
     - assets/icon/
+    - assets/navigators/

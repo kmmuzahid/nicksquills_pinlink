@@ -3,14 +3,14 @@
  * @Date: 2026-01-18 19:52:54
  * @Email: km.muzahid@gmail.com
  */
-import 'package:mygarage/config/bloc/safe_cubit.dart';
-import 'package:mygarage/config/route/app_router.dart';
-import 'package:mygarage/config/route/app_router.gr.dart';
-import 'package:mygarage/coreFeature/auth/cubit/auth_cubit.dart';
-import 'package:mygarage/coreFeature/auth/entity/forget_pass_entity.dart';
-import 'package:mygarage/coreFeature/auth/entity/login_entity.dart';
-import 'package:mygarage/coreFeature/auth/entity/signup_entity.dart';
-import 'package:mygarage/coreFeature/auth/repository/auth_repository.dart';
+import 'package:pinlink/config/bloc/safe_cubit.dart';
+import 'package:pinlink/config/route/app_router.dart';
+import 'package:pinlink/config/route/app_router.gr.dart';
+import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
+import 'package:pinlink/coreFeature/auth/entity/forget_pass_entity.dart';
+import 'package:pinlink/coreFeature/auth/entity/login_entity.dart';
+import 'package:pinlink/coreFeature/auth/entity/signup_entity.dart';
+import 'package:pinlink/coreFeature/auth/repository/auth_repository.dart';
 
 class AuthFlowCubit extends SafeCubit<bool> {
   AuthFlowCubit(this.authCubit) : super(false);
@@ -19,7 +19,8 @@ class AuthFlowCubit extends SafeCubit<bool> {
 
   Future<void> login(LoginEntity entity) async {
     //remove it on integration
-    appRouter.replaceAll([const NavigationRoute()]);
+    appRouter.replaceAll([const SplashRoute()]);
+
     //uncomment it on integration
     // emit(true);
     // final result = await _authRepository.login(entity);
@@ -49,9 +50,11 @@ class AuthFlowCubit extends SafeCubit<bool> {
 
   Future<void> signup(SignUpEntity entity) async {
     //remove it on integration
+
     appRouter.push(
       SendOtpRoute(
         onSuccess: ({required email, required token}) async {
+          print('OTP Verified Successfully. Token: $token, Email: $email ');
           final loginEntity = LoginEntity();
           loginEntity.email = email;
           loginEntity.password = entity.password;

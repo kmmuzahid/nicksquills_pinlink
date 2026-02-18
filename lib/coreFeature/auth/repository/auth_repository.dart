@@ -5,10 +5,10 @@
  */
 import 'package:core_kit/core_kit.dart';
 import 'package:core_kit/network/request_input.dart';
-import 'package:mygarage/config/api/api_end_point.dart';
-import 'package:mygarage/coreFeature/auth/entity/forget_pass_entity.dart';
-import 'package:mygarage/coreFeature/auth/entity/login_entity.dart';
-import 'package:mygarage/coreFeature/auth/entity/signup_entity.dart';
+import 'package:pinlink/config/api/api_end_point.dart';
+import 'package:pinlink/coreFeature/auth/entity/forget_pass_entity.dart';
+import 'package:pinlink/coreFeature/auth/entity/login_entity.dart';
+import 'package:pinlink/coreFeature/auth/entity/signup_entity.dart';
 
 class AuthRepository {
   Future<ResponseState<dynamic>> signup(SignUpEntity entity) async {

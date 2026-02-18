@@ -3,10 +3,11 @@ import 'package:core_kit/text_field/input_formatters/input_helper.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mygarage/config/bloc/cubit_scope_value.dart';
-import 'package:mygarage/config/color/app_color.dart';
-import 'package:mygarage/coreFeature/auth/cubit/otp_cubit.dart';
-import 'package:mygarage/coreFeature/auth/cubit/otp_state.dart';
+import 'package:pinlink/config/bloc/cubit_scope_value.dart';
+import 'package:pinlink/config/color/app_color.dart';
+import 'package:pinlink/constant/app_string.dart';
+import 'package:pinlink/coreFeature/auth/cubit/otp_cubit.dart';
+import 'package:pinlink/coreFeature/auth/cubit/otp_state.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OtpInputWidget extends StatefulWidget {
@@ -44,7 +45,7 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
         cubit: widget.cubit,
         builder: (context, cubit, state) {
           return CommonButton(
-            titleText: 'Verify OTP',
+            titleText: AppString.verify_otp,
             isLoading: state.isLoading,
             buttonWidth: 160,
             buttonHeight: 40.h,
@@ -66,7 +67,7 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
         ? _resendMessageBuilder(state)
         : CommonText(
             alignment: MainAxisAlignment.end,
-            text: 'Resend Code in ${state.count} seconds',
+            text: '${AppString.resend_code_in} ${state.count} ${AppString.seconds}',
             fontWeight: FontWeight.bold,
             textColor: AppColor.primary,
           );
@@ -78,7 +79,7 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
       TextSpan(
         children: [
           TextSpan(
-            text: 'Didnt Recive Code?',
+            text: '${AppString.didnt_recive_code}?',
             style: TextStyle(
               color: getTheme.textTheme.bodySmall?.color,
               fontSize: 12,
@@ -88,7 +89,7 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
 
           /// Sign Up Button here
           TextSpan(
-            text: ' Resend Code',
+            text: AppString.resend_code,
             recognizer: TapGestureRecognizer()
               ..onTap = () { 
                 context.read<OtpCubit>().sendOtp(widget.username, isResend: true);
@@ -103,7 +104,8 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
 
   Widget _otpBuilder(BuildContext context) {
     return PinCodeTextField(  
-      cursorColor: getTheme.textSelectionTheme.cursorColor,
+      cursorColor: AppColor.primary,
+      backgroundColor: AppColor.background,
       textStyle: getTheme.textTheme.bodyMedium?.copyWith(fontSize: 25, color: AppColor.primary),
       appContext: context,
       autoFocus: true,
@@ -111,13 +113,14 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
         otp = value;
       },
       pinTheme: PinTheme(
+        
         shape: PinCodeFieldShape.box,
         borderRadius: BorderRadius.circular(4),
         fieldHeight: 40,
         fieldWidth: 40,
-        activeFillColor: Colors.transparent,
-        selectedFillColor: Colors.transparent,
-        inactiveFillColor: Colors.transparent,
+        activeFillColor: AppColor.background,
+        selectedFillColor: AppColor.background,
+        inactiveFillColor: AppColor.background,
         borderWidth: 0.1,
         selectedColor: getTheme.primaryColor.withAlpha(80),
         activeColor: getTheme.primaryColor.withAlpha(80),

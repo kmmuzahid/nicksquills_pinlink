@@ -5,7 +5,7 @@
  */
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:mygarage/config/route/app_router.gr.dart';
+import 'package:pinlink/config/route/app_router.gr.dart';
 
 final GlobalKey<NavigatorState> navigatorRouterKey = GlobalKey<NavigatorState>();
 
@@ -58,5 +58,8 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: ChangePasswordRoute.page),
     AutoRoute(page: NotificationRoute.page),
     AutoRoute(page: ResetPasswordRoute.page),
+    AutoRoute(page: FaqRoute.page),
+    AutoRoute(page: AboutUsRoute.page),
+    AutoRoute(page: PersonalInformationRoute.page), 
   ];
 }

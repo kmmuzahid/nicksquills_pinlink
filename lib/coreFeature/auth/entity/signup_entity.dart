@@ -4,6 +4,8 @@
  * @Email: km.muzahid@gmail.com
  */
 
+
+
 class SignUpEntity {
   String? fullName;
   String? email;

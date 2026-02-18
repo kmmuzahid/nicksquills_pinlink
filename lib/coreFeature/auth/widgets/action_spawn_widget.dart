@@ -1,6 +1,11 @@
+/*
+ * @Author: Km Muzahid
+ * @Date: 2026-02-01 09:37:24
+ * @Email: km.muzahid@gmail.com
+ */
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:mygarage/config/color/app_color.dart';
+import 'package:pinlink/config/color/app_color.dart';
 
 class ActionSpawnWidget extends StatelessWidget {
   const ActionSpawnWidget({
@@ -17,15 +22,15 @@ class ActionSpawnWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return RichText(
       text: TextSpan(
-        style: TextStyle(color: AppColor.onPrimary, fontSize: 12),
+        style: TextStyle(color: AppColor.textGray, fontSize: 14),
         children: [
           TextSpan(
             text: title,
-            style: TextStyle(color: AppColor.onPrimary, fontSize: 12),
+            style: TextStyle(color: AppColor.textGray, fontSize: 14),
           ),
           TextSpan(
             text: ' $actionTitle',
-            style: TextStyle(color: AppColor.accentColor, fontWeight: FontWeight.w600),
+            style: TextStyle(color: AppColor.primary, fontWeight: FontWeight.w600),
             recognizer: TapGestureRecognizer()..onTap = onTap,
           ),
         ],
