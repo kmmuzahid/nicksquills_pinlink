@@ -5,10 +5,7 @@
  */
 
 import 'package:auto_route/auto_route.dart';
-import 'package:core_kit/app_bar/common_app_bar.dart';
-import 'package:core_kit/button/common_button.dart';
-import 'package:core_kit/image/common_image.dart' show CommonImage;
-import 'package:core_kit/utils/core_screen_utils.dart';
+import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
@@ -28,23 +25,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   bool showPages = false;
   List<Map<String, String>> pages = [
     {
-      'title': AppString.welcome_to_sharecharge,
-      'subtitle': AppString.find_ev_charging_points_and_rental_parking_spaces_easily,
-      'image': Assets.images.onboarding1.path,
+      'title': 'Play. Compare. Discover.',
+      'subtitle':
+          'Track the golf courses you’ve played, explore new ones, and share your journey with friends.',
+      'image': Assets.images.oboarding1.path,
     },
     {
-      'title': AppString.search_book_charging_points,
-      'subtitle': AppString.quickly_find_nearby_charging_stations_and_reserve_your_spot_directly,
-      'image': Assets.images.onboarding2.path,
+      'title': 'Rate by Comparison.',
+      'subtitle': 'Simply choose which course you liked more — we’ll do the rest.',
+      'image': Assets.images.oboarding2.path,
     },
     {
-      'title': AppString.rent_your_parking_space,
-      'subtitle': AppString.earn_money_with_your_parking_spaces_by_offering_ev_charging,
+      'title': 'Your Golf World on the Map',
+      'subtitle': 'See played courses, wishlist spots, and friends’ journeys — all in one map.',
       'image': Assets.images.onboarding3.path,
     },
     {
-      'title': AppString.rent_your_parking_space,
-      'subtitle': AppString.earn_money_with_your_parking_spaces_by_offering_ev_charging,
+      'title': 'Compete, Connect, and Climb the Leaderboard',
+      'subtitle': 'Travel farther, play better courses, and rise among fellow golfers.',
       'image': Assets.images.onboarding4.path,
     },
   ];
@@ -123,35 +121,58 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         ),
         Align(
           alignment: .bottomEnd,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _pageIndicator(),
-              100.height,
-
-              CommonButton(
-                onTap: () { 
-                  if (pageController.page == pages.length - 1) {
-                      appRouter.replace(const LoginRoute());
-                  } else {
-                    pageController.nextPage(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.ease,
-                    );
-                  }
-                }, 
-                suffix: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6),
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: CommonImage(src: Assets.images.onBoardingNextButtonPrefix),
-                  ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                80.height,
+                const Spacer(),
+                CommonImage(src: Assets.images.globe.path, height: 117, width: 86),
+                20.height,
+                CommonText(
+                  text: pages[pageIndex]['title']!,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  textColor: Colors.white,
+                  maxLines: 2,
                 ),
+                4.height,
+                CommonText(
+                  text: pages[pageIndex]['subtitle']!,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  textColor: AppColor.clickableBorder,
+                  maxLines: 3,
+                ),
+                const Spacer(),
+                _pageIndicator(),
+                100.height,
 
-                titleText: pageIndex == pages.length - 1 ? AppString.letsStart : 'Next',
-              ),
-              200.height,
-            ],
+                CommonButton(
+                  onTap: () {
+                    if (pageController.page == pages.length - 1) {
+                      appRouter.replace(const LoginRoute());
+                    } else {
+                      pageController.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.ease,
+                      );
+                    }
+                  },
+                  suffix: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: CommonImage(src: Assets.images.onBoardingNextButtonPrefix),
+                    ),
+                  ),
+
+                  titleText: pageIndex == pages.length - 1 ? AppString.letsStart : 'Next',
+                ),
+                200.height,
+              ],
+            ),
           ),
         )
       ],

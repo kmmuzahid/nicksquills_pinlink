@@ -21,5 +21,6 @@ class AppColor {
   static Color get secondButtonColor => Colors.lightBlue;
   static Color get listMenuColor => const Color(0xFFF1F8F4);
   static Color get faqColor => const Color(0xFFeffaff);
+  static Color get clickableBorder => const Color(0xFF789086);
 
 }

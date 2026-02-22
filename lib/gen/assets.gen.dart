@@ -37,20 +37,23 @@ class $AssetsImagesGen {
   /// File path: assets/images/background.svg
   String get background => 'assets/images/background.svg';
 
+  /// File path: assets/images/globe.png
+  AssetGenImage get globe => const AssetGenImage('assets/images/globe.png');
+
   /// File path: assets/images/google.svg
   String get google => 'assets/images/google.svg';
+
+  /// File path: assets/images/oboarding_1.png
+  AssetGenImage get oboarding1 =>
+      const AssetGenImage('assets/images/oboarding_1.png');
+
+  /// File path: assets/images/oboarding_2.png
+  AssetGenImage get oboarding2 =>
+      const AssetGenImage('assets/images/oboarding_2.png');
 
   /// File path: assets/images/onBoardingNextButtonPrefix.svg
   String get onBoardingNextButtonPrefix =>
       'assets/images/onBoardingNextButtonPrefix.svg';
-
-  /// File path: assets/images/onboarding_1.png
-  AssetGenImage get onboarding1 =>
-      const AssetGenImage('assets/images/onboarding_1.png');
-
-  /// File path: assets/images/onboarding_2.png
-  AssetGenImage get onboarding2 =>
-      const AssetGenImage('assets/images/onboarding_2.png');
 
   /// File path: assets/images/onboarding_3.png
   AssetGenImage get onboarding3 =>
@@ -73,10 +76,11 @@ class $AssetsImagesGen {
     apple,
     authBackground,
     background,
+    globe,
     google,
+    oboarding1,
+    oboarding2,
     onBoardingNextButtonPrefix,
-    onboarding1,
-    onboarding2,
     onboarding3,
     onboarding4,
     spImage1,
