@@ -1,6 +1,10 @@
+/*
+ * @Author: Km Muzahid
+ * @Date: 2026-02-18 09:39:56
+ * @Email: km.muzahid@gmail.com
+ */
 import 'package:core_kit/text/common_text.dart';
 import 'package:flutter/material.dart';
-import 'package:pinlink/config/color/app_color.dart';
 
 class BuildLabel extends StatelessWidget {
   const BuildLabel(this.label, {super.key});
@@ -11,7 +15,7 @@ class BuildLabel extends StatelessWidget {
     return Align(
       alignment: Alignment.centerLeft,
       child: CommonText(
-        text: label, textColor: AppColor.textGray, fontSize: 14),
+        left: 10, text: label, textColor: Colors.white, fontSize: 14),
     );
   }
 }

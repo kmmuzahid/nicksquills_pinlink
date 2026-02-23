@@ -1,152 +1,134 @@
 /*
  * @Author: Km Muzahid
+ * @Date: 2026-02-18 09:39:56
+ * @Email: km.muzahid@gmail.com
+ */
+/*
+ * @Author: Km Muzahid
  * @Date: 2026-01-08 12:44:55
  * @Email: km.muzahid@gmail.com
  */
-import 'package:auto_route/auto_route.dart';
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:pinlink/common_widgets/appbar/appbar_gradient_expanded.dart';
-import 'package:pinlink/common_widgets/common_widget.dart';
 import 'package:pinlink/config/bloc/cubit_scope.dart';
 import 'package:pinlink/config/color/app_color.dart';
-import 'package:pinlink/config/route/app_router.dart';
-import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/constant/app_string.dart';
-import 'package:pinlink/constant/constants.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_flow_cubit.dart';
 import 'package:pinlink/coreFeature/auth/entity/signup_entity.dart';
 import 'package:pinlink/coreFeature/auth/widgets/action_spawn_widget.dart';
-import 'package:pinlink/coreFeature/auth/widgets/terms_agreement_widget.dart';
+import 'package:pinlink/coreFeature/auth/widgets/signup_form_one.dart';
 
-@RoutePage()
-class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({super.key});
- 
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key, required this.changeToLogin});
+
+  final Function() changeToLogin;
+
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  int page = 0;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarGradientExpanded(),
-      body: Padding(
-        padding: Constants.bodyPadding,
-        child: FormBuilder(
-          entity: SignUpEntity(),
-          builder: (context, formKey, entity) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                20.height,
-                CommonText(
-                  text: AppString.sign_up,
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w500,
-                ).center,
-                CommonText(
-                  text: AppString.please_fill_the_details_and_create_account,
-                  fontSize: 14,
-                  textColor: AppColor.textGray,
-                ).center,
-                20.height,
-        
-                // Email Field
-                BuildLabel(AppString.name),
-                CommonTextField(
-                  hintText: AppString.name,
-                  validationType: ValidationType.validateRequired,
-                  prefixIcon: const Icon(Icons.email_outlined),
-                  onSaved: (value, controller) => entity.fullName = value,
+    return Container(
+      padding: const EdgeInsets.only(top: 16, bottom: 16, left: 16, right: 16),
+      decoration: BoxDecoration(
+        color: const Color(0xFF052217).withOpacity(0.9),
+        borderRadius: const BorderRadius.all(Radius.circular(16)),
+      ),
+      child: FormBuilder(
+        entity: SignUpEntity(),
+        scrollPhysics: const NeverScrollableScrollPhysics(),
+        builder: (context, formKey, entity) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: List.generate(
+                  4,
+                  (index) => Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 2),
+                      height: 8,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: AppColor.white),
+                        borderRadius: BorderRadius.circular(5),
+                        color: page == index ? AppColor.primary : AppColor.white,
+                      ),
+                    ),
+                  ),
                 ),
-                10.height,
-                // Email Field
-                BuildLabel(AppString.email),
-                CommonTextField(
-                  hintText: AppString.email,
-                  validationType: ValidationType.validateEmail,
-                  prefixIcon: const Icon(Icons.email_outlined),
-                  onSaved: (value, controller) => entity.email = value,
-                ),
-                10.height,
-        
-                // Password Field
-                BuildLabel(AppString.password),
-                CommonTextField(
-                  hintText: AppString.password,
-                  validationType: ValidationType.validatePassword,
-                  prefixIcon: const Icon(Icons.lock_outline),
-                  onSaved: (value, controller) => entity.password = value,
-                ),
-                10.height,
-        
-                // Password Field
-                BuildLabel(AppString.confirm_password),
-                CommonTextField(
-                  hintText: AppString.confirm_password,
-                  originalPassword: () => entity.password ?? '',
-                  validationType: ValidationType.validateConfirmPassword,
-                  prefixIcon: const Icon(Icons.lock_outline),
-                  onSaved: (value, controller) => entity.confirmPassword = value,
-                ),
-                20.height,
-                TermsAgreementWidget(
-                  onChanged: (value) {
-                    entity.isAgree = value;
-                  },
-                ),
-                20.height,
+              ),
+              CommonText(text: 'Page ${page + 1} of 4', textColor: AppColor.textSubDark).center,
+              2.height,
+              CommonText(text: getTitle(), fontSize: 16, fontWeight: FontWeight.w500),
+              Divider(color: AppColor.outlineColor),
 
-                CubitScope(
-                  create: () => AuthFlowCubit(AuthCubit()),
-                  builder: (context, cubit, state) {
-                    return Column(
-                      children: [
-                        CommonButton(
-                          onTap: () {
-                            formKey.currentState?.save();
-                            // if ((formKey.currentState?.validate() ?? false) && entity.isAgree) {
-                            cubit.signup(entity);
-                            // }
-                          },
-                          isLoading: state,
-                          titleText: AppString.sign_up_as_parking_owner,
-                          buttonWidth: double.infinity,
-                        ),
-                        20.height,
-                        CommonButton(
-                          borderColor: AppColor.textGray,
-                          borderWidth: 1.5,
-                          buttonColor: AppColor.background,
-                          titleColor: AppColor.textGray,
-                          onTap: () {
-                            formKey.currentState?.save();
-                            // if ((formKey.currentState?.validate() ?? false) && entity.isAgree) {
-                            cubit.signup(entity);
-                            // }
-                          },
-                          isLoading: state,
-                          titleText: AppString.sign_in_as_ev_owner,
-                          buttonWidth: double.infinity,
-                        ),
-                      ],
-                    );
-                  },
-                ),
-        
-                30.height,
-              
-                ActionSpawnWidget(
-                  title: AppString.have_you_already_an_account,
-                  actionTitle: AppString.sign_in,
-                  onTap: () {
-                    appRouter.replace(const LoginRoute());
-                  },
-                ).center,
-                50.height,
-              ],
-            );
-          },
-        ),
+              Expanded(child: SingleChildScrollView(child: getPage(page, formKey, entity))),
+
+              CubitScope(
+                create: () => AuthFlowCubit(AuthCubit()),
+                builder: (context, cubit, state) {
+                  return Column(
+                    children: [
+                      CommonButton(
+                        onTap: () {
+                          formKey.currentState?.save();
+                          // if ((formKey.currentState?.validate() ?? false) && entity.isAgree) {
+                          cubit.signup(entity);
+                          // }
+                        },
+                        isLoading: state,
+                        titleText: page == 3 ? 'Create Account' : 'Continue',
+                        buttonWidth: double.infinity,
+                      ),
+                    ],
+                  );
+                },
+              ),
+
+              30.height,
+
+              ActionSpawnWidget(
+                title: AppString.have_you_already_an_account,
+                actionTitle: AppString.sign_in,
+                onTap: () {
+                  widget.changeToLogin.call();
+                },
+              ).center,
+              15.height,
+            ],
+          );
+        },
       ),
     );
+  }
+
+  Widget getPage(int page, GlobalKey<FormState> formKey, SignUpEntity entity) {
+    switch (page) {
+      case 0:
+        return SignupFormOne(formKey: formKey, entity: entity);
+      case 1:
+        return Container();
+      case 2:
+        return Container();
+      default:
+        return Container();
+    }
+  }
+
+  String getTitle() {
+    switch (page) {
+      case 0:
+        return 'Personal Information';
+      case 1:
+        return 'Location Details';
+      case 2:
+        return 'Golf Details';
+      default:
+        return 'Review & Confirm';
+    }
   }
 }

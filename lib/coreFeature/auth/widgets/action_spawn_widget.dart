@@ -30,7 +30,14 @@ class ActionSpawnWidget extends StatelessWidget {
           ),
           TextSpan(
             text: ' $actionTitle',
-            style: TextStyle(color: AppColor.primary, fontWeight: FontWeight.w600),
+            style: const TextStyle(
+              color: Colors.blue,
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.italic,
+              decoration: TextDecoration.underline,
+              decorationThickness: 2,
+              decorationColor: Colors.blue,
+            ),
             recognizer: TapGestureRecognizer()..onTap = onTap,
           ),
         ],

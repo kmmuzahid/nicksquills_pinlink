@@ -29,10 +29,9 @@ class _AppString {
 
   //signin screen
 
-  final String sign_in_now = 'Sign In Now';
+  final String sign_in_now = 'Welcome Back!';
   final String please_sign_in_to_continue_our_app = 'Please Sign in to Continue Our App';
-  final String forget_password = 'Forget Password?';
-  final String sign_in_as_parking_owner = 'Sign In as Parking Owner';
+  final String forget_password = 'Forget Password?'; 
   final String sign_in_as_ev_owner = 'Sign In as EV Owner';
   final String or_continue_with = 'Or continue with';
   final String dont_have_an_account = 'Don’t have an account?';

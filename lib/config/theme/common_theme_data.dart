@@ -9,8 +9,8 @@ import 'package:pinlink/config/color/app_color.dart';
 String fontFamily = 'Inter';
 final TextTheme baseTextTheme = ThemeData.light().textTheme.apply(
   fontFamily: fontFamily,
-  displayColor: Colors.black,
-  bodyColor: Colors.black,
+  displayColor: Colors.white,
+  bodyColor: Colors.white,
 );
 final ThemeData commonThemeData = ThemeData(
   useMaterial3: true,
@@ -30,9 +30,9 @@ final ThemeData commonThemeData = ThemeData(
   ),
   inputDecorationTheme: InputDecorationTheme(
     filled: true,
-    fillColor: AppColor.white,
+    fillColor: const Color(0xFF061512),
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(40),
       borderSide: BorderSide(color: AppColor.outlineColor, width: 1.5),
     ),
 
@@ -47,9 +47,9 @@ final ThemeData commonThemeData = ThemeData(
   dropdownMenuTheme: DropdownMenuThemeData(
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: AppColor.white,
-      hintStyle: TextStyle(
-        color: Colors.grey.shade500,
+      fillColor: const Color(0xFF061512),
+      hintStyle: const TextStyle(
+        color: Color(0xFF6B7280),
         fontSize: 12,
         fontWeight: FontWeight.w400,
         fontStyle: FontStyle.normal,
@@ -68,10 +68,25 @@ final ThemeData commonThemeData = ThemeData(
   ),
 
   elevatedButtonTheme: ElevatedButtonThemeData(
-    style: ElevatedButton.styleFrom(
-      minimumSize: const Size(80, 50),
     
-      backgroundColor: AppColor.primary, //button background
+    style: ElevatedButton.styleFrom(
+      minimumSize: const Size(80, 50), 
+      
+      backgroundBuilder: (context, states, child) {
+        return Container(
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [Color(0xFF184F3A), Color(0xFF2F6F57)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+
+            borderRadius: BorderRadius.circular(8),
+          ),
+          // The 'child' here is the internal label/icon of the button
+          child: Center(child: child),
+        );
+      },
       foregroundColor: Colors.orangeAccent, //loader color
       textStyle: const TextStyle(color: Colors.white), //title color
       shape: RoundedRectangleBorder(

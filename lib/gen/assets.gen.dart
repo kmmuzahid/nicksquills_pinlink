@@ -31,11 +31,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/apple.png
   AssetGenImage get apple => const AssetGenImage('assets/images/apple.png');
 
-  /// File path: assets/images/auth_background.svg
-  String get authBackground => 'assets/images/auth_background.svg';
-
-  /// File path: assets/images/background.svg
-  String get background => 'assets/images/background.svg';
+  /// File path: assets/images/auth_background.png
+  AssetGenImage get authBackground =>
+      const AssetGenImage('assets/images/auth_background.png');
 
   /// File path: assets/images/globe.png
   AssetGenImage get globe => const AssetGenImage('assets/images/globe.png');
@@ -63,6 +61,10 @@ class $AssetsImagesGen {
   AssetGenImage get onboarding4 =>
       const AssetGenImage('assets/images/onboarding_4.png');
 
+  /// File path: assets/images/simple_background.png
+  AssetGenImage get simpleBackground =>
+      const AssetGenImage('assets/images/simple_background.png');
+
   /// File path: assets/images/sp_image_1.png
   AssetGenImage get spImage1 =>
       const AssetGenImage('assets/images/sp_image_1.png');
@@ -75,7 +77,6 @@ class $AssetsImagesGen {
     appIcon,
     apple,
     authBackground,
-    background,
     globe,
     google,
     oboarding1,
@@ -83,6 +84,7 @@ class $AssetsImagesGen {
     onBoardingNextButtonPrefix,
     onboarding3,
     onboarding4,
+    simpleBackground,
     spImage1,
     splash,
   ];
