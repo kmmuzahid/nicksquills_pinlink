@@ -47,19 +47,19 @@ class _AuthSigmentedContainerState extends State<AuthSigmentedContainer> {
 
         20.height,
 
-        Expanded(
-          child: selectedIndex == 0
-              ? widget.signupWidget(() {
+        selectedIndex == 0
+            ? Expanded(
+                child: widget.signupWidget(() {
                   setState(() {
                     selectedIndex = 1;
                   });
-                })
-              : widget.loginWidget(() {
-                  setState(() {
-                    selectedIndex = 0;
-                  });
                 }),
-        ),
+              )
+            : widget.loginWidget(() {
+                setState(() {
+                  selectedIndex = 0;
+                });
+              }),
         50.height,
       ],
     );
