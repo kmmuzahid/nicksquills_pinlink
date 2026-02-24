@@ -6,6 +6,7 @@
 import 'package:pinlink/config/bloc/safe_cubit.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
+import 'package:pinlink/config/storage/storage_key.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/coreFeature/auth/entity/forget_pass_entity.dart';
 import 'package:pinlink/coreFeature/auth/entity/login_entity.dart';
@@ -19,6 +20,7 @@ class AuthFlowCubit extends SafeCubit<bool> {
 
   Future<void> login(LoginEntity entity) async {
     //remove it on integration
+    StorageService.instance.accessToken = 'gg';
     appRouter.replaceAll([const SplashRoute()]);
 
     //uncomment it on integration

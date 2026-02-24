@@ -6,7 +6,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinlink/config/bloc/safe_cubit.dart';
 import 'package:pinlink/config/route/app_router.dart';
-import 'package:pinlink/config/route/app_router.gr.dart' show LoginRoute, OnboardingRoute;
+import 'package:pinlink/config/route/app_router.gr.dart'
+    show LoginRoute, OnboardingRoute, NavigationRoute;
 import 'package:pinlink/config/storage/storage_key.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_state.dart';
 import 'package:pinlink/coreFeature/auth/repository/auth_repository.dart';
@@ -20,6 +21,12 @@ class AuthCubit extends SafeCubit<AuthState> {
   Future<void> init() async {
     // await StorageService.instance.clearDb();
     await Future.delayed(_delaySplash);
+
+    final token = await StorageService.instance.accessToken;
+    if (token != null && token.isNotEmpty) {
+      appRouter.replaceAll([const NavigationRoute()]);
+      return;
+    }
 
     final roleData = await StorageService.instance.role;
 
