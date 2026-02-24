@@ -7,7 +7,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pinlink/common_widgets/appbar/appbar_gradient_expanded.dart';
+import 'package:pinlink/common_widgets/auth_background.dart';
 import 'package:pinlink/config/bloc/cubit_scope.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/constant/app_string.dart';
@@ -28,8 +28,8 @@ class SendOtpScreen extends StatelessWidget {
   final bool showSendToField;
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBarGradientExpanded(),
+  Widget build(BuildContext context) => AuthBackground(
+    appBar: CommonAppBar(appbarConfig: AppbarConfig(backgroundColor: Colors.transparent)),
     body: Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: CubitScope(
@@ -47,7 +47,7 @@ class SendOtpScreen extends StatelessWidget {
               if (!showSendToField && !state.isOtpSent && !state.isResend)
                ...[
                 CommonText(
-                  text: AppString.forget_password.toUpperCase(),
+                  text: AppString.forget_password,
                   fontSize: 18,
 
                   alignment: MainAxisAlignment.center,
@@ -56,6 +56,7 @@ class SendOtpScreen extends StatelessWidget {
                   text: AppString.enter_your_email_account_to_rest_your_password,
                   fontSize: 16,
                   textColor: AppColor.textGray,
+                  maxLines: 3,
                   isDescription: true,
                   alignment: MainAxisAlignment.center,
                 ),
@@ -86,16 +87,11 @@ class SendOtpScreen extends StatelessWidget {
                   text:
                       '${AppString.verification_code_has_been_sent_to} ${username.isNotEmpty ? username : state.username}',
                   fontSize: 14,
-                  textColor: AppColor.textSecondary,
+                  textColor: AppColor.textSubDark,
                   isDescription: true,
                   alignment: MainAxisAlignment.center,
                 ),
-              20.height,
-                CommonText(
-                  text: AppString.enter_verification_code,
-                  textColor: AppColor.textGray,
-                  fontSize: 12,
-                ).start,
+                20.height,
               ],
               4.height,
               AnimatedCrossFade(

@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 
 class AppColor {
+  AppColor._();
   static Color get background => const Color(0xFF184F3A);
   static Color get white => const Color(0xFFFFFFFF);
   static Color get primary => const Color(0xFF146B3E);
@@ -24,5 +25,8 @@ class AppColor {
   static Color get clickableBorder => const Color(0xFF789086);
   static Color get subtitleColor => const Color(0xFF6FAE97);
   static Color get textSubDark => const Color(0xFFB2CBC1);
+  static Color get textSub => const Color(0xFF6B7280);
+  static Color get infoBoxColor => const Color(0xFF061512);
+  static Color get cardColor => const Color(0xFF052217).withOpacity(0.9);
 
 }

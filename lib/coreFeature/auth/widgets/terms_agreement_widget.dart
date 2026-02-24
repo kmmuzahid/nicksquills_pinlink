@@ -37,14 +37,14 @@ class TermsAgreementWidget extends StatelessWidget {
 
                   fillColor: WidgetStateProperty.resolveWith<Color>((states) {
                     if (states.contains(WidgetState.disabled)) {
-                      return AppColor.outlineColor;
+                      return AppColor.primary;
                     }
                     if (states.contains(WidgetState.error) &&
                         !states.contains(WidgetState.selected)) {
                       return AppColor.white;
                     }
                     if (states.contains(WidgetState.selected)) {
-                      return Colors.blue;
+                      return AppColor.primary;
                     }
                     return Colors.white;
                   }),
@@ -66,8 +66,8 @@ class TermsAgreementWidget extends StatelessWidget {
                         // ),
                         TextSpan(
                           text: "Privacy Policy",
-                          style: TextStyle(
-                            color: AppColor.textGray,
+                          style: const TextStyle(
+                            color: Colors.blue,
                             fontWeight: FontWeight.w600,
                             decoration: TextDecoration.underline,
                           ),
@@ -83,8 +83,8 @@ class TermsAgreementWidget extends StatelessWidget {
                         ),
                         TextSpan(
                           text: "Terms of Conditions",
-                          style: TextStyle(
-                            color: AppColor.textGray,
+                          style: const TextStyle(
+                            color: Colors.blue,
                             fontWeight: FontWeight.w600,
                             decoration: TextDecoration.underline,
                           ),

@@ -7,6 +7,7 @@ import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinlink/config/bloc/cubit_scope_value.dart';
+import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/coreFeature/auth/cubit/otp_cubit.dart';
 
 class OtpSend extends StatefulWidget {
@@ -32,56 +33,54 @@ class _OtpSendState extends State<OtpSend> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Form(
-        key: formKey,
-        child: Column(
-          children: [
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 10),
-            //   child: CommonPhoneNumberTextFiled(controller: controller, countryChange: (value) {}),
-            // ),
-            // 12.height,
-            10.height,
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: CommonText(text: 'Email Address', textColor: Colors.white, fontSize: 14),
-            ),
-            12.height,
-            CommonTextField(
-              controller: controller,
-              isReadOnly: widget.isSignUp,
-              hintText: 'Enter email address here...',
-              validationType: ValidationType.validateEmail,
-              prefixIcon: const Icon(Icons.email_outlined),
-              onSaved: (value, controller) {},
-            ),
-            40.height,
-            CubitScopeValue(
-              cubit: widget.cubit,
-              builder: (context, cubit, state) {
-                return CommonButton(
-                  titleText: 'Send OTP',
-                  isLoading: state.isLoading, 
-                  buttonWidth: double.infinity,
-                  titleSize: 12,
-                  titleWeight: FontWeight.w500,
-                  onTap: () {
-                    if (formKey.currentState?.validate() == true) {
+      child: Container(
+        margin: EdgeInsets.only(top: 20.w),
+        padding: EdgeInsets.only(top: 25.h, bottom: 30.h, left: 16.w, right: 16.w),
+        decoration: BoxDecoration(
+          color: AppColor.cardColor,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Form(
+          key: formKey,
+          child: Column(
+            children: [
+              
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: CommonText(text: 'Email Address', textColor: Colors.white, fontSize: 14),
+              ),
+              12.height,
+              CommonTextField(
+                controller: controller,
+                isReadOnly: widget.isSignUp,
+                hintText: 'Enter email or username here...',
+                validationType: ValidationType.validateRequired,
+                prefixIcon: const Icon(Icons.email_outlined),
+                onSaved: (value, controller) {},
+              ),
+              40.height,
+              CubitScopeValue(
+                cubit: widget.cubit,
+                builder: (context, cubit, state) {
+                  return CommonButton(
+                    titleText: 'Send OTP',
+                    isLoading: state.isLoading,
+                    buttonWidth: double.infinity,
+                    titleSize: 12,
+                    titleWeight: FontWeight.w500,
+                    onTap: () {
+                      // if (formKey.currentState?.validate() == true) {
                       context.read<OtpCubit>().sendOtp(controller.text);
-                    }
-                  },
-                );
-              }
-            ),
-          ],
+                      // }
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
+ 
 }

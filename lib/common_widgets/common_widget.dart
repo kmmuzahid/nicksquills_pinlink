@@ -15,7 +15,7 @@ class BuildLabel extends StatelessWidget {
     return Align(
       alignment: Alignment.centerLeft,
       child: CommonText(
-        left: 10, text: label, textColor: Colors.white, fontSize: 14),
+        left: 10, text: label, textColor: Colors.white, fontSize: 12),
     );
   }
 }

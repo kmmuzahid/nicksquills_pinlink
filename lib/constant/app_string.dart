@@ -59,7 +59,7 @@ class _AppString {
   final String verify_otp = 'Verify OTP';
   final String resend_code_in = 'Resend Code in';
   final String seconds = 'seconds';
-  final String didnt_recive_code = 'Didnt Recive Code';
+  final String didnt_recive_code = 'Didn\'t Recive Code';
   final String resend_code = 'Resend Code';
   final String verification_code_has_been_sent_to = 'Verification code has been sent to';
   final String otp_verification = 'OTP Verification';

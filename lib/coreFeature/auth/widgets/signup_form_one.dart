@@ -1,3 +1,8 @@
+/*
+ * @Author: Km Muzahid
+ * @Date: 2026-02-23 15:16:43
+ * @Email: km.muzahid@gmail.com
+ */
 import 'package:core_kit/text_field/common_text_field.dart';
 import 'package:core_kit/text_field/validation_type.dart';
 import 'package:core_kit/utils/core_screen_utils.dart';
@@ -16,26 +21,35 @@ class SignupFormOne extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         // Email Field
         BuildLabel(AppString.name),
         CommonTextField(
-          hintText: AppString.name,
+          hintText: 'Enter Your Full Name',
           validationType: ValidationType.validateRequired,
-          prefixIcon: const Icon(Icons.email_outlined),
+          prefixIcon: const Icon(Icons.person_outline_outlined),
           onSaved: (value, controller) => entity.fullName = value,
         ),
         10.height,
-        // Email Field
+
+        const BuildLabel('Username'),
+        CommonTextField(
+          hintText: 'Enter a Unique Username (e.g., nickgolf23)',
+          validationType: ValidationType.validateRequired,
+          prefixIcon: const Icon(Icons.person_outline_outlined),
+          onSaved: (value, controller) => entity.username = value,
+        ),
+        10.height,
+// Email Field
         BuildLabel(AppString.email),
         CommonTextField(
-          hintText: AppString.email,
+          hintText: 'Enter Your Email',
           validationType: ValidationType.validateEmail,
           prefixIcon: const Icon(Icons.email_outlined),
           onSaved: (value, controller) => entity.email = value,
         ),
         10.height,
-
         // Password Field
         BuildLabel(AppString.password),
         CommonTextField(

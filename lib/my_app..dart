@@ -7,6 +7,7 @@ import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinlink/config/api/api_end_point.dart';
+import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router_observer.dart';
 import 'package:pinlink/config/storage/storage_key.dart';
@@ -15,6 +16,7 @@ import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_state.dart';
 import 'package:pinlink/coreFeature/navigation/cubit/navigation_cubit.dart';
 import 'package:pinlink/coreFeature/notification/cubit/notification_cubit.dart';
+import 'package:pinlink/gen/assets.gen.dart';
 
 final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 class CustomScrollBehavior extends MaterialScrollBehavior {
@@ -53,24 +55,24 @@ class MyApp extends StatelessWidget {
             builder: (context, state) {
               return CoreKit.init(
                 appbarConfig: AppbarConfig(
-                  backgroundColor: Colors.transparent,
                   // height: 120,
 
-                  // decoration: BoxDecoration(
-                  //   border: Border(bottom: BorderSide(color: AppColor.errorColor, width: 1)),
-                  //   borderRadius: const BorderRadius.only(
-                  //     bottomLeft: Radius.circular(20),
-                  //     bottomRight: Radius.circular(20),
-                  //   ),
-                  //   gradient: LinearGradient(
-                  //     begin: Alignment.topLeft,
-                  //     end: Alignment.bottomRight,
-                  //     colors: [AppColor.secondary, AppColor.primary],
-                  //   ),
-                  // ),
+                  decoration: BoxDecoration(
+                    border: Border(bottom: BorderSide(color: AppColor.outlineColor, width: 1.5)),
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20),
+                    ),
+                    color: Colors.transparent,
+                  ),
                   onBack: () {
                     appRouter.pop();
                   },
+                  backButton: Container(
+                    padding: const EdgeInsets.all(10),
+                    color: Colors.transparent,
+                    child: CommonImage(src: Assets.images.back),
+                  ),
                 ),
                 designSize: const Size(393, 690),
                 imageBaseUrl: ApiEndPoint.instance.baseUrl,

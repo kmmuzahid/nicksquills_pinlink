@@ -35,6 +35,9 @@ class $AssetsImagesGen {
   AssetGenImage get authBackground =>
       const AssetGenImage('assets/images/auth_background.png');
 
+  /// File path: assets/images/back.svg
+  String get back => 'assets/images/back.svg';
+
   /// File path: assets/images/globe.png
   AssetGenImage get globe => const AssetGenImage('assets/images/globe.png');
 
@@ -77,6 +80,7 @@ class $AssetsImagesGen {
     appIcon,
     apple,
     authBackground,
+    back,
     globe,
     google,
     oboarding1,

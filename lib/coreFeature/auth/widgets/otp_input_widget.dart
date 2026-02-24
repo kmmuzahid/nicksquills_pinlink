@@ -3,12 +3,12 @@ import 'package:core_kit/text_field/input_formatters/input_helper.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:pinlink/config/bloc/cubit_scope_value.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/constant/app_string.dart';
 import 'package:pinlink/coreFeature/auth/cubit/otp_cubit.dart';
 import 'package:pinlink/coreFeature/auth/cubit/otp_state.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OtpInputWidget extends StatefulWidget {
   const OtpInputWidget({
@@ -35,31 +35,41 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
   }
 
   @override
-  Widget build(BuildContext context) => Column(
-    children: [
-      Form(key: formKey, child: _otpBuilder(context)),
+  Widget build(BuildContext context) => Container(
+    padding: EdgeInsets.only(top: 25.h, bottom: 30.h, left: 16.w, right: 16.w),
+    decoration: BoxDecoration(color: AppColor.cardColor, borderRadius: BorderRadius.circular(12)),
+    child: Column(
+      children: [
+        CommonText(
+          text: AppString.enter_verification_code,
+          textColor: AppColor.textGray,
+          fontSize: 12,
+          bottom: 4,
+        ).start,
+        Form(key: formKey, child: _otpBuilder(context)),
 
-      _resendOtpTimerBuilder(widget.state).end,
-      20.height,
-      CubitScopeValue(
-        cubit: widget.cubit,
-        builder: (context, cubit, state) {
-          return CommonButton(
-            titleText: AppString.verify_otp,
-            isLoading: state.isLoading,
-            buttonWidth: 160,
-            buttonHeight: 40.h,
-            titleSize: 12,
-            titleWeight: FontWeight.w500,
-            onTap: () {
-              if (formKey.currentState?.validate() == true) {
-                context.read<OtpCubit>().verifyOtp(otp, widget.onSuccess);
-              }
-            },
-          );
-        },
-      ),
-    ],
+        _resendOtpTimerBuilder(widget.state).end,
+        20.height,
+        CubitScopeValue(
+          cubit: widget.cubit,
+          builder: (context, cubit, state) {
+            return CommonButton(
+              
+              titleText: AppString.verify_otp,
+              isLoading: state.isLoading,
+              buttonWidth: double.infinity,
+              titleSize: 12,
+              titleWeight: FontWeight.w500,
+              onTap: () {
+                if (formKey.currentState?.validate() == true) {
+                  context.read<OtpCubit>().verifyOtp(otp, widget.onSuccess);
+                }
+              },
+            );
+          },
+        ),
+      ],
+    ),
   );
 
   Widget _resendOtpTimerBuilder(OtpState state) {
@@ -79,7 +89,7 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
       TextSpan(
         children: [
           TextSpan(
-            text: '${AppString.didnt_recive_code}?',
+            text: '${AppString.didnt_recive_code}? ',
             style: TextStyle(
               color: getTheme.textTheme.bodySmall?.color,
               fontSize: 12,
@@ -94,7 +104,7 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
               ..onTap = () { 
                 context.read<OtpCubit>().sendOtp(widget.username, isResend: true);
               },
-            style: TextStyle(color: AppColor.primary, fontSize: 16, fontWeight: FontWeight.bold),
+            style: const TextStyle(color: Colors.blue, fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ],
       ),
@@ -105,7 +115,7 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
   Widget _otpBuilder(BuildContext context) {
     return PinCodeTextField(  
       cursorColor: AppColor.primary,
-      backgroundColor: AppColor.background,
+      backgroundColor: Colors.transparent,
       textStyle: getTheme.textTheme.bodyMedium?.copyWith(fontSize: 25, color: AppColor.primary),
       appContext: context,
       autoFocus: true,
@@ -118,15 +128,15 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
         borderRadius: BorderRadius.circular(4),
         fieldHeight: 40,
         fieldWidth: 40,
-        activeFillColor: AppColor.background,
-        selectedFillColor: AppColor.background,
-        inactiveFillColor: AppColor.background,
+        activeFillColor: AppColor.infoBoxColor,
+        selectedFillColor: AppColor.infoBoxColor,
+        inactiveFillColor: AppColor.infoBoxColor,
         borderWidth: 0.1,
-        selectedColor: getTheme.primaryColor.withAlpha(80),
-        activeColor: getTheme.primaryColor.withAlpha(80),
-        inactiveColor: getTheme.primaryColor.withAlpha(80),
+        selectedColor: AppColor.infoBoxColor,
+        activeColor: AppColor.infoBoxColor,
+        inactiveColor: AppColor.infoBoxColor,
       ),
-      length: 6,
+      length: 6, 
       keyboardType: InputHelper.getKeyboardType(ValidationType.validateOTP),
       inputFormatters: InputHelper.getInputFormatters(ValidationType.validateOTP),
       autovalidateMode: AutovalidateMode.disabled,

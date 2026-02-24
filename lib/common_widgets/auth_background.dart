@@ -15,7 +15,7 @@ class AuthBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(  
       body: Container(
         width: CoreScreenUtils.deviceSize.width,
         height: CoreScreenUtils.deviceSize.height,

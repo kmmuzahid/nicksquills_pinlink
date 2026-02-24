@@ -10,14 +10,20 @@
  */
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinlink/config/bloc/cubit_scope.dart';
 import 'package:pinlink/config/color/app_color.dart';
+import 'package:pinlink/config/route/app_router.dart';
+import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/constant/app_string.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_flow_cubit.dart';
 import 'package:pinlink/coreFeature/auth/entity/signup_entity.dart';
 import 'package:pinlink/coreFeature/auth/widgets/action_spawn_widget.dart';
 import 'package:pinlink/coreFeature/auth/widgets/signup_form_one.dart';
+import 'package:pinlink/coreFeature/auth/widgets/signup_form_two.dart';
+import 'package:pinlink/coreFeature/auth/widgets/signup_overview.dart';
+import 'package:pinlink/coreFeature/auth/widgets/singup_form_three.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key, required this.changeToLogin});
@@ -35,7 +41,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Container(
       padding: const EdgeInsets.only(top: 16, bottom: 16, left: 16, right: 16),
       decoration: BoxDecoration(
-        color: const Color(0xFF052217).withOpacity(0.9),
+        color: AppColor.cardColor,
         borderRadius: const BorderRadius.all(Radius.circular(16)),
       ),
       child: FormBuilder(
@@ -55,41 +61,86 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       decoration: BoxDecoration(
                         border: Border.all(color: AppColor.white),
                         borderRadius: BorderRadius.circular(5),
-                        color: page == index ? AppColor.primary : AppColor.white,
+                        color: page >= index ? AppColor.primary : AppColor.white,
                       ),
                     ),
                   ),
                 ),
               ),
-              CommonText(text: 'Page ${page + 1} of 4', textColor: AppColor.textSubDark).center,
-              2.height,
-              CommonText(text: getTitle(), fontSize: 16, fontWeight: FontWeight.w500),
+              6.height,
+              CommonText(
+                text: 'Step ${page + 1} of 4',
+                textColor: AppColor.textSubDark,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ).center,
+              8.height,
+              CommonText(
+                text: getTitle(),
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                textColor: AppColor.textSubDark,
+              ),
               Divider(color: AppColor.outlineColor),
 
-              Expanded(child: SingleChildScrollView(child: getPage(page, formKey, entity))),
+              Column(
+                children: [
+                  getPage(page, formKey, entity),
 
-              CubitScope(
-                create: () => AuthFlowCubit(AuthCubit()),
-                builder: (context, cubit, state) {
-                  return Column(
-                    children: [
-                      CommonButton(
+                  CubitScope(
+                    create: () => AuthFlowCubit(context.read<AuthCubit>()),
+                    builder: (context, cubit, state) {
+                      return Column(
+                        children: [
+                          CommonButton(
+                            onTap: () {
+                              formKey.currentState?.save();
+                              if (page < 3) {
+                                setState(() {
+                                  page++;
+                                });
+                              }
+                              if (page == 3) {
+                                appRouter.push(
+                                  SendOtpRoute(
+                                    onSuccess: ({required String email, required String token}) {},
+                                    username: entity.username ?? '',
+                                    showSendToField: true,
+                                  ),
+                                );
+                              }
+                              // if ((formKey.currentState?.validate() ?? false) && entity.isAgree &&  page == 3) {
+                              // cubit.signup(entity);
+                              // }
+                            },
+                            isLoading: state,
+                            titleText: page == 3 ? 'Create Account' : 'Continue',
+                            buttonWidth: double.infinity,
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+
+                  if (page > 0)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: CommonButton(
                         onTap: () {
-                          formKey.currentState?.save();
-                          // if ((formKey.currentState?.validate() ?? false) && entity.isAgree) {
-                          cubit.signup(entity);
-                          // }
+                          setState(() {
+                            page--;
+                          });
                         },
-                        isLoading: state,
-                        titleText: page == 3 ? 'Create Account' : 'Continue',
+                        titleText: 'Back',
+                        buttonColor: const Color(0xFF052217).withOpacity(0.9),
+                        borderColor: AppColor.primary,
                         buttonWidth: double.infinity,
                       ),
-                    ],
-                  );
-                },
-              ),
+                    ),
 
-              30.height,
+                  30.height,
+                ],
+              ),
 
               ActionSpawnWidget(
                 title: AppString.have_you_already_an_account,
@@ -111,11 +162,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
       case 0:
         return SignupFormOne(formKey: formKey, entity: entity);
       case 1:
-        return Container();
+        return SignupFormTwo(formKey: formKey, entity: entity);
       case 2:
-        return Container();
+        return SignupFormThree(formKey: formKey, entity: entity);
       default:
-        return Container();
+        return SignUpOverview(entity: entity);
     }
   }
 

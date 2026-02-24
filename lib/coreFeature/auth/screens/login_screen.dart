@@ -35,7 +35,12 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AuthBackground(
-      appBar: const CommonAppBar(title: '', disableBack: true, hideBack: true),
+      appBar: CommonAppBar(
+        title: '',
+        disableBack: true,
+        hideBack: true,
+        appbarConfig: AppbarConfig(backgroundColor: Colors.transparent),
+      ),
       body: Padding(
         padding: Constants.bodyPadding,
         child: AuthSigmentedContainer(
@@ -62,6 +67,7 @@ class _loginForm extends StatelessWidget {
       ),
       child: FormBuilder(
         entity: LoginEntity(),
+        scrollPhysics: const NeverScrollableScrollPhysics(),
         builder: (context, formKey, entity) => Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +76,7 @@ class _loginForm extends StatelessWidget {
             const BuildLabel('Email or Username'),
             CommonTextField(
               hintText: 'Email or Username',
-              validationType: ValidationType.validateEmail,
+              validationType: ValidationType.validateRequired,
               prefixIcon: const Icon(Icons.email_outlined),
               onSaved: (value, controller) => entity.email = value,
             ),

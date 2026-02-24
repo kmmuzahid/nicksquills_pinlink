@@ -11,5 +11,9 @@ class SignUpEntity {
   String? email;
   String? password;
   String? confirmPassword;
+  String? username;
+  String? homeCourse;
+  String? handicap;
+  String? hometown;
   bool isAgree = false;
 }

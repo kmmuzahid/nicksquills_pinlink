@@ -20,14 +20,40 @@ class _AuthSigmentedContainerState extends State<AuthSigmentedContainer> {
   int selectedIndex = 1;
   @override
   Widget build(BuildContext context) {
+    return SingleChildScrollView(child: Column(children: [_buildTitle(), 20.height, _content()]));
+  }
+
+  Column _content() {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        20.height,
+        Flexible(
+          child: selectedIndex == 0
+              ? widget.signupWidget(() {
+                  setState(() {
+                    selectedIndex = 1;
+                  });
+                })
+              : widget.loginWidget(() {
+                  setState(() {
+                    selectedIndex = 0;
+                  });
+                }),
+        ),
+        50.height,
+      ],
+    );
+  }
+
+  Widget _buildTitle() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
         CommonText(
           text: selectedIndex == 0 ? singUpTittle : signInTittle,
           fontSize: 24,
           fontWeight: FontWeight.w500,
+          
         ).center,
         CommonText(
           text: selectedIndex == 0 ? singUpSubTitle : signInSubTitle,
@@ -44,23 +70,6 @@ class _AuthSigmentedContainerState extends State<AuthSigmentedContainer> {
             });
           },
         ),
-
-        20.height,
-
-        selectedIndex == 0
-            ? Expanded(
-                child: widget.signupWidget(() {
-                  setState(() {
-                    selectedIndex = 1;
-                  });
-                }),
-              )
-            : widget.loginWidget(() {
-                setState(() {
-                  selectedIndex = 0;
-                });
-              }),
-        50.height,
       ],
     );
   }
