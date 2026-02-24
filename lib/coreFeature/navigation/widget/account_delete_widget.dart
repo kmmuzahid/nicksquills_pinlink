@@ -17,7 +17,7 @@ class AccountDeleteWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColor.background,
+        color: AppColor.bACKGROUND_darkCard,
         borderRadius: BorderRadius.circular(8),
       ),
       padding: const EdgeInsets.all(16),
@@ -37,7 +37,7 @@ class AccountDeleteWidget extends StatelessWidget {
             text: AppString
                 .please_be_aware_that_deleted_account_cannot_be_undone_all_your_data_will_be_lost,
             maxLines: 2,
-            textColor: AppColor.textGray,
+            textColor: AppColor.tEXT_white,
             fontSize: 16,
           ),
 
@@ -49,7 +49,7 @@ class AccountDeleteWidget extends StatelessWidget {
           ).start,
           8.height,
           CommonTextField(
-            borderColor: AppColor.background,
+            borderColor: AppColor.bACKGROUND_clickableBorder,
             hintText: AppString.enter_your_password,
             validationType: ValidationType.validatePassword,
             prefixIcon: const Icon(Icons.lock_outline),
@@ -62,13 +62,13 @@ class AccountDeleteWidget extends StatelessWidget {
             children: [
               CommonButton(
                 titleText: AppString.no,
-                titleColor: AppColor.primary,
+                titleColor: AppColor.tEXT_subDark,
                 buttonWidth: 100,
                 onTap: () {
                   navigatorRouterKey.currentState?.pop();
                 },
-                buttonColor: AppColor.background,
-                borderColor: AppColor.outlineColor,
+                buttonColor: AppColor.pRIMARY_brandClr,
+                borderColor: AppColor.pRIMARY_brandClr,
               ),
 
               const Spacer(),

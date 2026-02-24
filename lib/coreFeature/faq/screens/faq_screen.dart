@@ -42,7 +42,7 @@ class FaqScreen extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         child: Card(
-          color: AppColor.faqColor,
+          color: AppColor.bACKGROUND_darkCard,
           elevation: .5,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
           child: ExpansionTile(

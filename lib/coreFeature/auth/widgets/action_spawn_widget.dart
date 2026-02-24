@@ -22,21 +22,21 @@ class ActionSpawnWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return RichText(
       text: TextSpan(
-        style: TextStyle(color: AppColor.textGray, fontSize: 14),
+        style: TextStyle(color: AppColor.tEXT_sub, fontSize: 14),
         children: [
           TextSpan(
             text: title,
-            style: TextStyle(color: AppColor.textGray, fontSize: 14),
+            style: TextStyle(color: AppColor.tEXT_sub, fontSize: 14),
           ),
           TextSpan(
             text: ' $actionTitle',
-            style: const TextStyle(
-              color: Colors.blue,
+            style: TextStyle(
+              color: AppColor.sTATUS_info,
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.italic,
               decoration: TextDecoration.underline,
               decorationThickness: 2,
-              decorationColor: Colors.blue,
+              decorationColor: AppColor.sTATUS_info,
             ),
             recognizer: TapGestureRecognizer()..onTap = onTap,
           ),

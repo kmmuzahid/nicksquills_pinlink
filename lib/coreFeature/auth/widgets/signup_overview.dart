@@ -26,8 +26,8 @@ class SignUpOverview extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: AppColor.infoBoxColor,
-            border: Border.all(color: AppColor.outlineColor, width: 1.4),
+            color: AppColor.bACKGROUND_darkPage,
+            border: Border.all(color: AppColor.bACKGROUND_darkCardBoarder, width: 1.4),
             borderRadius: BorderRadius.circular(16),
           ),
           child: Text.rich(
@@ -35,19 +35,19 @@ class SignUpOverview extends StatelessWidget {
               children: [
                 TextSpan(
                   text: 'By clicking “Create Account”, you agree to our ',
-                  style: TextStyle(color: AppColor.textSub),
+                  style: TextStyle(color: AppColor.tEXT_sub),
                 ),
-                const TextSpan(
+                TextSpan(
                   text: 'Terms of Service',
-                  style: TextStyle(color: Color(0xFF6FAE97)),
+                  style: TextStyle(color: AppColor.pRIMARY_priSoft),
                 ),
                 TextSpan(
                   text: ' and ',
-                  style: TextStyle(color: AppColor.textSub),
+                  style: TextStyle(color: AppColor.tEXT_sub),
                 ),
-                const TextSpan(
+                TextSpan(
                   text: 'Privacy Policy',
-                  style: TextStyle(color: Color(0xFF6FAE97)),
+                  style: TextStyle(color: AppColor.pRIMARY_priSoft),
                 ),
               ],
             ),
@@ -63,7 +63,9 @@ class SignUpOverview extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       decoration: !isLast
           ? BoxDecoration(
-              border: Border(bottom: BorderSide(color: AppColor.outlineColor, width: 1.4)),
+              border: Border(
+                bottom: BorderSide(color: AppColor.bACKGROUND_darkCardBoarder, width: 1.4),
+              ),
             )
           : null,
       child: Row(
@@ -72,14 +74,14 @@ class SignUpOverview extends StatelessWidget {
             text: title,
             fontSize: 16,
             fontWeight: FontWeight.w500,
-            textColor: AppColor.textSubDark,
+            textColor: AppColor.tEXT_subDark,
           ),
           const Spacer(),
           CommonText(
             text: value,
             fontSize: 16,
             fontWeight: FontWeight.w500,
-            textColor: Colors.white,
+            textColor: AppColor.tEXT_white,
           ),
         ],
       ),

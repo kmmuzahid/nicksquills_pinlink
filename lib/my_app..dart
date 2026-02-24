@@ -58,7 +58,9 @@ class MyApp extends StatelessWidget {
                   // height: 120,
 
                   decoration: BoxDecoration(
-                    border: Border(bottom: BorderSide(color: AppColor.outlineColor, width: 1.5)),
+                    border: Border(
+                      bottom: BorderSide(color: AppColor.bACKGROUND_darkCardBoarder, width: 1.5),
+                    ),
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(20),
                       bottomRight: Radius.circular(20),

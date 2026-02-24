@@ -30,7 +30,7 @@ class SignupFormThree extends StatelessWidget {
         ),
         CommonText(
           text: 'Don’t know? Enter an estimate between 0-36',
-          textColor: AppColor.textSubDark,
+          textColor: AppColor.tEXT_subDark,
           isDescription: true,
           fontSize: 12,
           top: 4,
@@ -50,13 +50,19 @@ class SignupFormThree extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColor.infoBoxColor,
+        color: AppColor.bACKGROUND_darkPage,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColor.bACKGROUND_darkCardBoarder, width: 1.4),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const CommonText(text: 'What Next?', fontSize: 16, fontWeight: FontWeight.w500),
+          CommonText(
+            text: 'What Next?',
+            fontSize: 16,
+            textColor: AppColor.tEXT_white,
+            fontWeight: FontWeight.w500,
+          ),
           _buildText(text: 'Add 5-10 courses you’ve played'),
           _buildText(text: 'Compare courses to build your rankings'),
           _buildText(text: 'Add courses to your wishlist'),
@@ -67,9 +73,9 @@ class SignupFormThree extends StatelessWidget {
 
   CommonText _buildText({required String text}) {
     return CommonText(
-      preffix: Icon(Icons.check, color: AppColor.primary, size: 16),
+      preffix: Icon(Icons.check, color: AppColor.pRIMARY_priSoft, size: 16),
       text: text,
-      textColor: AppColor.textSubDark,
+      textColor: AppColor.tEXT_subDark,
       isDescription: true,
       fontSize: 12,
       top: 4,

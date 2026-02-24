@@ -49,13 +49,14 @@ class SendOtpScreen extends StatelessWidget {
                 CommonText(
                   text: AppString.forget_password,
                   fontSize: 18,
+                  textColor: AppColor.tEXT_white,
 
                   alignment: MainAxisAlignment.center,
                 ),
                 CommonText(
                   text: AppString.enter_your_email_account_to_rest_your_password,
                   fontSize: 16,
-                  textColor: AppColor.textGray,
+                  textColor: AppColor.pRIMARY_priSoft,
                   maxLines: 3,
                   isDescription: true,
                   alignment: MainAxisAlignment.center,
@@ -70,13 +71,14 @@ class SendOtpScreen extends StatelessWidget {
                       text: AppString.otp_verification.toUpperCase(),
                       style: getTheme.textTheme.bodyLarge,
                       alignment: MainAxisAlignment.center,
+                      textColor: AppColor.tEXT_white,
                     ),
                     if (!showSendToField)
                       IconButton(
                         onPressed: () {
                           context.read<OtpCubit>().resetState();
                         },
-                        icon: Icon(Icons.edit_note_outlined, color: AppColor.primary),
+                        icon: Icon(Icons.edit_note_outlined, color: AppColor.tEXT_white),
                       ),
                   ],
                 ),
@@ -87,7 +89,7 @@ class SendOtpScreen extends StatelessWidget {
                   text:
                       '${AppString.verification_code_has_been_sent_to} ${username.isNotEmpty ? username : state.username}',
                   fontSize: 14,
-                  textColor: AppColor.textSubDark,
+                  textColor: AppColor.pRIMARY_priSoft,
                   isDescription: true,
                   alignment: MainAxisAlignment.center,
                 ),

@@ -41,8 +41,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Container(
       padding: const EdgeInsets.only(top: 16, bottom: 16, left: 16, right: 16),
       decoration: BoxDecoration(
-        color: AppColor.cardColor,
+        color: AppColor.bACKGROUND_darkCard,
         borderRadius: const BorderRadius.all(Radius.circular(16)),
+        border: Border.all(color: AppColor.bACKGROUND_darkCardBoarder, width: 1.4),
       ),
       child: FormBuilder(
         entity: SignUpEntity(),
@@ -59,9 +60,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       margin: const EdgeInsets.symmetric(horizontal: 2),
                       height: 8,
                       decoration: BoxDecoration(
-                        border: Border.all(color: AppColor.white),
+                        border: Border.all(color: AppColor.tEXT_subDark),
                         borderRadius: BorderRadius.circular(5),
-                        color: page >= index ? AppColor.primary : AppColor.white,
+                        color: page >= index ? AppColor.pRIMARY_brandClr : AppColor.tEXT_subDark,
                       ),
                     ),
                   ),
@@ -70,7 +71,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               6.height,
               CommonText(
                 text: 'Step ${page + 1} of 4',
-                textColor: AppColor.textSubDark,
+                textColor: AppColor.tEXT_subDark,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ).center,
@@ -79,9 +80,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 text: getTitle(),
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                textColor: AppColor.textSubDark,
+                textColor: AppColor.tEXT_subDark,
               ),
-              Divider(color: AppColor.outlineColor),
+              Divider(color: AppColor.bACKGROUND_darkCardBoarder),
 
               Column(
                 children: [
@@ -132,8 +133,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           });
                         },
                         titleText: 'Back',
-                        buttonColor: const Color(0xFF052217).withOpacity(0.9),
-                        borderColor: AppColor.primary,
+                        buttonColor: AppColor.bACKGROUND_darkCardBoarder,
+                        borderColor: Colors.transparent,
                         buttonWidth: double.infinity,
                       ),
                     ),

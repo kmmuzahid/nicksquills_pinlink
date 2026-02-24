@@ -12,6 +12,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pinlink/common_widgets/simple_background.dart';
 import 'package:pinlink/config/bloc/cubit_scope_value.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/coreFeature/navigation/cubit/navigation_cubit.dart';
@@ -56,15 +57,14 @@ class NavigationScreen extends StatelessWidget {
         } else if (state.currentIndex == 4) {
           title = 'Profile';
         }
-        return Scaffold(
+        return SimpleBackground(
           key: scaffoldKey,
           // appBar: AppBarSimple(
           //   title: title,
           //   hideBack: true,
           //   disableBack: true,
           //   actions: [const NotificationIconWidget()],
-          // ),
-          backgroundColor: AppColor.background,
+          // ), 
           body: AnimatedSwitcher(
             duration: const Duration(milliseconds: 350),
             transitionBuilder: (child, animation) {
@@ -83,7 +83,7 @@ class NavigationScreen extends StatelessWidget {
           ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: state.currentIndex,
-            backgroundColor: AppColor.background,
+            backgroundColor: AppColor.bACKGROUND_darkCard,
             onTap: (index) => cubit.changeIndex(index),
             items: getpage()
                 .asMap()
@@ -129,15 +129,11 @@ class NavigationScreen extends StatelessWidget {
             topRight: Radius.circular(25),
             bottomLeft: Radius.circular(25),
           ),
-          gradient: LinearGradient(
-            colors: isSelected
-                ? [AppColor.secondary, AppColor.primary]
-                : [AppColor.background, AppColor.background],
-          ),
+          color: isSelected ? AppColor.tEXT_white : AppColor.tEXT_sub,
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: AppColor.primary.withOpacity(0.35),
+                    color: AppColor.pRIMARY_priLight.withOpacity(0.35),
                     blurRadius: 12,
                     offset: const Offset(0, 6),
                   ),

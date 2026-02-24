@@ -31,12 +31,12 @@ class NotificationIconWidget extends StatelessWidget {
                     label: Text(state.unreadCount.toString()),
                     backgroundColor: Colors.red,
                     textColor: Colors.white,
-                    child: Icon(Icons.notifications_outlined, color: AppColor.primary),
+                    child: Icon(Icons.notifications_outlined, color: AppColor.pRIMARY_brandClr),
                   )
-                : Icon(Icons.notifications_outlined, color: AppColor.primary),
+                : Icon(Icons.notifications_outlined, color: AppColor.pRIMARY_brandClr),
           ),
         );
       },
-    );
+    ); 
   }
 }

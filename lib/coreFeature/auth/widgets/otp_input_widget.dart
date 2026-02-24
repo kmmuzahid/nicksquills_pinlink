@@ -37,12 +37,15 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
   @override
   Widget build(BuildContext context) => Container(
     padding: EdgeInsets.only(top: 25.h, bottom: 30.h, left: 16.w, right: 16.w),
-    decoration: BoxDecoration(color: AppColor.cardColor, borderRadius: BorderRadius.circular(12)),
+    decoration: BoxDecoration(
+      color: AppColor.bACKGROUND_darkCard,
+      borderRadius: BorderRadius.circular(12),
+    ),
     child: Column(
       children: [
         CommonText(
           text: AppString.enter_verification_code,
-          textColor: AppColor.textGray,
+          textColor: AppColor.tEXT_white,
           fontSize: 12,
           bottom: 4,
         ).start,
@@ -79,7 +82,7 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
             alignment: MainAxisAlignment.end,
             text: '${AppString.resend_code_in} ${state.count} ${AppString.seconds}',
             fontWeight: FontWeight.bold,
-            textColor: AppColor.primary,
+            textColor: AppColor.sTATUS_info,
           );
   }
 
@@ -114,9 +117,12 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
 
   Widget _otpBuilder(BuildContext context) {
     return PinCodeTextField(  
-      cursorColor: AppColor.primary,
+      cursorColor: AppColor.pRIMARY_brandClr,
       backgroundColor: Colors.transparent,
-      textStyle: getTheme.textTheme.bodyMedium?.copyWith(fontSize: 25, color: AppColor.primary),
+      textStyle: getTheme.textTheme.bodyMedium?.copyWith(
+        fontSize: 25,
+        color: AppColor.pRIMARY_brandClr,
+      ),
       appContext: context,
       autoFocus: true,
       onChanged: (value) {
@@ -128,13 +134,13 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
         borderRadius: BorderRadius.circular(4),
         fieldHeight: 40,
         fieldWidth: 40,
-        activeFillColor: AppColor.infoBoxColor,
-        selectedFillColor: AppColor.infoBoxColor,
-        inactiveFillColor: AppColor.infoBoxColor,
+        activeFillColor: AppColor.bACKGROUND_darkPage,
+        selectedFillColor: AppColor.bACKGROUND_darkPage,
+        inactiveFillColor: AppColor.bACKGROUND_darkPage,
         borderWidth: 0.1,
-        selectedColor: AppColor.infoBoxColor,
-        activeColor: AppColor.infoBoxColor,
-        inactiveColor: AppColor.infoBoxColor,
+        selectedColor: AppColor.bACKGROUND_darkPage,
+        activeColor: AppColor.bACKGROUND_darkPage,
+        inactiveColor: AppColor.bACKGROUND_darkPage,
       ),
       length: 6, 
       keyboardType: InputHelper.getKeyboardType(ValidationType.validateOTP),

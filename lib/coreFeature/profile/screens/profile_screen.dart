@@ -66,7 +66,7 @@ class ProfileScreen extends StatelessWidget {
                   appRouter.push(const AboutUsRoute());
                 }),
                 const SizedBox(height: 20),
-                _buildActionButton(AppString.logout, Icons.logout_outlined, AppColor.textGray, () {
+                _buildActionButton(AppString.logout, Icons.logout_outlined, AppColor.tEXT_sub, () {
                   showDialog<Widget>(
                     context: context,
                     builder: (context) => const Dialog(child: LogoutAlertWidget()),
@@ -76,7 +76,7 @@ class ProfileScreen extends StatelessWidget {
                 _buildActionButton(
                   AppString.delete_account,
                   Icons.delete_outline,
-                  AppColor.textGray,
+                  AppColor.tEXT_dark,
                   () {
                     showDialog<Widget>(
                       context: context,
@@ -143,7 +143,7 @@ class ProfileScreen extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [AppColor.secondary, AppColor.primary],
+                colors: [AppColor.pRIMARY_brandClr, AppColor.pRIMARY_brandClr],
               ),
               borderRadius: BorderRadius.vertical(bottom: Radius.circular(50.r)),
             ),
@@ -222,7 +222,7 @@ class ProfileScreen extends StatelessWidget {
             value: true,
             onChanged: (val) {},
             activeThumbColor: Colors.cyan,
-            inactiveThumbColor: AppColor.outlineColor,
+            inactiveThumbColor: AppColor.bACKGROUND_darkCardBoarder,
           ),
         ),
       ],
@@ -233,7 +233,7 @@ class ProfileScreen extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
-        color: AppColor.listMenuColor,
+        color: AppColor.bACKGROUND_darkCard,
         borderRadius: BorderRadius.circular(8),
       ),
       child: ListTile(
@@ -246,7 +246,7 @@ class ProfileScreen extends StatelessWidget {
 
   Widget _buildActionButton(String label, IconData icon, Color color, Function() onTap) {
     return CommonButton(
-      buttonColor: AppColor.background,
+      buttonColor: AppColor.bACKGROUND_darkPage,
       borderColor: color,
       buttonWidth: double.infinity,
       prefix: Icon(icon, color: color),

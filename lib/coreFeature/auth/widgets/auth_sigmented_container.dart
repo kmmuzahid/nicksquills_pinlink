@@ -53,6 +53,7 @@ class _AuthSigmentedContainerState extends State<AuthSigmentedContainer> {
           text: selectedIndex == 0 ? singUpTittle : signInTittle,
           fontSize: 24,
           fontWeight: FontWeight.w500,
+          textColor: AppColor.tEXT_white,
           
         ).center,
         CommonText(
@@ -60,7 +61,7 @@ class _AuthSigmentedContainerState extends State<AuthSigmentedContainer> {
           fontSize: 16,
           maxLines: 3,
           isDescription: true,
-          textColor: AppColor.subtitleColor,
+          textColor: AppColor.pRIMARY_priSoft,
         ).center,
         20.height,
         _buildSegmentedButton(
@@ -77,9 +78,9 @@ class _AuthSigmentedContainerState extends State<AuthSigmentedContainer> {
   Widget _buildSegmentedButton({required Function(int) onTap}) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColor.surfaceColor.withValues(alpha: .3),
+        color: AppColor.bACKGROUND_darkCard,
         borderRadius: BorderRadius.circular(40),
-        border: Border.all(color: AppColor.outlineColor, width: 1.2),
+        border: Border.all(color: AppColor.bACKGROUND_darkCardBoarder, width: 1.2),
       ),
 
       child: Row(
@@ -113,7 +114,7 @@ class _AuthSigmentedContainerState extends State<AuthSigmentedContainer> {
           child: Center(
             child: CommonText(
               text: segments[index],
-              textColor: AppColor.white,
+              textColor: AppColor.tEXT_white,
               fontSize: 15,
               fontWeight: FontWeight.w500,
             ),

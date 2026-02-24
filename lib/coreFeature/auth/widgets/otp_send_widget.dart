@@ -37,7 +37,7 @@ class _OtpSendState extends State<OtpSend> {
         margin: EdgeInsets.only(top: 20.w),
         padding: EdgeInsets.only(top: 25.h, bottom: 30.h, left: 16.w, right: 16.w),
         decoration: BoxDecoration(
-          color: AppColor.cardColor,
+          color: AppColor.bACKGROUND_darkCard,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Form(

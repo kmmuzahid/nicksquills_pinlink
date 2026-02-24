@@ -43,7 +43,7 @@ class ChangePasswordScreen extends StatelessWidget {
                   AppString.in_order_to_keep_your_account_safe_you_need_to_create_a_strong_password,
               maxLines: 2,
               textAlign: TextAlign.center,
-              textColor: AppColor.textGray,
+              textColor: AppColor.tEXT_white,
               fontSize: 16,
             ),
             20.height,

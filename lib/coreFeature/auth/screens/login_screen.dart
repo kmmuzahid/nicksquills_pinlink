@@ -62,7 +62,7 @@ class _loginForm extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
       decoration: BoxDecoration(
-        color: const Color(0xFF052217).withOpacity(0.9),
+        color: AppColor.bACKGROUND_darkCard,
         borderRadius: const BorderRadius.all(Radius.circular(16)),
       ),
       child: FormBuilder(
@@ -91,7 +91,7 @@ class _loginForm extends StatelessWidget {
               onSaved: (value, controller) => entity.password = value,
             ),
             10.height,
-            GestureDetector(
+            GestureDetector( 
               onTap: () {
                 final email = entity.email ?? '';
                 appRouter.push(
@@ -105,13 +105,13 @@ class _loginForm extends StatelessWidget {
               },
               child: CommonText(
                 text: AppString.forget_password,
-                textColor: AppColor.errorColor,
+                textColor: AppColor.sTATUS_error,
                 fontSize: 12,
                 style: TextStyle(
                   decoration: TextDecoration.underline,
                   decorationThickness: 2,
                   fontStyle: FontStyle.italic,
-                  decorationColor: AppColor.errorColor,
+                  decorationColor: AppColor.sTATUS_error,
                 ),
                 fontWeight: FontWeight.bold,
               ).end,
@@ -146,7 +146,7 @@ class _loginForm extends StatelessWidget {
                     Center(
                       child: CommonText(
                         text: AppString.or_continue_with,
-                        textColor: AppColor.textGray,
+                        textColor: AppColor.tEXT_sub,
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
                       ),
