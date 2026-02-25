@@ -11,7 +11,9 @@ import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router_observer.dart';
 import 'package:pinlink/config/storage/storage_key.dart';
-import 'package:pinlink/config/theme/common_theme_data.dart';
+import 'package:pinlink/config/theme/cubit/theme_cubit.dart' show ThemeCubit;
+import 'package:pinlink/config/theme/cubit/theme_state.dart';
+import 'package:pinlink/config/theme/custom_theme.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_state.dart';
 import 'package:pinlink/coreFeature/navigation/cubit/navigation_cubit.dart';
@@ -38,73 +40,83 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        // BlocProvider(create: (_) => ThemeCubit()..update(), lazy: false),
+        BlocProvider(create: (_) => ThemeCubit(), lazy: false),
         // BlocProvider(create: (_) => LanguageCubit()..init(), lazy: false),
         BlocProvider(create: (_) => AuthCubit()),
         BlocProvider(create: (_) => NotificationCubit()),
         BlocProvider(create: (_) => NavigationCubit()),
       ],
-      child: MaterialApp.router(
-        scrollBehavior: CustomScrollBehavior(),
-        debugShowCheckedModeBanner: false,
-        routerConfig: appRouter.config(navigatorObservers: () => [AppRouterObserver()]),
-        theme: commonThemeData,
-        themeMode: ThemeMode.dark,
-        builder: (context, child) {
-          return BlocBuilder<AuthCubit, AuthState>(
-            builder: (context, state) {
-              return CoreKit.init(
-                appbarConfig: AppbarConfig(
-                  // height: 120,
-
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(color: AppColor.bACKGROUND_darkCardBoarder, width: 1.5),
+      child: BlocBuilder<ThemeCubit, ThemeState>(
+        builder: (context, themeState) {
+          return MaterialApp.router(
+            scrollBehavior: CustomScrollBehavior(),
+            debugShowCheckedModeBanner: false,
+            routerConfig: appRouter.config(navigatorObservers: () => [AppRouterObserver()]),
+            theme: commonThemeData(LightAppColor.instance),
+            darkTheme: commonThemeData(DarkAppColor.instance),
+            themeMode: themeState.themeMode,
+            builder: (context, child) {
+              return BlocBuilder<AuthCubit, AuthState>(
+                builder: (context, state) {
+                  return CoreKit.init(
+                    appbarConfig: AppbarConfig(
+                      // height: 120,
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: AppColor.bACKGROUND_darkCardBoarder,
+                            width: 1.5,
+                          ),
+                        ),
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(20),
+                          bottomRight: Radius.circular(20),
+                        ),
+                        color: Colors.transparent,
+                      ),
+                      onBack: () {
+                        appRouter.pop();
+                      },
+                      backButton: Container(
+                        padding: const EdgeInsets.all(10),
+                        color: Colors.transparent,
+                        child: CommonImage(
+                          src: Assets.images.back,
+                          imageColor: AppColor.tEXT_white,
+                        ),
+                      ),
                     ),
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
+                    designSize: const Size(393, 690),
+                    imageBaseUrl: ApiEndPoint.instance.baseUrl,
+                    navigatorKey: appRouter.navigatorKey,
+                    dioServiceConfig: DioServiceConfig(
+                      baseUrl: ApiEndPoint.instance.baseUrl,
+                      refreshTokenEndpoint: ApiEndPoint.instance.refreshTokenEndpoint,
+                      onLogout: () {
+                        context.read<AuthCubit>().clearTokens();
+                      },
+                      enableDebugLogs: true,
                     ),
-                    color: Colors.transparent,
-                  ),
-                  onBack: () {
-                    appRouter.pop();
-                  },
-                  backButton: Container(
-                    padding: const EdgeInsets.all(10),
-                    color: Colors.transparent,
-                    child: CommonImage(src: Assets.images.back),
-                  ),
-                ),
-                designSize: const Size(393, 690),
-                imageBaseUrl: ApiEndPoint.instance.baseUrl,
-                navigatorKey: appRouter.navigatorKey, 
-                dioServiceConfig: DioServiceConfig(
-                  baseUrl: ApiEndPoint.instance.baseUrl,
-                  refreshTokenEndpoint: ApiEndPoint.instance.refreshTokenEndpoint,
-                  onLogout: () {
-                    context.read<AuthCubit>().clearTokens();
-                  },
-                  enableDebugLogs: true,
-                ),
-                tokenProvider: TokenProvider(
-                  accessToken: () async => (await StorageService.instance.accessToken) ?? '',
-                  refreshToken: () async {
-                    AppLogger.debug(
-                      (await StorageService.instance.refreshToken).toString(),
-                      tag: 'refreshToken',
-                    );
-                    return (await StorageService.instance.refreshToken) ?? '';
-                  },
-                  updateTokens: (data) async { 
-                    AppLogger.debug('Update Tokens', tag: 'updateTokens');
-                    await context.read<AuthCubit>().updateTokens(
-                      data['accessToken'],
-                      data['refreshToken'],
-                    );
-                  }, 
-                ),
-                child: child,
+                    tokenProvider: TokenProvider(
+                      accessToken: () async => (await StorageService.instance.accessToken) ?? '',
+                      refreshToken: () async {
+                        AppLogger.debug(
+                          (await StorageService.instance.refreshToken).toString(),
+                          tag: 'refreshToken',
+                        );
+                        return (await StorageService.instance.refreshToken) ?? '';
+                      },
+                      updateTokens: (data) async {
+                        AppLogger.debug('Update Tokens', tag: 'updateTokens');
+                        await context.read<AuthCubit>().updateTokens(
+                          data['accessToken'],
+                          data['refreshToken'],
+                        );
+                      },
+                    ),
+                    child: child,
+                  );
+                },
               );
             },
           );

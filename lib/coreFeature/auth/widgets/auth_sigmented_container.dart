@@ -103,8 +103,11 @@ class _AuthSigmentedContainerState extends State<AuthSigmentedContainer> {
           decoration: BoxDecoration(
             color: selectedIndex == index ? null : Colors.transparent,
             gradient: selectedIndex == index
-                ? const LinearGradient(
-                    colors: [Color(0xFF184F3A), Color(0xFF2F6F57)],
+                ? LinearGradient(
+                    colors: [
+                      DarkAppColor.instance.pRIMARY_priMedium,
+                      DarkAppColor.instance.pRIMARY_priLight,
+                    ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                   )
@@ -114,7 +117,7 @@ class _AuthSigmentedContainerState extends State<AuthSigmentedContainer> {
           child: Center(
             child: CommonText(
               text: segments[index],
-              textColor: AppColor.tEXT_white,
+              textColor: selectedIndex == index ? Colors.white : AppColor.tEXT_white,
               fontSize: 15,
               fontWeight: FontWeight.w500,
             ),

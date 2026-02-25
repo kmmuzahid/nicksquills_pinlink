@@ -8,15 +8,38 @@ import 'package:pinlink/constant/enums.dart';
 class Plan {
   final String name;
   final double price;
+  final String subtitle;
+  final List<String> featureTitles;
+  final List<String> extraFeatures;
   final List<Feature> allowedFeatures;
   final Map<Feature, int>? limits; // for features with max values
 
-  Plan({required this.name, required this.price, required this.allowedFeatures, this.limits});
+  Plan({
+    required this.name,
+    required this.price,
+    required this.featureTitles,
+    required this.extraFeatures,
+    required this.allowedFeatures,
+    required this.subtitle,
+    this.limits,
+  });
 }
 
 final freePlan = Plan(
   name: "Free",
   price: 0,
+  subtitle: 'Lifetime',
+  featureTitles: [
+    "Rank unlimited courses",
+    "Wishlist limited courses (5)",
+    "Limited photo uploads per post  (5)",
+    "10 seconds long video posting",
+    "Ads included",
+    "No sign-up bonus points",
+    "No points for PinLinks 5 courses",
+    "Invite up to 5 friends for the tournament",
+  ],
+  extraFeatures: ["Limited course comparison categories", "No Ad-free experience"],
   allowedFeatures: [
     Feature.rankWishlistCourses,
     Feature.feedPosts,
@@ -36,8 +59,20 @@ final freePlan = Plan(
 );
 
 final clubPlan = Plan(
+  subtitle: 'Monthly',
   name: "PinLinks Club Member",
   price: 12.99,
+  featureTitles: [
+    "Unlimited course tracking",
+    "Ad-free experience",
+    "Unlimited friends",
+    "Unlimited leaderboard invites",
+    "6+ photos per post",
+    "Longer Video posting",
+    "1000 points at sign-up",
+    "100 points for playing Pinlinks 5 courses",
+  ],
+  extraFeatures: [],
   allowedFeatures: [
     Feature.rankWishlistCourses,
     Feature.feedPosts,
@@ -57,8 +92,18 @@ final clubPlan = Plan(
 );
 
 final creatorPlan = Plan(
+  subtitle: 'Yearly',
   name: "Creator / Business",
   price: 24.99,
+  featureTitles: [
+    "For creators & brands",
+    "All Club features",
+    "Social links (YouTube, IG, TikTok, X)",
+    "Personal store integration",
+    "Self-promo ad space",
+    "Analytics: views, clicks, revenue",
+  ],
+  extraFeatures: [],
   allowedFeatures: [
     Feature.rankWishlistCourses,
     Feature.feedPosts,

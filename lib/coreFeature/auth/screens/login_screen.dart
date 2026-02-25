@@ -26,7 +26,6 @@ import 'package:pinlink/coreFeature/auth/entity/login_entity.dart';
 import 'package:pinlink/coreFeature/auth/screens/sign_up_screen.dart';
 import 'package:pinlink/coreFeature/auth/widgets/action_spawn_widget.dart';
 import 'package:pinlink/coreFeature/auth/widgets/auth_sigmented_container.dart';
-import 'package:pinlink/gen/assets.gen.dart';
 
 @RoutePage()
 class LoginScreen extends StatelessWidget {
@@ -143,48 +142,48 @@ class _loginForm extends StatelessWidget {
                     ),
 
                     25.height,
-                    Center(
-                      child: CommonText(
-                        text: AppString.or_continue_with,
-                        textColor: AppColor.tEXT_sub,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    15.height,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: CommonButton(
-                            titleText: 'Google',
-                            buttonColor: Colors.transparent,
-                            borderColor: const Color(0xFF6FAE97),
-                            prefix: CommonImage(
-                              size: 25,
-                              fill: BoxFit.contain,
-                              src: Assets.images.google,
-                            ),
-                            onTap: () {},
-                          ),
-                        ),
-                        20.width,
-                        Expanded(
-                          child: CommonButton(
-                            titleText: 'Google',
-                            buttonColor: Colors.transparent,
-                            borderColor: const Color(0xFF6FAE97),
-                            prefix: CommonImage(
-                              size: 25,
-                              fill: BoxFit.contain,
-                              src: Assets.images.apple.path,
-                              imageColor: Colors.white,
-                            ),
-                            onTap: () {},
-                          ),
-                        ),
-                      ],
-                    ),
+                    // Center(
+                    //   child: CommonText(
+                    //     text: AppString.or_continue_with,
+                    //     textColor: AppColor.tEXT_sub,
+                    //     fontSize: 15,
+                    //     fontWeight: FontWeight.w500,
+                    //   ),
+                    // ),
+                    // 15.height,
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     Expanded(
+                    //       child: CommonButton(
+                    //         titleText: 'Google',
+                    //         buttonColor: Colors.transparent,
+                    //         borderColor: const Color(0xFF6FAE97),
+                    //         prefix: CommonImage(
+                    //           size: 25,
+                    //           fill: BoxFit.contain,
+                    //           src: Assets.images.google,
+                    //         ),
+                    //         onTap: () {},
+                    //       ),
+                    //     ),
+                    //     20.width,
+                    //     Expanded(
+                    //       child: CommonButton(
+                    //         titleText: 'Google',
+                    //         buttonColor: Colors.transparent,
+                    //         borderColor: const Color(0xFF6FAE97),
+                    //         prefix: CommonImage(
+                    //           size: 25,
+                    //           fill: BoxFit.contain,
+                    //           src: Assets.images.apple.path,
+                    //           imageColor: Colors.white,
+                    //         ),
+                    //         onTap: () {},
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                   ],
                 );
               },

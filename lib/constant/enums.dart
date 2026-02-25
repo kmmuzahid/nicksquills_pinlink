@@ -30,5 +30,5 @@ enum Feature {
   socialLinks,
   personalStoreLink,
   selfPromoAdSpace,
-  analyticsViewsClicksRevenue,
+  analyticsViewsClicksRevenue,  
 }

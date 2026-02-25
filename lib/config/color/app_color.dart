@@ -6,18 +6,29 @@
  * @Email: km.muzahid@gmail.com
  */
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pinlink/config/route/app_router.dart';
+import 'package:pinlink/config/theme/cubit/theme_cubit.dart';
 
-AppColorBase get AppColor => LightAppColor();
+AppColorBase get AppColor =>
+    appRouter.navigatorKey.currentContext?.read<ThemeCubit>().state.themeMode == ThemeMode.dark
+    ? DarkAppColor.instance
+    : LightAppColor.instance;
 
-class DarkAppColor extends AppColorBase {}
+class DarkAppColor extends AppColorBase {
+  DarkAppColor._();
+  static DarkAppColor instance = DarkAppColor._();
+}
 
 abstract class AppColorBase {
+  Color get background => Theme.of(appRouter.navigatorKey.currentContext!).scaffoldBackgroundColor;
+  Color background_theme = const Color(0xFF0C2E1E);
   Color bACKGROUND_card = const Color(0xFFFEFBE8);
   Color bACKGROUND_clickableBorder = const Color(0xFF789086);
   Color bACKGROUND_darkCard = const Color(0xFF052217);
   Color bACKGROUND_darkCardBoarder = const Color(0xFF1A3129);
   Color bACKGROUND_darkPage = const Color(0xFF061512);
-  Color bACKGROUND_page = const Color(0xFFF8FAF9);
+  Color bACKGROUND_page = const Color.fromARGB(255, 55, 92, 74);
   Color border_divider = const Color(0xFFE5E7EB);
   Color iconBorder = const Color(0xFF0C2E1E);
   Color lightYellow = const Color(0xFFFFF4CC);
@@ -39,7 +50,13 @@ abstract class AppColorBase {
 }
 
 class LightAppColor extends AppColorBase {
+  LightAppColor._();
+  static LightAppColor instance = LightAppColor._();
   // Backgrounds
+  @override
+  Color get background => Theme.of(appRouter.navigatorKey.currentContext!).scaffoldBackgroundColor; // pure white for cards
+  @override
+  Color background_theme = const Color(0xFFFFFFFF); // pure white for cards
   @override
   Color bACKGROUND_card = const Color(0xFFFFFFFF); // pure white for cards
   @override
@@ -49,7 +66,7 @@ class LightAppColor extends AppColorBase {
   @override
   Color bACKGROUND_darkCardBoarder = const Color(0xFFE2E8F0); // subtle card border
   @override
-  Color bACKGROUND_darkPage = const Color(0xFFF7FAFC); // main page light gray
+  Color bACKGROUND_darkPage = Colors.grey.shade200; // main page light gray
   @override
   Color bACKGROUND_page = const Color(0xFFFFFFFF); // white background
 
@@ -65,13 +82,11 @@ class LightAppColor extends AppColorBase {
 
   // Brand colors
   @override
-  Color pRIMARY_brandClr = const Color(0xFF1F5D42); // dark green
+  Color pRIMARY_brandClr = const Color(0xFF184F3A);
   @override
-  Color pRIMARY_priLight = const Color(0xFF4A8C6F); // lighter green
+  Color pRIMARY_priLight = Colors.grey.shade50;
   @override
-  Color pRIMARY_priMedium = const Color(0xFF256B4E); // medium green
-  @override
-  Color pRIMARY_priSoft = const Color(0xFF8FC9AA); // soft green
+  Color pRIMARY_priMedium = Colors.grey.shade300;
 
   // Status
   @override

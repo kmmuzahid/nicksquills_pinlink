@@ -6,6 +6,7 @@
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pinlink/common_widgets/common_widget.dart';
 import 'package:pinlink/config/bloc/cubit_scope_value.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/coreFeature/auth/cubit/otp_cubit.dart';
@@ -44,11 +45,8 @@ class _OtpSendState extends State<OtpSend> {
           key: formKey,
           child: Column(
             children: [
-              
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: CommonText(text: 'Email Address', textColor: Colors.white, fontSize: 14),
-              ),
+
+              const BuildLabel('Email Address'),
               12.height,
               CommonTextField(
                 controller: controller,
