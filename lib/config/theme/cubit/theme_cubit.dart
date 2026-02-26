@@ -5,17 +5,15 @@
  */
 import 'package:flutter/material.dart';
 import 'package:pinlink/config/bloc/safe_cubit.dart';
-import 'package:pinlink/config/color/app_color.dart';
-import 'package:pinlink/config/theme/cubit/theme_state.dart';
 
-class ThemeCubit extends SafeCubit<ThemeState> {
-  ThemeCubit() : super(ThemeState(appColor: DarkAppColor.instance, themeMode: ThemeMode.dark));
+class ThemeCubit extends SafeCubit<ThemeMode> {
+  ThemeCubit() : super(ThemeMode.dark);
 
   void toggleTheme() {
-    if (state.themeMode == ThemeMode.dark) {
-      emit(ThemeState(appColor: LightAppColor.instance, themeMode: ThemeMode.light));
+    if (state == ThemeMode.dark) {
+      emit(ThemeMode.light);
     } else {
-      emit(ThemeState(appColor: DarkAppColor.instance, themeMode: ThemeMode.dark));
+      emit(ThemeMode.dark);
     }
   }
 }

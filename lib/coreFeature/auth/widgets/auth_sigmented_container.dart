@@ -53,7 +53,7 @@ class _AuthSigmentedContainerState extends State<AuthSigmentedContainer> {
           text: selectedIndex == 0 ? singUpTittle : signInTittle,
           fontSize: 24,
           fontWeight: FontWeight.w500,
-          textColor: AppColor.tEXT_white,
+          textColor: context.colors.tEXT_white,
           
         ).center,
         CommonText(
@@ -61,7 +61,7 @@ class _AuthSigmentedContainerState extends State<AuthSigmentedContainer> {
           fontSize: 16,
           maxLines: 3,
           isDescription: true,
-          textColor: AppColor.pRIMARY_priSoft,
+          textColor: context.colors.pRIMARY_priSoft,
         ).center,
         20.height,
         _buildSegmentedButton(
@@ -78,9 +78,9 @@ class _AuthSigmentedContainerState extends State<AuthSigmentedContainer> {
   Widget _buildSegmentedButton({required Function(int) onTap}) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColor.bACKGROUND_darkCard,
+        color: context.colors.bACKGROUND_darkCard,
         borderRadius: BorderRadius.circular(40),
-        border: Border.all(color: AppColor.bACKGROUND_darkCardBoarder, width: 1.2),
+        border: Border.all(color: context.colors.bACKGROUND_darkCardBoarder, width: 1.2),
       ),
 
       child: Row(
@@ -105,8 +105,7 @@ class _AuthSigmentedContainerState extends State<AuthSigmentedContainer> {
             gradient: selectedIndex == index
                 ? LinearGradient(
                     colors: [
-                      DarkAppColor.instance.pRIMARY_priMedium,
-                      DarkAppColor.instance.pRIMARY_priLight,
+                      ThemeColor.dark.pRIMARY_priMedium, ThemeColor.dark.pRIMARY_priLight,
                     ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
@@ -117,7 +116,7 @@ class _AuthSigmentedContainerState extends State<AuthSigmentedContainer> {
           child: Center(
             child: CommonText(
               text: segments[index],
-              textColor: selectedIndex == index ? Colors.white : AppColor.tEXT_white,
+              textColor: selectedIndex == index ? Colors.white : context.colors.tEXT_white,
               fontSize: 15,
               fontWeight: FontWeight.w500,
             ),

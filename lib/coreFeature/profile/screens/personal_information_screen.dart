@@ -8,7 +8,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pinlink/common_widgets/appbar/appbar_simple.dart';
 import 'package:pinlink/config/bloc/cubit_scope.dart';
 import 'package:pinlink/constant/app_string.dart';
 import 'package:pinlink/constant/constants.dart';
@@ -24,7 +23,7 @@ class PersonalInformationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final authCubit = context.read<AuthCubit>();
     return Scaffold(
-      appBar: AppBarSimple(title: AppString.personal_information),
+      appBar: CommonAppBar(title: AppString.personal_information),
       body: Padding(
         padding: Constants.bodyPadding,
         child: FormBuilder(

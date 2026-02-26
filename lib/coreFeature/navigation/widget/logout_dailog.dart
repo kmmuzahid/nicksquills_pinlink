@@ -22,7 +22,7 @@ class LogoutAlertWidget extends StatelessWidget {
   Container _content(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColor.bACKGROUND_darkCard,
+        color: context.colors.bACKGROUND_darkCard,
         borderRadius: BorderRadius.circular(8),
       ),
       padding: const EdgeInsets.all(16),
@@ -41,7 +41,7 @@ class LogoutAlertWidget extends StatelessWidget {
           CommonText(
             text: AppString.are_you_sure_you_want_to_logout_of_your_account,
             maxLines: 2,
-            textColor: AppColor.tEXT_sub,
+            textColor: context.colors.tEXT_sub,
             fontSize: 16,
           ),
 
@@ -51,13 +51,13 @@ class LogoutAlertWidget extends StatelessWidget {
             children: [
               CommonButton(
                 titleText: AppString.no,
-                titleColor: AppColor.pRIMARY_brandClr,
+                titleColor: context.colors.pRIMARY_brandClr,
                 buttonWidth: 100,
                 onTap: () {
                   navigatorRouterKey.currentState?.pop();
                 },
-                buttonColor: AppColor.bACKGROUND_clickableBorder,
-                borderColor: AppColor.bACKGROUND_clickableBorder,
+                buttonColor: context.colors.bACKGROUND_clickableBorder,
+                borderColor: context.colors.bACKGROUND_clickableBorder,
               ),
 
               const Spacer(),

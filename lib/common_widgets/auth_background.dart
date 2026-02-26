@@ -15,27 +15,40 @@ class AuthBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(  
+    
+    return Scaffold(   
+      backgroundColor: context.colors.background,
       body: SizedBox(
         width: CoreScreenUtils.deviceSize.width,
         height: CoreScreenUtils.deviceSize.height,
-      
-        child: background(
-          context: context,
-          width: CoreScreenUtils.deviceSize.width,
-          height: CoreScreenUtils.deviceSize.height,
-          circleColor1: AppColor.pRIMARY_priLight,
-          circleColor2: AppColor.pRIMARY_priMedium,
-          // child: const SizedBox.shrink(),
-          child: Column(
-            children: [
-              appBar ?? const SizedBox.shrink(),
-              Expanded(child: body),
-              bottomNavigationBar ?? const SizedBox.shrink(),
-            ],
-          ),
+        child: Column(
+          children: [
+            appBar ?? const SizedBox.shrink(),
+            Expanded(child: body),
+            bottomNavigationBar ?? const SizedBox.shrink(),
+          ],
         ),
       ),
+      // body: SizedBox(
+      //   width: CoreScreenUtils.deviceSize.width,
+      //   height: CoreScreenUtils.deviceSize.height,
+
+      //   // child: background(
+      //   //   context: context,
+      //   //   width: CoreScreenUtils.deviceSize.width,
+      //   //   height: CoreScreenUtils.deviceSize.height,
+      //   //   circleColor1: context.colors.pRIMARY_priLight,
+      //   //   circleColor2: context.colors.pRIMARY_priMedium,
+      //   //   // child: const SizedBox.shrink(),
+      //   //   child: Column(
+      //   //     children: [
+      //   //       appBar ?? const SizedBox.shrink(),
+      //   //       Expanded(child: body),
+      //   //       bottomNavigationBar ?? const SizedBox.shrink(),
+      //   //     ],
+      //   //   ),
+      //   // ),
+      // ),
     );
   }
 
@@ -47,7 +60,7 @@ class AuthBackground extends StatelessWidget {
     required Color circleColor1,
     required Color circleColor2,
   }) {
-    final background1 = AppColor.background;
+    final background1 = context.colors.background;
     return Container(
       color: background1, // top and bottom dark base
       width: width,

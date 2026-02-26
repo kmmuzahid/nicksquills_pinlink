@@ -32,13 +32,13 @@ class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return AuthBackground(
-      appBar: CommonAppBar(
-        title: '',
+      appBar: CommonAppBar( 
         disableBack: true,
         hideBack: true,
         appbarConfig: AppbarConfig(backgroundColor: Colors.transparent),
+        
       ),
       body: Padding(
         padding: Constants.bodyPadding,
@@ -61,7 +61,7 @@ class _loginForm extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
       decoration: BoxDecoration(
-        color: AppColor.bACKGROUND_darkCard,
+        color: context.colors.bACKGROUND_darkCard,
         borderRadius: const BorderRadius.all(Radius.circular(16)),
       ),
       child: FormBuilder(
@@ -90,7 +90,7 @@ class _loginForm extends StatelessWidget {
               onSaved: (value, controller) => entity.password = value,
             ),
             10.height,
-            GestureDetector( 
+            GestureDetector(
               onTap: () {
                 final email = entity.email ?? '';
                 appRouter.push(
@@ -104,13 +104,13 @@ class _loginForm extends StatelessWidget {
               },
               child: CommonText(
                 text: AppString.forget_password,
-                textColor: AppColor.sTATUS_error,
+                textColor: context.colors.sTATUS_error,
                 fontSize: 12,
                 style: TextStyle(
                   decoration: TextDecoration.underline,
                   decorationThickness: 2,
                   fontStyle: FontStyle.italic,
-                  decorationColor: AppColor.sTATUS_error,
+                  decorationColor: context.colors.sTATUS_error,
                 ),
                 fontWeight: FontWeight.bold,
               ).end,

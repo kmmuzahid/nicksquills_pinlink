@@ -89,7 +89,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white, width: 1.5),
             borderRadius: BorderRadius.circular(15),
-            color: pageIndex == index ? DarkAppColor.instance.pRIMARY_brandClr : Colors.white,
+            color: pageIndex == index ? ThemeColor.dark.pRIMARY_brandClr : Colors.white,
           ),
         );
       }),
@@ -134,7 +134,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   text: pages[pageIndex]['title']!,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  textColor: DarkAppColor.instance.tEXT_white,
+                  textColor: ThemeColor.dark.tEXT_white,
                   maxLines: 2,
                 ),
                 4.height,
@@ -142,7 +142,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   text: pages[pageIndex]['subtitle']!,
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
-                  textColor: DarkAppColor.instance.bACKGROUND_clickableBorder,
+                  textColor: ThemeColor.dark.bACKGROUND_clickableBorder,
                   maxLines: 3,
                 ),
                 const Spacer(),

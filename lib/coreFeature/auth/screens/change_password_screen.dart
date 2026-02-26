@@ -6,7 +6,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:pinlink/common_widgets/appbar/appbar_simple.dart';
 import 'package:pinlink/common_widgets/common_widget.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
@@ -22,9 +21,11 @@ class ChangePasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold( 
-      appBar: AppBarSimple(
+      appBar: CommonAppBar(
         title: AppString.change_password,
-        actions: const [NotificationIconWidget()],
+        appbarConfig: AppbarConfig(
+          actions: const [NotificationIconWidget()],
+        ),
       ),
       body: Padding(
         padding: Constants.bodyPadding,
@@ -43,7 +44,7 @@ class ChangePasswordScreen extends StatelessWidget {
                   AppString.in_order_to_keep_your_account_safe_you_need_to_create_a_strong_password,
               maxLines: 2,
               textAlign: TextAlign.center,
-              textColor: AppColor.tEXT_white,
+              textColor: context.colors.tEXT_white,
               fontSize: 16,
             ),
             20.height,

@@ -43,7 +43,7 @@ class SignupFormTwo extends StatelessWidget {
               'Choose the course you play most frequently. If you do not have a home course, choose the course closest to you',
           isDescription: true,
           left: 5,
-          textColor: AppColor.tEXT_subDark,
+          textColor: context.colors.tEXT_subDark,
           textAlign: TextAlign.left,
           maxLines: 5,
         ),

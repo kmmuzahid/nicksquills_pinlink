@@ -21,7 +21,7 @@ class ToggleTheme extends StatelessWidget {
             ButtonSegment<String>(value: 'Light', label: Text('Light')),
             ButtonSegment<String>(value: 'Dark', label: Text('Dark')),
           ],
-          selected: <String>{state.themeMode == ThemeMode.dark ? 'Dark' : 'Light'},
+          selected: <String>{state == ThemeMode.dark ? 'Dark' : 'Light'},
           onSelectionChanged: (value) {
             cubit.toggleTheme();
           },

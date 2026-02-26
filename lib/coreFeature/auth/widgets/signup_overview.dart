@@ -16,18 +16,18 @@ class SignUpOverview extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _buildText('Name', entity.fullName ?? ''),
-        _buildText('Username', entity.username ?? ''),
-        _buildText('Email', entity.email ?? ''),
-        _buildText('Hometown', entity.hometown ?? ''),
-        _buildText('Home Course', entity.homeCourse ?? ''),
-        _buildText('Estimated Handicap', entity.handicap ?? '', isLast: true),
+        _buildText(context, 'Name', entity.fullName ?? ''),
+        _buildText(context, 'Username', entity.username ?? ''),
+        _buildText(context, 'Email', entity.email ?? ''),
+        _buildText(context, 'Hometown', entity.hometown ?? ''),
+        _buildText(context, 'Home Course', entity.homeCourse ?? ''),
+        _buildText(context, 'Estimated Handicap', entity.handicap ?? '', isLast: true),
         20.height,
         Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: AppColor.bACKGROUND_darkPage,
-            border: Border.all(color: AppColor.bACKGROUND_darkCardBoarder, width: 1.4),
+            color: context.colors.bACKGROUND_darkPage,
+            border: Border.all(color: context.colors.bACKGROUND_darkCardBoarder, width: 1.4),
             borderRadius: BorderRadius.circular(16),
           ),
           child: Text.rich(
@@ -35,19 +35,19 @@ class SignUpOverview extends StatelessWidget {
               children: [
                 TextSpan(
                   text: 'By clicking “Create Account”, you agree to our ',
-                  style: TextStyle(color: AppColor.tEXT_sub),
+                  style: TextStyle(color: context.colors.tEXT_sub),
                 ),
                 TextSpan(
                   text: 'Terms of Service',
-                  style: TextStyle(color: AppColor.pRIMARY_priSoft),
+                  style: TextStyle(color: context.colors.pRIMARY_priSoft),
                 ),
                 TextSpan(
                   text: ' and ',
-                  style: TextStyle(color: AppColor.tEXT_sub),
+                  style: TextStyle(color: context.colors.tEXT_sub),
                 ),
                 TextSpan(
                   text: 'Privacy Policy',
-                  style: TextStyle(color: AppColor.pRIMARY_priSoft),
+                  style: TextStyle(color: context.colors.pRIMARY_priSoft),
                 ),
               ],
             ),
@@ -58,13 +58,13 @@ class SignUpOverview extends StatelessWidget {
     );
   }
 
-  Widget _buildText(String title, String value, {bool isLast = false}) {
+  Widget _buildText(BuildContext context, String title, String value, {bool isLast = false}) {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: !isLast
           ? BoxDecoration(
               border: Border(
-                bottom: BorderSide(color: AppColor.bACKGROUND_darkCardBoarder, width: 1.4),
+                bottom: BorderSide(color: context.colors.bACKGROUND_darkCardBoarder, width: 1.4),
               ),
             )
           : null,
@@ -74,14 +74,14 @@ class SignUpOverview extends StatelessWidget {
             text: title,
             fontSize: 16,
             fontWeight: FontWeight.w500,
-            textColor: AppColor.tEXT_subDark,
+            textColor: context.colors.tEXT_subDark,
           ),
           const Spacer(),
           CommonText(
             text: value,
             fontSize: 16,
             fontWeight: FontWeight.w500,
-            textColor: AppColor.tEXT_white,
+            textColor: context.colors.tEXT_white,
           ),
         ],
       ),

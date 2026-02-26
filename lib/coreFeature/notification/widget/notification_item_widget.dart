@@ -51,7 +51,7 @@ class NotificationItemWidget extends StatelessWidget {
               ),
               child: Icon(
                 icon,
-                color: isUnread ? AppColor.pRIMARY_priSoft : theme.colorScheme.primary,
+                color: isUnread ? context.colors.pRIMARY_priSoft : theme.colorScheme.primary,
                 size: 22,
               ),
             ),
@@ -69,7 +69,7 @@ class NotificationItemWidget extends StatelessWidget {
                           text: title,
                           maxLines: 1,
                           style: theme.textTheme.titleMedium?.copyWith(
-                            color: !isUnread ? Colors.black : AppColor.pRIMARY_priSoft,
+                            color: !isUnread ? Colors.black : context.colors.pRIMARY_priSoft,
                             fontWeight: isUnread ? FontWeight.w600 : FontWeight.w500,
                           ),
                         ),
@@ -78,7 +78,7 @@ class NotificationItemWidget extends StatelessWidget {
                       CommonText(
                         text: time,
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: !isUnread ? Colors.black : AppColor.tEXT_white,
+                          color: !isUnread ? Colors.black : context.colors.tEXT_white,
                           fontSize: 12,
                         ),
                       ),
@@ -92,7 +92,7 @@ class NotificationItemWidget extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: !isUnread ? Colors.black : AppColor.tEXT_white,
+                      color: !isUnread ? Colors.black : context.colors.tEXT_white,
                     ),
                   ),
                 ],

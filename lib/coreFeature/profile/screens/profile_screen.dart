@@ -1,7 +1,6 @@
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pinlink/common_widgets/appbar/appbar_simple.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
@@ -37,7 +36,7 @@ class ProfileScreen extends StatelessWidget {
                 return FlexibleSpaceBar(
                   collapseMode: .pin,
                   title: const SizedBox.shrink(),
-                  background: _buildHeader(),
+                  background: _buildHeader(context),
                 );
               },
             ),
@@ -46,27 +45,32 @@ class ProfileScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
-                _buildNotificationSwitch(),
+                _buildNotificationSwitch(context),
                 // _buildMenuTile(AppString.payment_history, () {
                 //   if (authCubit.state.role == Role.EV_OWNER) {
                 //     context.read<NavigationCubit>().changeIndex(2);
                 //   }
                 // }),
                 _buildSectionTitle(AppString.account),
-                _buildMenuTile(AppString.change_password, () {
+                _buildMenuTile(context, AppString.change_password, () {
                   appRouter.push(const ChangePasswordRoute());
                 }),
-                _buildMenuTile(AppString.personal_information, () {
+                _buildMenuTile(context, AppString.personal_information, () {
                   appRouter.push(const PersonalInformationRoute());
                 }),
-                _buildMenuTile(AppString.faqs, () {
+                _buildMenuTile(context, AppString.faqs, () {
                   appRouter.push(const FaqRoute());
                 }),
-                _buildMenuTile(AppString.about_us, () {
+                _buildMenuTile(context, AppString.about_us, () {
                   appRouter.push(const AboutUsRoute());
                 }),
                 const SizedBox(height: 20),
-                _buildActionButton(AppString.logout, Icons.logout_outlined, AppColor.tEXT_sub, () {
+                _buildActionButton(
+                  context,
+                  AppString.logout,
+                  Icons.logout_outlined,
+                  context.colors.tEXT_sub,
+                  () {
                   showDialog<Widget>(
                     context: context,
                     builder: (context) => const Dialog(child: LogoutAlertWidget()),
@@ -74,9 +78,10 @@ class ProfileScreen extends StatelessWidget {
                 }),
                 15.height,
                 _buildActionButton(
+                  context,
                   AppString.delete_account,
                   Icons.delete_outline,
-                  AppColor.tEXT_dark,
+                  context.colors.tEXT_dark,
                   () {
                     showDialog<Widget>(
                       context: context,
@@ -94,7 +99,7 @@ class ProfileScreen extends StatelessWidget {
   }
 
   Widget appBar() {
-    return AppBarSimple(
+    return CommonAppBar(
       hideBack: true,
       titleWidget: Row(
         children: [
@@ -116,18 +121,19 @@ class ProfileScreen extends StatelessWidget {
           const Icon(Icons.edit, size: 16, color: Colors.white),
         ],
       ),
-      actions: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
-          child: const Icon(Icons.notifications_none, color: Colors.green),
-        ),
-      ],
-      title: '',
+      appbarConfig: AppbarConfig(
+        actions: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            child: const Icon(Icons.notifications_none, color: Colors.green),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
       clipBehavior: Clip.none,
@@ -143,7 +149,7 @@ class ProfileScreen extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [AppColor.pRIMARY_brandClr, AppColor.pRIMARY_brandClr],
+                colors: [context.colors.pRIMARY_brandClr, context.colors.pRIMARY_brandClr],
               ),
               borderRadius: BorderRadius.vertical(bottom: Radius.circular(50.r)),
             ),
@@ -206,7 +212,7 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildNotificationSwitch() {
+  Widget _buildNotificationSwitch(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -222,18 +228,18 @@ class ProfileScreen extends StatelessWidget {
             value: true,
             onChanged: (val) {},
             activeThumbColor: Colors.cyan,
-            inactiveThumbColor: AppColor.bACKGROUND_darkCardBoarder,
+            inactiveThumbColor: context.colors.bACKGROUND_darkCardBoarder,
           ),
         ),
       ],
     );
   }
 
-  Widget _buildMenuTile(String title, Function() onTap) {
+  Widget _buildMenuTile(BuildContext context, String title, Function() onTap) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
-        color: AppColor.bACKGROUND_darkCard,
+        color: context.colors.bACKGROUND_darkCard,
         borderRadius: BorderRadius.circular(8),
       ),
       child: ListTile(
@@ -244,9 +250,15 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildActionButton(String label, IconData icon, Color color, Function() onTap) {
+  Widget _buildActionButton(
+    BuildContext context,
+    String label,
+    IconData icon,
+    Color color,
+    Function() onTap,
+  ) {
     return CommonButton(
-      buttonColor: AppColor.bACKGROUND_darkPage,
+      buttonColor: context.colors.bACKGROUND_darkPage,
       borderColor: color,
       buttonWidth: double.infinity,
       prefix: Icon(icon, color: color),

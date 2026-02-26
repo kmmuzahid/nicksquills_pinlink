@@ -5,6 +5,7 @@
  */
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:pinlink/config/color/app_color.dart';
 
 class SimpleBackground extends StatelessWidget {
   const SimpleBackground({
@@ -22,7 +23,7 @@ class SimpleBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(buildContext ?? context).scaffoldBackgroundColor,
+      backgroundColor: context.colors.background,
       body: SizedBox(
         width: CoreScreenUtils.deviceSize.width,
         height: CoreScreenUtils.deviceSize.height,

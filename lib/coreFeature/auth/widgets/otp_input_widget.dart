@@ -38,14 +38,14 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
   Widget build(BuildContext context) => Container(
     padding: EdgeInsets.only(top: 25.h, bottom: 30.h, left: 16.w, right: 16.w),
     decoration: BoxDecoration(
-      color: AppColor.bACKGROUND_darkCard,
+      color: context.colors.bACKGROUND_darkCard,
       borderRadius: BorderRadius.circular(12),
     ),
     child: Column(
       children: [
         CommonText(
           text: AppString.enter_verification_code,
-          textColor: AppColor.tEXT_white,
+          textColor: context.colors.tEXT_white,
           fontSize: 12,
           bottom: 4,
         ).start,
@@ -82,7 +82,7 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
             alignment: MainAxisAlignment.end,
             text: '${AppString.resend_code_in} ${state.count} ${AppString.seconds}',
             fontWeight: FontWeight.bold,
-            textColor: AppColor.sTATUS_info,
+            textColor: context.colors.sTATUS_info,
           );
   }
 
@@ -117,11 +117,11 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
 
   Widget _otpBuilder(BuildContext context) {
     return PinCodeTextField(  
-      cursorColor: AppColor.pRIMARY_brandClr,
+      cursorColor: context.colors.pRIMARY_brandClr,
       backgroundColor: Colors.transparent,
       textStyle: getTheme.textTheme.bodyMedium?.copyWith(
         fontSize: 25,
-        color: AppColor.pRIMARY_brandClr,
+        color: context.colors.pRIMARY_brandClr,
       ),
       appContext: context,
       autoFocus: true,
@@ -134,13 +134,13 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
         borderRadius: BorderRadius.circular(4),
         fieldHeight: 40,
         fieldWidth: 40,
-        activeFillColor: AppColor.bACKGROUND_darkPage,
-        selectedFillColor: AppColor.bACKGROUND_darkPage,
-        inactiveFillColor: AppColor.bACKGROUND_darkPage,
+        activeFillColor: context.colors.bACKGROUND_darkPage,
+        selectedFillColor: context.colors.bACKGROUND_darkPage,
+        inactiveFillColor: context.colors.bACKGROUND_darkPage,
         borderWidth: 0.1,
-        selectedColor: AppColor.bACKGROUND_darkPage,
-        activeColor: AppColor.bACKGROUND_darkPage,
-        inactiveColor: AppColor.bACKGROUND_darkPage,
+        selectedColor: context.colors.bACKGROUND_darkPage,
+        activeColor: context.colors.bACKGROUND_darkPage,
+        inactiveColor: context.colors.bACKGROUND_darkPage,
       ),
       length: 6, 
       keyboardType: InputHelper.getKeyboardType(ValidationType.validateOTP),

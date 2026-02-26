@@ -4,10 +4,10 @@
  * @Email: km.muzahid@gmail.com
  */
 import 'package:auto_route/auto_route.dart';
+import 'package:core_kit/app_bar/common_app_bar.dart';
 import 'package:core_kit/list_loader/smart_list_loader.dart';
 import 'package:core_kit/text/common_text.dart';
 import 'package:flutter/material.dart';
-import 'package:pinlink/common_widgets/appbar/appbar_simple.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/constant/app_string.dart';
 import 'package:pinlink/coreFeature/faq/model/faq_model.dart';
@@ -18,7 +18,7 @@ class FaqScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarSimple(title: AppString.faq_help),
+      appBar: CommonAppBar(title: AppString.faq_help),
       body: SmartListLoader(
         onRefresh: () {},
         itemCount: 10,
@@ -42,7 +42,7 @@ class FaqScreen extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         child: Card(
-          color: AppColor.bACKGROUND_darkCard,
+          color: context.colors.bACKGROUND_darkCard,
           elevation: .5,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
           child: ExpansionTile(

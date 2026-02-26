@@ -11,8 +11,7 @@ import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router_observer.dart';
 import 'package:pinlink/config/storage/storage_key.dart';
-import 'package:pinlink/config/theme/cubit/theme_cubit.dart' show ThemeCubit;
-import 'package:pinlink/config/theme/cubit/theme_state.dart';
+import 'package:pinlink/config/theme/cubit/theme_cubit.dart';
 import 'package:pinlink/config/theme/custom_theme.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_state.dart';
@@ -21,6 +20,7 @@ import 'package:pinlink/coreFeature/notification/cubit/notification_cubit.dart';
 import 'package:pinlink/gen/assets.gen.dart';
 
 final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
 class CustomScrollBehavior extends MaterialScrollBehavior {
   @override
   ScrollPhysics getScrollPhysics(BuildContext context) {
@@ -46,25 +46,29 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => NotificationCubit()),
         BlocProvider(create: (_) => NavigationCubit()),
       ],
-      child: BlocBuilder<ThemeCubit, ThemeState>(
+      child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, themeState) {
           return MaterialApp.router(
             scrollBehavior: CustomScrollBehavior(),
             debugShowCheckedModeBanner: false,
             routerConfig: appRouter.config(navigatorObservers: () => [AppRouterObserver()]),
-            theme: commonThemeData(LightAppColor.instance),
-            darkTheme: commonThemeData(DarkAppColor.instance),
-            themeMode: themeState.themeMode,
-            builder: (context, child) {
+            theme: commonThemeData(ThemeColor.light),
+            darkTheme: commonThemeData(ThemeColor.dark),
+            themeMode: themeState,
+            builder: (context, child) { 
               return BlocBuilder<AuthCubit, AuthState>(
                 builder: (context, state) {
                   return CoreKit.init(
+                    
                     appbarConfig: AppbarConfig(
-                      // height: 120,
+                      // height: 120, 
+
+                      titleColor: () => context.colors.tEXT_white,
+                        
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
-                            color: AppColor.bACKGROUND_darkCardBoarder,
+                            color: context.colors.bACKGROUND_darkCardBoarder,
                             width: 1.5,
                           ),
                         ),
@@ -73,17 +77,36 @@ class MyApp extends StatelessWidget {
                           bottomRight: Radius.circular(20),
                         ),
                         color: Colors.transparent,
-                      ),
+                      ), 
                       onBack: () {
                         appRouter.pop();
                       },
-                      backButton: Container(
-                        padding: const EdgeInsets.all(10),
-                        color: Colors.transparent,
-                        child: CommonImage(
-                          src: Assets.images.back,
-                          imageColor: AppColor.tEXT_white,
+
+                      actions: [
+                        Builder(
+                          builder: (context) {
+                            return IconButton(
+                              onPressed: () {
+                                context.read<ThemeCubit>().toggleTheme();
+                              },
+                              icon: Icon(Icons.track_changes, color: context.colors.tEXT_white),
+                            );
+                          },
                         ),
+                      ],
+
+                      backButton: LayoutBuilder(
+                        builder: (context, constraints) {
+                          return Container(
+                            padding: const EdgeInsets.all(10),
+                            color: Colors.transparent,
+                            child: CommonImage(
+                              src: Assets.images.back,
+                              imageColor: context.colors.tEXT_white,
+                              fill: BoxFit.contain,
+                            ),
+                          );
+                        }
                       ),
                     ),
                     designSize: const Size(393, 690),

@@ -7,16 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:pinlink/config/color/app_color.dart';
 
 String fontFamily = 'Inter';
-TextTheme baseTextTheme(AppColorBase appColor) => ThemeData.light().textTheme.apply(
+TextTheme baseTextTheme(ThemeColor appColor) => ThemeData.light().textTheme.apply(
   fontFamily: fontFamily,
   displayColor: appColor.tEXT_white,
   bodyColor: appColor.tEXT_white,
 );
-ThemeData commonThemeData(AppColorBase appColor) => ThemeData(
+ThemeData commonThemeData(ThemeColor appColor) => ThemeData(
   useMaterial3: true,
-  scaffoldBackgroundColor: appColor.background_theme,
+  scaffoldBackgroundColor: appColor.background,
   textTheme: baseTextTheme(appColor),
   brightness: Brightness.light,
+  extensions: [appColor],
   colorScheme: ColorScheme.fromSeed(
     seedColor: appColor.pRIMARY_brandClr,
     primary: appColor.pRIMARY_brandClr, // button, Snackbar Info

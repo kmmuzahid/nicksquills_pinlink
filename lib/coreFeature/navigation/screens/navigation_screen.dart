@@ -78,19 +78,24 @@ class NavigationScreen extends StatelessWidget {
             },
             child: KeyedSubtree(
               key: ValueKey(state.currentIndex),
-              child: currentPage(state.currentIndex),
+              child: currentPage(state.currentIndex, context),
             ),
           ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: state.currentIndex,
-            backgroundColor: AppColor.bACKGROUND_darkCard,
+            backgroundColor: context.colors.bACKGROUND_darkCard,
             onTap: (index) => cubit.changeIndex(index),
             items: getpage()
                 .asMap()
                 .map(
                   (index, value) => MapEntry(
                     index,
-                    _navBuilder(index: index, image: value.imagePath, state: state),
+                    _navBuilder(
+                      index: index,
+                      image: value.imagePath,
+                      state: state,
+                      context: context,
+                    ),
                   ),
                 )
                 .values
@@ -102,7 +107,7 @@ class NavigationScreen extends StatelessWidget {
     );
   }
 
-  Widget currentPage(int index) {
+  Widget currentPage(int index, BuildContext context) {
     final screen = getpage()[index].screen;
     AppLogger.info('Switched to -> ${screen.runtimeType.toString()}', tag: 'Navigation');
     return screen;
@@ -112,6 +117,7 @@ class NavigationScreen extends StatelessWidget {
     required int index,
     required String image,
     required NavigationState state,
+    required BuildContext context
   }) {
     final isSelected = index == state.currentIndex;
 
@@ -129,11 +135,11 @@ class NavigationScreen extends StatelessWidget {
             topRight: Radius.circular(25),
             bottomLeft: Radius.circular(25),
           ),
-          color: isSelected ? AppColor.tEXT_white : AppColor.tEXT_sub,
+          color: isSelected ? context.colors.tEXT_white : context.colors.tEXT_sub,
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: AppColor.pRIMARY_priLight.withOpacity(0.35),
+                    color: context.colors.pRIMARY_priLight.withOpacity(0.35),
                     blurRadius: 12,
                     offset: const Offset(0, 6),
                   ),

@@ -30,7 +30,7 @@ class SignupFormThree extends StatelessWidget {
         ),
         CommonText(
           text: 'Don’t know? Enter an estimate between 0-36',
-          textColor: AppColor.tEXT_subDark,
+          textColor: context.colors.tEXT_subDark,
           isDescription: true,
           fontSize: 12,
           top: 4,
@@ -38,21 +38,21 @@ class SignupFormThree extends StatelessWidget {
           maxLines: 2,
         ),
         10.height,
-        _buildInfo(),
+        _buildInfo(context),
         // Email Field
         20.height,
       ],
     );
   }
 
-  Widget _buildInfo() {
+  Widget _buildInfo(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColor.bACKGROUND_darkPage,
+        color: context.colors.bACKGROUND_darkPage,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColor.bACKGROUND_darkCardBoarder, width: 1.4),
+        border: Border.all(color: context.colors.bACKGROUND_darkCardBoarder, width: 1.4),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,22 +60,22 @@ class SignupFormThree extends StatelessWidget {
           CommonText(
             text: 'What Next?',
             fontSize: 16,
-            textColor: AppColor.tEXT_white,
+            textColor: context.colors.tEXT_white,
             fontWeight: FontWeight.w500,
           ),
-          _buildText(text: 'Add 5-10 courses you’ve played'),
-          _buildText(text: 'Compare courses to build your rankings'),
-          _buildText(text: 'Add courses to your wishlist'),
+          _buildText(context: context, text: 'Add 5-10 courses you’ve played'),
+          _buildText(context: context, text: 'Compare courses to build your rankings'),
+          _buildText(context: context, text: 'Add courses to your wishlist'),
         ],
       ),
     );
   }
 
-  CommonText _buildText({required String text}) {
+  CommonText _buildText({required BuildContext context, required String text}) {
     return CommonText(
-      preffix: Icon(Icons.check, color: AppColor.pRIMARY_priSoft, size: 16),
+      preffix: Icon(Icons.check, color: context.colors.pRIMARY_priSoft, size: 16),
       text: text,
-      textColor: AppColor.tEXT_subDark,
+      textColor: context.colors.tEXT_subDark,
       isDescription: true,
       fontSize: 12,
       top: 4,
