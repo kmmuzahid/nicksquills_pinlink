@@ -9,6 +9,7 @@ class Plan {
   final String name;
   final double price;
   final String subtitle;
+  final String durationTitle;
   final List<String> featureTitles;
   final List<String> extraFeatures;
   final List<Feature> allowedFeatures;
@@ -16,6 +17,7 @@ class Plan {
 
   Plan({
     required this.name,
+    required this.durationTitle,
     required this.price,
     required this.featureTitles,
     required this.extraFeatures,
@@ -29,13 +31,14 @@ final freePlan = Plan(
   name: "Free",
   price: 0,
   subtitle: 'Lifetime',
+  durationTitle: 'Lifetime',
   featureTitles: [
     'Rank unlimited courses',
     'Wishlist limited courses',
     'Limited photo uploads per post (5)',
     '10 seconds long video posting',
     'Invite up to 5 friends for the tournament',
-    'Limited raffle entries (spending cap up to \$10)'
+    'Limited raffle entries (spending cap up to \$10)',
   ],
   extraFeatures: ["Limited course comparison categories", "No Ad-free experience"],
   allowedFeatures: [
@@ -58,6 +61,7 @@ final freePlan = Plan(
 
 final clubPlan = Plan(
   subtitle: 'Monthly',
+  durationTitle: 'Month',
   name: "PinLinks Club Member",
   price: 12.99,
   featureTitles: [
@@ -69,7 +73,7 @@ final clubPlan = Plan(
     '6+ photos per post',
     'Longer Video posting',
     '1000 points at sign-up',
-    '100 points for playing Pinlinks 5 courses'
+    '100 points for playing Pinlinks 5 courses',
   ],
   extraFeatures: [],
   allowedFeatures: [
@@ -91,6 +95,7 @@ final clubPlan = Plan(
 );
 
 final creatorPlan = Plan(
+  durationTitle: 'Year',
   subtitle: 'Yearly',
   name: "Creator / Business",
   price: 24.99,

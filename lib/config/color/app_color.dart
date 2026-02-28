@@ -100,7 +100,7 @@ class ThemeColor extends ThemeExtension<ThemeColor> {
   static const ThemeColor light = ThemeColor(
     background: Color(0xFFFFFFFF),
     bACKGROUND_card: Color(0xFFFFFFFF),
-    bACKGROUND_clickableBorder: Color(0xFFCBD5E0),
+    bACKGROUND_clickableBorder: Color.fromARGB(255, 196, 205, 216),
     bACKGROUND_darkCard: Color(0xFFF8FAF9),
     bACKGROUND_darkCardBoarder: Color(0xFFE2E8F0),
     bACKGROUND_darkPage: Color(0xFFE5E7EB), // grey.shade200

@@ -18,6 +18,7 @@ ThemeData commonThemeData(ThemeColor appColor) => ThemeData(
   textTheme: baseTextTheme(appColor),
   brightness: Brightness.light,
   extensions: [appColor],
+  appBarTheme: const AppBarTheme(surfaceTintColor: Colors.transparent),
   colorScheme: ColorScheme.fromSeed(
     seedColor: appColor.pRIMARY_brandClr,
     primary: appColor.pRIMARY_brandClr, // button, Snackbar Info
@@ -87,6 +88,8 @@ ThemeData commonThemeData(ThemeColor appColor) => ThemeData(
           child: Center(child: child),
         );
       },
+      shadowColor: Colors.transparent,
+      elevation: 0,
       foregroundColor: Colors.orangeAccent, //loader color
       textStyle: const TextStyle(color: Colors.white), //title color
       shape: RoundedRectangleBorder(

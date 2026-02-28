@@ -1,5 +1,10 @@
 /*
  * @Author: Km Muzahid
+ * @Date: 2026-02-18 09:39:56
+ * @Email: km.muzahid@gmail.com
+ */
+/*
+ * @Author: Km Muzahid
  * @Date: 2026-02-01 09:37:24
  * @Email: km.muzahid@gmail.com
  */
@@ -19,29 +24,43 @@ import 'package:pinlink/coreFeature/navigation/cubit/navigation_cubit.dart';
 import 'package:pinlink/coreFeature/navigation/cubit/navigation_state.dart';
 import 'package:pinlink/coreFeature/navigation/nav_utils/navigator_item.dart';
 import 'package:pinlink/coreFeature/profile/screens/profile_screen.dart';
+import 'package:pinlink/features/course_comparision/screens/add_course_screen.dart';
 import 'package:pinlink/gen/assets.gen.dart';
 
 final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
 @RoutePage()
 class NavigationScreen extends StatelessWidget {
-  const NavigationScreen({super.key});
+  const NavigationScreen({super.key}); 
 
   List<NavigatorItem> getpage() {
     final evItems = <NavigatorItem>[
-      NavigatorItem(imagePath: Assets.navigators.social, screen: Container()),
-      NavigatorItem(imagePath: Assets.navigators.leaderboard, screen: Container()),
-      NavigatorItem(imagePath: Assets.navigators.addCourse, screen: Container()),
-      NavigatorItem(imagePath: Assets.navigators.map, screen: Container()),
-      NavigatorItem(imagePath: Assets.navigators.profile, screen: const ProfileScreen()),
+      NavigatorItem(imagePath: Assets.navigators.social, screen: Container(), label: 'Socia'),
+      NavigatorItem(
+        imagePath: Assets.navigators.leaderboard,
+        screen: Container(),
+        label: 'Leaderboard',
+      ),
+
+      NavigatorItem(imagePath: Assets.navigators.map, screen: Container(), label: 'Map'),
+      NavigatorItem(
+        imagePath: Assets.navigators.profile,
+        screen: const ProfileScreen(),
+        label: 'My Profile',
+      ),
     ];
 
     return evItems;
   }
 
-  @override
-  Widget build(BuildContext context) { 
+  NavigatorItem centerItem() => NavigatorItem(
+    imagePath: Assets.navigators.addCourse,
+    screen: const AddCourseScreen(enableSafeArea: false),
+    label: 'Add Course',
+  );
 
+  @override
+  Widget build(BuildContext context) {
     return CubitScopeValue(
       cubit: context.read<NavigationCubit>(),
       builder: (context, cubit, state) {
@@ -59,12 +78,7 @@ class NavigationScreen extends StatelessWidget {
         }
         return SimpleBackground(
           key: scaffoldKey,
-          // appBar: AppBarSimple(
-          //   title: title,
-          //   hideBack: true,
-          //   disableBack: true,
-          //   actions: [const NotificationIconWidget()],
-          // ), 
+ 
           body: AnimatedSwitcher(
             duration: const Duration(milliseconds: 350),
             transitionBuilder: (child, animation) {
@@ -81,31 +95,19 @@ class NavigationScreen extends StatelessWidget {
               child: currentPage(state.currentIndex, context),
             ),
           ),
-          bottomNavigationBar: BottomNavigationBar(
+          bottomNavigationBar: CustomBottomNavBar(
             currentIndex: state.currentIndex,
-            backgroundColor: context.colors.bACKGROUND_darkCard,
             onTap: (index) => cubit.changeIndex(index),
-            items: getpage()
-                .asMap()
-                .map(
-                  (index, value) => MapEntry(
-                    index,
-                    _navBuilder(
-                      index: index,
-                      image: value.imagePath,
-                      state: state,
-                      context: context,
-                    ),
-                  ),
-                )
-                .values
-                .toList(),
+            items: getpage(),
+            onCenterTap: () {},
           ),
           // drawer: const DrawerWidget(),
         );
       },
     );
   }
+
+ 
 
   Widget currentPage(int index, BuildContext context) {
     final screen = getpage()[index].screen;
@@ -117,7 +119,7 @@ class NavigationScreen extends StatelessWidget {
     required int index,
     required String image,
     required NavigationState state,
-    required BuildContext context
+    required BuildContext context,
   }) {
     final isSelected = index == state.currentIndex;
 
@@ -157,4 +159,164 @@ class NavigationScreen extends StatelessWidget {
 
     return BottomNavigationBarItem(label: '', icon: icon);
   }
+}
+
+  
+ 
+
+class CustomBottomNavBar extends StatelessWidget {
+  final List<NavigatorItem> items;
+  final int currentIndex;
+  final Function(int) onTap;
+  final VoidCallback onCenterTap;
+
+  const CustomBottomNavBar({
+    super.key,
+    required this.items,
+    required this.currentIndex,
+    required this.onTap,
+    required this.onCenterTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // Colors based on your images
+    const activeColor = Colors.white;
+    const inactiveColor = Color(0xFF7A8D86);
+    const navBgColor = Color(0xFF052018);
+    const glowColor = Color(0xFF1E9C6E);
+
+    // Split the list of items into two halves
+    final halfLength = (items.length / 2).floor();
+    final leftItems = items.sublist(0, halfLength);
+    final rightItems = items.sublist(halfLength);
+
+    return Container(
+      height: 110,
+      color: Colors.transparent,
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          // The Custom Background Shape
+          CustomPaint(
+            size: Size(MediaQuery.of(context).size.width, 100),
+            painter: WaveNavBarPainter(color: navBgColor),
+          ),
+
+          // The Floating Center Action Button
+          Positioned(
+            top: 10,
+            child: GestureDetector(
+              onTap: onCenterTap,
+              child: Container(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: navBgColor,
+                  boxShadow: [
+                    BoxShadow(color: glowColor.withOpacity(0.5), blurRadius: 20, spreadRadius: 2),
+                  ],
+                ),
+                child: const Icon(Icons.golf_course, color: Colors.white, size: 30),
+              ),
+            ),
+          ),
+
+          // The Navigation Items Row
+          SizedBox(
+            height: 80,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ..._buildNavGroup(leftItems, 0, activeColor, inactiveColor),
+                const SizedBox(width: 80), // Space for center button
+                ..._buildNavGroup(rightItems, halfLength, activeColor, inactiveColor),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> _buildNavGroup(
+    List<NavigatorItem> group,
+    int startIndex,
+    Color active,
+    Color inactive,
+  ) {
+    return group.asMap().entries.map((entry) {
+      final actualIndex = startIndex + entry.key;
+      final isActive = currentIndex == actualIndex;
+
+      return Expanded(
+        child: InkWell(
+          onTap: () => onTap(actualIndex),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CommonImage(
+                src: entry.value.imagePath,
+                imageColor: isActive ? active : inactive,
+                size: 24,
+              ),
+              const SizedBox(height: 4),
+              CommonText(
+                text: entry.value.label,
+                style: TextStyle(
+                  color: isActive ? active : inactive,
+                  fontSize: 11,
+                  fontWeight: isActive ? FontWeight.bold : FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }).toList();
+  }
+}
+
+// Custom Painter for the specific "Wave" notch shape
+class WaveNavBarPainter extends CustomPainter {
+  final Color color;
+  WaveNavBarPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+
+    final path = Path();
+    final h = size.height;
+    final w = size.width;
+
+    // Starting point on the left edge (slightly down from the top)
+    path.moveTo(0, -10);
+
+    // 1. Left Hump
+    // Control point at 1/4 width (at y=0 for the peak)
+    // End point at 40% width (where the center dip begins)
+    path.quadraticBezierTo(w * 0.20, 0, w * 0.5, 20);
+
+    // 2. Center Dip (The Notch)
+    // This creates the hollow space for your action button
+    // path.arcToPoint(Offset(w * 0.60, 20), radius: const Radius.circular(30), clockwise: false);
+
+    // 3. Right Hump (Mirror of the Left)
+    // Control point at 3/4 width (matching the left hump's height)
+    // End point at the far right edge
+    path.quadraticBezierTo(w * 0.80, 0, w, -h * 0.1);
+
+    // 4. Complete the shape
+    path.lineTo(w, h); // Down to bottom right
+    path.lineTo(0, h); // Across to bottom left
+    path.close();
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
