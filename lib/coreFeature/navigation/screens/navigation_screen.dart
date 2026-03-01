@@ -31,7 +31,7 @@ final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
 @RoutePage()
 class NavigationScreen extends StatelessWidget {
-  const NavigationScreen({super.key}); 
+  const NavigationScreen({super.key});
 
   List<NavigatorItem> getpage() {
     final evItems = <NavigatorItem>[
@@ -41,6 +41,8 @@ class NavigationScreen extends StatelessWidget {
         screen: Container(),
         label: 'Leaderboard',
       ),
+
+      centerItem(),
 
       NavigatorItem(imagePath: Assets.navigators.map, screen: Container(), label: 'Map'),
       NavigatorItem(
@@ -78,7 +80,7 @@ class NavigationScreen extends StatelessWidget {
         }
         return SimpleBackground(
           key: scaffoldKey,
- 
+
           body: AnimatedSwitcher(
             duration: const Duration(milliseconds: 350),
             transitionBuilder: (child, animation) {
@@ -99,15 +101,15 @@ class NavigationScreen extends StatelessWidget {
             currentIndex: state.currentIndex,
             onTap: (index) => cubit.changeIndex(index),
             items: getpage(),
-            onCenterTap: () {},
+            onCenterTap: () {
+              cubit.changeIndex(2);
+            },
           ),
           // drawer: const DrawerWidget(),
         );
       },
     );
   }
-
- 
 
   Widget currentPage(int index, BuildContext context) {
     final screen = getpage()[index].screen;
@@ -161,14 +163,12 @@ class NavigationScreen extends StatelessWidget {
   }
 }
 
-  
- 
-
 class CustomBottomNavBar extends StatelessWidget {
   final List<NavigatorItem> items;
   final int currentIndex;
   final Function(int) onTap;
   final VoidCallback onCenterTap;
+  
 
   const CustomBottomNavBar({
     super.key,
@@ -181,61 +181,73 @@ class CustomBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Colors based on your images
-    const activeColor = Colors.white;
-    const inactiveColor = Color(0xFF7A8D86);
-    const navBgColor = Color(0xFF052018);
+    final activeColor = context.colors.navActiveColor;
+    final inactiveColor = context.colors.tEXT_sub;
+    final navBgColor = context.colors.bACKGROUND_darkCard;
     const glowColor = Color(0xFF1E9C6E);
 
     // Split the list of items into two halves
-    final halfLength = (items.length / 2).floor();
-    final leftItems = items.sublist(0, halfLength);
-    final rightItems = items.sublist(halfLength);
+    final leftItems = items.sublist(0, 2);
+    final rightItems = items.sublist(3, 5);
 
-    return Container(
-      height: 110,
-      color: Colors.transparent,
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          // The Custom Background Shape
-          CustomPaint(
-            size: Size(MediaQuery.of(context).size.width, 100),
-            painter: WaveNavBarPainter(color: navBgColor),
-          ),
+    return SafeArea(
+      top: false,
+      bottom: true,
+      child: Container(
+        height: 120,
+        width: MediaQuery.of(context).size.width - 8,
+        color: Colors.transparent,
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            // The Custom Background Shape
+            CustomPaint(
+              size: Size(MediaQuery.of(context).size.width - 8, 110),
+              painter: WaveNavBarPainter(
+                color: navBgColor,
+                borderColor: context.colors.bACKGROUND_darkCardBoarder,
+              ),
 
-          // The Floating Center Action Button
-          Positioned(
-            top: 10,
-            child: GestureDetector(
-              onTap: onCenterTap,
               child: Container(
-                width: 64,
-                height: 64,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: navBgColor,
-                  boxShadow: [
-                    BoxShadow(color: glowColor.withOpacity(0.5), blurRadius: 20, spreadRadius: 2),
+                height: 100,
+
+                padding: const EdgeInsets.only(bottom: 20),
+                child: Row(
+                  crossAxisAlignment: .end,
+                  children: [
+                    ..._buildNavGroup(leftItems, 0, activeColor, inactiveColor),
+                    const SizedBox(width: 80), // Space for center button
+                    ..._buildNavGroup(rightItems, 3, activeColor, inactiveColor),
                   ],
                 ),
-                child: const Icon(Icons.golf_course, color: Colors.white, size: 30),
               ),
             ),
-          ),
 
-          // The Navigation Items Row
-          SizedBox(
-            height: 80,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ..._buildNavGroup(leftItems, 0, activeColor, inactiveColor),
-                const SizedBox(width: 80), // Space for center button
-                ..._buildNavGroup(rightItems, halfLength, activeColor, inactiveColor),
-              ],
+            // The Floating Center Action Button
+            Positioned(
+              top: 10,
+              child: GestureDetector(
+                onTap: onCenterTap,
+                child: Container(
+                  width: 64,
+                  height: 64,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: navBgColor,
+                    boxShadow: [
+                      BoxShadow(color: glowColor.withOpacity(0.5), blurRadius: 20, spreadRadius: 2),
+                    ],
+                  ),
+                  child: Icon(
+                    Icons.golf_course,
+                    color: currentIndex == 2 ? activeColor : inactiveColor,
+                    size: 30,
+                  ),
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -281,38 +293,66 @@ class CustomBottomNavBar extends StatelessWidget {
 // Custom Painter for the specific "Wave" notch shape
 class WaveNavBarPainter extends CustomPainter {
   final Color color;
-  WaveNavBarPainter({required this.color});
+  final Color borderColor;
+  WaveNavBarPainter({required this.color, required this.borderColor});
 
   @override
   void paint(Canvas canvas, Size size) {
+    const border = 2.0;
+    const padding = 20.0;
+
+    draw(
+      canvas: canvas,
+      size: size,
+      color: borderColor,
+      reduction: 0,
+      offset: 0,
+      radius: padding + border,
+    );
+    draw(
+      canvas: canvas,
+      size: size,
+      color: color,
+      reduction: border * 2,
+      offset: border,
+      radius: padding,
+    );
+  }
+
+  void draw({
+    required Canvas canvas,
+    required Size size,
+    required Color color,
+    required double reduction,
+    required double offset,
+    required double radius,
+  }) {
     final paint = Paint()
       ..color = color
       ..style = PaintingStyle.fill;
 
     final path = Path();
-    final h = size.height;
-    final w = size.width;
 
-    // Starting point on the left edge (slightly down from the top)
-    path.moveTo(0, -10);
+    final h = size.height - reduction;
+    final w = size.width - reduction;
 
-    // 1. Left Hump
-    // Control point at 1/4 width (at y=0 for the peak)
-    // End point at 40% width (where the center dip begins)
-    path.quadraticBezierTo(w * 0.20, 0, w * 0.5, 20);
+    path.moveTo(offset + radius, offset);
 
-    // 2. Center Dip (The Notch)
-    // This creates the hollow space for your action button
-    // path.arcToPoint(Offset(w * 0.60, 20), radius: const Radius.circular(30), clockwise: false);
+    path.lineTo(offset + w - radius, offset);
+    path.arcToPoint(Offset(offset + w, offset + radius), radius: Radius.circular(radius));
 
-    // 3. Right Hump (Mirror of the Left)
-    // Control point at 3/4 width (matching the left hump's height)
-    // End point at the far right edge
-    path.quadraticBezierTo(w * 0.80, 0, w, -h * 0.1);
+    path.lineTo(offset + w, offset + h - radius);
+    path.arcToPoint(Offset(offset + w - radius, offset + h), radius: Radius.circular(radius));
 
-    // 4. Complete the shape
-    path.lineTo(w, h); // Down to bottom right
-    path.lineTo(0, h); // Across to bottom left
+    path.lineTo(offset + radius, offset + h);
+    path.arcToPoint(Offset(offset, offset + h - radius), radius: Radius.circular(radius));
+
+    path.lineTo(offset, offset + radius);
+    path.arcToPoint(Offset(offset + radius, offset), radius: Radius.circular(radius));
+
+    // your custom curve
+    path.quadraticBezierTo(offset + w * .5, offset + h - 40, offset + w - radius, offset);
+
     path.close();
     canvas.drawPath(path, paint);
   }

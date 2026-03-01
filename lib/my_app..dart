@@ -53,7 +53,9 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             routerConfig: appRouter.config(navigatorObservers: () => [AppRouterObserver()]),
             theme: commonThemeData(ThemeColor.light),
-            darkTheme: commonThemeData(ThemeColor.dark),
+            darkTheme: commonThemeData(ThemeColor.dark), 
+            themeAnimationCurve: Curves.easeInOut,
+            themeAnimationDuration: const Duration(milliseconds: 300),
             themeMode: themeState,
             builder: (context, child) { 
               return BlocBuilder<AuthCubit, AuthState>(

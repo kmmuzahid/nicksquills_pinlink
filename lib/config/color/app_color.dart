@@ -39,6 +39,7 @@ class ThemeColor extends ThemeExtension<ThemeColor> {
     required this.tEXT_sub,
     required this.tEXT_subDark,
     required this.tEXT_white,
+    required this.navActiveColor,
   });
 
   final Color background;
@@ -66,6 +67,7 @@ class ThemeColor extends ThemeExtension<ThemeColor> {
   final Color tEXT_sub;
   final Color tEXT_subDark;
   final Color tEXT_white;
+  final Color navActiveColor;
 
   // ── Dark ──────────────────────────────────────────────────────────────────
   static const ThemeColor dark = ThemeColor(
@@ -94,6 +96,7 @@ class ThemeColor extends ThemeExtension<ThemeColor> {
     tEXT_sub: Color(0xFF6B7280),
     tEXT_subDark: Color(0xFFB2CBC1),
     tEXT_white: Color(0xFFFFFFFF),
+    navActiveColor: Color(0xFFFFFFFF),
   );
 
   // ── Light ─────────────────────────────────────────────────────────────────
@@ -123,6 +126,7 @@ class ThemeColor extends ThemeExtension<ThemeColor> {
     tEXT_sub: Color(0xFF4B5563),
     tEXT_subDark: Color(0xFF6B7280),
     tEXT_white: Color(0xFF1F2937),
+    navActiveColor: Color(0xFF184F3A),
   );
 
   @override
@@ -152,6 +156,7 @@ class ThemeColor extends ThemeExtension<ThemeColor> {
     Color? tEXT_sub,
     Color? tEXT_subDark,
     Color? tEXT_white,
+    Color? navActiveColor,
   }) {
     return ThemeColor(
       background: background_theme ?? background,
@@ -181,6 +186,7 @@ class ThemeColor extends ThemeExtension<ThemeColor> {
       tEXT_sub: tEXT_sub ?? this.tEXT_sub,
       tEXT_subDark: tEXT_subDark ?? this.tEXT_subDark,
       tEXT_white: tEXT_white ?? this.tEXT_white,
+      navActiveColor: navActiveColor ?? this.navActiveColor,
     );
   }
 
@@ -233,6 +239,7 @@ class ThemeColor extends ThemeExtension<ThemeColor> {
       tEXT_sub: Color.lerp(tEXT_sub, other.tEXT_sub, t)!,
       tEXT_subDark: Color.lerp(tEXT_subDark, other.tEXT_subDark, t)!,
       tEXT_white: Color.lerp(tEXT_white, other.tEXT_white, t)!,
+      navActiveColor: Color.lerp(navActiveColor, other.navActiveColor, t)!,
     );
   }
 }
