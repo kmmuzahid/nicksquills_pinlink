@@ -29,7 +29,9 @@ class SendOtpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => AuthBackground(
-    appBar: CommonAppBar(appbarConfig: AppbarConfig(backgroundColor: Colors.transparent)),
+    appBar: CommonAppBar(
+      appbarConfig: AppbarConfig(decoration: () => const BoxDecoration(color: Colors.transparent)),
+    ),
     body: Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: CubitScope(

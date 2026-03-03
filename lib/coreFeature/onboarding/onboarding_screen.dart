@@ -116,7 +116,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           child: CommonAppBar(
             hideBack: true,
             disableBack: true,
-            appbarConfig: AppbarConfig(backgroundColor: Colors.transparent),
+            appbarConfig: AppbarConfig(
+              decoration: () => const BoxDecoration(color: Colors.transparent),
+            ),
           ),
         ),
         Align(

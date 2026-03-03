@@ -39,6 +39,7 @@ class ComparisonScreen extends StatelessWidget {
             disableBack: true,
             hideBack: !isQuestionRanking,
             appbarConfig: AppbarConfig(
+              decoration: () => const BoxDecoration(color: Colors.transparent),
               actions: [
                 if (questinIndex > 0 && isQuestionRanking)
                   GestureDetector(

@@ -18,21 +18,25 @@ import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 
 @RoutePage()
 class SubscriptionsScreen extends StatelessWidget {
-  const SubscriptionsScreen({super.key, this.isBackDisabled = false});
+  const SubscriptionsScreen({super.key, this.isBackDisabled = false, this.isNavPage = false});
   final bool isBackDisabled;
+  final bool isNavPage;
 
   @override
   Widget build(BuildContext context) {
     File('assets/images/subscription.png');
     return SimpleBackground(
-      appBar: CommonAppBar(
+      appBar: isNavPage
+          ? null
+          : CommonAppBar(
         hideBack: isBackDisabled,
-        disableBack: isBackDisabled,
-
-        appbarConfig: AppbarConfig(backgroundColor: Colors.transparent),
+              disableBack: isBackDisabled, 
+              appbarConfig: AppbarConfig(
+                decoration: () => const BoxDecoration(color: Colors.transparent),
+              ),
       ),
       body: Column(
-        children: [ 
+        children: [
           CommonText(
             text: 'Choose Your Plan',
             fontSize: 24,

@@ -67,7 +67,7 @@ class MyApp extends StatelessWidget {
 
                       titleColor: () => context.colors.tEXT_white,
                         
-                      decoration: BoxDecoration(
+                      decoration: () => BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
                             color: context.colors.bACKGROUND_darkCardBoarder,
@@ -99,8 +99,7 @@ class MyApp extends StatelessWidget {
 
                       backButton: LayoutBuilder(
                         builder: (context, constraints) {
-                          return Container(
-                            padding: const EdgeInsets.all(10),
+                          return Container(  
                             color: Colors.transparent,
                             child: CommonImage(
                               src: Assets.images.back,

@@ -18,18 +18,28 @@ import 'package:pinlink/features/course_comparision/widgets/new_course_dailoge_w
 
 @RoutePage()
 class AddCourseScreen extends StatelessWidget {
-  const AddCourseScreen({super.key, this.enableSafeArea = true});
+  const AddCourseScreen({super.key, this.enableSafeArea = true, this.isInNavigation = false});
   final bool enableSafeArea;
+  final bool isInNavigation;
 
   @override
   Widget build(BuildContext context) {
     return SimpleBackground(
-      appBar: const CommonAppBar(disableBack: true, hideBack: true),
+      appBar: isInNavigation
+          ? null
+          : CommonAppBar(
+              disableBack: true,
+              hideBack: true,
+              appbarConfig: AppbarConfig(
+                decoration: () => const BoxDecoration(color: Colors.transparent),
+              ),
+            ),
       body: CubitScope(
         create: () => AddCourseCubit()..init(),
         builder: (context, cubit, state) {
           return Column(
             children: [
+              if (!isInNavigation)
               CommonText(
                 text: 'Add Courses You\'ve Played',
                 fontSize: 24,

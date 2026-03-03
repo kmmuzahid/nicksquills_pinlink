@@ -44,6 +44,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/google.svg
   String get google => 'assets/images/google.svg';
 
+  /// File path: assets/images/notification_icon.svg
+  String get notificationIcon => 'assets/images/notification_icon.svg';
+
   /// File path: assets/images/oboarding_1.png
   AssetGenImage get oboarding1 =>
       const AssetGenImage('assets/images/oboarding_1.png');
@@ -64,6 +67,9 @@ class $AssetsImagesGen {
   AssetGenImage get onboarding4 =>
       const AssetGenImage('assets/images/onboarding_4.png');
 
+  /// File path: assets/images/setting_icon.svg
+  String get settingIcon => 'assets/images/setting_icon.svg';
+
   /// File path: assets/images/simple_background.png
   AssetGenImage get simpleBackground =>
       const AssetGenImage('assets/images/simple_background.png');
@@ -83,11 +89,13 @@ class $AssetsImagesGen {
     back,
     globe,
     google,
+    notificationIcon,
     oboarding1,
     oboarding2,
     onBoardingNextButtonPrefix,
     onboarding3,
     onboarding4,
+    settingIcon,
     simpleBackground,
     spImage1,
     splash,

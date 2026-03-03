@@ -57,7 +57,7 @@ class NavigationScreen extends StatelessWidget {
 
   NavigatorItem centerItem() => NavigatorItem(
     imagePath: Assets.navigators.addCourse,
-    screen: const AddCourseScreen(enableSafeArea: false),
+    screen: const AddCourseScreen(enableSafeArea: false, isInNavigation: true),
     label: 'Add Course',
   );
 
@@ -72,7 +72,7 @@ class NavigationScreen extends StatelessWidget {
         } else if (state.currentIndex == 1) {
           title = 'Leaderboard';
         } else if (state.currentIndex == 2) {
-          title = 'Add Courses';
+          title = 'Add Courses You\'ve Played';
         } else if (state.currentIndex == 3) {
           title = 'Golf Map';
         } else if (state.currentIndex == 4) {
@@ -80,6 +80,40 @@ class NavigationScreen extends StatelessWidget {
         }
         return SimpleBackground(
           key: scaffoldKey,
+          
+          
+          appBar: CommonAppBar(
+            // leading: const SizedBox.shrink(),
+            disableBack: true,
+            hideBack: true,
+            title: title,
+            appbarConfig: AppbarConfig(
+              titleAlignment: .centerLeft,
+              height: 70,
+              titleSpacing: 16,
+              actions: [
+                IconButton(
+                  onPressed: () {},
+                  icon: SizedBox(
+                    width: 25,
+                    height: 25,
+                    child: CommonImage(src: Assets.images.settingIcon),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: SizedBox(
+                    width: 25,
+                    height: 25,
+                    child: Badge.count(
+                      count: 1,
+                      child: CommonImage(src: Assets.images.notificationIcon),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
 
           body: AnimatedSwitcher(
             duration: const Duration(milliseconds: 350),

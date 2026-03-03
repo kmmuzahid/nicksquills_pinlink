@@ -60,10 +60,15 @@ class AddCourseRoute extends _i17.PageRouteInfo<AddCourseRouteArgs> {
   AddCourseRoute({
     _i18.Key? key,
     bool enableSafeArea = true,
+    bool isInNavigation = false,
     List<_i17.PageRouteInfo>? children,
   }) : super(
          AddCourseRoute.name,
-         args: AddCourseRouteArgs(key: key, enableSafeArea: enableSafeArea),
+         args: AddCourseRouteArgs(
+           key: key,
+           enableSafeArea: enableSafeArea,
+           isInNavigation: isInNavigation,
+         ),
          initialChildren: children,
        );
 
@@ -78,32 +83,42 @@ class AddCourseRoute extends _i17.PageRouteInfo<AddCourseRouteArgs> {
       return _i2.AddCourseScreen(
         key: args.key,
         enableSafeArea: args.enableSafeArea,
+        isInNavigation: args.isInNavigation,
       );
     },
   );
 }
 
 class AddCourseRouteArgs {
-  const AddCourseRouteArgs({this.key, this.enableSafeArea = true});
+  const AddCourseRouteArgs({
+    this.key,
+    this.enableSafeArea = true,
+    this.isInNavigation = false,
+  });
 
   final _i18.Key? key;
 
   final bool enableSafeArea;
 
+  final bool isInNavigation;
+
   @override
   String toString() {
-    return 'AddCourseRouteArgs{key: $key, enableSafeArea: $enableSafeArea}';
+    return 'AddCourseRouteArgs{key: $key, enableSafeArea: $enableSafeArea, isInNavigation: $isInNavigation}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! AddCourseRouteArgs) return false;
-    return key == other.key && enableSafeArea == other.enableSafeArea;
+    return key == other.key &&
+        enableSafeArea == other.enableSafeArea &&
+        isInNavigation == other.isInNavigation;
   }
 
   @override
-  int get hashCode => key.hashCode ^ enableSafeArea.hashCode;
+  int get hashCode =>
+      key.hashCode ^ enableSafeArea.hashCode ^ isInNavigation.hashCode;
 }
 
 /// generated route for
@@ -469,10 +484,15 @@ class SubscriptionsRoute extends _i17.PageRouteInfo<SubscriptionsRouteArgs> {
   SubscriptionsRoute({
     _i18.Key? key,
     bool isBackDisabled = false,
+    bool isNavPage = false,
     List<_i17.PageRouteInfo>? children,
   }) : super(
          SubscriptionsRoute.name,
-         args: SubscriptionsRouteArgs(key: key, isBackDisabled: isBackDisabled),
+         args: SubscriptionsRouteArgs(
+           key: key,
+           isBackDisabled: isBackDisabled,
+           isNavPage: isNavPage,
+         ),
          initialChildren: children,
        );
 
@@ -487,32 +507,42 @@ class SubscriptionsRoute extends _i17.PageRouteInfo<SubscriptionsRouteArgs> {
       return _i15.SubscriptionsScreen(
         key: args.key,
         isBackDisabled: args.isBackDisabled,
+        isNavPage: args.isNavPage,
       );
     },
   );
 }
 
 class SubscriptionsRouteArgs {
-  const SubscriptionsRouteArgs({this.key, this.isBackDisabled = false});
+  const SubscriptionsRouteArgs({
+    this.key,
+    this.isBackDisabled = false,
+    this.isNavPage = false,
+  });
 
   final _i18.Key? key;
 
   final bool isBackDisabled;
 
+  final bool isNavPage;
+
   @override
   String toString() {
-    return 'SubscriptionsRouteArgs{key: $key, isBackDisabled: $isBackDisabled}';
+    return 'SubscriptionsRouteArgs{key: $key, isBackDisabled: $isBackDisabled, isNavPage: $isNavPage}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! SubscriptionsRouteArgs) return false;
-    return key == other.key && isBackDisabled == other.isBackDisabled;
+    return key == other.key &&
+        isBackDisabled == other.isBackDisabled &&
+        isNavPage == other.isNavPage;
   }
 
   @override
-  int get hashCode => key.hashCode ^ isBackDisabled.hashCode;
+  int get hashCode =>
+      key.hashCode ^ isBackDisabled.hashCode ^ isNavPage.hashCode;
 }
 
 /// generated route for
