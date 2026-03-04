@@ -272,14 +272,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
-  cupertino_icons:
-    dependency: "direct main"
-    description:
-      name: cupertino_icons
-      sha256: ba631d1c7f7bef6b729a622b7b752645a2d076dba9976925b8f25725a30e1ee6
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.8"
   dart_style:
     dependency: transitive
     description:
@@ -405,14 +397,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_auto_size_text:
-    dependency: "direct dev"
-    description:
-      name: flutter_auto_size_text
-      sha256: eba9a0053ab13703eca8468754940f1567cfd364b5aa7225420ea5ec3c02b83e
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.1.0"
   flutter_bloc:
     dependency: "direct main"
     description:
@@ -727,14 +711,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.5"
-  intl_utils:
-    dependency: "direct dev"
-    description:
-      name: intl_utils
-      sha256: da67ac187b521445d745f7c68e7254c2090f6c3c9081c93cd515480af9e59569
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.8.11"
   io:
     dependency: transitive
     description:
@@ -984,7 +960,7 @@ packages:
     source: hosted
     version: "7.0.1"
   pin_code_fields:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: pin_code_fields
       sha256: "4c0db7fbc889e622e7c71ea54b9ee624bb70c7365b532abea0271b17ea75b729"

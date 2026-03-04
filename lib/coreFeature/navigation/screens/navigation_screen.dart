@@ -25,6 +25,7 @@ import 'package:pinlink/coreFeature/navigation/cubit/navigation_state.dart';
 import 'package:pinlink/coreFeature/navigation/nav_utils/navigator_item.dart';
 import 'package:pinlink/coreFeature/profile/screens/profile_screen.dart';
 import 'package:pinlink/features/course_comparision/screens/add_course_screen.dart';
+import 'package:pinlink/features/social/screens/social_screen.dart';
 import 'package:pinlink/gen/assets.gen.dart';
 
 final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
@@ -35,7 +36,11 @@ class NavigationScreen extends StatelessWidget {
 
   List<NavigatorItem> getpage() {
     final evItems = <NavigatorItem>[
-      NavigatorItem(imagePath: Assets.navigators.social, screen: Container(), label: 'Socia'),
+      NavigatorItem(
+        imagePath: Assets.navigators.social,
+        screen: const SocialScreen(),
+        label: 'Socia',
+      ),
       NavigatorItem(
         imagePath: Assets.navigators.leaderboard,
         screen: Container(),
@@ -80,43 +85,11 @@ class NavigationScreen extends StatelessWidget {
         }
         return SimpleBackground(
           key: scaffoldKey,
-          
-          
-          appBar: CommonAppBar(
-            // leading: const SizedBox.shrink(),
-            disableBack: true,
-            hideBack: true,
-            title: title,
-            appbarConfig: AppbarConfig(
-              titleAlignment: .centerLeft,
-              height: 70,
-              titleSpacing: 16,
-              actions: [
-                IconButton(
-                  onPressed: () {},
-                  icon: SizedBox(
-                    width: 25,
-                    height: 25,
-                    child: CommonImage(src: Assets.images.settingIcon),
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: SizedBox(
-                    width: 25,
-                    height: 25,
-                    child: Badge.count(
-                      count: 1,
-                      child: CommonImage(src: Assets.images.notificationIcon),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          appBar: _appbar(title),
 
           body: AnimatedSwitcher(
             duration: const Duration(milliseconds: 350),
+
             transitionBuilder: (child, animation) {
               return SlideTransition(
                 position: Tween(
@@ -128,7 +101,7 @@ class NavigationScreen extends StatelessWidget {
             },
             child: KeyedSubtree(
               key: ValueKey(state.currentIndex),
-              child: currentPage(state.currentIndex, context),
+              child: Align(alignment: .topStart, child: currentPage(state.currentIndex, context)),
             ),
           ),
           bottomNavigationBar: CustomBottomNavBar(
@@ -142,6 +115,37 @@ class NavigationScreen extends StatelessWidget {
           // drawer: const DrawerWidget(),
         );
       },
+    );
+  }
+
+  CommonAppBar _appbar(String title) {
+    return CommonAppBar(
+      disableBack: true,
+      hideBack: true,
+      title: title,
+      appbarConfig: AppbarConfig(
+        titleAlignment: .centerLeft,
+        height: 70,
+        titleSpacing: 16,
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: SizedBox(
+              width: 25,
+              height: 25,
+              child: CommonImage(src: Assets.images.settingIcon),
+            ),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: SizedBox(
+              width: 25,
+              height: 25,
+              child: Badge.count(count: 1, child: CommonImage(src: Assets.images.notificationIcon)),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

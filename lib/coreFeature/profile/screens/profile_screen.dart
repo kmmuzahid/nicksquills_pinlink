@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
+import 'package:pinlink/config/theme/toggle_theme.dart';
 import 'package:pinlink/constant/app_string.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/coreFeature/navigation/widget/account_delete_widget.dart';
@@ -64,6 +65,7 @@ class ProfileScreen extends StatelessWidget {
                 _buildMenuTile(context, AppString.about_us, () {
                   appRouter.push(const AboutUsRoute());
                 }),
+                const ToggleTheme(),
                 const SizedBox(height: 20),
                 _buildActionButton(
                   context,
