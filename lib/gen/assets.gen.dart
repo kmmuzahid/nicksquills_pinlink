@@ -67,6 +67,9 @@ class $AssetsImagesGen {
   AssetGenImage get onboarding4 =>
       const AssetGenImage('assets/images/onboarding_4.png');
 
+  /// File path: assets/images/privacy_icon.svg
+  String get privacyIcon => 'assets/images/privacy_icon.svg';
+
   /// File path: assets/images/raffle_icon.svg
   String get raffleIcon => 'assets/images/raffle_icon.svg';
 
@@ -98,6 +101,7 @@ class $AssetsImagesGen {
     onBoardingNextButtonPrefix,
     onboarding3,
     onboarding4,
+    privacyIcon,
     raffleIcon,
     settingIcon,
     simpleBackground,
