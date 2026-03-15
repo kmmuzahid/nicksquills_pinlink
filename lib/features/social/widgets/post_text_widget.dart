@@ -1,6 +1,5 @@
 import 'package:core_kit/utils/core_screen_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:pinlink/config/color/app_color.dart';
 
 class PostTextWidget extends StatefulWidget {
   const PostTextWidget({super.key, required this.text});
@@ -33,7 +32,7 @@ class _PostTextWidgetState extends State<PostTextWidget> {
           children: [
             TextSpan(
               text: displayContent,
-              style: TextStyle(color: context.colors.tEXT_subDark, fontSize: 12),
+              style: const TextStyle(color: Color(0xffB2CBC1), fontSize: 12),
             ),
             if (isLongText)
               WidgetSpan(
@@ -50,7 +49,7 @@ class _PostTextWidgetState extends State<PostTextWidget> {
                       isMoreShown ? " Show Less" : " More...",
                       textAlign: .end,
                       style: TextStyle(
-                        color: context.colors.tEXT_white,
+                        color: Colors.white,
                         fontSize: 12.sp,
                         fontWeight: FontWeight.bold,
                       ),

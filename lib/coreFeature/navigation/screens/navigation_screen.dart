@@ -25,6 +25,7 @@ import 'package:pinlink/coreFeature/navigation/cubit/navigation_state.dart';
 import 'package:pinlink/coreFeature/navigation/nav_utils/navigator_item.dart';
 import 'package:pinlink/coreFeature/profile/screens/profile_screen.dart';
 import 'package:pinlink/features/course_comparision/screens/add_course_screen.dart';
+import 'package:pinlink/features/leaderboard/screens/leaderboard_screen.dart';
 import 'package:pinlink/features/social/screens/social_screen.dart';
 import 'package:pinlink/gen/assets.gen.dart';
 
@@ -43,7 +44,7 @@ class NavigationScreen extends StatelessWidget {
       ),
       NavigatorItem(
         imagePath: Assets.navigators.leaderboard,
-        screen: Container(),
+        screen: const LeaderboardScreen(),
         label: 'Leaderboard',
       ),
 

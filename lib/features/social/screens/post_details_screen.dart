@@ -2,9 +2,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:pinlink/common_widgets/simple_background.dart';
-import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/constant/constants.dart';
 import 'package:pinlink/features/social/widgets/post_text_widget.dart';
+import 'package:pinlink/gen/assets.gen.dart';
 
 @RoutePage()
 class PostDetailsScreen extends StatelessWidget {
@@ -37,26 +37,40 @@ class PostDetailsScreen extends StatelessWidget {
               top: false,
               bottom: true,
               child: Column(
+                mainAxisSize: .min,
+
                 children: [
-                  _buildActionButton(Icons.favorite, "42", Colors.red).end,
-                  const SizedBox(height: 20),
-                  _buildActionButton(Icons.chat_bubble_outline, "35", Colors.white).end,
-                  const SizedBox(height: 20),
-                  _buildActionButton(Icons.share, "52", Colors.white).end,
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16),
-                    child: const Icon(Icons.more_vert, color: Colors.white).end,
-                  ),
                   Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Colors.transparent, Colors.black.withOpacity(0.8)],
+                    color: Colors.black.withValues(alpha: 0.05),
+                    padding: const EdgeInsets.only(top: 10),
+                    margin: const EdgeInsets.only(bottom: 16),
+                    child: IntrinsicWidth(
+                      child: Column(
+                        mainAxisAlignment: .center,
+                        crossAxisAlignment: .center,
+                        children: [
+                          _buildActionButton(Icons.favorite, "42", Colors.red).end,
+                          const SizedBox(height: 20),
+                          _buildActionButton(Icons.chat_bubble_outline, "35", Colors.white).end,
+                          const SizedBox(height: 20),
+                          _buildActionButton(Icons.share, "52", Colors.white).end,
+                          const SizedBox(height: 20),
+                          CommonPopupMenu(
+                            showIconTrigger: true,
+                            showTextTrigger: false,
+                            primaryColor: Colors.white,
+                            onPrimaryColor: Colors.white,
+                            menuTextStyle: const TextStyle(color: Colors.black),
+                            items: const ['Report User', 'Report Post'],
+                            onItemSelected: (value) {},
+                          ),
+                        ],
                       ),
                     ),
+                  ).end,
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    color: Colors.black.withValues(alpha: 0.05),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
@@ -65,15 +79,27 @@ class PostDetailsScreen extends StatelessWidget {
                         const SizedBox(height: 12),
                         const Divider(color: Colors.white24),
                         const SizedBox(height: 8),
+                        SingleChildScrollView(
+                          scrollDirection: .horizontal,
+                          child: Row(
+                            children: [
+                              showUrl('https://www.youtube.com/watch?v=1234567890'),
+                              showUrl('https://www.instagram.com/'),
+                              showUrl('https://www.facebook.com/'),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
                         _buildPostStats(),
                         const SizedBox(height: 12),
-                        Text(
-                          "Amazing weather today! Course was in perfect condition.",
-                          style: TextStyle(
-                            color: context.colors.tEXT_white,
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        const CommonText(
+                          text: "Amazing weather today! Course was in perfect condition.",
+                          maxLines: 2,
+                          textAlign: .start,
+                          textColor: Colors.white,
+                          fontSize: 18,
+                          preventScaling: true,
+                          fontWeight: FontWeight.bold,
                         ),
                         const SizedBox(height: 8),
                         const PostTextWidget(
@@ -92,10 +118,37 @@ class PostDetailsScreen extends StatelessWidget {
     );
   }
 
+  Widget showUrl(String url) {
+    Widget? icon;
+    if (url.contains('youtube')) {
+      icon = CommonImage(src: Assets.images.youtube, size: 14);
+    } else if (url.contains('instagram')) {
+      icon = CommonImage(src: Assets.images.instagram, size: 14);
+    } else if (url.contains('facebook')) {
+      icon = CommonImage(src: Assets.images.facebook, size: 14);
+    }
+
+    return GestureDetector(
+      onTap: () {},
+      child: CommonText(
+        preffix: icon,
+        text: "${url.substring(0, url.length > 20 ? 20 : url.length)}...   ",
+        maxLines: 2,
+        textAlign: .start,
+        textColor: const Color(0xffB2CBC1),
+        fontSize: 12,
+        preventScaling: true,
+      ),
+    );
+  }
+
   Widget _buildActionButton(IconData icon, String label, Color color) {
     return Padding(
-      padding: const EdgeInsets.only(right: 16),
+      padding: const EdgeInsets.only(right: 10),
       child: Column(
+        mainAxisSize: .min,
+        mainAxisAlignment: .center,
+        crossAxisAlignment: .center,
         children: [
           Icon(icon, color: color, size: 30),
           Text(label, style: const TextStyle(color: Colors.white, fontSize: 12)),
@@ -115,10 +168,10 @@ class PostDetailsScreen extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  CommonText(
+                  const CommonText(
                     text: "Ava Harper",
                     style: TextStyle(
-                      color: context.colors.tEXT_white,
+                      color: Colors.white,
                       fontWeight: FontWeight.w600,
                       fontSize: 16,
                     ),
@@ -135,16 +188,16 @@ class PostDetailsScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              Row(
+              const Row(
                 children: [
                   CommonText(
                     text: "Augusta National ",
-                    style: TextStyle(color: context.colors.tEXT_subDark, fontSize: 12),
+                    style: TextStyle(color: Color(0xffB2CBC1), fontSize: 12),
                   ),
-                  const Icon(Icons.circle, size: 6, color: Color(0xffE3C97A)),
+                  Icon(Icons.circle, size: 6, color: Color(0xffE3C97A)),
                   CommonText(
                     text: " California, USA",
-                    style: TextStyle(color: context.colors.tEXT_subDark, fontSize: 12),
+                    style: TextStyle(color: Color(0xffB2CBC1), fontSize: 12),
                   ),
                 ],
               ),
@@ -157,19 +210,38 @@ class PostDetailsScreen extends StatelessWidget {
   }
 
   Widget _buildPostStats() {
-    return const Row(
+    return Row(
       children: [
-        Text("Date: 12 Jan, 2026", style: TextStyle(color: Colors.white, fontSize: 12)),
-        Padding(
+        _buildPostStatsText(title: "Date", value: "12 Jan, 2026"),
+        const Padding(
           padding: EdgeInsets.symmetric(horizontal: 8),
           child: Icon(Icons.circle, size: 4, color: Colors.white),
         ),
-        Text("Total Score: 45", style: TextStyle(color: Colors.white, fontSize: 12)),
-        Padding(
+        _buildPostStatsText(title: "Total Score", value: "45"),
+        const Padding(
           padding: EdgeInsets.symmetric(horizontal: 8),
           child: Icon(Icons.circle, size: 4, color: Colors.white),
         ),
-        Text("Holes: 9", style: TextStyle(color: Colors.white, fontSize: 12)),
+        _buildPostStatsText(title: "Holes", value: "9"),
+      ],
+    );
+  }
+
+  Widget _buildPostStatsText({required String title, required String value}) {
+    return Row(
+      children: [
+        CommonText(
+          text: title,
+          style: const TextStyle(color: Color(0xffB2CBC1), fontSize: 14),
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8),
+          child: Icon(Icons.circle, size: 4, color: Colors.white),
+        ),
+        CommonText(
+          text: value,
+          style: const TextStyle(color: Colors.white, fontSize: 14),
+        ),
       ],
     );
   }

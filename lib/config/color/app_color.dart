@@ -110,7 +110,7 @@ class ThemeColor extends ThemeExtension<ThemeColor> {
     bACKGROUND_page: Color(0xFFFFFFFF),
     border_divider: Color(0xFFE5E7EB),
     iconBorder: Color(0xFF4B5563),
-    lightYellow: Color(0xFFFFFBEA),
+    lightYellow: Color.fromARGB(255, 255, 208, 0),
     pRIMARY_brandClr: Color(0xFF184F3A),
     pRIMARY_priLight: Color(0xFFF9FAFB), // grey.shade50
     pRIMARY_priMedium: Color(0xFFD1D5DB), // grey.shade300

@@ -32,3 +32,24 @@ enum Feature {
   selfPromoAdSpace,
   analyticsViewsClicksRevenue,  
 }
+
+enum LeaderboardType {
+  pinLinksWorldRankings("PinLinks World Rankings"),
+  friends("Friends");
+
+  final String displayName;
+
+  const LeaderboardType(this.displayName);
+}
+
+enum LeaderboardSearchType {
+  Points("Points"),
+  MostCoursesPlayed("Most Courses Played"),
+  MostRoundPlayed("Most Round Played"),
+  TravelDistance("Travel Distance"),
+  PlayedMostPinLinks5Courses("Played Most PinLinks 5 Courses");
+
+  final String displayName;
+
+  const LeaderboardSearchType(this.displayName);
+}

@@ -38,11 +38,17 @@ class $AssetsImagesGen {
   /// File path: assets/images/back.svg
   String get back => 'assets/images/back.svg';
 
+  /// File path: assets/images/facebook.svg
+  String get facebook => 'assets/images/facebook.svg';
+
   /// File path: assets/images/globe.png
   AssetGenImage get globe => const AssetGenImage('assets/images/globe.png');
 
   /// File path: assets/images/google.svg
   String get google => 'assets/images/google.svg';
+
+  /// File path: assets/images/instagram.svg
+  String get instagram => 'assets/images/instagram.svg';
 
   /// File path: assets/images/notification_icon.svg
   String get notificationIcon => 'assets/images/notification_icon.svg';
@@ -73,6 +79,15 @@ class $AssetsImagesGen {
   /// File path: assets/images/raffle_icon.svg
   String get raffleIcon => 'assets/images/raffle_icon.svg';
 
+  /// File path: assets/images/rank1.svg
+  String get rank1 => 'assets/images/rank1.svg';
+
+  /// File path: assets/images/rank2.svg
+  String get rank2 => 'assets/images/rank2.svg';
+
+  /// File path: assets/images/rank3.svg
+  String get rank3 => 'assets/images/rank3.svg';
+
   /// File path: assets/images/setting_icon.svg
   String get settingIcon => 'assets/images/setting_icon.svg';
 
@@ -87,14 +102,19 @@ class $AssetsImagesGen {
   /// File path: assets/images/splash.png
   AssetGenImage get splash => const AssetGenImage('assets/images/splash.png');
 
+  /// File path: assets/images/youtube.svg
+  String get youtube => 'assets/images/youtube.svg';
+
   /// List of all assets
   List<dynamic> get values => [
     appIcon,
     apple,
     authBackground,
     back,
+    facebook,
     globe,
     google,
+    instagram,
     notificationIcon,
     oboarding1,
     oboarding2,
@@ -103,10 +123,14 @@ class $AssetsImagesGen {
     onboarding4,
     privacyIcon,
     raffleIcon,
+    rank1,
+    rank2,
+    rank3,
     settingIcon,
     simpleBackground,
     spImage1,
     splash,
+    youtube,
   ];
 }
 
