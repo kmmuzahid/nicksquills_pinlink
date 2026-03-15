@@ -63,14 +63,18 @@ class FriendsScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Add Friend',
-            style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: context.colors.tEXT_white,
+              fontSize: 24,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           const SizedBox(height: 12),
-          const Text(
+          Text(
             'Add friend by username (they must have an account)',
-            style: TextStyle(color: Colors.white70, fontSize: 13),
+            style: TextStyle(color: context.colors.tEXT_subDark, fontSize: 12),
           ),
           const SizedBox(height: 16),
           Row(
