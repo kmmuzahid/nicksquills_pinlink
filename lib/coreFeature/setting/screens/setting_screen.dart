@@ -1,23 +1,23 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pinlink/common_widgets/simple_background.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/config/theme/toggle_theme.dart';
 import 'package:pinlink/constant/app_string.dart';
-import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/coreFeature/navigation/widget/account_delete_widget.dart';
 import 'package:pinlink/coreFeature/navigation/widget/logout_dailog.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+@RoutePage()
+class SettingScreen extends StatelessWidget {
+  const SettingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final authCubit = context.read<AuthCubit>();
-    return Scaffold(
-      backgroundColor: Colors.white,
+    return SimpleBackground(
+      appBar: const CommonAppBar(title: 'Settings'),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -73,11 +73,12 @@ class ProfileScreen extends StatelessWidget {
                   Icons.logout_outlined,
                   context.colors.tEXT_sub,
                   () {
-                  showDialog<Widget>(
-                    context: context,
-                    builder: (context) => const Dialog(child: LogoutAlertWidget()),
-                  );
-                }),
+                    showDialog<Widget>(
+                      context: context,
+                      builder: (context) => const Dialog(child: LogoutAlertWidget()),
+                    );
+                  },
+                ),
                 15.height,
                 _buildActionButton(
                   context,

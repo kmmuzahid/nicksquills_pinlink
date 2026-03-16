@@ -5,10 +5,10 @@
  */
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:pinlink/common_widgets/social_item_widget.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
-import 'package:pinlink/constant/constants.dart';
 
 class SocialScreen extends StatelessWidget {
   const SocialScreen({super.key});
@@ -24,7 +24,7 @@ class SocialScreen extends StatelessWidget {
         onRefresh: () {},
         onLoadMore: (page) {},
         limit: 20,
-        itemBuilder: (context, index) => _item(),
+        itemBuilder: (context, index) => const SocialItemWidget(),
       ),
     );
   }
@@ -61,99 +61,7 @@ class SocialScreen extends StatelessWidget {
     );
   }
 
-  Widget _item() {
-    return GestureDetector(
-      onTap: () {
-        appRouter.push(const PostDetailsRoute());
-      },
-      child: Stack(
-        children: [
-          Positioned.fill(child: CommonImage(src: Constants.sampleImage, borderRadius: 6)),
-          Positioned(
-            right: 0,
-            top: 0,
-            child: Container(
-              color: Colors.black.withValues(alpha: 0.05),
-              child: CommonPopupMenu(
-                showIconTrigger: true,
-                showTextTrigger: false,
-                primaryColor: Colors.white,
-                onPrimaryColor: Colors.white,
-                menuTextStyle: const TextStyle(color: Colors.black),
-                items: const ['Report User', 'Report Post'],
-                onItemSelected: (value) {},
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              color: Colors.black.withValues(alpha: 0.05),
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              child: const CommonText(
-                text: 'Amazing weather today! Course was in perfect condition.',
-                maxLines: 3,
-                textAlign: .left,
-                fontSize: 14,
-                fontWeight: .w500,
-                textColor: Colors.white,
-                autoResize: false,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Widget raffle(BuildContext context) {
-  //   return Container(
-  //     decoration: BoxDecoration(
-  //       gradient: const LinearGradient(
-  //         begin: .centerLeft,
-  //         end: .centerRight,
-  //         colors: [Color(0xff2F80ED), Color(0xff2668C1), Color(0xff1B4987)],
-  //       ),
-  //       border: Border.all(color: context.colors.bACKGROUND_darkCardBoarder),
-  //       borderRadius: BorderRadius.circular(16.r),
-  //     ),
-  //     width: double.infinity,
-  //     padding: const EdgeInsets.all(16),
-  //     child: Row(
-  //       children: [
-  //         CommonImage(src: Assets.images.raffleIcon),
-  //         10.width,
-  //         Column(
-  //           crossAxisAlignment: .start,
-  //           children: [
-  //             const CommonText(
-  //               text: 'Enter Raffle to Win Free Clubs and Prizes!',
-  //               textColor: Colors.white,
-  //               fontSize: 14,
-  //               fontWeight: .bold,
-  //             ),
-  //             CommonText(
-  //               text: 'Win free golf rounds ⚡',
-  //               textColor: Colors.white,
-  //               fontSize: 13,
-  //               maxLines: 2,
-  //               borderRadious: 15,
-  //               borderColor: Colors.transparent,
-  //               backgroundColor: Colors.white.withOpacity(0.2),
-  //               fontWeight: .w600,
-  //               top: 5,
-  //               left: 12,
-  //               bottom: 5,
-  //               right: 12,
-  //             ),
-  //           ],
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
+ 
 
   Widget consentCard(BuildContext context) {
     return Container(

@@ -20,12 +20,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinlink/common_widgets/simple_background.dart';
 import 'package:pinlink/config/bloc/cubit_scope_value.dart';
 import 'package:pinlink/config/color/app_color.dart';
+import 'package:pinlink/config/route/app_router.dart';
+import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/coreFeature/navigation/cubit/navigation_cubit.dart';
 import 'package:pinlink/coreFeature/navigation/cubit/navigation_state.dart';
 import 'package:pinlink/coreFeature/navigation/nav_utils/navigator_item.dart';
-import 'package:pinlink/coreFeature/profile/screens/profile_screen.dart';
 import 'package:pinlink/features/course_comparision/screens/add_course_screen.dart';
+import 'package:pinlink/features/golf_map/screens/golf_map_screen.dart';
 import 'package:pinlink/features/leaderboard/screens/leaderboard_screen.dart';
+import 'package:pinlink/features/profile/screens/profile_screen.dart';
 import 'package:pinlink/features/social/screens/social_screen.dart';
 import 'package:pinlink/gen/assets.gen.dart';
 
@@ -50,7 +53,7 @@ class NavigationScreen extends StatelessWidget {
 
       centerItem(),
 
-      NavigatorItem(imagePath: Assets.navigators.map, screen: Container(), label: 'Map'),
+      NavigatorItem(imagePath: Assets.navigators.map, screen: const GolfMapScreen(), label: 'Map'),
       NavigatorItem(
         imagePath: Assets.navigators.profile,
         screen: const ProfileScreen(),
@@ -130,7 +133,9 @@ class NavigationScreen extends StatelessWidget {
         titleSpacing: 16,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              appRouter.push(const SettingRoute());
+            },
             icon: SizedBox(
               width: 25,
               height: 25,

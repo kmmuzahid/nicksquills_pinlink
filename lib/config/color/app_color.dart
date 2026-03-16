@@ -71,7 +71,8 @@ class ThemeColor extends ThemeExtension<ThemeColor> {
 
   // ── Dark ──────────────────────────────────────────────────────────────────
   static const ThemeColor dark = ThemeColor(
-    background: Color(0xFF0C2E1E),
+    background: Color.fromARGB(255, 10, 39, 26), 
+    // background: Color(0xFF0C2E1E), 
     bACKGROUND_card: Color(0xFFFEFBE8),
     bACKGROUND_clickableBorder: Color(0xFF789086),
     bACKGROUND_darkCard: Color(0xFF052217),

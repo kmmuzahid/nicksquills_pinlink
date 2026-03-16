@@ -1,10 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:pinlink/common_widgets/show_url_widget.dart';
 import 'package:pinlink/common_widgets/simple_background.dart';
 import 'package:pinlink/constant/constants.dart';
 import 'package:pinlink/features/social/widgets/post_text_widget.dart';
-import 'package:pinlink/gen/assets.gen.dart';
 
 @RoutePage()
 class PostDetailsScreen extends StatelessWidget {
@@ -79,13 +79,13 @@ class PostDetailsScreen extends StatelessWidget {
                         const SizedBox(height: 12),
                         const Divider(color: Colors.white24),
                         const SizedBox(height: 8),
-                        SingleChildScrollView(
+                        const SingleChildScrollView(
                           scrollDirection: .horizontal,
                           child: Row(
                             children: [
-                              showUrl('https://www.youtube.com/watch?v=1234567890'),
-                              showUrl('https://www.instagram.com/'),
-                              showUrl('https://www.facebook.com/'),
+                              ShowUrlWidget(url: 'https://www.youtube.com/watch?v=1234567890'),
+                              ShowUrlWidget(url: 'https://www.instagram.com/'),
+                              ShowUrlWidget(url: 'https://www.facebook.com/'),
                             ],
                           ),
                         ),
@@ -118,29 +118,6 @@ class PostDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget showUrl(String url) {
-    Widget? icon;
-    if (url.contains('youtube')) {
-      icon = CommonImage(src: Assets.images.youtube, size: 14);
-    } else if (url.contains('instagram')) {
-      icon = CommonImage(src: Assets.images.instagram, size: 14);
-    } else if (url.contains('facebook')) {
-      icon = CommonImage(src: Assets.images.facebook, size: 14);
-    }
-
-    return GestureDetector(
-      onTap: () {},
-      child: CommonText(
-        preffix: icon,
-        text: "${url.substring(0, url.length > 20 ? 20 : url.length)}...   ",
-        maxLines: 2,
-        textAlign: .start,
-        textColor: const Color(0xffB2CBC1),
-        fontSize: 12,
-        preventScaling: true,
-      ),
-    );
-  }
 
   Widget _buildActionButton(IconData icon, String label, Color color) {
     return Padding(

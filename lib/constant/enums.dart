@@ -53,3 +53,24 @@ enum LeaderboardSearchType {
 
   const LeaderboardSearchType(this.displayName);
 }
+
+enum MapFilters {
+  Played("Played"),
+  Wishlist("Wishlist"),
+  Friends("Friends"),
+  PinLinks5("PinLinks 5");
+
+  final String displayName;
+
+  const MapFilters(this.displayName);
+}
+
+enum FilterProfile {
+  MyCourses("My Courses"),
+  MyPosts("My Posts"),
+  MyWishlist("My Wishlist");
+
+  final String displayName;
+
+  const FilterProfile(this.displayName);
+}

@@ -50,6 +50,13 @@ class $AssetsImagesGen {
   /// File path: assets/images/instagram.svg
   String get instagram => 'assets/images/instagram.svg';
 
+  /// File path: assets/images/map_sample.png
+  AssetGenImage get mapSample =>
+      const AssetGenImage('assets/images/map_sample.png');
+
+  /// File path: assets/images/marker.svg
+  String get marker => 'assets/images/marker.svg';
+
   /// File path: assets/images/notification_icon.svg
   String get notificationIcon => 'assets/images/notification_icon.svg';
 
@@ -115,6 +122,8 @@ class $AssetsImagesGen {
     globe,
     google,
     instagram,
+    mapSample,
+    marker,
     notificationIcon,
     oboarding1,
     oboarding2,

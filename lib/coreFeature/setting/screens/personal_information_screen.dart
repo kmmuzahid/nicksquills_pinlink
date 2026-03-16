@@ -12,8 +12,8 @@ import 'package:pinlink/config/bloc/cubit_scope.dart';
 import 'package:pinlink/constant/app_string.dart';
 import 'package:pinlink/constant/constants.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
-import 'package:pinlink/coreFeature/profile/screens/cubit/personal_info_cubit.dart';
-import 'package:pinlink/coreFeature/profile/screens/cubit/personal_info_state.dart';
+import 'package:pinlink/coreFeature/setting/screens/cubit/personal_info_cubit.dart';
+import 'package:pinlink/coreFeature/setting/screens/cubit/personal_info_state.dart';
 
 @RoutePage()
 class PersonalInformationScreen extends StatelessWidget {

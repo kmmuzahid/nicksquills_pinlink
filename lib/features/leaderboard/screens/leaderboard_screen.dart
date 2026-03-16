@@ -2,6 +2,7 @@ import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:pinlink/common_widgets/common_widget.dart';
 import 'package:pinlink/common_widgets/custom_card.dart';
+import 'package:pinlink/common_widgets/info_card_widget.dart';
 import 'package:pinlink/common_widgets/simple_background.dart';
 import 'package:pinlink/common_widgets/text_to_avater.dart';
 import 'package:pinlink/config/bloc/cubit_scope.dart';
@@ -66,7 +67,11 @@ class LeaderboardScreen extends StatelessWidget {
             ),
           ],
         ),
-        _buildInfoCard(context),
+        const InfoCardWidget(
+          title: 'Automatic Rankings',
+          description:
+              'Rankings update automatically when you add or compare courses using Add / Play.',
+        ),
         const SizedBox(height: 20),
         _buildActionButtons(context),
         const SizedBox(height: 20),
@@ -98,46 +103,7 @@ class LeaderboardScreen extends StatelessWidget {
     );
   }
 
-  // Info card at the top
-  Widget _buildInfoCard(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: context.colors.bACKGROUND_darkCard,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: context.colors.bACKGROUND_darkCardBoarder),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(Icons.info_outline, color: context.colors.lightYellow, size: 20),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CommonText(
-                  text: 'Automatic Rankings',
-                  fontSize: 16,
-                  fontWeight: .bold,
-                  textColor: context.colors.lightYellow,
-                ),
-                const SizedBox(height: 4),
-                CommonText(
-                  textAlign: .left,
-                  text:
-                      'Rankings update automatically when you add or compare courses using Add / Play.',
-                  fontSize: 14,
-                  isDescription: true,
-                  textColor: context.colors.tEXT_subDark,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+
 
   // Button row (Build Tournament / Add Friend)
   Widget _buildActionButtons(BuildContext context) {
@@ -148,7 +114,9 @@ class LeaderboardScreen extends StatelessWidget {
           buttonHeight: 36,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           titleText: 'Build a Tournament',
-          onTap: () {},
+          onTap: () {
+            appRouter.push(const BuildTournamentRoute());
+          },
           prefix: const Icon(Icons.calendar_today, size: 16),
         ),
         const SizedBox(width: 10),

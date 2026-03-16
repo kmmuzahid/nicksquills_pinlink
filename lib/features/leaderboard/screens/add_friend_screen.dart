@@ -33,7 +33,7 @@ class FriendsScreen extends StatelessWidget {
         10.height,
         _buildAddFriendSection(context),
         const SizedBox(height: 16),
-        _buildStatusMessage(),
+        _buildStatusMessage(context),
         const SizedBox(height: 24),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -63,8 +63,8 @@ class FriendsScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Add Friend',
+          CommonText(
+            text: 'Add Friend',
             style: TextStyle(
               color: context.colors.tEXT_white,
               fontSize: 24,
@@ -79,34 +79,12 @@ class FriendsScreen extends StatelessWidget {
           const SizedBox(height: 16),
           Row(
             children: [
-              Expanded(
-                child: TextField(
-                  style: const TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                    hintText: 'Email',
-                    hintStyle: const TextStyle(color: Colors.white30),
-                    filled: true,
-                    fillColor: Colors.black26,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
+              const Expanded(
+                child: CommonTextField(hintText: 'Email', validationType: .validateEmail
                 ),
               ),
               const SizedBox(width: 12),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF2E7D32),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                ),
-                child: const Text(
-                  'Add',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                ),
+              CommonButton(titleText: 'Add', onTap: () {}, buttonRadius: 30, buttonWidth: 80,
               ),
             ],
           ),
@@ -116,17 +94,18 @@ class FriendsScreen extends StatelessWidget {
   }
 
   // Small status bubble
-  Widget _buildStatusMessage() {
+  Widget _buildStatusMessage(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
+        color: context.colors.lightYellow.withOpacity(0.1),
         borderRadius: BorderRadius.circular(30),
       ),
-      child: const Text(
-        'Friend added. They\'ll show up here if they have an account.',
-        style: TextStyle(color: Colors.white70, fontSize: 12),
+      child: CommonText(
+        text: 'Friend added. They\'ll show up here if they have an account.',
+        style: TextStyle(color: context.colors.lightYellow, fontSize: 12),
+        maxLines: 2,
         textAlign: TextAlign.center,
       ),
     );
