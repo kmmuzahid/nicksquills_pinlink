@@ -165,12 +165,93 @@ class $AssetsNavigatorsGen {
   List<String> get values => [addCourse, leaderboard, map, profile, social];
 }
 
+class $AssetsSettingGen {
+  const $AssetsSettingGen();
+
+  /// File path: assets/setting/about_us.svg
+  String get aboutUs => 'assets/setting/about_us.svg';
+
+  /// File path: assets/setting/change_password.svg
+  String get changePassword => 'assets/setting/change_password.svg';
+
+  /// File path: assets/setting/comment.svg
+  String get comment => 'assets/setting/comment.svg';
+
+  /// File path: assets/setting/delete.svg
+  String get delete => 'assets/setting/delete.svg';
+
+  /// File path: assets/setting/edit_profile.svg
+  String get editProfile => 'assets/setting/edit_profile.svg';
+
+  /// File path: assets/setting/faq.svg
+  String get faq => 'assets/setting/faq.svg';
+
+  /// File path: assets/setting/filter.svg
+  String get filter => 'assets/setting/filter.svg';
+
+  /// File path: assets/setting/notification.svg
+  String get notification => 'assets/setting/notification.svg';
+
+  /// File path: assets/setting/palyed_course.svg
+  String get palyedCourse => 'assets/setting/palyed_course.svg';
+
+  /// File path: assets/setting/played_course.svg
+  String get playedCourse => 'assets/setting/played_course.svg';
+
+  /// File path: assets/setting/privacy.svg
+  String get privacy => 'assets/setting/privacy.svg';
+
+  /// File path: assets/setting/scores.svg
+  String get scores => 'assets/setting/scores.svg';
+
+  /// File path: assets/setting/show_handicap.svg
+  String get showHandicap => 'assets/setting/show_handicap.svg';
+
+  /// File path: assets/setting/subscriptions.svg
+  String get subscriptions => 'assets/setting/subscriptions.svg';
+
+  /// File path: assets/setting/support.svg
+  String get support => 'assets/setting/support.svg';
+
+  /// File path: assets/setting/talk_to_support.svg
+  String get talkToSupport => 'assets/setting/talk_to_support.svg';
+
+  /// File path: assets/setting/theme.svg
+  String get theme => 'assets/setting/theme.svg';
+
+  /// File path: assets/setting/tournament_list.svg
+  String get tournamentList => 'assets/setting/tournament_list.svg';
+
+  /// List of all assets
+  List<String> get values => [
+    aboutUs,
+    changePassword,
+    comment,
+    delete,
+    editProfile,
+    faq,
+    filter,
+    notification,
+    palyedCourse,
+    playedCourse,
+    privacy,
+    scores,
+    showHandicap,
+    subscriptions,
+    support,
+    talkToSupport,
+    theme,
+    tournamentList,
+  ];
+}
+
 class Assets {
   const Assets._();
 
   static const $AssetsIconGen icon = $AssetsIconGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsNavigatorsGen navigators = $AssetsNavigatorsGen();
+  static const $AssetsSettingGen setting = $AssetsSettingGen();
 }
 
 class AssetGenImage {

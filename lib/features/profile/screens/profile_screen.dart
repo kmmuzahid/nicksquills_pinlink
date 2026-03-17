@@ -126,9 +126,10 @@ class ProfileScreen extends StatelessWidget {
       children: [
         5.width,
         CommonText(
-          text: 'All Courses',
-          fontSize: 16,
-          fontWeight: .bold,
+          text: state.selectedFilter == FilterProfile.MyCourses
+              ? 'Ranked from favorite to least favorite'
+              : 'Courses you want to play',
+          fontSize: 14,
           textColor: context.colors.tEXT_white,
         ),
         const Spacer(),
@@ -144,7 +145,7 @@ class ProfileScreen extends StatelessWidget {
           },
           child: const CommonText(
             text: 'View on Map (5)',
-            fontSize: 14,
+            fontSize: 12,
             fontWeight: .bold,
             textColor: Color(0xff10B981),
           ),

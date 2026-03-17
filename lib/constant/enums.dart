@@ -74,3 +74,12 @@ enum FilterProfile {
 
   const FilterProfile(this.displayName);
 }
+
+enum ThemeType {
+  light("Light Mode"),
+  dark("Dark Mode");
+
+  final String displayName;
+
+  const ThemeType(this.displayName);
+}

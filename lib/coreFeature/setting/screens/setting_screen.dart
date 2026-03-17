@@ -1,14 +1,20 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pinlink/common_widgets/custom_card.dart';
+import 'package:pinlink/common_widgets/custom_divider.dart';
 import 'package:pinlink/common_widgets/simple_background.dart';
+import 'package:pinlink/config/bloc/cubit_scope_value.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
-import 'package:pinlink/config/theme/toggle_theme.dart';
+import 'package:pinlink/config/theme/cubit/theme_cubit.dart';
 import 'package:pinlink/constant/app_string.dart';
+import 'package:pinlink/constant/enums.dart';
 import 'package:pinlink/coreFeature/navigation/widget/account_delete_widget.dart';
 import 'package:pinlink/coreFeature/navigation/widget/logout_dailog.dart';
+import 'package:pinlink/gen/assets.gen.dart';
 
 @RoutePage()
 class SettingScreen extends StatelessWidget {
@@ -20,52 +26,89 @@ class SettingScreen extends StatelessWidget {
       appBar: const CommonAppBar(title: 'Settings'),
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
-            surfaceTintColor: Colors.transparent,
-            expandedHeight: 230.h,
-            toolbarHeight: 230.h,
-            pinned: true,
-            floating: false,
-            backgroundColor: Colors.transparent,
-            leading: const SizedBox.shrink(),
-            flexibleSpace: LayoutBuilder(
-              builder: (context, constraints) {
-                // final top = constraints.biggest.height;
-                // final isCollapsed = top <= MediaQuery.of(context).padding.top + kToolbarHeight;
-                // return isCollapsed ? appBar() : _buildHeader();
-
-                return FlexibleSpaceBar(
-                  collapseMode: .pin,
-                  title: const SizedBox.shrink(),
-                  background: _buildHeader(context),
-                );
-              },
-            ),
-          ),
+ 
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
-                _buildNotificationSwitch(context),
-                // _buildMenuTile(AppString.payment_history, () {
-                //   if (authCubit.state.role == Role.EV_OWNER) {
-                //     context.read<NavigationCubit>().changeIndex(2);
-                //   }
-                // }),
-                _buildSectionTitle(AppString.account),
-                _buildMenuTile(context, AppString.change_password, () {
-                  appRouter.push(const ChangePasswordRoute());
-                }),
-                _buildMenuTile(context, AppString.personal_information, () {
-                  appRouter.push(const PersonalInformationRoute());
-                }),
-                _buildMenuTile(context, AppString.faqs, () {
-                  appRouter.push(const FaqRoute());
-                }),
-                _buildMenuTile(context, AppString.about_us, () {
-                  appRouter.push(const AboutUsRoute());
-                }),
-                const ToggleTheme(),
+                10.height,
+                _buildSectionTitle(
+                  context: context,
+                  title: 'Account',
+                  image: Assets.setting.editProfile,
+                ),
+                6.height,
+
+                _accountSections(context),
+
+                10.height,
+                _buildSectionTitle(context: context, title: 'Theme', image: Assets.setting.theme),
+                6.height,
+                _theme(context),
+
+                10.height,
+                _buildSectionTitle(
+                  context: context,
+                  title: 'Privacy & Social',
+                  image: Assets.setting.privacy,
+                ),
+                6.height,
+
+                _privacy(context),
+
+                10.height,
+                _buildSectionTitle(
+                  context: context,
+                  title: 'Notifications',
+                  image: Assets.setting.notification,
+                ),
+                6.height,
+                _notifications(context),
+                10.height,
+                _buildSectionTitle(
+                  context: context,
+                  title: 'Gameplay Preferences',
+                  image: Assets.setting.scores,
+                ),
+                6.height,
+
+                CustomCard(
+                  child: Column(
+                    children: [
+                      _buildMenuTileSwitch(
+                        context: context,
+                        title: 'Profanity Filter',
+                        subtitle: 'Filter inappropriate content',
+                        onSwitchChanged: (value) {
+                          appRouter.push(const ChangePasswordRoute());
+                        },
+                        image: Assets.setting.filter,
+                      ),
+                      const CustomDivider(),
+                      _buildMenuTileSwitch(
+                        context: context,
+                        title: 'Played Courses',
+                        subtitle: 'Show courses you\'ve played',
+                        onSwitchChanged: (value) {
+                          appRouter.push(const PersonalInformationRoute());
+                        },
+                        image: Assets.setting.playedCourse,
+                      ),
+                    ],
+                  ),
+                ),
+
+                10.height,
+                _buildSectionTitle(
+                  context: context,
+                  title: 'Support',
+                  image: Assets.setting.support,
+                ),
+                6.height,
+
+                _support(context),
+
+              
                 const SizedBox(height: 20),
                 _buildActionButton(
                   context,
@@ -79,19 +122,7 @@ class SettingScreen extends StatelessWidget {
                     );
                   },
                 ),
-                15.height,
-                _buildActionButton(
-                  context,
-                  AppString.delete_account,
-                  Icons.delete_outline,
-                  context.colors.tEXT_dark,
-                  () {
-                    showDialog<Widget>(
-                      context: context,
-                      builder: (context) => const Dialog(child: AccountDeleteWidget()),
-                    );
-                  },
-                ),
+               
                 const SizedBox(height: 30),
               ]),
             ),
@@ -101,154 +132,273 @@ class SettingScreen extends StatelessWidget {
     );
   }
 
-  Widget appBar() {
-    return CommonAppBar(
-      hideBack: true,
-      titleWidget: Row(
+  CustomCard _notifications(BuildContext context) {
+    return CustomCard(
+      child: Column(
         children: [
-          10.width,
-          const Padding(
-            padding: EdgeInsets.only(bottom: 8.0),
-            child: CommonImage(
-              src: 'https://picsum.photos/id/1/200/300',
-              size: 100,
-              borderRadius: 100,
-            ),
+          _buildMenuTileSwitch(
+            context: context,
+            title: 'Friend Requests',
+            subtitle: 'Get notified when someone sends you a friend request',
+            onSwitchChanged: (value) {},
+            image: Assets.setting.editProfile,
           ),
-          10.width,
-          const Text(
-            "Mr's Alex",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Serif'),
+          const CustomDivider(),
+          _buildMenuTileSwitch(
+            context: context,
+            title: 'Leaderboard Updates',
+            subtitle: 'Updates on your ranking and achievements',
+            onSwitchChanged: (value) {},
+            image: Assets.setting.showHandicap,
           ),
-          const SizedBox(width: 5),
-          const Icon(Icons.edit, size: 16, color: Colors.white),
+          const CustomDivider(),
+          _buildMenuTileSwitch(
+            context: context,
+            title: 'Tournament Invites',
+            subtitle: 'Get notified about tournament invitations',
+            onSwitchChanged: (value) {},
+            image: Assets.setting.subscriptions,
+          ),
+          const CustomDivider(),
+          _buildMenuTileSwitch(
+            context: context,
+            title: 'Score Updates',
+            subtitle: 'Notifications when friends post scores',
+            onSwitchChanged: (value) {},
+            image: Assets.setting.scores,
+          ),
+          const CustomDivider(),
+          _buildMenuTileSwitch(
+            context: context,
+            title: 'Comments & Likes',
+            subtitle: 'Interactions on your posts',
+            onSwitchChanged: (value) {},
+            image: Assets.setting.comment,
+          ),
         ],
       ),
-      appbarConfig: AppbarConfig(
-        actions: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
-            child: const Icon(Icons.notifications_none, color: Colors.green),
+    );
+  }
+
+  CubitScopeValue<ThemeCubit, ThemeMode> _theme(BuildContext context) {
+    return CubitScopeValue(
+      cubit: context.read<ThemeCubit>(),
+      builder: (context, cubit, state) {
+        return _sigmentedButton(
+          selectedTheme: state == ThemeMode.light ? ThemeType.light : ThemeType.dark,
+          onTap: (p0) {
+            cubit.toggleTheme();
+          },
+          context: context,
+        );
+      },
+    );
+  }
+
+  CustomCard _privacy(BuildContext context) {
+    return CustomCard(
+      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+      child: _buildMenuTileSwitch(
+        context: context,
+        title: 'Show Handicap',
+        subtitle: 'Display your handicap on your profile',
+        image: Assets.setting.showHandicap,
+        onSwitchChanged: (value) {},
+      ),
+    );
+  }
+
+  CustomCard _support(BuildContext context) {
+    return CustomCard(
+      child: Column(
+        children: [
+          _buildMenuTile(
+            context: context,
+            title: 'About Us',
+            onTap: () {
+              appRouter.push(const AboutUsRoute());
+            },
+            image: Assets.setting.aboutUs,
+          ),
+          const CustomDivider(),
+          _buildMenuTile(
+            context: context,
+            title: 'FAQ’s',
+            onTap: () {
+              appRouter.push(const FaqRoute());
+            },
+            image: Assets.setting.faq,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      clipBehavior: Clip.none,
-      children: [
-        const Positioned.fill(child: SizedBox(height: 230, width: double.infinity)),
-        Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          child: Container(
-            height: 160.h,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [context.colors.pRIMARY_brandClr, context.colors.pRIMARY_brandClr],
-              ),
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(50.r)),
-            ),
-            alignment: Alignment.topCenter,
-            padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(Icons.notifications_none, color: Colors.green),
-                ),
-              ],
-            ),
+  CustomCard _accountSections(BuildContext context) {
+    return CustomCard(
+      child: Column(
+        children: [
+          _buildMenuTile(
+            context: context,
+            title: 'Edit Profile',
+            onTap: () {
+              appRouter.push(const PersonalInformationRoute());
+            },
+            image: Assets.setting.editProfile,
           ),
-        ),
-        Positioned(
-          bottom: 30,
-          child: Column(
-            children: [
-              Text(
-                AppString.profile,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              10.height,
-              const CommonImage(
-                src: 'https://picsum.photos/id/28/200/300',
-                borderRadius: 100,
-                size: 100,
-              ),
-              const SizedBox(height: 10),
-              const CommonText(
-                text: "Mr's Alex",
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                textColor: Colors.black,
-              ),
-            ],
+          const CustomDivider(),
+          _buildMenuTile(
+            context: context,
+            title: 'Change Password',
+            onTap: () {
+              appRouter.push(const ChangePasswordRoute());
+            },
+            image: Assets.setting.changePassword,
           ),
-        ),
-      ],
-    );
-  }
+          const CustomDivider(),
+          _buildMenuTile(
+            context: context,
+            title: 'Tournaments List',
+            onTap: () {},
+            image: Assets.setting.tournamentList,
+          ),
+          const CustomDivider(),
+          _buildMenuTile(
+            context: context,
+            title: 'Talk to Support',
+            onTap: () {},
+            image: Assets.setting.talkToSupport,
+          ),
+          const CustomDivider(),
+          _buildMenuTile(
+            context: context,
+            title: 'Subscription Management',
+            onTap: () {},
+            image: Assets.setting.subscriptions,
+            subscriptionName: 'Free',
+          ),
+          const CustomDivider(),
+          _buildMenuTile(
+            context: context,
+            title: 'Delete Account',
+            onTap: () {
+              showDialog<Widget>(
+                context: context,
+                builder: (context) => const Dialog(child: AccountDeleteWidget()),
+              );
+            },
+            image: Assets.setting.delete,
+            color: context.colors.sTATUS_error,
+            enableTrail: false,
+          ),
 
-  Widget _buildSectionTitle(String title) {
-    return SizedBox(
-      width: double.infinity,
-      child: Text(
-        title,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black87),
+      
+        ],
       ),
     );
   }
-
-  Widget _buildNotificationSwitch(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        CommonText(
-          text: AppString.notification,
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          textColor: Colors.black87,
-        ),
-        Transform.scale(
-          scale: .7, // Increases the size by 50%
-          child: Switch(
-            value: true,
-            onChanged: (val) {},
-            activeThumbColor: Colors.cyan,
-            inactiveThumbColor: context.colors.bACKGROUND_darkCardBoarder,
-          ),
-        ),
-      ],
+  Widget _buildSectionTitle({
+    required BuildContext context,
+    required String title,
+    required String image,
+  }) {
+    return CommonText(
+      preffix: CommonImage(
+        src: image,
+        size: 16,
+        imageColor: context.colors.successVerifiedPositivestats_freshGrass,
+      ),
+      text: title,
+      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: context.colors.tEXT_white),
     );
   }
 
-  Widget _buildMenuTile(BuildContext context, String title, Function() onTap) {
+ 
+  Widget _buildMenuTile({
+    required BuildContext context,
+    required String title,
+    required Function() onTap,
+    required String image,
+    bool enableTrail = true,
+    String? subscriptionName,
+    Color? color,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 5),
+        decoration: BoxDecoration(
+          color: context.colors.bACKGROUND_darkCard,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          children: [
+            CommonImage(src: image, imageColor: color ?? context.colors.tEXT_subDark, size: 20),
+            CommonText(
+              left: 10,
+              text: title,
+              fontSize: 16,
+              style: TextStyle(color: color ?? context.colors.tEXT_white),
+            ),
+            const Spacer(),
+            if (subscriptionName != null)
+              CustomCard(
+                child: CommonText(
+                  left: 5,
+                  right: 5,
+                  text: subscriptionName,
+                  textColor: context.colors.tEXT_subDark,
+                  fontSize: 12,
+                ),
+              ),
+            if (enableTrail) Icon(Icons.chevron_right, color: context.colors.tEXT_subDark),
+          ],
+        ),
+      ),
+    );
+  }
+  Widget _buildMenuTileSwitch({
+    required BuildContext context,
+    required String title,
+    required String subtitle,
+    required String image,
+    bool switchValue = true,
+    Function(bool value)? onSwitchChanged,
+    Color? color,
+  }) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
         color: context.colors.bACKGROUND_darkCard,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: ListTile(
-        title: Text(title, style: const TextStyle(color: Colors.black54)),
-        trailing: const Icon(Icons.chevron_right, color: Colors.blue),
-        onTap: onTap,
+      child: Row(
+        children: [
+          CommonImage(src: image, imageColor: color ?? context.colors.tEXT_subDark, size: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CommonText(
+                  left: 10,
+                  text: title,
+                  fontSize: 16,
+                  style: TextStyle(color: color ?? context.colors.tEXT_white),
+                ),
+                CommonText(
+                  left: 10,
+                  text: subtitle,
+                  fontSize: 14,
+                  maxLines: 3,
+                  textAlign: .left,
+                  style: TextStyle(color: color ?? context.colors.tEXT_subDark),
+                ),
+              ],
+            ),
+          ),
+
+          Switch(value: switchValue, onChanged: onSwitchChanged),
+        ],
       ),
     );
   }
@@ -269,6 +419,78 @@ class SettingScreen extends StatelessWidget {
       titleColor: color,
       onTap: onTap,
       borderWidth: 1,
+    );
+  }
+
+  
+  Widget _sigmentedButton({
+    required Function(ThemeType) onTap,
+    required ThemeType selectedTheme,
+    required BuildContext context,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: context.colors.bACKGROUND_darkCard,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: context.colors.bACKGROUND_darkCard, width: 1.2),
+      ),
+
+      child: Row(
+        children: [
+          _buildSegmentButton(
+            themeType: ThemeType.light,
+            selectedTheme: selectedTheme,
+            onTap: onTap,
+            context: context,
+          ),
+          _buildSegmentButton(
+            themeType: ThemeType.dark,
+            selectedTheme: selectedTheme,
+            onTap: onTap,
+            context: context,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSegmentButton({
+    required ThemeType themeType,
+    required ThemeType selectedTheme,
+    required Function(ThemeType) onTap,
+    required BuildContext context,
+  }) {
+    const radious = 8.0;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => onTap(themeType),
+        child: Container(
+          decoration: BoxDecoration(
+            color: selectedTheme == themeType
+                ? context.colors.bACKGROUND_darkPage
+                : Colors.transparent,
+
+            borderRadius: const BorderRadius.all(Radius.circular(radious)),
+          ),
+          child: Center(
+            child: CommonText(
+              left: 10,
+              right: 10,
+              top: 8,
+              bottom: 8,
+              preffix: Icon(
+                themeType == ThemeType.light ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
+                size: 16,
+                color: context.colors.tEXT_white,
+              ),
+              text: themeType.displayName,
+              textColor: context.colors.tEXT_white,
+              fontSize: 14,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
