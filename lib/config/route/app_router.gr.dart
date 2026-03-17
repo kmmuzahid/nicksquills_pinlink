@@ -15,18 +15,18 @@ import 'package:pinlink/constant/enums.dart' as _i26;
 import 'package:pinlink/coreFeature/about_us/about_us_screen.dart' as _i1;
 import 'package:pinlink/coreFeature/auth/screens/change_password_screen.dart'
     as _i4;
-import 'package:pinlink/coreFeature/auth/screens/login_screen.dart' as _i10;
+import 'package:pinlink/coreFeature/auth/screens/login_screen.dart' as _i11;
 import 'package:pinlink/coreFeature/auth/screens/reset_password_screen.dart'
     as _i17;
 import 'package:pinlink/coreFeature/auth/screens/send_otp_screen.dart' as _i18;
-import 'package:pinlink/coreFeature/faq/screens/faq_screen.dart' as _i7;
+import 'package:pinlink/coreFeature/faq/screens/faq_screen.dart' as _i8;
 import 'package:pinlink/coreFeature/navigation/screens/navigation_screen.dart'
-    as _i11;
-import 'package:pinlink/coreFeature/notification/notification_screen.dart'
     as _i12;
-import 'package:pinlink/coreFeature/onboarding/onboarding_screen.dart' as _i13;
-import 'package:pinlink/coreFeature/setting/screens/personal_information_screen.dart'
-    as _i14;
+import 'package:pinlink/coreFeature/notification/notification_screen.dart'
+    as _i13;
+import 'package:pinlink/coreFeature/onboarding/onboarding_screen.dart' as _i14;
+import 'package:pinlink/coreFeature/setting/screens/edit_profile_screen.dart'
+    as _i7;
 import 'package:pinlink/coreFeature/setting/screens/setting_screen.dart'
     as _i19;
 import 'package:pinlink/coreFeature/splash/splash_screen.dart' as _i20;
@@ -39,9 +39,9 @@ import 'package:pinlink/features/course_comparision/screens/add_course_screen.da
 import 'package:pinlink/features/course_comparision/screens/comparison_screen.dart'
     as _i5;
 import 'package:pinlink/features/golf_map_view/golf_map_view_screen.dart'
-    as _i9;
+    as _i10;
 import 'package:pinlink/features/leaderboard/screens/add_friend_screen.dart'
-    as _i8;
+    as _i9;
 import 'package:pinlink/features/leaderboard/screens/build_tournament_screen.dart'
     as _i3;
 import 'package:pinlink/features/social/screens/create_post_screen.dart' as _i6;
@@ -257,7 +257,23 @@ class CreatePostRoute extends _i23.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i7.FaqScreen]
+/// [_i7.EditProfileScreen]
+class EditProfileRoute extends _i23.PageRouteInfo<void> {
+  const EditProfileRoute({List<_i23.PageRouteInfo>? children})
+    : super(EditProfileRoute.name, initialChildren: children);
+
+  static const String name = 'EditProfileRoute';
+
+  static _i23.PageInfo page = _i23.PageInfo(
+    name,
+    builder: (data) {
+      return const _i7.EditProfileScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [_i8.FaqScreen]
 class FaqRoute extends _i23.PageRouteInfo<void> {
   const FaqRoute({List<_i23.PageRouteInfo>? children})
     : super(FaqRoute.name, initialChildren: children);
@@ -267,13 +283,13 @@ class FaqRoute extends _i23.PageRouteInfo<void> {
   static _i23.PageInfo page = _i23.PageInfo(
     name,
     builder: (data) {
-      return const _i7.FaqScreen();
+      return const _i8.FaqScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i8.FriendsScreen]
+/// [_i9.FriendsScreen]
 class FriendsRoute extends _i23.PageRouteInfo<void> {
   const FriendsRoute({List<_i23.PageRouteInfo>? children})
     : super(FriendsRoute.name, initialChildren: children);
@@ -283,13 +299,13 @@ class FriendsRoute extends _i23.PageRouteInfo<void> {
   static _i23.PageInfo page = _i23.PageInfo(
     name,
     builder: (data) {
-      return const _i8.FriendsScreen();
+      return const _i9.FriendsScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i9.GolfMapViewScreen]
+/// [_i10.GolfMapViewScreen]
 class GolfMapViewRoute extends _i23.PageRouteInfo<GolfMapViewRouteArgs> {
   GolfMapViewRoute({
     _i24.Key? key,
@@ -307,7 +323,7 @@ class GolfMapViewRoute extends _i23.PageRouteInfo<GolfMapViewRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<GolfMapViewRouteArgs>();
-      return _i9.GolfMapViewScreen(
+      return _i10.GolfMapViewScreen(
         key: args.key,
         selectedFilter: args.selectedFilter,
       );
@@ -339,7 +355,7 @@ class GolfMapViewRouteArgs {
 }
 
 /// generated route for
-/// [_i10.LoginScreen]
+/// [_i11.LoginScreen]
 class LoginRoute extends _i23.PageRouteInfo<void> {
   const LoginRoute({List<_i23.PageRouteInfo>? children})
     : super(LoginRoute.name, initialChildren: children);
@@ -349,13 +365,13 @@ class LoginRoute extends _i23.PageRouteInfo<void> {
   static _i23.PageInfo page = _i23.PageInfo(
     name,
     builder: (data) {
-      return const _i10.LoginScreen();
+      return const _i11.LoginScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i11.NavigationScreen]
+/// [_i12.NavigationScreen]
 class NavigationRoute extends _i23.PageRouteInfo<void> {
   const NavigationRoute({List<_i23.PageRouteInfo>? children})
     : super(NavigationRoute.name, initialChildren: children);
@@ -365,13 +381,13 @@ class NavigationRoute extends _i23.PageRouteInfo<void> {
   static _i23.PageInfo page = _i23.PageInfo(
     name,
     builder: (data) {
-      return const _i11.NavigationScreen();
+      return const _i12.NavigationScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i12.NotificationScreen]
+/// [_i13.NotificationScreen]
 class NotificationRoute extends _i23.PageRouteInfo<void> {
   const NotificationRoute({List<_i23.PageRouteInfo>? children})
     : super(NotificationRoute.name, initialChildren: children);
@@ -381,13 +397,13 @@ class NotificationRoute extends _i23.PageRouteInfo<void> {
   static _i23.PageInfo page = _i23.PageInfo(
     name,
     builder: (data) {
-      return const _i12.NotificationScreen();
+      return const _i13.NotificationScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i13.OnboardingScreen]
+/// [_i14.OnboardingScreen]
 class OnboardingRoute extends _i23.PageRouteInfo<void> {
   const OnboardingRoute({List<_i23.PageRouteInfo>? children})
     : super(OnboardingRoute.name, initialChildren: children);
@@ -397,23 +413,7 @@ class OnboardingRoute extends _i23.PageRouteInfo<void> {
   static _i23.PageInfo page = _i23.PageInfo(
     name,
     builder: (data) {
-      return const _i13.OnboardingScreen();
-    },
-  );
-}
-
-/// generated route for
-/// [_i14.PersonalInformationScreen]
-class PersonalInformationRoute extends _i23.PageRouteInfo<void> {
-  const PersonalInformationRoute({List<_i23.PageRouteInfo>? children})
-    : super(PersonalInformationRoute.name, initialChildren: children);
-
-  static const String name = 'PersonalInformationRoute';
-
-  static _i23.PageInfo page = _i23.PageInfo(
-    name,
-    builder: (data) {
-      return const _i14.PersonalInformationScreen();
+      return const _i14.OnboardingScreen();
     },
   );
 }

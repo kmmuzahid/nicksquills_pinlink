@@ -7,12 +7,12 @@ import 'package:auto_route/auto_route.dart';
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:pinlink/common_widgets/common_widget.dart';
+import 'package:pinlink/common_widgets/simple_background.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/constant/app_string.dart';
 import 'package:pinlink/constant/constants.dart';
-import 'package:pinlink/coreFeature/notification/notification_button.dart';
 
 @RoutePage()
 class ChangePasswordScreen extends StatelessWidget {
@@ -20,12 +20,10 @@ class ChangePasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold( 
+    return SimpleBackground( 
       appBar: CommonAppBar(
         title: AppString.change_password,
-        appbarConfig: AppbarConfig(
-          actions: const [NotificationIconWidget()],
-        ),
+        
       ),
       body: Padding(
         padding: Constants.bodyPadding,

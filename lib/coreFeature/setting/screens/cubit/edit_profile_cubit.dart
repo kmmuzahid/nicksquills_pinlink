@@ -6,7 +6,7 @@
 
 import 'package:core_kit/core_kit.dart';
 import 'package:pinlink/config/bloc/safe_cubit.dart';
-import 'package:pinlink/coreFeature/setting/screens/cubit/personal_info_state.dart';
+import 'package:pinlink/coreFeature/setting/screens/cubit/edit_profile_state.dart';
 
 class PersonalInfoCubit extends SafeCubit<PersonalInfoState> {
   PersonalInfoCubit() : super(const PersonalInfoState());

@@ -41,7 +41,7 @@ class LogoutAlertWidget extends StatelessWidget {
           CommonText(
             text: AppString.are_you_sure_you_want_to_logout_of_your_account,
             maxLines: 2,
-            textColor: context.colors.tEXT_sub,
+            textColor: context.colors.tEXT_white,
             fontSize: 16,
           ),
 
@@ -51,13 +51,11 @@ class LogoutAlertWidget extends StatelessWidget {
             children: [
               CommonButton(
                 titleText: AppString.no,
-                titleColor: context.colors.pRIMARY_brandClr,
+                titleColor: Colors.white,
                 buttonWidth: 100,
                 onTap: () {
                   navigatorRouterKey.currentState?.pop();
-                },
-                buttonColor: context.colors.bACKGROUND_clickableBorder,
-                borderColor: context.colors.bACKGROUND_clickableBorder,
+                }, 
               ),
 
               const Spacer(),

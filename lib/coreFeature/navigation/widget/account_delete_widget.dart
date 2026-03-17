@@ -44,7 +44,7 @@ class AccountDeleteWidget extends StatelessWidget {
           10.height,
           CommonText(
             text: AppString.enter_your_password_to_confirm,
-            textColor: Colors.white,
+            textColor: context.colors.tEXT_white,
             fontSize: 14,
           ).start,
           8.height,
@@ -62,7 +62,7 @@ class AccountDeleteWidget extends StatelessWidget {
             children: [
               CommonButton(
                 titleText: AppString.no,
-                titleColor: context.colors.tEXT_subDark,
+                titleColor: Colors.white,
                 buttonWidth: 100,
                 onTap: () {
                   navigatorRouterKey.currentState?.pop();

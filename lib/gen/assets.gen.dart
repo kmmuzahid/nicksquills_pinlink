@@ -192,11 +192,8 @@ class $AssetsSettingGen {
   /// File path: assets/setting/notification.svg
   String get notification => 'assets/setting/notification.svg';
 
-  /// File path: assets/setting/palyed_course.svg
-  String get palyedCourse => 'assets/setting/palyed_course.svg';
-
-  /// File path: assets/setting/played_course.svg
-  String get playedCourse => 'assets/setting/played_course.svg';
+  /// File path: assets/setting/palyed_courses.svg
+  String get palyedCourses => 'assets/setting/palyed_courses.svg';
 
   /// File path: assets/setting/privacy.svg
   String get privacy => 'assets/setting/privacy.svg';
@@ -232,8 +229,7 @@ class $AssetsSettingGen {
     faq,
     filter,
     notification,
-    palyedCourse,
-    playedCourse,
+    palyedCourses,
     privacy,
     scores,
     showHandicap,

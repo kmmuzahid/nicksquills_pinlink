@@ -80,7 +80,7 @@ class SettingScreen extends StatelessWidget {
                         title: 'Profanity Filter',
                         subtitle: 'Filter inappropriate content',
                         onSwitchChanged: (value) {
-                          appRouter.push(const ChangePasswordRoute());
+                          
                         },
                         image: Assets.setting.filter,
                       ),
@@ -90,9 +90,9 @@ class SettingScreen extends StatelessWidget {
                         title: 'Played Courses',
                         subtitle: 'Show courses you\'ve played',
                         onSwitchChanged: (value) {
-                          appRouter.push(const PersonalInformationRoute());
+                         
                         },
-                        image: Assets.setting.playedCourse,
+                        image: Assets.setting.palyedCourses,
                       ),
                     ],
                   ),
@@ -114,7 +114,7 @@ class SettingScreen extends StatelessWidget {
                   context,
                   AppString.logout,
                   Icons.logout_outlined,
-                  context.colors.tEXT_sub,
+                  context.colors.sTATUS_error,
                   () {
                     showDialog<Widget>(
                       context: context,
@@ -242,7 +242,7 @@ class SettingScreen extends StatelessWidget {
             context: context,
             title: 'Edit Profile',
             onTap: () {
-              appRouter.push(const PersonalInformationRoute());
+              appRouter.push(const EditProfileRoute());
             },
             image: Assets.setting.editProfile,
           ),
@@ -397,7 +397,14 @@ class SettingScreen extends StatelessWidget {
             ),
           ),
 
-          Switch(value: switchValue, onChanged: onSwitchChanged),
+          Transform.scale(
+            scale: 0.8,
+            child: Switch(
+              activeThumbColor: context.colors.successVerifiedPositivestats_freshGrass,
+              value: switchValue,
+              onChanged: onSwitchChanged,
+            ),
+          ),
         ],
       ),
     );
@@ -411,12 +418,15 @@ class SettingScreen extends StatelessWidget {
     Function() onTap,
   ) {
     return CommonButton(
-      buttonColor: context.colors.bACKGROUND_darkPage,
+      buttonColor: color.withValues(alpha: .06),
       borderColor: color,
       buttonWidth: double.infinity,
       prefix: Icon(icon, color: color),
       titleText: label,
       titleColor: color,
+      
+      titleWeight: .w700,
+      titleSize: 16,
       onTap: onTap,
       borderWidth: 1,
     );
