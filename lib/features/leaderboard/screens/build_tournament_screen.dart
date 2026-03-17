@@ -15,18 +15,66 @@ class BuildTournamentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SimpleBackground(
       appBar: const CommonAppBar(),
-      body: SmartListLoader(
-        padding: Constants.bodyPadding,
-        itemCount: 20,
-        appbar: _appBar(context),
-        onColapsAppbar: Container(
-          padding: Constants.bodyPadding,
-          color: context.colors.background,
-          child: _onColupse(context),
+      body: Column(
+        children: [
+          Expanded(
+            child: SmartListLoader(
+              padding: Constants.bodyPadding,
+              itemCount: 20,
+              appbar: _appBar(context),
+              onColapsAppbar: Container(
+                padding: Constants.bodyPadding,
+                color: context.colors.background,
+                child: _onColupse(context),
+              ),
+              itemBuilder: (context, index) {
+                return FriendListItemWidget(
+                  name: 'Pete',
+                  course: 'Not set',
+                  isSelected: index == 0,
+                );
+              },
+            ),
+          ),
+
+          _bottomSections(),
+        ],
+      ),
+    );
+  }
+
+  Widget _bottomSections() {
+    return SafeArea(
+      top: false,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 16, right: 16, top: 5),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      const BuildLabel('Start Date'),
+                      CommonDateInputTextField(borderRadius: 40),
+                    ],
+                  ),
+                ),
+                10.width,
+                Expanded(
+                  child: Column(
+                    children: [
+                      const BuildLabel('End Date'),
+                      CommonDateInputTextField(borderRadius: 40),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            8.height,
+            CommonButton(buttonWidth: .infinity, titleText: 'Create Tournament', onTap: () {}),
+          ],
         ),
-        itemBuilder: (context, index) {
-          return const FriendListItemWidget(name: 'Pete', course: 'Not set');
-        },
       ),
     );
   }

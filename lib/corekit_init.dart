@@ -10,7 +10,6 @@ import 'package:pinlink/config/api/api_end_point.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/storage/storage_key.dart';
-import 'package:pinlink/config/theme/cubit/theme_cubit.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/gen/assets.gen.dart';
 
@@ -74,16 +73,16 @@ class CorekitInit {
       },
 
       actions: [
-        Builder(
-          builder: (context) {
-            return IconButton(
-              onPressed: () {
-                context.read<ThemeCubit>().toggleTheme();
-              },
-              icon: Icon(Icons.track_changes, color: context.colors.tEXT_white),
-            );
-          },
-        ),
+        // Builder(
+        //   builder: (context) {
+        //     return IconButton(
+        //       onPressed: () {
+        //         context.read<ThemeCubit>().toggleTheme();
+        //       },
+        //       icon: Icon(Icons.track_changes, color: context.colors.tEXT_white),
+        //     );
+        //   },
+        // ),
       ],
 
       backButton: LayoutBuilder(

@@ -9,9 +9,9 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i23;
-import 'package:flutter/material.dart' as _i24;
-import 'package:pinlink/constant/enums.dart' as _i26;
+import 'package:auto_route/auto_route.dart' as _i25;
+import 'package:flutter/material.dart' as _i26;
+import 'package:pinlink/constant/enums.dart' as _i28;
 import 'package:pinlink/coreFeature/about_us/about_us_screen.dart' as _i1;
 import 'package:pinlink/coreFeature/auth/screens/change_password_screen.dart'
     as _i4;
@@ -31,9 +31,9 @@ import 'package:pinlink/coreFeature/setting/screens/setting_screen.dart'
     as _i19;
 import 'package:pinlink/coreFeature/splash/splash_screen.dart' as _i20;
 import 'package:pinlink/coreFeature/terms/privacy_policy_screen.dart' as _i16;
-import 'package:pinlink/coreFeature/terms/terms_of_use_screen.dart' as _i22;
+import 'package:pinlink/coreFeature/terms/terms_of_use_screen.dart' as _i23;
 import 'package:pinlink/features/course_comparision/cubit/add_course_cubit.dart'
-    as _i25;
+    as _i27;
 import 'package:pinlink/features/course_comparision/screens/add_course_screen.dart'
     as _i2;
 import 'package:pinlink/features/course_comparision/screens/comparison_screen.dart'
@@ -49,16 +49,19 @@ import 'package:pinlink/features/social/screens/post_details_screen.dart'
     as _i15;
 import 'package:pinlink/features/subscription/screens/subscriptions_screen.dart'
     as _i21;
+import 'package:pinlink/features/support/screens/support_screen.dart' as _i22;
+import 'package:pinlink/features/tournament/screens/tournament_list_screen.dart'
+    as _i24;
 
 /// generated route for
 /// [_i1.AboutUsScreen]
-class AboutUsRoute extends _i23.PageRouteInfo<void> {
-  const AboutUsRoute({List<_i23.PageRouteInfo>? children})
+class AboutUsRoute extends _i25.PageRouteInfo<void> {
+  const AboutUsRoute({List<_i25.PageRouteInfo>? children})
     : super(AboutUsRoute.name, initialChildren: children);
 
   static const String name = 'AboutUsRoute';
 
-  static _i23.PageInfo page = _i23.PageInfo(
+  static _i25.PageInfo page = _i25.PageInfo(
     name,
     builder: (data) {
       return const _i1.AboutUsScreen();
@@ -68,12 +71,12 @@ class AboutUsRoute extends _i23.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.AddCourseScreen]
-class AddCourseRoute extends _i23.PageRouteInfo<AddCourseRouteArgs> {
+class AddCourseRoute extends _i25.PageRouteInfo<AddCourseRouteArgs> {
   AddCourseRoute({
-    _i24.Key? key,
+    _i26.Key? key,
     bool enableSafeArea = true,
     bool isInNavigation = false,
-    List<_i23.PageRouteInfo>? children,
+    List<_i25.PageRouteInfo>? children,
   }) : super(
          AddCourseRoute.name,
          args: AddCourseRouteArgs(
@@ -86,7 +89,7 @@ class AddCourseRoute extends _i23.PageRouteInfo<AddCourseRouteArgs> {
 
   static const String name = 'AddCourseRoute';
 
-  static _i23.PageInfo page = _i23.PageInfo(
+  static _i25.PageInfo page = _i25.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<AddCourseRouteArgs>(
@@ -108,7 +111,7 @@ class AddCourseRouteArgs {
     this.isInNavigation = false,
   });
 
-  final _i24.Key? key;
+  final _i26.Key? key;
 
   final bool enableSafeArea;
 
@@ -135,13 +138,13 @@ class AddCourseRouteArgs {
 
 /// generated route for
 /// [_i3.BuildTournamentScreen]
-class BuildTournamentRoute extends _i23.PageRouteInfo<void> {
-  const BuildTournamentRoute({List<_i23.PageRouteInfo>? children})
+class BuildTournamentRoute extends _i25.PageRouteInfo<void> {
+  const BuildTournamentRoute({List<_i25.PageRouteInfo>? children})
     : super(BuildTournamentRoute.name, initialChildren: children);
 
   static const String name = 'BuildTournamentRoute';
 
-  static _i23.PageInfo page = _i23.PageInfo(
+  static _i25.PageInfo page = _i25.PageInfo(
     name,
     builder: (data) {
       return const _i3.BuildTournamentScreen();
@@ -151,13 +154,13 @@ class BuildTournamentRoute extends _i23.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i4.ChangePasswordScreen]
-class ChangePasswordRoute extends _i23.PageRouteInfo<void> {
-  const ChangePasswordRoute({List<_i23.PageRouteInfo>? children})
+class ChangePasswordRoute extends _i25.PageRouteInfo<void> {
+  const ChangePasswordRoute({List<_i25.PageRouteInfo>? children})
     : super(ChangePasswordRoute.name, initialChildren: children);
 
   static const String name = 'ChangePasswordRoute';
 
-  static _i23.PageInfo page = _i23.PageInfo(
+  static _i25.PageInfo page = _i25.PageInfo(
     name,
     builder: (data) {
       return const _i4.ChangePasswordScreen();
@@ -167,13 +170,13 @@ class ChangePasswordRoute extends _i23.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i5.ComparisonScreen]
-class ComparisonRoute extends _i23.PageRouteInfo<ComparisonRouteArgs> {
+class ComparisonRoute extends _i25.PageRouteInfo<ComparisonRouteArgs> {
   ComparisonRoute({
-    _i24.Key? key,
-    required _i25.AddCourseCubit cubit,
+    _i26.Key? key,
+    required _i27.AddCourseCubit cubit,
     required int questinIndex,
     bool isQuestionRanking = true,
-    List<_i23.PageRouteInfo>? children,
+    List<_i25.PageRouteInfo>? children,
   }) : super(
          ComparisonRoute.name,
          args: ComparisonRouteArgs(
@@ -187,7 +190,7 @@ class ComparisonRoute extends _i23.PageRouteInfo<ComparisonRouteArgs> {
 
   static const String name = 'ComparisonRoute';
 
-  static _i23.PageInfo page = _i23.PageInfo(
+  static _i25.PageInfo page = _i25.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<ComparisonRouteArgs>();
@@ -209,9 +212,9 @@ class ComparisonRouteArgs {
     this.isQuestionRanking = true,
   });
 
-  final _i24.Key? key;
+  final _i26.Key? key;
 
-  final _i25.AddCourseCubit cubit;
+  final _i27.AddCourseCubit cubit;
 
   final int questinIndex;
 
@@ -242,13 +245,13 @@ class ComparisonRouteArgs {
 
 /// generated route for
 /// [_i6.CreatePostScreen]
-class CreatePostRoute extends _i23.PageRouteInfo<void> {
-  const CreatePostRoute({List<_i23.PageRouteInfo>? children})
+class CreatePostRoute extends _i25.PageRouteInfo<void> {
+  const CreatePostRoute({List<_i25.PageRouteInfo>? children})
     : super(CreatePostRoute.name, initialChildren: children);
 
   static const String name = 'CreatePostRoute';
 
-  static _i23.PageInfo page = _i23.PageInfo(
+  static _i25.PageInfo page = _i25.PageInfo(
     name,
     builder: (data) {
       return const _i6.CreatePostScreen();
@@ -258,13 +261,13 @@ class CreatePostRoute extends _i23.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i7.EditProfileScreen]
-class EditProfileRoute extends _i23.PageRouteInfo<void> {
-  const EditProfileRoute({List<_i23.PageRouteInfo>? children})
+class EditProfileRoute extends _i25.PageRouteInfo<void> {
+  const EditProfileRoute({List<_i25.PageRouteInfo>? children})
     : super(EditProfileRoute.name, initialChildren: children);
 
   static const String name = 'EditProfileRoute';
 
-  static _i23.PageInfo page = _i23.PageInfo(
+  static _i25.PageInfo page = _i25.PageInfo(
     name,
     builder: (data) {
       return const _i7.EditProfileScreen();
@@ -274,13 +277,13 @@ class EditProfileRoute extends _i23.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i8.FaqScreen]
-class FaqRoute extends _i23.PageRouteInfo<void> {
-  const FaqRoute({List<_i23.PageRouteInfo>? children})
+class FaqRoute extends _i25.PageRouteInfo<void> {
+  const FaqRoute({List<_i25.PageRouteInfo>? children})
     : super(FaqRoute.name, initialChildren: children);
 
   static const String name = 'FaqRoute';
 
-  static _i23.PageInfo page = _i23.PageInfo(
+  static _i25.PageInfo page = _i25.PageInfo(
     name,
     builder: (data) {
       return const _i8.FaqScreen();
@@ -290,13 +293,13 @@ class FaqRoute extends _i23.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i9.FriendsScreen]
-class FriendsRoute extends _i23.PageRouteInfo<void> {
-  const FriendsRoute({List<_i23.PageRouteInfo>? children})
+class FriendsRoute extends _i25.PageRouteInfo<void> {
+  const FriendsRoute({List<_i25.PageRouteInfo>? children})
     : super(FriendsRoute.name, initialChildren: children);
 
   static const String name = 'FriendsRoute';
 
-  static _i23.PageInfo page = _i23.PageInfo(
+  static _i25.PageInfo page = _i25.PageInfo(
     name,
     builder: (data) {
       return const _i9.FriendsScreen();
@@ -306,11 +309,11 @@ class FriendsRoute extends _i23.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i10.GolfMapViewScreen]
-class GolfMapViewRoute extends _i23.PageRouteInfo<GolfMapViewRouteArgs> {
+class GolfMapViewRoute extends _i25.PageRouteInfo<GolfMapViewRouteArgs> {
   GolfMapViewRoute({
-    _i24.Key? key,
-    required _i26.MapFilters? selectedFilter,
-    List<_i23.PageRouteInfo>? children,
+    _i26.Key? key,
+    required _i28.MapFilters? selectedFilter,
+    List<_i25.PageRouteInfo>? children,
   }) : super(
          GolfMapViewRoute.name,
          args: GolfMapViewRouteArgs(key: key, selectedFilter: selectedFilter),
@@ -319,7 +322,7 @@ class GolfMapViewRoute extends _i23.PageRouteInfo<GolfMapViewRouteArgs> {
 
   static const String name = 'GolfMapViewRoute';
 
-  static _i23.PageInfo page = _i23.PageInfo(
+  static _i25.PageInfo page = _i25.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<GolfMapViewRouteArgs>();
@@ -334,9 +337,9 @@ class GolfMapViewRoute extends _i23.PageRouteInfo<GolfMapViewRouteArgs> {
 class GolfMapViewRouteArgs {
   const GolfMapViewRouteArgs({this.key, required this.selectedFilter});
 
-  final _i24.Key? key;
+  final _i26.Key? key;
 
-  final _i26.MapFilters? selectedFilter;
+  final _i28.MapFilters? selectedFilter;
 
   @override
   String toString() {
@@ -356,13 +359,13 @@ class GolfMapViewRouteArgs {
 
 /// generated route for
 /// [_i11.LoginScreen]
-class LoginRoute extends _i23.PageRouteInfo<void> {
-  const LoginRoute({List<_i23.PageRouteInfo>? children})
+class LoginRoute extends _i25.PageRouteInfo<void> {
+  const LoginRoute({List<_i25.PageRouteInfo>? children})
     : super(LoginRoute.name, initialChildren: children);
 
   static const String name = 'LoginRoute';
 
-  static _i23.PageInfo page = _i23.PageInfo(
+  static _i25.PageInfo page = _i25.PageInfo(
     name,
     builder: (data) {
       return const _i11.LoginScreen();
@@ -372,13 +375,13 @@ class LoginRoute extends _i23.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i12.NavigationScreen]
-class NavigationRoute extends _i23.PageRouteInfo<void> {
-  const NavigationRoute({List<_i23.PageRouteInfo>? children})
+class NavigationRoute extends _i25.PageRouteInfo<void> {
+  const NavigationRoute({List<_i25.PageRouteInfo>? children})
     : super(NavigationRoute.name, initialChildren: children);
 
   static const String name = 'NavigationRoute';
 
-  static _i23.PageInfo page = _i23.PageInfo(
+  static _i25.PageInfo page = _i25.PageInfo(
     name,
     builder: (data) {
       return const _i12.NavigationScreen();
@@ -388,13 +391,13 @@ class NavigationRoute extends _i23.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i13.NotificationScreen]
-class NotificationRoute extends _i23.PageRouteInfo<void> {
-  const NotificationRoute({List<_i23.PageRouteInfo>? children})
+class NotificationRoute extends _i25.PageRouteInfo<void> {
+  const NotificationRoute({List<_i25.PageRouteInfo>? children})
     : super(NotificationRoute.name, initialChildren: children);
 
   static const String name = 'NotificationRoute';
 
-  static _i23.PageInfo page = _i23.PageInfo(
+  static _i25.PageInfo page = _i25.PageInfo(
     name,
     builder: (data) {
       return const _i13.NotificationScreen();
@@ -404,13 +407,13 @@ class NotificationRoute extends _i23.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i14.OnboardingScreen]
-class OnboardingRoute extends _i23.PageRouteInfo<void> {
-  const OnboardingRoute({List<_i23.PageRouteInfo>? children})
+class OnboardingRoute extends _i25.PageRouteInfo<void> {
+  const OnboardingRoute({List<_i25.PageRouteInfo>? children})
     : super(OnboardingRoute.name, initialChildren: children);
 
   static const String name = 'OnboardingRoute';
 
-  static _i23.PageInfo page = _i23.PageInfo(
+  static _i25.PageInfo page = _i25.PageInfo(
     name,
     builder: (data) {
       return const _i14.OnboardingScreen();
@@ -420,13 +423,13 @@ class OnboardingRoute extends _i23.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i15.PostDetailsScreen]
-class PostDetailsRoute extends _i23.PageRouteInfo<void> {
-  const PostDetailsRoute({List<_i23.PageRouteInfo>? children})
+class PostDetailsRoute extends _i25.PageRouteInfo<void> {
+  const PostDetailsRoute({List<_i25.PageRouteInfo>? children})
     : super(PostDetailsRoute.name, initialChildren: children);
 
   static const String name = 'PostDetailsRoute';
 
-  static _i23.PageInfo page = _i23.PageInfo(
+  static _i25.PageInfo page = _i25.PageInfo(
     name,
     builder: (data) {
       return const _i15.PostDetailsScreen();
@@ -436,13 +439,13 @@ class PostDetailsRoute extends _i23.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i16.PrivacyPolicyScreen]
-class PrivacyPolicyRoute extends _i23.PageRouteInfo<void> {
-  const PrivacyPolicyRoute({List<_i23.PageRouteInfo>? children})
+class PrivacyPolicyRoute extends _i25.PageRouteInfo<void> {
+  const PrivacyPolicyRoute({List<_i25.PageRouteInfo>? children})
     : super(PrivacyPolicyRoute.name, initialChildren: children);
 
   static const String name = 'PrivacyPolicyRoute';
 
-  static _i23.PageInfo page = _i23.PageInfo(
+  static _i25.PageInfo page = _i25.PageInfo(
     name,
     builder: (data) {
       return const _i16.PrivacyPolicyScreen();
@@ -452,12 +455,12 @@ class PrivacyPolicyRoute extends _i23.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i17.ResetPasswordScreen]
-class ResetPasswordRoute extends _i23.PageRouteInfo<ResetPasswordRouteArgs> {
+class ResetPasswordRoute extends _i25.PageRouteInfo<ResetPasswordRouteArgs> {
   ResetPasswordRoute({
-    _i24.Key? key,
+    _i26.Key? key,
     required String verificationToken,
     required String email,
-    List<_i23.PageRouteInfo>? children,
+    List<_i25.PageRouteInfo>? children,
   }) : super(
          ResetPasswordRoute.name,
          args: ResetPasswordRouteArgs(
@@ -470,7 +473,7 @@ class ResetPasswordRoute extends _i23.PageRouteInfo<ResetPasswordRouteArgs> {
 
   static const String name = 'ResetPasswordRoute';
 
-  static _i23.PageInfo page = _i23.PageInfo(
+  static _i25.PageInfo page = _i25.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<ResetPasswordRouteArgs>();
@@ -490,7 +493,7 @@ class ResetPasswordRouteArgs {
     required this.email,
   });
 
-  final _i24.Key? key;
+  final _i26.Key? key;
 
   final String verificationToken;
 
@@ -517,14 +520,14 @@ class ResetPasswordRouteArgs {
 
 /// generated route for
 /// [_i18.SendOtpScreen]
-class SendOtpRoute extends _i23.PageRouteInfo<SendOtpRouteArgs> {
+class SendOtpRoute extends _i25.PageRouteInfo<SendOtpRouteArgs> {
   SendOtpRoute({
-    _i24.Key? key,
+    _i26.Key? key,
     required dynamic Function({required String email, required String token})
     onSuccess,
     required String username,
     bool showSendToField = false,
-    List<_i23.PageRouteInfo>? children,
+    List<_i25.PageRouteInfo>? children,
   }) : super(
          SendOtpRoute.name,
          args: SendOtpRouteArgs(
@@ -538,7 +541,7 @@ class SendOtpRoute extends _i23.PageRouteInfo<SendOtpRouteArgs> {
 
   static const String name = 'SendOtpRoute';
 
-  static _i23.PageInfo page = _i23.PageInfo(
+  static _i25.PageInfo page = _i25.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<SendOtpRouteArgs>();
@@ -560,7 +563,7 @@ class SendOtpRouteArgs {
     this.showSendToField = false,
   });
 
-  final _i24.Key? key;
+  final _i26.Key? key;
 
   final dynamic Function({required String email, required String token})
   onSuccess;
@@ -590,13 +593,13 @@ class SendOtpRouteArgs {
 
 /// generated route for
 /// [_i19.SettingScreen]
-class SettingRoute extends _i23.PageRouteInfo<void> {
-  const SettingRoute({List<_i23.PageRouteInfo>? children})
+class SettingRoute extends _i25.PageRouteInfo<void> {
+  const SettingRoute({List<_i25.PageRouteInfo>? children})
     : super(SettingRoute.name, initialChildren: children);
 
   static const String name = 'SettingRoute';
 
-  static _i23.PageInfo page = _i23.PageInfo(
+  static _i25.PageInfo page = _i25.PageInfo(
     name,
     builder: (data) {
       return const _i19.SettingScreen();
@@ -606,13 +609,13 @@ class SettingRoute extends _i23.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i20.SplashScreen]
-class SplashRoute extends _i23.PageRouteInfo<void> {
-  const SplashRoute({List<_i23.PageRouteInfo>? children})
+class SplashRoute extends _i25.PageRouteInfo<void> {
+  const SplashRoute({List<_i25.PageRouteInfo>? children})
     : super(SplashRoute.name, initialChildren: children);
 
   static const String name = 'SplashRoute';
 
-  static _i23.PageInfo page = _i23.PageInfo(
+  static _i25.PageInfo page = _i25.PageInfo(
     name,
     builder: (data) {
       return const _i20.SplashScreen();
@@ -622,25 +625,27 @@ class SplashRoute extends _i23.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i21.SubscriptionsScreen]
-class SubscriptionsRoute extends _i23.PageRouteInfo<SubscriptionsRouteArgs> {
+class SubscriptionsRoute extends _i25.PageRouteInfo<SubscriptionsRouteArgs> {
   SubscriptionsRoute({
-    _i24.Key? key,
+    _i26.Key? key,
     bool isBackDisabled = false,
     bool isNavPage = false,
-    List<_i23.PageRouteInfo>? children,
+    bool isSubscriptionMangement = false,
+    List<_i25.PageRouteInfo>? children,
   }) : super(
          SubscriptionsRoute.name,
          args: SubscriptionsRouteArgs(
            key: key,
            isBackDisabled: isBackDisabled,
            isNavPage: isNavPage,
+           isSubscriptionMangement: isSubscriptionMangement,
          ),
          initialChildren: children,
        );
 
   static const String name = 'SubscriptionsRoute';
 
-  static _i23.PageInfo page = _i23.PageInfo(
+  static _i25.PageInfo page = _i25.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<SubscriptionsRouteArgs>(
@@ -650,6 +655,7 @@ class SubscriptionsRoute extends _i23.PageRouteInfo<SubscriptionsRouteArgs> {
         key: args.key,
         isBackDisabled: args.isBackDisabled,
         isNavPage: args.isNavPage,
+        isSubscriptionMangement: args.isSubscriptionMangement,
       );
     },
   );
@@ -660,17 +666,20 @@ class SubscriptionsRouteArgs {
     this.key,
     this.isBackDisabled = false,
     this.isNavPage = false,
+    this.isSubscriptionMangement = false,
   });
 
-  final _i24.Key? key;
+  final _i26.Key? key;
 
   final bool isBackDisabled;
 
   final bool isNavPage;
 
+  final bool isSubscriptionMangement;
+
   @override
   String toString() {
-    return 'SubscriptionsRouteArgs{key: $key, isBackDisabled: $isBackDisabled, isNavPage: $isNavPage}';
+    return 'SubscriptionsRouteArgs{key: $key, isBackDisabled: $isBackDisabled, isNavPage: $isNavPage, isSubscriptionMangement: $isSubscriptionMangement}';
   }
 
   @override
@@ -679,26 +688,62 @@ class SubscriptionsRouteArgs {
     if (other is! SubscriptionsRouteArgs) return false;
     return key == other.key &&
         isBackDisabled == other.isBackDisabled &&
-        isNavPage == other.isNavPage;
+        isNavPage == other.isNavPage &&
+        isSubscriptionMangement == other.isSubscriptionMangement;
   }
 
   @override
   int get hashCode =>
-      key.hashCode ^ isBackDisabled.hashCode ^ isNavPage.hashCode;
+      key.hashCode ^
+      isBackDisabled.hashCode ^
+      isNavPage.hashCode ^
+      isSubscriptionMangement.hashCode;
 }
 
 /// generated route for
-/// [_i22.TermsOfUseScreen]
-class TermsOfUseRoute extends _i23.PageRouteInfo<void> {
-  const TermsOfUseRoute({List<_i23.PageRouteInfo>? children})
+/// [_i22.SupportScreen]
+class SupportRoute extends _i25.PageRouteInfo<void> {
+  const SupportRoute({List<_i25.PageRouteInfo>? children})
+    : super(SupportRoute.name, initialChildren: children);
+
+  static const String name = 'SupportRoute';
+
+  static _i25.PageInfo page = _i25.PageInfo(
+    name,
+    builder: (data) {
+      return const _i22.SupportScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [_i23.TermsOfUseScreen]
+class TermsOfUseRoute extends _i25.PageRouteInfo<void> {
+  const TermsOfUseRoute({List<_i25.PageRouteInfo>? children})
     : super(TermsOfUseRoute.name, initialChildren: children);
 
   static const String name = 'TermsOfUseRoute';
 
-  static _i23.PageInfo page = _i23.PageInfo(
+  static _i25.PageInfo page = _i25.PageInfo(
     name,
     builder: (data) {
-      return const _i22.TermsOfUseScreen();
+      return const _i23.TermsOfUseScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [_i24.TournamentListScreen]
+class TournamentListRoute extends _i25.PageRouteInfo<void> {
+  const TournamentListRoute({List<_i25.PageRouteInfo>? children})
+    : super(TournamentListRoute.name, initialChildren: children);
+
+  static const String name = 'TournamentListRoute';
+
+  static _i25.PageInfo page = _i25.PageInfo(
+    name,
+    builder: (data) {
+      return const _i24.TournamentListScreen();
     },
   );
 }

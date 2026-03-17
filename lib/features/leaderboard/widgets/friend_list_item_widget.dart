@@ -4,10 +4,16 @@ import 'package:pinlink/common_widgets/custom_card.dart';
 import 'package:pinlink/config/color/app_color.dart';
 
 class FriendListItemWidget extends StatelessWidget {
-  const FriendListItemWidget({super.key, required this.name, required this.course});
+  const FriendListItemWidget({
+    super.key,
+    required this.name,
+    required this.course,
+    this.isSelected = false,
+  });
 
   final String name;
   final String course;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +57,13 @@ class FriendListItemWidget extends StatelessWidget {
                     ],
                   ),
                 ),
+                if (isSelected)
+                  CustomCard(
+                    borderRadius: 40,
+                    padding: const EdgeInsets.all(5),
+                    backgroundColor: context.colors.successVerifiedPositivestats_freshGrass,
+                    child: const Icon(Icons.check, size: 21, color: Colors.white),
+                  ),
               ],
             ),
             const SizedBox(height: 16),

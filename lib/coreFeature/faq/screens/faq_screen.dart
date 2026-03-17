@@ -26,9 +26,9 @@ class FaqScreen extends StatelessWidget {
           return _faqBuilder(
             context,
             const FaqModel(
-              question: 'What is ShareCharge?',
+              question: 'What is PinLink?',
               answer:
-                  'ShareCharge is a platform that allows you to share your electric vehicle charging station with other EV owners.',
+                  'PinLink is a platform that allows you to share your electric vehicle charging station with other EV owners.',
             ),
           );
         },
@@ -40,7 +40,7 @@ class FaqScreen extends StatelessWidget {
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 2.0),
         child: Card(
           color: context.colors.bACKGROUND_darkCard,
           elevation: .5,
@@ -50,18 +50,18 @@ class FaqScreen extends StatelessWidget {
               text: faq.question,
               textAlign: TextAlign.left,
               maxLines: 4,
-              style: const TextStyle(fontSize: 16, color: Colors.black),
+              style: TextStyle(fontSize: 16, color: context.colors.tEXT_white),
             ),
             childrenPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
             expandedCrossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Divider(height: 1, color: Colors.grey[300]),
+              Divider(height: 1, color: context.colors.bACKGROUND_darkCardBoarder),
               const SizedBox(height: 12),
               CommonText(
                 text: faq.answer,
                 maxLines: 20,
                 textAlign: TextAlign.left,
-                style: TextStyle(color: Colors.grey[700], fontSize: 14, height: 1.5),
+                style: TextStyle(color: context.colors.tEXT_subDark, fontSize: 14, height: 1.5),
               ),
               const SizedBox(height: 4),
             ],

@@ -9,6 +9,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pinlink/common_widgets/custom_card.dart';
 import 'package:pinlink/common_widgets/simple_background.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
@@ -18,9 +19,15 @@ import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 
 @RoutePage()
 class SubscriptionsScreen extends StatelessWidget {
-  const SubscriptionsScreen({super.key, this.isBackDisabled = false, this.isNavPage = false});
+  const SubscriptionsScreen({
+    super.key,
+    this.isBackDisabled = false,
+    this.isNavPage = false,
+    this.isSubscriptionMangement = false,
+  });
   final bool isBackDisabled;
   final bool isNavPage;
+  final bool isSubscriptionMangement;
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +36,17 @@ class SubscriptionsScreen extends StatelessWidget {
       appBar: isNavPage
           ? null
           : CommonAppBar(
-        hideBack: isBackDisabled,
-              disableBack: isBackDisabled, 
+              hideBack: isBackDisabled,
+              disableBack: isBackDisabled,
+              title: isSubscriptionMangement ? 'Subscription Management' : '',
               appbarConfig: AppbarConfig(
                 decoration: () => const BoxDecoration(color: Colors.transparent),
               ),
-      ),
+            ),
       body: Column(
         children: [
-          CommonText(
+          if (!isSubscriptionMangement) ...[
+            CommonText(
             text: 'Choose Your Plan',
             fontSize: 24,
             textColor: context.colors.tEXT_white,
@@ -49,14 +58,15 @@ class SubscriptionsScreen extends StatelessWidget {
             fontSize: 16,
             textColor: context.colors.pRIMARY_priSoft,
             fontWeight: FontWeight.w400,
-          ),
+            ),
+          ],
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [
                   subscriptionCard(context: context, plan: freePlan),
-                  subscriptionCard(context: context, plan: clubPlan),
+                  subscriptionCard(context: context, plan: clubPlan, isActive: true),
                   subscriptionCard(context: context, plan: creatorPlan),
                 ],
               ),
@@ -67,7 +77,11 @@ class SubscriptionsScreen extends StatelessWidget {
     );
   }
 
-  Widget subscriptionCard({required BuildContext context, required Plan plan}) {
+  Widget subscriptionCard({
+    required BuildContext context,
+    required Plan plan,
+    bool isActive = false,
+  }) {
     return GestureDetector(
       onTap: () {
         context.read<AuthCubit>().updateSubscriptionPlan(plan);
@@ -98,25 +112,34 @@ class SubscriptionsScreen extends StatelessWidget {
                   ),
                   child: Icon(Icons.electric_bolt_sharp, color: context.colors.tEXT_white),
                 ),
-                Column(
-                  crossAxisAlignment: .start,
-                  children: [
-                    CommonText(
-                      text: plan.name,
-                      fontSize: 20,
-                      left: 10,
-                      textColor: context.colors.tEXT_white,
-                      fontWeight: FontWeight.bold,
-                    ).start,
-                    CommonText(
-                      text: plan.subtitle,
-                      left: 10,
-                      fontSize: 16,
-                      textColor: context.colors.pRIMARY_priSoft,
-                      fontWeight: FontWeight.w400,
-                    ).start,
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: .start,
+                    children: [
+                      CommonText(
+                        text: plan.name,
+                        fontSize: 20,
+                        left: 10,
+                        textColor: context.colors.tEXT_white,
+                        fontWeight: FontWeight.bold,
+                      ).start,
+                      CommonText(
+                        text: plan.subtitle,
+                        left: 10,
+                        fontSize: 16,
+                        textColor: context.colors.pRIMARY_priSoft,
+                        fontWeight: FontWeight.w400,
+                      ).start,
+                    ],
+                  ),
                 ),
+                if (isActive)
+                  CustomCard(
+                    borderRadius: 40,
+                    padding: const EdgeInsets.all(5),
+                    backgroundColor: context.colors.successVerifiedPositivestats_freshGrass,
+                    child: const Icon(Icons.check, size: 21, color: Colors.white),
+                  ),
               ],
             ),
 

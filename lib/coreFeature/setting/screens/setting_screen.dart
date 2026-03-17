@@ -259,21 +259,27 @@ class SettingScreen extends StatelessWidget {
           _buildMenuTile(
             context: context,
             title: 'Tournaments List',
-            onTap: () {},
+            onTap: () {
+              appRouter.push(const TournamentListRoute());
+            },
             image: Assets.setting.tournamentList,
           ),
           const CustomDivider(),
           _buildMenuTile(
             context: context,
             title: 'Talk to Support',
-            onTap: () {},
+            onTap: () {
+              appRouter.push(const SupportRoute());
+            },
             image: Assets.setting.talkToSupport,
           ),
           const CustomDivider(),
           _buildMenuTile(
             context: context,
             title: 'Subscription Management',
-            onTap: () {},
+            onTap: () {
+              appRouter.push(SubscriptionsRoute(isSubscriptionMangement: true));
+            },
             image: Assets.setting.subscriptions,
             subscriptionName: 'Free',
           ),

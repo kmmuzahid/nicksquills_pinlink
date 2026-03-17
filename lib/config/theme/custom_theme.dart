@@ -12,11 +12,53 @@ TextTheme baseTextTheme(ThemeColor appColor) => ThemeData.light().textTheme.appl
   displayColor: appColor.tEXT_white,
   bodyColor: appColor.tEXT_white,
 );
+
+
 ThemeData commonThemeData(ThemeColor appColor) => ThemeData(
   useMaterial3: true,
   scaffoldBackgroundColor: appColor.background,
   textTheme: baseTextTheme(appColor),
   brightness: Brightness.light,
+  textButtonTheme: TextButtonThemeData(
+    style: TextButton.styleFrom(
+      foregroundColor: appColor.ratingPremiumTags_goldAccent, // OK / Cancel text color
+      backgroundColor: appColor.ratingPremiumTags_goldAccent.withValues(alpha: .2),
+    ),
+  ),
+
+  datePickerTheme: DatePickerThemeData(
+    backgroundColor: appColor.bACKGROUND_darkCard,
+    headerBackgroundColor: appColor.bACKGROUND_darkCard,
+    headerForegroundColor: appColor.tEXT_white,
+
+    dayForegroundColor: WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.selected)) {
+        return Colors.amber;
+      }
+      return appColor.tEXT_white;
+    }),
+
+    dayBackgroundColor: WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.selected)) {
+        return appColor.background;
+      }
+      return appColor.background;
+    }),
+
+    // Border for selected day
+    dayShape: WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.selected)) {
+        return const CircleBorder(side: BorderSide(color: Colors.amber, width: 2));
+      }
+      return const CircleBorder();
+    }),
+
+    todayForegroundColor: WidgetStateProperty.all(appColor.tEXT_white),
+    todayBackgroundColor: WidgetStateProperty.all(appColor.background),
+    todayBorder: BorderSide(color: appColor.background, width: 1.5),
+
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+  ),
   extensions: [appColor],
   appBarTheme: const AppBarTheme(surfaceTintColor: Colors.transparent),
   colorScheme: ColorScheme.fromSeed(
@@ -97,5 +139,7 @@ ThemeData commonThemeData(ThemeColor appColor) => ThemeData(
         borderRadius: BorderRadius.circular(8),
       ),
     ),
+
+    
   ),
 );
