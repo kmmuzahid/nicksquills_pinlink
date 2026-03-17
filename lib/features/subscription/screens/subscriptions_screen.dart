@@ -66,7 +66,11 @@ class SubscriptionsScreen extends StatelessWidget {
               child: Column(
                 children: [
                   subscriptionCard(context: context, plan: freePlan),
-                  subscriptionCard(context: context, plan: clubPlan, isActive: true),
+                  subscriptionCard(
+                    context: context,
+                    plan: clubPlan,
+                    isActive: isSubscriptionMangement,
+                  ),
                   subscriptionCard(context: context, plan: creatorPlan),
                 ],
               ),

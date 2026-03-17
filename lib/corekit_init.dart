@@ -57,7 +57,7 @@ class CorekitInit {
   AppbarConfig _appbarConfig(BuildContext context) {
     return AppbarConfig(
       titleColor: () => context.colors.tEXT_white,
-
+      titleAlignment: .center,
       decoration: () => BoxDecoration(
         border: Border(
           bottom: BorderSide(color: context.colors.bACKGROUND_darkCardBoarder, width: 1.5),
