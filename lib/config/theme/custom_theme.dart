@@ -114,7 +114,7 @@ ThemeData commonThemeData(ThemeColor appColor) => ThemeData(
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       minimumSize: const Size(80, 50),
-
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       backgroundBuilder: (context, states, child) {
         return Container(
           decoration: BoxDecoration(
