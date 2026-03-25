@@ -54,7 +54,7 @@ class LoginScreen extends StatelessWidget {
 }
 
 class _loginForm extends StatelessWidget {
-  const _loginForm({super.key, required this.changeToSingup});
+  const _loginForm({required this.changeToSingup});
 
   final Function() changeToSingup;
 

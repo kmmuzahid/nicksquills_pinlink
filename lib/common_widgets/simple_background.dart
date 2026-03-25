@@ -7,6 +7,7 @@ import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:pinlink/config/color/app_color.dart';
 
+ 
 class SimpleBackground extends StatelessWidget {
   const SimpleBackground({
     super.key,
@@ -21,7 +22,7 @@ class SimpleBackground extends StatelessWidget {
   final BuildContext? buildContext;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return Scaffold(
       backgroundColor: context.colors.background,
       body: SizedBox(

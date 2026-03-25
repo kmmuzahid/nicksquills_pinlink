@@ -30,7 +30,8 @@ class ComparisonScreen extends StatelessWidget {
   final bool isQuestionRanking;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
+    
     return CubitScopeValue(
       cubit: cubit,
       builder: (context, cubit, state) {

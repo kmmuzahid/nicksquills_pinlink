@@ -6,11 +6,12 @@ import 'package:pinlink/common_widgets/show_url_widget.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/constant/constants.dart';
 
+ 
 class MapPointsDetails extends StatelessWidget {
   const MapPointsDetails({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return CustomCard(
       child: ConstrainedBox(
         constraints: BoxConstraints(

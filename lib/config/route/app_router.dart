@@ -4,10 +4,8 @@
  * @Email: km.muzahid@gmail.com
  */
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
-
-final GlobalKey<NavigatorState> navigatorRouterKey = GlobalKey<NavigatorState>();
+ 
 
 final appRouter = AppRouter();
 
@@ -38,7 +36,7 @@ class AuthGuard extends AutoRouteGuard {
 
 @AutoRouterConfig(replaceInRouteName: 'Screen|Page,Route')
 class AppRouter extends RootStackRouter {
-  AppRouter() : super(navigatorKey: navigatorRouterKey);
+  AppRouter();
   @override
   List<AutoRouteGuard> get guards => [AuthGuard()];
 

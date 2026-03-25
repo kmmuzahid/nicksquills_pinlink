@@ -14,9 +14,7 @@ import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/gen/assets.gen.dart';
 
 
-class CoreKitConfigImpl extends CoreKitConfig with CoreKitConfigDefaults {
-  final BuildContext context;
-  CoreKitConfigImpl({required this.context});
+class CoreKitConfigImpl extends CoreKitConfig with CoreKitConfigDefaults {  
 
   @override
   String get imageBaseUrl => ApiEndPoint.instance.domain;

@@ -65,7 +65,7 @@ class AccountDeleteWidget extends StatelessWidget {
                 titleColor: Colors.white,
                 buttonWidth: 100,
                 onTap: () {
-                  navigatorRouterKey.currentState?.pop();
+                  Navigator.pop(context);
                 },
                 buttonColor: context.colors.pRIMARY_brandClr,
                 borderColor: context.colors.pRIMARY_brandClr,

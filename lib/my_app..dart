@@ -46,13 +46,14 @@ class MyApp extends StatelessWidget {
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, themeState) { 
           return CoreKit.router(
+            config: CoreKitConfigImpl(),
+            navigatorKey: appRouter.navigatorKey,
             scrollBehavior: CustomScrollBehavior(),
             debugShowCheckedModeBanner: false,
             routerConfig: appRouter.config(navigatorObservers: () => [AppRouterObserver()]),
             theme: commonThemeData(ThemeColor.light),
             darkTheme: commonThemeData(ThemeColor.dark), 
             themeMode: themeState,
-            config: CoreKitConfigImpl(context: context),
           );
         },
       ),

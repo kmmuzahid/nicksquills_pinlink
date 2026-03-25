@@ -163,7 +163,7 @@ class AddCourseScreen extends StatelessWidget {
         border: Border.all(color: context.colors.bACKGROUND_darkCardBoarder, width: 1.4),
       ),
       child: Column(
-        children: [
+        children: [ 
           Row(
             children: [
               Icon(Icons.location_on_outlined, color: context.colors.tEXT_white),

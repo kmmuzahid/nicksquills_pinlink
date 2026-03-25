@@ -7,7 +7,6 @@ import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinlink/config/color/app_color.dart';
-import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/constant/app_string.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 
@@ -54,7 +53,7 @@ class LogoutAlertWidget extends StatelessWidget {
                 titleColor: Colors.white,
                 buttonWidth: 100,
                 onTap: () {
-                  navigatorRouterKey.currentState?.pop();
+                  Navigator.pop(context);
                 }, 
               ),
 

@@ -22,6 +22,7 @@ class GolfMapScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return SimpleBackground(
       body: CubitScope(
         create: () => GolfMapCubit(),
