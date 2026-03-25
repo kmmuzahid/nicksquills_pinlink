@@ -13,20 +13,16 @@ import 'package:pinlink/config/storage/storage_key.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/gen/assets.gen.dart';
 
-class CorekitInit {
-  Widget corekitInit(BuildContext context, Widget? child) {
-    return CoreKit.init(
-      appbarConfig: _appbarConfig(context),
-      designSize: const Size(393, 690),
-      imageBaseUrl: ApiEndPoint.instance.baseUrl,
-      navigatorKey: appRouter.navigatorKey,
-      dioServiceConfig: _dioServiceConfig(context),
-      tokenProvider: _tokenProvider(context),
-      child: child,
-    );
-  }
 
-  DioServiceConfig _dioServiceConfig(BuildContext context) {
+class CoreKitConfigImpl extends CoreKitConfig with CoreKitConfigDefaults {
+  final BuildContext context;
+  CoreKitConfigImpl({required this.context});
+
+  @override
+  String get imageBaseUrl => ApiEndPoint.instance.domain;
+
+  @override
+  DioServiceConfig get dioConfig {
     return DioServiceConfig(
       baseUrl: ApiEndPoint.instance.baseUrl,
       refreshTokenEndpoint: ApiEndPoint.instance.refreshTokenEndpoint,
@@ -37,7 +33,8 @@ class CorekitInit {
     );
   }
 
-  TokenProvider _tokenProvider(BuildContext context) {
+  @override
+  TokenProvider get tokenProvider {
     return TokenProvider(
       accessToken: () async => (await StorageService.instance.accessToken) ?? '',
       refreshToken: () async {
@@ -54,7 +51,8 @@ class CorekitInit {
     );
   }
 
-  AppbarConfig _appbarConfig(BuildContext context) {
+  @override
+  AppbarConfig? get appbarConfig {
     return AppbarConfig(
       titleColor: () => context.colors.tEXT_white,
       titleAlignment: .center,

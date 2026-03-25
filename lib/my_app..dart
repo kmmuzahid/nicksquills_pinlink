@@ -3,6 +3,7 @@
  * @Date: 2026-01-07 15:37:37
  * @Email: km.muzahid@gmail.com
  */
+import 'package:core_kit/core_kit_internal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinlink/config/color/app_color.dart';
@@ -11,10 +12,9 @@ import 'package:pinlink/config/route/app_router_observer.dart';
 import 'package:pinlink/config/theme/cubit/theme_cubit.dart';
 import 'package:pinlink/config/theme/custom_theme.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
-import 'package:pinlink/coreFeature/auth/cubit/auth_state.dart';
 import 'package:pinlink/coreFeature/navigation/cubit/navigation_cubit.dart';
 import 'package:pinlink/coreFeature/notification/cubit/notification_cubit.dart';
-import 'package:pinlink/corekit_init.dart';
+import 'package:pinlink/corekit_config_impl.dart';
 
 final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
@@ -44,26 +44,19 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => NavigationCubit()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(
-        builder: (context, themeState) {
-          return MaterialApp.router(
+        builder: (context, themeState) { 
+          return CoreKit.router(
             scrollBehavior: CustomScrollBehavior(),
             debugShowCheckedModeBanner: false,
             routerConfig: appRouter.config(navigatorObservers: () => [AppRouterObserver()]),
             theme: commonThemeData(ThemeColor.light),
-            darkTheme: commonThemeData(ThemeColor.dark),
-            themeAnimationCurve: Curves.easeInOut,
-            themeAnimationDuration: const Duration(milliseconds: 300),
+            darkTheme: commonThemeData(ThemeColor.dark), 
             themeMode: themeState,
-            builder: (context, child) {
-              return BlocBuilder<AuthCubit, AuthState>(
-                builder: (context, state) {
-                  return CorekitInit().corekitInit(context, child);
-                },
-              );
-            },
+            config: CoreKitConfigImpl(context: context),
           );
         },
       ),
     );
   }
 }
+

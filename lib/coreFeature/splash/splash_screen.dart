@@ -7,6 +7,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pinlink/config/route/app_router.dart';
+import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/gen/assets.gen.dart';
 
@@ -18,7 +20,8 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<AuthCubit>().init();
-    }); 
+    });
+    appRouter.push(SubscriptionsRoute(isBackDisabled: true));
     return Scaffold(
       body: SizedBox(
         width: double.infinity,
@@ -28,4 +31,3 @@ class SplashScreen extends StatelessWidget {
     );
   }
 }
-
