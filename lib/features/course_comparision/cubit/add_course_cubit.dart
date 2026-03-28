@@ -4,9 +4,8 @@
  * @Email: km.muzahid@gmail.com
  */
 import 'package:pinlink/config/bloc/safe_cubit.dart';
-import 'package:pinlink/config/route/app_router.dart';
-import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/constant/constants.dart';
+import 'package:pinlink/constant/enums.dart';
 import 'package:pinlink/features/course_comparision/cubit/add_course_state.dart';
 import 'package:pinlink/features/course_comparision/model/comparison_model.dart';
 import 'package:pinlink/features/course_comparision/model/course_model.dart';
@@ -31,24 +30,18 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
             question: 'Which course do you prefer?',
             options: [
               ComparisonOptionModel(
-                title: 'Augusta National',
+                title: 'Augusta National 1',
                 isSelected: false,
                 address: 'Scotland, United States',
                 image: Constants.sampleImage,
               ),
               ComparisonOptionModel(
-                title: 'Augusta National',
+                title: 'Augusta National 3',
                 isSelected: false,
                 address: 'Scotland, United States',
                 image: Constants.sampleImage,
               ),
-
-              ComparisonOptionModel(
-                title: 'Augusta National',
-                isSelected: false,
-                address: 'Scotland, United States',
-                image: Constants.sampleImage,
-              ),
+              
             ],
           ),
 
@@ -62,23 +55,20 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
                 image: Constants.sampleImage,
               ),
               ComparisonOptionModel(
-                title: 'Augusta National',
+                title: 'Augusta National 2',
                 isSelected: false,
                 address: 'Scotland, United States',
                 image: Constants.sampleImage,
-              ),
-
-              ComparisonOptionModel(
-                title: 'Augusta National',
-                isSelected: false,
-                address: 'Scotland, United States',
-                image: Constants.sampleImage,
-              ),
+              ), 
             ],
           ),
         ],
       ),
     );
+  }
+
+  void setRankingType(RankingType rankingType) {
+    emit(state.copyWith(rankingType: rankingType));
   }
 
   void addTag(String tag) {
@@ -101,7 +91,5 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
     );
   }
 
-  void addIntoWishList() {
-    appRouter.replaceAll([const NavigationRoute()]);
-  }
+  
 }

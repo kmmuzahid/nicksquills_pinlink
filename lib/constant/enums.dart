@@ -83,3 +83,13 @@ enum ThemeType {
 
   const ThemeType(this.displayName);
 }
+
+
+enum RankingType {
+  courseRanking("Course Ranking"),
+  wishlistRanking("Wishlist Ranking");
+
+  final String displayName;
+
+  const RankingType(this.displayName);
+}

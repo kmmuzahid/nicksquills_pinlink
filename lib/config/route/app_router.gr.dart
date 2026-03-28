@@ -175,7 +175,8 @@ class ComparisonRoute extends _i25.PageRouteInfo<ComparisonRouteArgs> {
     _i26.Key? key,
     required _i27.AddCourseCubit cubit,
     required int questinIndex,
-    bool isQuestionRanking = true,
+    required _i28.RankingType rankingType,
+    bool isNaviagtion = false,
     List<_i25.PageRouteInfo>? children,
   }) : super(
          ComparisonRoute.name,
@@ -183,7 +184,8 @@ class ComparisonRoute extends _i25.PageRouteInfo<ComparisonRouteArgs> {
            key: key,
            cubit: cubit,
            questinIndex: questinIndex,
-           isQuestionRanking: isQuestionRanking,
+           rankingType: rankingType,
+           isNaviagtion: isNaviagtion,
          ),
          initialChildren: children,
        );
@@ -198,7 +200,8 @@ class ComparisonRoute extends _i25.PageRouteInfo<ComparisonRouteArgs> {
         key: args.key,
         cubit: args.cubit,
         questinIndex: args.questinIndex,
-        isQuestionRanking: args.isQuestionRanking,
+        rankingType: args.rankingType,
+        isNaviagtion: args.isNaviagtion,
       );
     },
   );
@@ -209,7 +212,8 @@ class ComparisonRouteArgs {
     this.key,
     required this.cubit,
     required this.questinIndex,
-    this.isQuestionRanking = true,
+    required this.rankingType,
+    this.isNaviagtion = false,
   });
 
   final _i26.Key? key;
@@ -218,11 +222,13 @@ class ComparisonRouteArgs {
 
   final int questinIndex;
 
-  final bool isQuestionRanking;
+  final _i28.RankingType rankingType;
+
+  final bool isNaviagtion;
 
   @override
   String toString() {
-    return 'ComparisonRouteArgs{key: $key, cubit: $cubit, questinIndex: $questinIndex, isQuestionRanking: $isQuestionRanking}';
+    return 'ComparisonRouteArgs{key: $key, cubit: $cubit, questinIndex: $questinIndex, rankingType: $rankingType, isNaviagtion: $isNaviagtion}';
   }
 
   @override
@@ -232,7 +238,8 @@ class ComparisonRouteArgs {
     return key == other.key &&
         cubit == other.cubit &&
         questinIndex == other.questinIndex &&
-        isQuestionRanking == other.isQuestionRanking;
+        rankingType == other.rankingType &&
+        isNaviagtion == other.isNaviagtion;
   }
 
   @override
@@ -240,7 +247,8 @@ class ComparisonRouteArgs {
       key.hashCode ^
       cubit.hashCode ^
       questinIndex.hashCode ^
-      isQuestionRanking.hashCode;
+      rankingType.hashCode ^
+      isNaviagtion.hashCode;
 }
 
 /// generated route for

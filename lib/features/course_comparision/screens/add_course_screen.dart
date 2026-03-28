@@ -11,7 +11,9 @@ import 'package:pinlink/common_widgets/simple_background.dart';
 import 'package:pinlink/config/bloc/cubit_scope.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
+import 'package:pinlink/constant/enums.dart';
 import 'package:pinlink/features/course_comparision/cubit/add_course_cubit.dart';
+import 'package:pinlink/features/course_comparision/cubit/add_course_state.dart';
 import 'package:pinlink/features/course_comparision/model/course_model.dart';
 import 'package:pinlink/features/course_comparision/widgets/already_added_course_dailoge_wiget.dart';
 import 'package:pinlink/features/course_comparision/widgets/new_course_dailoge_widgets.dart';
@@ -40,49 +42,53 @@ class AddCourseScreen extends StatelessWidget {
           return Column(
             children: [
               if (!isInNavigation)
-              CommonText(
-                text: 'Add Courses You\'ve Played',
-                fontSize: 24,
-                textColor: context.colors.tEXT_white,
-                fontWeight: FontWeight.w500,
-              ),
+                CommonText(
+                  text: 'Add Courses You\'ve Played',
+                  fontSize: 24,
+                  textColor: context.colors.tEXT_white,
+                  fontWeight: FontWeight.w500,
+                ),
               8.height,
-              CommonText(
-                text: 'Add at least 2 courses to continue',
-                fontSize: 16,
-                textColor: context.colors.pRIMARY_priSoft,
-                fontWeight: FontWeight.w400,
-              ),
-              8.height,
+              if (isInNavigation) ...[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: _sigmentedButton(
+                    onTap: (value) {
+                      cubit.setRankingType(value);
+                    },
+                    selectedTheme: state.rankingType,
+                    context: context,
+                  ),
+                ),
+              ],
+            
 
               Flexible(
                 child: SmartListLoader(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
+                  onColapsAppbar: Container(
+                    color: context.colors.background,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: _buildHeader(context, state),
+                  ),
+                  appbar: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: _appbar(context, state),
+                  ),
 
-                  itemCount: state.courses.length + state.selectedCourses.length + 3,
+                  itemCount: state.courses.length + state.selectedCourses.length + 1,
                   itemBuilder: (context, index) {
-                    if (index == 0) {
-                      return CommonText(
-                        text: 'Added Courses (${state.selectedCourses.length})',
-                        bottom: 6,
-                        fontSize: 18,
-                        textColor: context.colors.tEXT_white,
-                      );
-                    }
+                  
 
-                    if (index == 1) {
-                      return _buildHeader(context);
-                    }
-
-                    if (index < state.selectedCourses.length + 2 && index > 1) {
+                    if (index < state.selectedCourses.length) {
                       return _buildCourseCard(
                         context,
-                        state.selectedCourses[index - 2],
+                        state.selectedCourses[index],
                         cubit,
                         isAdded: true,
                       );
                     }
-                    if (index == state.selectedCourses.length + 2) {
+                    if (index == state.selectedCourses.length) {
                       return CommonText(
                         text: 'Available Courses',
                         top: 16,
@@ -92,7 +98,7 @@ class AddCourseScreen extends StatelessWidget {
                     }
                     return _buildCourseCard(
                       context,
-                      state.courses[index - state.selectedCourses.length - 3],
+                      state.courses[index - state.selectedCourses.length - 1],
                       cubit,
                     );
                   },
@@ -113,14 +119,20 @@ class AddCourseScreen extends StatelessWidget {
                     titleText: 'Continue to Course Rnaking',
                     onTap: () {
                       if (state.comparison.isNotEmpty) {
-                        context.router.push(ComparisonRoute(cubit: cubit, questinIndex: 0));
+                        context.router.push(
+                          ComparisonRoute(
+                            cubit: cubit,
+                            questinIndex: 0,
+                            rankingType: state.rankingType,
+                            isNaviagtion: isInNavigation,
+                          ),
+                        );
                       }
                     },
                   ),
                 ),
               ),
-              if (enableSafeArea)
-              16.height,
+              if (enableSafeArea) 16.height,
             ],
           );
         },
@@ -128,15 +140,49 @@ class AddCourseScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _appbar(BuildContext context, AddCourseState state) {
     return Column(
       children: [
+        CommonText(
+          text: "Add at least ${isInNavigation ? 1 : 2} courses to continue",
+          fontSize: 16,
+          bottom: 20,
+          textColor: context.colors.pRIMARY_priSoft,
+          fontWeight: FontWeight.w400,
+        ),
+        CommonText(
+          text: 'Added Courses (${state.selectedCourses.length})',
+          bottom: 6,
+          fontSize: 18,
+          textColor: context.colors.tEXT_white,
+        ).start,
         CommonText(
           text: 'Search Courses',
           fontSize: 14,
           textColor: context.colors.tEXT_white,
         ).start,
         4.height,
+        CommonTextField(
+          hintText: 'Search Courses',
+          prefixIcon: Icon(Icons.search, color: context.colors.tEXT_sub),
+          validationType: ValidationType.notRequired,
+          borderRadius: 20,
+          onChanged: (value) {},
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHeader(BuildContext context, AddCourseState state) {
+    return Column(
+      children: [
+        CommonText(
+          text: 'Added Courses (${state.selectedCourses.length})',
+          bottom: 6,
+          fontSize: 18,
+          textColor: context.colors.tEXT_white,
+        ).start,
+
         CommonTextField(
           hintText: 'Search Courses',
           prefixIcon: Icon(Icons.search, color: context.colors.tEXT_sub),
@@ -163,7 +209,7 @@ class AddCourseScreen extends StatelessWidget {
         border: Border.all(color: context.colors.bACKGROUND_darkCardBoarder, width: 1.4),
       ),
       child: Column(
-        children: [ 
+        children: [
           Row(
             children: [
               Icon(Icons.location_on_outlined, color: context.colors.tEXT_white),
@@ -191,6 +237,10 @@ class AddCourseScreen extends StatelessWidget {
                 onTap: () {
                   if (isAdded) {
                     cubit.unselectCourse(course);
+                    return;
+                  }
+                  if (!isInNavigation) {
+                    cubit.selectCourse(course);
                     return;
                   }
                   if (course.isAlreadyPlayed) {
@@ -227,7 +277,7 @@ class AddCourseScreen extends StatelessWidget {
                   child: Icon(
                     isAdded ? Icons.close : Icons.add,
                     size: 24,
-                    color: course.isAlreadyPlayed && !isAdded
+                    color: course.isAlreadyPlayed && isInNavigation && !isAdded
                         ? context.colors.ratingPremiumTags_goldAccent
                         : context.colors.successVerifiedPositivestats_freshGrass,
                   ),
@@ -236,6 +286,79 @@ class AddCourseScreen extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _sigmentedButton({
+    required Function(RankingType) onTap,
+    required RankingType selectedTheme,
+    required BuildContext context,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: context.colors.bACKGROUND_darkCard,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: context.colors.bACKGROUND_darkCard, width: 1.2),
+      ),
+
+      child: Row(
+        children: [
+          _buildSegmentButton(
+            rankingType: RankingType.courseRanking,
+            selectedTheme: selectedTheme,
+            onTap: onTap,
+            context: context,
+          ),
+          _buildSegmentButton(
+            rankingType: RankingType.wishlistRanking,
+            selectedTheme: selectedTheme,
+            onTap: onTap,
+            context: context,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSegmentButton({
+    required RankingType rankingType,
+    required RankingType selectedTheme,
+    required Function(RankingType) onTap,
+    required BuildContext context,
+  }) {
+    const radious = 8.0;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => onTap(rankingType),
+        child: Container(
+          decoration: BoxDecoration(
+            color: selectedTheme == rankingType
+                ? context.colors.bACKGROUND_darkPage
+                : Colors.transparent,
+
+            borderRadius: const BorderRadius.all(Radius.circular(radious)),
+          ),
+          child: Center(
+            child: CommonText(
+              left: 10,
+              right: 10,
+              top: 8,
+              bottom: 8,
+              preffix: Icon(
+                rankingType == RankingType.courseRanking
+                    ? Icons.golf_course_outlined
+                    : Icons.favorite,
+                size: 16,
+                color: selectedTheme == rankingType ? Colors.red : context.colors.tEXT_white,
+              ),
+              text: rankingType.displayName,
+              textColor: context.colors.tEXT_white,
+              fontSize: 14,
+            ),
+          ),
+        ),
       ),
     );
   }

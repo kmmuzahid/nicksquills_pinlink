@@ -6,12 +6,15 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinlink/common_widgets/simple_background.dart';
 import 'package:pinlink/config/bloc/cubit_scope_value.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/constant/constants.dart';
+import 'package:pinlink/constant/enums.dart';
+import 'package:pinlink/coreFeature/navigation/cubit/navigation_cubit.dart';
 import 'package:pinlink/features/course_comparision/cubit/add_course_cubit.dart';
 import 'package:pinlink/features/course_comparision/cubit/add_course_state.dart';
 import 'package:pinlink/features/course_comparision/model/comparison_model.dart';
@@ -23,31 +26,36 @@ class ComparisonScreen extends StatelessWidget {
     super.key,
     required this.cubit,
     required this.questinIndex,
-    this.isQuestionRanking = true,
+    required this.rankingType,
+    this.isNaviagtion = false,
   });
   final AddCourseCubit cubit;
   final int questinIndex;
-  final bool isQuestionRanking;
+  final RankingType rankingType;
+  final bool isNaviagtion;
 
   @override
-  Widget build(BuildContext context) { 
-    
+  Widget build(BuildContext context) {
     return CubitScopeValue(
       cubit: cubit,
       builder: (context, cubit, state) {
         return SimpleBackground(
           appBar: CommonAppBar(
             disableBack: true,
-            hideBack: !isQuestionRanking,
             appbarConfig: AppbarConfig(
               decoration: () => const BoxDecoration(color: Colors.transparent),
               actions: [
-                if (questinIndex > 0 && isQuestionRanking)
+                if (rankingType == RankingType.wishlistRanking &&
+                    questinIndex < state.comparison.length - 1)
                   GestureDetector(
                     onTap: () {
                       if (questinIndex < state.comparison.length - 1) {
                         appRouter.replace(
-                          ComparisonRoute(cubit: cubit, questinIndex: questinIndex + 1),
+                          ComparisonRoute(
+                            cubit: cubit,
+                            questinIndex: questinIndex + 1,
+                            rankingType: rankingType,
+                          ),
                         );
                       } else if (questinIndex == state.comparison.length - 1) {
                         _goToWishList(cubit);
@@ -57,10 +65,15 @@ class ComparisonScreen extends StatelessWidget {
                   ),
               ],
             ),
-            onBackPress: () {
-              if (!isQuestionRanking) return;
+            onBackPress: () { 
               if (questinIndex > 0) {
-                appRouter.replace(ComparisonRoute(cubit: cubit, questinIndex: questinIndex - 1));
+                appRouter.replace(
+                  ComparisonRoute(
+                    cubit: cubit,
+                    questinIndex: questinIndex - 1,
+                    rankingType: rankingType,
+                  ),
+                );
               } else if (questinIndex == 0) {
                 appRouter.pop();
               }
@@ -71,16 +84,16 @@ class ComparisonScreen extends StatelessWidget {
               20.height,
               _flagIcon(context),
               CommonText(
-                text: isQuestionRanking ? 'Build Your Course Rankings' : 'Rank Your Wishlist',
+                text: rankingType == RankingType.courseRanking
+                    ? 'Build Your Course Rankings'
+                    : 'Rank Your Wishlist',
                 fontSize: 24,
                 top: 10,
                 textColor: context.colors.tEXT_white,
                 fontWeight: FontWeight.w500,
               ),
               CommonText(
-                text: isQuestionRanking
-                    ? state.comparison[questinIndex].question
-                    : 'Which course are you more excited to play?',
+                text: state.comparison[questinIndex].question,
                 fontSize: 16,
                 maxLines: 3,
                 top: 8,
@@ -96,14 +109,14 @@ class ComparisonScreen extends StatelessWidget {
                     final comparison = state.comparison[questinIndex].options[index];
                     return GestureDetector(
                       onTap: () {
-                        _onTapAnswer(state, cubit);
+                        _onTapAnswer(state, cubit, context);
                       },
                       child: _answerBuilder(context, comparison),
                     );
                   },
                 ),
               ),
-              if (!isQuestionRanking)
+              if (rankingType == RankingType.wishlistRanking)
                 SafeArea(
                   top: false,
                   bottom: true,
@@ -145,19 +158,26 @@ class ComparisonScreen extends StatelessWidget {
     );
   }
 
-  void _onTapAnswer(AddCourseState state, AddCourseCubit cubit) {
-    if (questinIndex < state.comparison.length - 1) {
-      appRouter.replace(ComparisonRoute(cubit: cubit, questinIndex: questinIndex + 1));
-    } else if (isQuestionRanking == false) {
-      cubit.addIntoWishList();
-    } else if (questinIndex == state.comparison.length - 1) {
+  void _onTapAnswer(AddCourseState state, AddCourseCubit cubit, BuildContext context) {
+    if ((questinIndex < state.comparison.length - 1) && rankingType == RankingType.courseRanking) {
+      appRouter.replace(
+        ComparisonRoute(cubit: cubit, questinIndex: questinIndex + 1, rankingType: rankingType),
+      );
+    } else if (rankingType == RankingType.wishlistRanking &&
+        questinIndex < state.comparison.length) {
       _goToWishList(cubit);
+    } else {
+      if (!isNaviagtion) appRouter.replaceAll([const NavigationRoute()]);
+      context.read<NavigationCubit>().changeIndex(
+        4,
+        filter: rankingType == RankingType.courseRanking ? .MyCourses : .MyWishlist,
+      );
     }
   }
 
   void _goToWishList(AddCourseCubit cubit) {
     appRouter.replace(
-      ComparisonRoute(cubit: cubit, questinIndex: questinIndex, isQuestionRanking: false),
+      ComparisonRoute(cubit: cubit, questinIndex: questinIndex, rankingType: rankingType),
     );
   }
 
@@ -235,12 +255,16 @@ class ComparisonScreen extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100),
         border: Border.all(
-          color: isQuestionRanking ? context.colors.bACKGROUND_darkCardBoarder : Colors.red,
+          color: rankingType == RankingType.courseRanking
+              ? context.colors.bACKGROUND_darkCardBoarder
+              : Colors.red,
           width: 1,
         ),
-        color: isQuestionRanking ? context.colors.bACKGROUND_darkCard : Colors.red.withOpacity(.3),
+        color: rankingType == RankingType.courseRanking
+            ? context.colors.bACKGROUND_darkCard
+            : Colors.red.withOpacity(.3),
         boxShadow: [
-          if (isQuestionRanking)
+          if (rankingType == RankingType.courseRanking)
             BoxShadow(
               offset: const Offset(0, 2),
               color: context.colors.pRIMARY_priLight,
@@ -249,7 +273,7 @@ class ComparisonScreen extends StatelessWidget {
             ),
         ],
       ),
-      child: isQuestionRanking
+      child: rankingType == RankingType.courseRanking
           ? CommonImage(
               src: Assets.navigators.addCourse,
               fill: .contain,

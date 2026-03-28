@@ -30,7 +30,7 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
   String otp = '';
   GlobalKey<FormState> formKey = GlobalKey();
   @override
-  void initState() { 
+  void initState() {
     super.initState();
   }
 
@@ -57,7 +57,6 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
           cubit: widget.cubit,
           builder: (context, cubit, state) {
             return CommonButton(
-              
               titleText: AppString.verify_otp,
               isLoading: state.isLoading,
               buttonWidth: double.infinity,
@@ -104,7 +103,7 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
           TextSpan(
             text: AppString.resend_code,
             recognizer: TapGestureRecognizer()
-              ..onTap = () { 
+              ..onTap = () {
                 context.read<OtpCubit>().sendOtp(widget.username, isResend: true);
               },
             style: const TextStyle(color: Colors.blue, fontSize: 16, fontWeight: FontWeight.bold),
@@ -116,43 +115,42 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
   );
 
   Widget _otpBuilder(BuildContext context) {
-    return PinCodeTextField(  
-      cursorColor: context.colors.pRIMARY_brandClr,
-      backgroundColor: Colors.transparent,
-      textStyle: getTheme.textTheme.bodyMedium?.copyWith(
-        fontSize: 25,
-        color: context.colors.pRIMARY_brandClr,
-      ),
-      appContext: context,
-      autoFocus: true,
-      onChanged: (value) {
-        otp = value;
+    return PinInputFormField(
+      length: 6,
+      pinBuilder: (BuildContext context, List<PinCellData> cells) {
+        return Wrap(
+          spacing: 10,
+          children: List.generate(cells.length, (index) {
+            return Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(color: context.colors.bACKGROUND_darkCardBoarder, width: 1.5),
+              ),
+              child: Center(
+                child: Text(
+                  cells[index].character ?? '',
+                  style: TextStyle(fontSize: 25, color: context.colors.bACKGROUND_darkPage),
+                ),
+              ),
+            );
+          }),
+        );
       },
-      pinTheme: PinTheme(
-        
-        shape: PinCodeFieldShape.box,
-        borderRadius: BorderRadius.circular(4),
-        fieldHeight: 40,
-        fieldWidth: 40,
-        activeFillColor: context.colors.bACKGROUND_darkPage,
-        selectedFillColor: context.colors.bACKGROUND_darkPage,
-        inactiveFillColor: context.colors.bACKGROUND_darkPage,
-        borderWidth: 0.1,
-        selectedColor: context.colors.bACKGROUND_darkPage,
-        activeColor: context.colors.bACKGROUND_darkPage,
-        inactiveColor: context.colors.bACKGROUND_darkPage,
-      ),
-      length: 6, 
       keyboardType: InputHelper.getKeyboardType(ValidationType.validateOTP),
       inputFormatters: InputHelper.getInputFormatters(ValidationType.validateOTP),
       autovalidateMode: AutovalidateMode.disabled,
-      enableActiveFill: true,
+      enableAutofill: true,
+      enableHapticFeedback: true,
+      enablePaste: true,
       validator: (value) => InputHelper.validate(ValidationType.validateOTP, value),
     );
+  
   }
 
   @override
-  void dispose() { 
+  void dispose() {
     super.dispose();
   }
 }

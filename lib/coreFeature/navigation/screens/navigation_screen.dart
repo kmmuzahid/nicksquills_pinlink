@@ -81,7 +81,7 @@ class NavigationScreen extends StatelessWidget {
         } else if (state.currentIndex == 1) {
           title = 'Leaderboard';
         } else if (state.currentIndex == 2) {
-          title = 'Add Courses You\'ve Played';
+          title = 'Rank Your Courses';
         } else if (state.currentIndex == 3) {
           title = 'Golf Map';
         } else if (state.currentIndex == 4) {
