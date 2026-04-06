@@ -30,7 +30,7 @@ enum Feature {
   socialLinks,
   personalStoreLink,
   selfPromoAdSpace,
-  analyticsViewsClicksRevenue,  
+  analyticsViewsClicksRevenue,
 }
 
 enum LeaderboardType {
@@ -84,7 +84,6 @@ enum ThemeType {
   const ThemeType(this.displayName);
 }
 
-
 enum RankingType {
   courseRanking("Course Ranking"),
   wishlistRanking("Wishlist Ranking");
@@ -92,4 +91,19 @@ enum RankingType {
   final String displayName;
 
   const RankingType(this.displayName);
+}
+
+enum RatingCategories {
+  overallFavorite("Overall Favorite"),
+  courseScenery("Course Scenery"),
+  courseDifficulty("Course Difficulty"),
+  teeBoxAndFairwayConditions("Tee Box & Fairway"),
+  greensSpeed("Greens Speed"),
+  greensCondition("Greens Condition"),
+  clubhouse("Clubhouse"),
+  foodAndDrink("Food & Drink");
+
+  final String displayName;
+
+  const RatingCategories(this.displayName);
 }

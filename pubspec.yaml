@@ -13,13 +13,14 @@ dependencies:
   core_kit:
     git:
       url: https://github.com/kmmuzahid/flutter_core_kit.git
-      ref: 1.0.56
+      ref: 1.0.75
   
   auto_route: 
   flutter_bloc: 
   get_it: 
   flutter_secure_storage: 
   equatable: 
+  linked_scroll_controller:
   pin_code_fields:
   video_player: ^2.11.0
   video_thumbnail:

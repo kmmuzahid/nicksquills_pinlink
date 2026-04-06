@@ -22,7 +22,6 @@ class GolfMapScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return SimpleBackground(
       body: CubitScope(
         create: () => GolfMapCubit(),
@@ -37,7 +36,10 @@ class GolfMapScreen extends StatelessWidget {
                 children: [
                   CommonTextField(
                     backgroundColor: Colors.transparent,
-                    prefixIcon: Icon(Icons.search, color: context.colors.tEXT_sub),
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: context.colors.tEXT_sub,
+                    ),
                     validationType: .notRequired,
                     hintText: 'Search courses on map...',
                   ),
@@ -61,6 +63,7 @@ class GolfMapScreen extends StatelessWidget {
                 );
               } else if (state.selectedFilter == MapFilters.Played) {
                 return GolfCoursePlayedItem(
+                  scrollController: cubit.controllerFor(index),
                   course: CourseModel(
                     name: 'Royal Melbourne',
                     address: 'Australia',
@@ -86,7 +89,11 @@ class GolfMapScreen extends StatelessWidget {
     );
   }
 
-  Widget _appbar(BuildContext context, GolfMapCubit cubit, GolfMapCubitState state) {
+  Widget _appbar(
+    BuildContext context,
+    GolfMapCubit cubit,
+    GolfMapCubitState state,
+  ) {
     return Padding(
       padding: Constants.bodyPadding,
       child: Column(
@@ -133,7 +140,9 @@ class GolfMapScreen extends StatelessWidget {
         const Spacer(),
         GestureDetector(
           onTap: () {
-            appRouter.push(GolfMapViewRoute(selectedFilter: state.selectedFilter));
+            appRouter.push(
+              GolfMapViewRoute(selectedFilter: state.selectedFilter),
+            );
           },
           child: const CommonText(
             text: 'View on Map (5)',
@@ -146,7 +155,11 @@ class GolfMapScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFilterSection(BuildContext context, GolfMapCubit cubit, GolfMapCubitState state) {
+  Widget _buildFilterSection(
+    BuildContext context,
+    GolfMapCubit cubit,
+    GolfMapCubitState state,
+  ) {
     return Column(
       children: [
         const CustomDivider(),

@@ -19,7 +19,7 @@ class SocialScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: SmartStaggeredLoader(
         topWidget: _topWidget(context),
-        aspectRatio: 0.65,
+        gridConfig: GridConfig(aspectRatio: 0.65),
         itemCount: 20,
         onRefresh: () {},
         onLoadMore: (page) {},
@@ -55,13 +55,11 @@ class SocialScreen extends StatelessWidget {
           onTap: () {
             appRouter.push(const CreatePostRoute());
           },
-        ).end, 
+        ).end,
         10.height,
       ],
     );
   }
-
- 
 
   Widget consentCard(BuildContext context) {
     return Container(
@@ -105,7 +103,9 @@ class SocialScreen extends StatelessWidget {
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 inactiveTrackColor: Colors.grey.shade200,
                 trackOutlineWidth: const WidgetStatePropertyAll(0),
-                trackOutlineColor: const WidgetStatePropertyAll(Colors.transparent),
+                trackOutlineColor: const WidgetStatePropertyAll(
+                  Colors.transparent,
+                ),
                 value: true,
                 onChanged: (value) {},
               ),

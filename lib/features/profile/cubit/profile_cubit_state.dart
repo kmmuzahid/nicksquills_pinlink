@@ -10,6 +10,8 @@ class ProfileCubitState extends Equatable {
   List<Object?> get props => [selectedFilter];
 
   ProfileCubitState copyWith({FilterProfile? selectedFilter}) {
-    return ProfileCubitState(selectedFilter: selectedFilter ?? this.selectedFilter);
+    return ProfileCubitState(
+      selectedFilter: selectedFilter ?? this.selectedFilter,
+    );
   }
 }

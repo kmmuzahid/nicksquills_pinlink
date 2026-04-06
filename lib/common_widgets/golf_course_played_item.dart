@@ -12,10 +12,12 @@ class GolfCoursePlayedItem extends StatelessWidget {
     required this.course,
     required this.index,
     required this.selectedFilter,
+    required this.scrollController,
   });
   final CourseModel course;
   final int index;
   final MapFilters? selectedFilter;
+  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -23,92 +25,135 @@ class GolfCoursePlayedItem extends StatelessWidget {
   }
 
   Widget _buildCourseCard(BuildContext context, CourseModel course, int index) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.symmetric(vertical: 4),
-      decoration: BoxDecoration(
-        color: context.colors.bACKGROUND_darkCard,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: context.colors.bACKGROUND_darkCardBoarder, width: 1.4),
-      ),
-      child: Row(
-        children: [
-          TextToAvatar(text: (index + 1).toString(), color: getGolfPrimaryColor(selectedFilter)),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: .start,
-              children: [
-                CommonText(
-                  text: course.name,
-                  fontSize: 16,
-                  left: 10,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  preventScaling: true,
-                  textColor: context.colors.tEXT_white,
-                  fontWeight: FontWeight.bold,
-                ).start,
-                CommonText(
-                  text: course.address,
-                  left: 10,
-                  fontSize: 14,
-                  overflow: TextOverflow.ellipsis,
-                  preventScaling: true,
-                  textColor: context.colors.pRIMARY_priSoft,
-                  fontWeight: FontWeight.w400,
-                ).start,
-                CommonText(
-                  text: 'Played 2024-01-15',
-                  left: 10,
-                  fontSize: 12,
-                  textColor: context.colors.tEXT_sub,
-                  fontWeight: FontWeight.w400,
-                ).start,
-              ],
+    return LayoutBuilder(
+      builder: (context, constrains) {
+        final rattingWidth = ((constrains.maxWidth * .68) - 32) / 3.5;
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 6),
+          width: rattingWidth,
+          decoration: BoxDecoration(
+            color: context.colors.bACKGROUND_darkCard,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: context.colors.bACKGROUND_darkCardBoarder,
+              width: 1.4,
             ),
           ),
-          Expanded(
-            child: SizedBox(
-              height: 60,
-              child: ListView.builder(
-                itemCount: 5,
-                shrinkWrap: true,
-
-                scrollDirection: .horizontal,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 10.0),
-                    child: Column(
-                      mainAxisSize: .min,
-                      children: [
-                        5.height,
-                        CommonRatingBar(
-                          rating: 5,
-                          size: 12,
-                          spacing: 0,
-                          color: index == 0 ? Colors.amber : context.colors.tEXT_sub,
-                        ),
-                        if (index == 0)
-                          CommonText(
-                            top: 5,
-                            text: '5.0',
-                            fontSize: 14,
-                            fontWeight: .bold,
-                            textColor: context.colors.tEXT_white,
-                          ),
-                        if (index != 0) ...[
-                          5.height,
-                          Icon(Icons.lock, color: context.colors.tEXT_sub, size: 14),
-                        ],
-                      ],
-                    ),
-                  );
-                },
+          child: Row(
+            crossAxisAlignment: .start,
+            children: [
+              TextToAvatar(
+                size: 35,
+                text: (index + 1).toString(),
+                color: getGolfPrimaryColor(selectedFilter),
               ),
-            ),
+              SizedBox(
+                width: (constrains.maxWidth * .40) - 35,
+                child: Column(
+                  crossAxisAlignment: .start,
+                  children: [
+                    CommonText(
+                      text: course.name,
+                      fontSize: 14,
+                      left: 10,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      preventScaling: true,
+                      textColor: context.colors.tEXT_white,
+                      fontWeight: FontWeight.bold,
+                    ).start,
+                    CommonText(
+                      text: course.address,
+                      left: 10,
+                      fontSize: 12,
+                      overflow: TextOverflow.ellipsis,
+                      preventScaling: true,
+                      textColor: context.colors.pRIMARY_priSoft,
+                      fontWeight: FontWeight.w400,
+                    ).start,
+                    CommonText(
+                      text: '🤾‍♂️ 2024-01-15',
+                      left: 10,
+                      fontSize: 11,
+                      textColor: context.colors.tEXT_sub,
+                      fontWeight: FontWeight.w400,
+                    ).start,
+                  ],
+                ),
+              ),
+              Expanded(
+                child: SizedBox(
+                  height: 60,
+                  child: ListView.builder(
+                    controller: scrollController,
+                    itemCount: 5,
+                    shrinkWrap: true,
+
+                    scrollDirection: .horizontal,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 10.0),
+                        child: Column(
+                          mainAxisSize: .min,
+                          children: [
+                            5.height,
+                            Row(
+                              children: [
+                                ...List.generate(
+                                  3,
+                                  (_) => rattingIcon(
+                                    index == 0
+                                        ? Colors.amber
+                                        : context.colors.tEXT_sub,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                ...List.generate(
+                                  2,
+                                  (_) => rattingIcon(
+                                    index == 0
+                                        ? Colors.amber
+                                        : context.colors.tEXT_sub,
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            5.height,
+                            if (index == 0)
+                              Text(
+                                '5.0',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: context.colors.tEXT_white,
+                                ),
+                              ),
+                            if (index != 0) ...[
+                              Icon(
+                                Icons.lock,
+                                color: context.colors.tEXT_sub,
+                                size: 14,
+                              ),
+                            ],
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
+  }
+
+  //ratting icon
+  Widget rattingIcon(Color color) {
+    return Icon(Icons.star, color: color, size: 14);
   }
 }

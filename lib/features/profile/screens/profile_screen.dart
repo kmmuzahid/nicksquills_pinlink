@@ -1,4 +1,5 @@
 import 'package:core_kit/core_kit.dart';
+import 'package:core_kit/list_loader/smart_tab_list_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:pinlink/common_widgets/golf_course_played_item.dart';
 import 'package:pinlink/common_widgets/golf_course_wishlist_item.dart';
@@ -24,34 +25,38 @@ class ProfileScreen extends StatelessWidget {
       body: CubitScope(
         create: () => ProfileCubit(),
         builder: (context, cubit, state) {
-          const length = 19;
-
-          final isList = state.selectedFilter != FilterProfile.MyPosts;
-          final rowCount = (length / 2).ceil();
-
-          return SmartListLoader(
+          return SmartTabListLoader(
             appbar: _appbar(context, cubit, state),
             padding: Constants.bodyPadding,
-            itemCount: isList ? length : rowCount,
-            itemBuilder: (context, index) {
-              if (!isList) {
-                final firstIndex = index * 2;
-                final secondIndex = firstIndex + 1;
-
-                final hasSecondItem = secondIndex < length;
-
-                return Row(
-                  children: [
-                    Expanded(child: _buildRowItem(context, firstIndex)),
-                    Expanded(
-                      child: hasSecondItem ? _buildRowItem(context, secondIndex) : const SizedBox(),
-                    ),
-                  ],
-                );
-              }
-
-              if (state.selectedFilter == FilterProfile.MyCourses) {
+            onColapsAppbar: _onColupse(context, cubit, state),
+            tabs: [
+              const SmartTabConfig(tab: FilterProfile.MyCourses, itemCount: 80),
+              SmartTabConfig(
+                tab: FilterProfile.MyPosts,
+                itemCount: 30,
+                gridConfig: GridConfig(itemInRow: 2),
+              ),
+              const SmartTabConfig(
+                tab: FilterProfile.MyWishlist,
+                itemCount: 30,
+              ),
+            ],
+            itemBuilder: (tab, index) {
+              if (tab.tab == FilterProfile.MyCourses) {
                 return GolfCoursePlayedItem(
+                  scrollController: cubit.controllerFor(index.toString()),
+                  course: CourseModel(
+                    name: 'Royal Melbourne',
+                    address: 'Australia',
+                    isAlreadyPlayed: false,
+                  ),
+                  selectedFilter: null,
+                  index: index,
+                );
+              } else if (tab.tab == .MyPosts) {
+                return _buildRowItem(context, index);
+              } else {
+                return GolfCourseWishListItem(
                   course: CourseModel(
                     name: 'Royal Melbourne',
                     address: 'Australia',
@@ -61,28 +66,27 @@ class ProfileScreen extends StatelessWidget {
                   index: index,
                 );
               }
-
-              return GolfCourseWishListItem(
-                course: CourseModel(
-                  name: 'Royal Melbourne',
-                  address: 'Australia',
-                  isAlreadyPlayed: false,
-                ),
-                selectedFilter: null,
-                index: index,
-              );
             },
+            value: state.selectedFilter,
           );
         },
       ),
     );
   }
 
-  Widget _buildRowItem(BuildContext context, int index, {bool showItem = true}) {
+  Widget _buildRowItem(
+    BuildContext context,
+    int index, {
+    bool showItem = true,
+  }) {
     final isEven = index.isEven;
 
     return Padding(
-      padding: EdgeInsets.only(left: isEven ? 0 : 4, right: isEven ? 4 : 0, bottom: 8),
+      padding: EdgeInsets.only(
+        left: isEven ? 0 : 4,
+        right: isEven ? 4 : 0,
+        bottom: 8,
+      ),
       child: AspectRatio(
         aspectRatio: 0.8,
         child: showItem ? const SocialItemWidget() : const SizedBox.shrink(),
@@ -90,10 +94,16 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _appbar(BuildContext context, ProfileCubit cubit, ProfileCubitState state) {
+  Widget _appbar(
+    BuildContext context,
+    ProfileCubit cubit,
+    ProfileCubitState state,
+  ) {
     return Padding(
       padding: Constants.bodyPadding,
       child: Column(
+        crossAxisAlignment: .start,
+        mainAxisAlignment: .start,
         children: [
           CommonText(
             text: 'Track your played courses, ratings, and wishlist',
@@ -115,9 +125,96 @@ class ProfileScreen extends StatelessWidget {
             totalWishlist: 30,
           ),
           10.height,
-          if (state.selectedFilter != FilterProfile.MyPosts) _headline(context, state),
+          if (state.selectedFilter != FilterProfile.MyPosts) ...[
+            _headline(context, state),
+            4.height,
+            _subHeader(cubit, "sub header 3"),
+          ],
         ],
       ),
+    );
+  }
+
+  Widget _onColupse(
+    BuildContext context,
+    ProfileCubit cubit,
+    ProfileCubitState state,
+  ) {
+    return Container(
+      color: context.colors.background,
+      padding: const .symmetric(horizontal: 16),
+      child: Column(
+        children: [
+          _buildSegmentedButton(
+            onTap: (value) {
+              cubit.changeFilter(value);
+            },
+            selectedLeaderboardType: state.selectedFilter,
+            context: context,
+            totalCoursesPlayed: 10,
+            totalPosts: 20,
+            totalWishlist: 30,
+          ),
+          4.height,
+          if (state.selectedFilter != FilterProfile.MyPosts)
+            _subHeader(cubit, "sub header 2"),
+        ],
+      ),
+    );
+  }
+
+  Widget _subHeader(ProfileCubit cubit, String tag) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final rattingWidth = ((constraints.maxWidth * .68) - 35) / 4;
+        return Row(
+          crossAxisAlignment: .end,
+          children: [
+            SizedBox(
+              width: (constraints.maxWidth * .32) + 35,
+              child: const Row(
+                children: [
+                  CommonText(
+                    left: 15,
+                    text: 'Rank',
+                    fontSize: 11,
+                    fontWeight: .bold,
+                  ),
+                  Spacer(),
+                  CommonText(text: 'Courses', fontSize: 11, fontWeight: .bold),
+                  Spacer(),
+                ],
+              ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                // controller: cubit.controllerFor(tag),
+                controller: cubit.controller,
+                scrollDirection: .horizontal,
+                child: Row(
+                  crossAxisAlignment: .start,
+                  children: [
+                    ...List.generate(
+                      RatingCategories.values.length,
+                      (index) => SizedBox(
+                        width: rattingWidth,
+                        child: CommonText(
+                          alignment: .center,
+                          textAlign: .center,
+                          maxLines: 3,
+                          fontSize: 11,
+                          fontWeight: .bold,
+                          text: RatingCategories.values[index].displayName,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -168,7 +265,10 @@ class ProfileScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: context.colors.bACKGROUND_darkCard,
         borderRadius: BorderRadius.circular(40),
-        border: Border.all(color: context.colors.bACKGROUND_darkCard, width: 1.2),
+        border: Border.all(
+          color: context.colors.bACKGROUND_darkCard,
+          width: 1.2,
+        ),
       ),
 
       child: Row(
