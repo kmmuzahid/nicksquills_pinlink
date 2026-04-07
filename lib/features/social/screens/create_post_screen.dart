@@ -40,7 +40,9 @@ class CreatePostScreen extends StatelessWidget {
                     Wrap(
                       spacing: 5,
                       alignment: .start,
-                      children: state.courses.map((e) => _chip(e, cubit)).toList(),
+                      children: state.courses
+                          .map((e) => _chip(e, cubit))
+                          .toList(),
                     ).start,
                     CommonTextField(
                       validationType: ValidationType.notRequired,
@@ -73,8 +75,10 @@ class CreatePostScreen extends StatelessWidget {
                       minLength: 300,
                       height: 150,
                       multilineLimitHintBuilder: MultilineHintLimitBuilder(
-                        minimumHint: (current, limit) => Text('\tMinimum $limit'),
-                        maximumHint: (current, limit) => Text('Maximum $current / $limit'),
+                        minimumHint: (current, limit) =>
+                            Text('\tMinimum $limit'),
+                        maximumHint: (current, limit) =>
+                            Text('Maximum $current / $limit'),
                       ),
                       borderRadius: 20,
                       hintText: 'Enter the description',
@@ -94,12 +98,16 @@ class CreatePostScreen extends StatelessWidget {
                         SegmentedButton<bool>(
                           style: ButtonStyle(
                             padding: WidgetStateProperty.all(EdgeInsets.zero),
-                            minimumSize: WidgetStateProperty.all(const Size.fromHeight(50)),
+                            minimumSize: WidgetStateProperty.all(
+                              const Size.fromHeight(50),
+                            ),
                             shape: WidgetStateProperty.all(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                                 side: BorderSide(
-                                  color: context.colors.successVerifiedPositivestats_freshGrass,
+                                  color: context
+                                      .colors
+                                      .successVerifiedPositivestats_freshGrass,
                                 ),
                               ),
                             ),
@@ -109,7 +117,10 @@ class CreatePostScreen extends StatelessWidget {
                           segments: <ButtonSegment<bool>>[
                             ButtonSegment<bool>(
                               value: true,
-                              label: CommonImage(src: Assets.images.globe.path, size: 20),
+                              label: CommonImage(
+                                src: Assets.images.globe.path,
+                                size: 20,
+                              ),
                             ),
                             ButtonSegment<bool>(
                               value: false,
@@ -171,7 +182,9 @@ class CreatePostScreen extends StatelessWidget {
                     Wrap(
                       spacing: 5,
                       alignment: .start,
-                      children: state.links.map((e) => _chip(e, cubit)).toList(),
+                      children: state.links
+                          .map((e) => _chip(e, cubit))
+                          .toList(),
                     ).start,
                     CommonTextField(
                       validationType: ValidationType.notRequired,
@@ -194,11 +207,12 @@ class CreatePostScreen extends StatelessWidget {
                     GridView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                      ),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                          ),
                       itemBuilder: (context, index) {
                         return _imageItems(context, index, state, cubit);
                       },
@@ -212,7 +226,7 @@ class CreatePostScreen extends StatelessWidget {
                         context.router.pop();
                       },
                     ),
-                    50.height
+                    50.height,
                   ],
                 );
               },
@@ -268,7 +282,9 @@ class CreatePostScreen extends StatelessWidget {
               cubit.removeImage(index);
             },
             child: Container(
-              decoration: BoxDecoration(color: Colors.black.withValues(alpha: .2)),
+              decoration: BoxDecoration(
+                color: Colors.black.withValues(alpha: .2),
+              ),
               padding: const EdgeInsets.all(2),
               child: const Icon(Icons.close, color: Colors.white),
             ),
@@ -278,7 +294,9 @@ class CreatePostScreen extends StatelessWidget {
         if (isVideo)
           Center(
             child: Container(
-              decoration: BoxDecoration(color: Colors.black.withValues(alpha: .1)),
+              decoration: BoxDecoration(
+                color: Colors.black.withValues(alpha: .1),
+              ),
               child: const Icon(Icons.play_arrow, size: 50, color: Colors.grey),
             ),
           ),
@@ -291,7 +309,9 @@ class CreatePostScreen extends StatelessWidget {
       constraints: const BoxConstraints(maxWidth: 150),
       child: Chip(
         label: Text(text, overflow: TextOverflow.ellipsis),
-        backgroundColor: Colors.amber.withValues(alpha: 0.2), // change background color here
+        backgroundColor: Colors.amber.withValues(
+          alpha: 0.2,
+        ), // change background color here
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
           side: const BorderSide(width: 0),

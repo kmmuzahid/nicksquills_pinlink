@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinlink/config/bloc/safe_cubit.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart'
-    show LoginRoute, OnboardingRoute, SubscriptionsRoute;
+    show LoginRoute, SubscriptionsRoute, OnboardingRoute;
 import 'package:pinlink/config/storage/storage_key.dart';
 import 'package:pinlink/constant/subscriptions.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_state.dart';
@@ -43,8 +43,6 @@ class AuthCubit extends SafeCubit<AuthState> {
     // }
   }
 
-
-
   Future<void> updateTokens(String accessToken, String refreshToken) async {
     emit(
       AuthState(
@@ -77,6 +75,8 @@ class AuthCubit extends SafeCubit<AuthState> {
     await StorageService.instance.clearDb();
     emit(AuthState(subscriptionPlan: freePlan));
     appRouter.replaceAll([const LoginRoute()]);
-    appRouter.navigatorKey.currentContext?.read<NavigationCubit>().changeIndex(0);
+    appRouter.navigatorKey.currentContext?.read<NavigationCubit>().changeIndex(
+      0,
+    );
   }
 }

@@ -53,7 +53,11 @@ class NavigationScreen extends StatelessWidget {
 
       centerItem(),
 
-      NavigatorItem(imagePath: Assets.navigators.map, screen: const GolfMapScreen(), label: 'Map'),
+      NavigatorItem(
+        imagePath: Assets.navigators.map,
+        screen: const GolfMapScreen(),
+        label: 'Map',
+      ),
       NavigatorItem(
         imagePath: Assets.navigators.profile,
         screen: const ProfileScreen(),
@@ -75,7 +79,7 @@ class NavigationScreen extends StatelessWidget {
     return CubitScopeValue(
       cubit: context.read<NavigationCubit>(),
       builder: (context, cubit, state) {
-        var title = '';
+        var title = 'Rank';
         if (state.currentIndex == 0) {
           title = 'Friends Feed';
         } else if (state.currentIndex == 1) {
@@ -96,16 +100,22 @@ class NavigationScreen extends StatelessWidget {
 
             transitionBuilder: (child, animation) {
               return SlideTransition(
-                position: Tween(
-                  begin: const Offset(0.2, 0),
-                  end: Offset.zero,
-                ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
+                position: Tween(begin: const Offset(0.2, 0), end: Offset.zero)
+                    .animate(
+                      CurvedAnimation(
+                        parent: animation,
+                        curve: Curves.easeOutCubic,
+                      ),
+                    ),
                 child: FadeTransition(opacity: animation, child: child),
               );
             },
             child: KeyedSubtree(
               key: ValueKey(state.currentIndex),
-              child: Align(alignment: .topStart, child: currentPage(state.currentIndex, context)),
+              child: Align(
+                alignment: .topStart,
+                child: currentPage(state.currentIndex, context),
+              ),
             ),
           ),
           bottomNavigationBar: CustomBottomNavBar(
@@ -125,10 +135,15 @@ class NavigationScreen extends StatelessWidget {
   CommonAppBar _appbar(String title) {
     return CommonAppBar(
       disableBack: true,
-      hideBack: true,
+      hideBack: false,
       title: title,
+      leading: CommonImage(
+        src: Assets.images.globe.path,
+        size: 45.h,
+        fill: .contain,
+      ),
       appbarConfig: AppbarConfig(
-        titleAlignment: .centerLeft,
+        titleAlignment: .center,
         height: 70,
         titleSpacing: 16,
         actions: [
@@ -147,7 +162,10 @@ class NavigationScreen extends StatelessWidget {
             icon: SizedBox(
               width: 25,
               height: 25,
-              child: Badge.count(count: 1, child: CommonImage(src: Assets.images.notificationIcon)),
+              child: Badge.count(
+                count: 1,
+                child: CommonImage(src: Assets.images.notificationIcon),
+              ),
             ),
           ),
         ],
@@ -157,7 +175,10 @@ class NavigationScreen extends StatelessWidget {
 
   Widget currentPage(int index, BuildContext context) {
     final screen = getpage()[index].screen;
-    AppLogger.info('Switched to -> ${screen.runtimeType.toString()}', tag: 'Navigation');
+    AppLogger.info(
+      'Switched to -> ${screen.runtimeType.toString()}',
+      tag: 'Navigation',
+    );
     return screen;
   }
 
@@ -183,7 +204,9 @@ class NavigationScreen extends StatelessWidget {
             topRight: Radius.circular(25),
             bottomLeft: Radius.circular(25),
           ),
-          color: isSelected ? context.colors.tEXT_white : context.colors.tEXT_sub,
+          color: isSelected
+              ? context.colors.tEXT_white
+              : context.colors.tEXT_sub,
           boxShadow: isSelected
               ? [
                   BoxShadow(
@@ -212,7 +235,6 @@ class CustomBottomNavBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
   final VoidCallback onCenterTap;
-  
 
   const CustomBottomNavBar({
     super.key,
@@ -261,7 +283,12 @@ class CustomBottomNavBar extends StatelessWidget {
                   children: [
                     ..._buildNavGroup(leftItems, 0, activeColor, inactiveColor),
                     const SizedBox(width: 80), // Space for center button
-                    ..._buildNavGroup(rightItems, 3, activeColor, inactiveColor),
+                    ..._buildNavGroup(
+                      rightItems,
+                      3,
+                      activeColor,
+                      inactiveColor,
+                    ),
                   ],
                 ),
               ),
@@ -273,19 +300,42 @@ class CustomBottomNavBar extends StatelessWidget {
               child: GestureDetector(
                 onTap: onCenterTap,
                 child: Container(
-                  width: 64,
-                  height: 64,
+                  width: 80,
+                  height: 80,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: navBgColor,
                     boxShadow: [
-                      BoxShadow(color: glowColor.withOpacity(0.5), blurRadius: 20, spreadRadius: 2),
+                      BoxShadow(
+                        color: glowColor.withOpacity(0.5),
+                        blurRadius: 20,
+                        spreadRadius: 2,
+                      ),
                     ],
                   ),
-                  child: Icon(
-                    Icons.golf_course,
-                    color: currentIndex == 2 ? activeColor : inactiveColor,
-                    size: 30,
+                  child: Column(
+                    mainAxisAlignment: .center,
+                    crossAxisAlignment: .center,
+                    children: [
+                      Icon(
+                        Icons.golf_course,
+                        color: currentIndex == 2 ? activeColor : inactiveColor,
+                        size: 30,
+                      ),
+                      const SizedBox(height: 4),
+                      CommonText(
+                        text: 'Ranking',
+                        style: TextStyle(
+                          color: currentIndex == 2
+                              ? activeColor
+                              : inactiveColor,
+                          fontSize: 11,
+                          fontWeight: currentIndex == 2
+                              ? FontWeight.bold
+                              : FontWeight.w400,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -383,19 +433,36 @@ class WaveNavBarPainter extends CustomPainter {
     path.moveTo(offset + radius, offset);
 
     path.lineTo(offset + w - radius, offset);
-    path.arcToPoint(Offset(offset + w, offset + radius), radius: Radius.circular(radius));
+    path.arcToPoint(
+      Offset(offset + w, offset + radius),
+      radius: Radius.circular(radius),
+    );
 
     path.lineTo(offset + w, offset + h - radius);
-    path.arcToPoint(Offset(offset + w - radius, offset + h), radius: Radius.circular(radius));
+    path.arcToPoint(
+      Offset(offset + w - radius, offset + h),
+      radius: Radius.circular(radius),
+    );
 
     path.lineTo(offset + radius, offset + h);
-    path.arcToPoint(Offset(offset, offset + h - radius), radius: Radius.circular(radius));
+    path.arcToPoint(
+      Offset(offset, offset + h - radius),
+      radius: Radius.circular(radius),
+    );
 
     path.lineTo(offset, offset + radius);
-    path.arcToPoint(Offset(offset + radius, offset), radius: Radius.circular(radius));
+    path.arcToPoint(
+      Offset(offset + radius, offset),
+      radius: Radius.circular(radius),
+    );
 
     // your custom curve
-    path.quadraticBezierTo(offset + w * .5, offset + h - 40, offset + w - radius, offset);
+    path.quadraticBezierTo(
+      offset + w * .5,
+      offset + h - 40,
+      offset + w - radius,
+      offset,
+    );
 
     path.close();
     canvas.drawPath(path, paint);

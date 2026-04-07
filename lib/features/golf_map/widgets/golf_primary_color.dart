@@ -12,7 +12,7 @@ Color getGolfPrimaryColor(MapFilters? selectedFilter) {
   } else if (selectedFilter == MapFilters.PinLinks5) {
     color = const Color(0xffFEB000);
   } else {
-    color = const Color(0xff511D8F);
+    color = const Color(0xff00B578);
   }
   return color;
 }

@@ -1,21 +1,15 @@
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:pinlink/common_widgets/custom_divider.dart';
-import 'package:pinlink/common_widgets/golf_course_played_item.dart';
-import 'package:pinlink/common_widgets/golf_course_wishlist_item.dart';
-import 'package:pinlink/common_widgets/info_card_widget.dart';
 import 'package:pinlink/common_widgets/simple_background.dart';
 import 'package:pinlink/config/bloc/cubit_scope.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
-import 'package:pinlink/constant/constants.dart';
 import 'package:pinlink/constant/enums.dart';
-import 'package:pinlink/features/course_comparision/model/course_model.dart';
 import 'package:pinlink/features/golf_map/cubit/golf_map_cubit.dart';
 import 'package:pinlink/features/golf_map/cubit/golf_map_cubit_state.dart';
 import 'package:pinlink/features/golf_map/widgets/filter_widget.dart';
-import 'package:pinlink/features/golf_map/widgets/golf_course_item.dart';
+import 'package:pinlink/features/profile/widgets/map_widget.dart';
 
 class GolfMapScreen extends StatelessWidget {
   const GolfMapScreen({super.key});
@@ -26,104 +20,38 @@ class GolfMapScreen extends StatelessWidget {
       body: CubitScope(
         create: () => GolfMapCubit(),
         builder: (context, cubit, state) {
-          return SmartListLoader(
-            padding: Constants.bodyPadding,
-            appbar: _appbar(context, cubit, state),
-            onColapsAppbar: Container(
-              color: context.colors.background,
-              padding: const EdgeInsets.only(left: 16, right: 16, top: 10),
-              child: Column(
-                children: [
-                  CommonTextField(
-                    backgroundColor: Colors.transparent,
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: context.colors.tEXT_sub,
+          return Column(
+            children: [
+              6.height,
+              _buildFilterSection(context, cubit, state),
+              Expanded(
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: MapWidget(selectedFilter: state.selectedFilter),
                     ),
-                    validationType: .notRequired,
-                    hintText: 'Search courses on map...',
-                  ),
-
-                  5.height,
-                  _headline(context, state),
-                ],
-              ),
-            ),
-            itemCount: 20,
-            itemBuilder: (context, index) {
-              if (state.selectedFilter == MapFilters.Wishlist) {
-                return GolfCourseWishListItem(
-                  course: CourseModel(
-                    name: 'Royal Melbourne',
-                    address: 'Australia',
-                    isAlreadyPlayed: false,
-                  ),
-                  index: index,
-                  selectedFilter: state.selectedFilter,
-                );
-              } else if (state.selectedFilter == MapFilters.Played) {
-                return GolfCoursePlayedItem(
-                  scrollController: cubit.controllerFor(index),
-                  course: CourseModel(
-                    name: 'Royal Melbourne',
-                    address: 'Australia',
-                    isAlreadyPlayed: false,
-                  ),
-                  index: index,
-                  selectedFilter: state.selectedFilter,
-                );
-              }
-              return GolfCourseItem(
-                course: CourseModel(
-                  name: 'Royal Melbourne',
-                  address: 'Australia',
-                  isAlreadyPlayed: false,
+                    Positioned(
+                      bottom: 10,
+                      left: 16,
+                      child: SizedBox(
+                        width: CoreScreenUtils.deviceSize.width * .7,
+                        child: CommonTextField(
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: context.colors.tEXT_sub,
+                          ),
+                          validationType: .notRequired,
+                          backgroundColor: context.colors.background,
+                          hintText: 'Search courses on map...',
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                index: index,
-                selectedFilter: state.selectedFilter,
-              );
-            },
+              ),
+            ],
           );
         },
-      ),
-    );
-  }
-
-  Widget _appbar(
-    BuildContext context,
-    GolfMapCubit cubit,
-    GolfMapCubitState state,
-  ) {
-    return Padding(
-      padding: Constants.bodyPadding,
-      child: Column(
-        crossAxisAlignment: .center,
-        mainAxisAlignment: .start,
-        mainAxisSize: .min,
-        children: [
-          CommonText(
-            text: 'Explore courses near you and worldwide',
-            fontSize: 16,
-            textColor: context.colors.tEXT_subDark,
-          ),
-          10.height,
-          CommonTextField(
-            prefixIcon: Icon(Icons.search, color: context.colors.tEXT_sub),
-            validationType: .notRequired,
-            backgroundColor: context.colors.background,
-            hintText: 'Search courses on map...',
-          ),
-          10.height,
-          const InfoCardWidget(
-            title: 'Explore Your Golf Journey',
-            description:
-                'Add or update courses using Add / Play. Filter pins to discover new courses.',
-          ),
-
-          _buildFilterSection(context, cubit, state),
-          5.height,
-          _headline(context, state),
-        ],
       ),
     );
   }
@@ -160,57 +88,37 @@ class GolfMapScreen extends StatelessWidget {
     GolfMapCubit cubit,
     GolfMapCubitState state,
   ) {
-    return Column(
+    return Wrap(
+      spacing: 4.w,
       children: [
-        const CustomDivider(),
-        Row(
-          children: [
-            Expanded(
-              child: FilterWidget(
-                title: MapFilters.Played,
-                selectedFilter: state.selectedFilter,
-                subtitle: "Courses you have played",
-                iconData: Icons.place_outlined,
-                onTap: cubit.changeFilter,
-              ),
-            ),
-            4.width,
-            Expanded(
-              child: FilterWidget(
-                selectedFilter: state.selectedFilter,
-                title: MapFilters.Wishlist,
-                subtitle: "Courses you want to play",
-                iconData: Icons.bookmark_border,
-                onTap: cubit.changeFilter,
-              ),
-            ),
-          ],
+        FilterWidget(
+          title: MapFilters.Played,
+          selectedFilter: state.selectedFilter,
+          subtitle: "Courses Done",
+          iconData: Icons.place_outlined,
+          onTap: cubit.changeFilter,
         ),
-        4.height,
-        Row(
-          children: [
-            Expanded(
-              child: FilterWidget(
-                selectedFilter: state.selectedFilter,
-                title: MapFilters.Friends,
-                subtitle: "Courses your friends have played",
-                iconData: Icons.people,
-                onTap: cubit.changeFilter,
-              ),
-            ),
-            4.width,
-            Expanded(
-              child: FilterWidget(
-                selectedFilter: state.selectedFilter,
-                title: MapFilters.PinLinks5,
-                subtitle: "Our top rated courses",
-                iconData: Icons.emoji_events_outlined,
-                onTap: cubit.changeFilter,
-              ),
-            ),
-          ],
+        FilterWidget(
+          selectedFilter: state.selectedFilter,
+          title: MapFilters.Wishlist,
+          subtitle: "Saved courses",
+          iconData: Icons.bookmark_border,
+          onTap: cubit.changeFilter,
         ),
-        const CustomDivider(),
+        FilterWidget(
+          selectedFilter: state.selectedFilter,
+          title: MapFilters.Friends,
+          subtitle: "Friends’ activity",
+          iconData: Icons.people,
+          onTap: cubit.changeFilter,
+        ),
+        FilterWidget(
+          selectedFilter: state.selectedFilter,
+          title: MapFilters.PinLinks5,
+          subtitle: "Top rated picks",
+          iconData: Icons.emoji_events_outlined,
+          onTap: cubit.changeFilter,
+        ),
       ],
     );
   }

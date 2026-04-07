@@ -14,6 +14,7 @@ import 'package:pinlink/constant/enums.dart';
 import 'package:pinlink/features/course_comparision/model/course_model.dart';
 import 'package:pinlink/features/profile/cubit/profile_cubit.dart';
 import 'package:pinlink/features/profile/cubit/profile_cubit_state.dart';
+import 'package:pinlink/features/profile/widgets/category_scrolled_list.dart';
 import 'package:pinlink/features/profile/widgets/profile_card_widget.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -44,7 +45,7 @@ class ProfileScreen extends StatelessWidget {
             itemBuilder: (tab, index) {
               if (tab.tab == FilterProfile.MyCourses) {
                 return GolfCoursePlayedItem(
-                  scrollController: cubit.controllerFor(index.toString()),
+                  controllers: cubit.controllers,
                   course: CourseModel(
                     name: 'Royal Melbourne',
                     address: 'Australia',
@@ -113,7 +114,7 @@ class ProfileScreen extends StatelessWidget {
             bottom: 10,
           ).center,
           const ProfileCardWidget(),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
           _buildSegmentedButton(
             onTap: (value) {
               cubit.changeFilter(value);
@@ -128,7 +129,7 @@ class ProfileScreen extends StatelessWidget {
           if (state.selectedFilter != FilterProfile.MyPosts) ...[
             _headline(context, state),
             4.height,
-            _subHeader(cubit, "sub header 3"),
+            _subHeader(cubit, state.selectedFilter),
           ],
         ],
       ),
@@ -157,13 +158,13 @@ class ProfileScreen extends StatelessWidget {
           ),
           4.height,
           if (state.selectedFilter != FilterProfile.MyPosts)
-            _subHeader(cubit, "sub header 2"),
+            _subHeader(cubit, state.selectedFilter),
         ],
       ),
     );
   }
 
-  Widget _subHeader(ProfileCubit cubit, String tag) {
+  Widget _subHeader(ProfileCubit cubit, FilterProfile filter) {
     return LayoutBuilder(
       builder: (context, constraints) {
         final rattingWidth = ((constraints.maxWidth * .68) - 35) / 4;
@@ -187,29 +188,9 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: SingleChildScrollView(
-                // controller: cubit.controllerFor(tag),
-                controller: cubit.controller,
-                scrollDirection: .horizontal,
-                child: Row(
-                  crossAxisAlignment: .start,
-                  children: [
-                    ...List.generate(
-                      RatingCategories.values.length,
-                      (index) => SizedBox(
-                        width: rattingWidth,
-                        child: CommonText(
-                          alignment: .center,
-                          textAlign: .center,
-                          maxLines: 3,
-                          fontSize: 11,
-                          fontWeight: .bold,
-                          text: RatingCategories.values[index].displayName,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              child: CategoryScrolledList(
+                rattingWidth: rattingWidth,
+                controllers: cubit.controllers,
               ),
             ),
           ],

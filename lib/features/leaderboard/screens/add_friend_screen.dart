@@ -48,7 +48,10 @@ class FriendsScreen extends StatelessWidget {
             ),
             Text(
               '$length friends',
-              style: TextStyle(color: context.colors.tEXT_subDark, fontSize: 12),
+              style: TextStyle(
+                color: context.colors.tEXT_subDark,
+                fontSize: 12,
+              ),
             ),
           ],
         ),
@@ -72,19 +75,25 @@ class FriendsScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          Text(
-            'Add friend by username (they must have an account)',
+          CommonText(
+            text: 'Add friend by username or email (they must have an account)',
             style: TextStyle(color: context.colors.tEXT_subDark, fontSize: 12),
           ),
           const SizedBox(height: 16),
           Row(
             children: [
               const Expanded(
-                child: CommonTextField(hintText: 'Email', validationType: .validateEmail
+                child: CommonTextField(
+                  hintText: 'Enter email or username',
+                  validationType: .validateEmail,
                 ),
               ),
               const SizedBox(width: 12),
-              CommonButton(titleText: 'Add', onTap: () {}, buttonRadius: 30, buttonWidth: 80,
+              CommonButton(
+                titleText: 'Add',
+                onTap: () {},
+                buttonRadius: 30,
+                buttonWidth: 80,
               ),
             ],
           ),

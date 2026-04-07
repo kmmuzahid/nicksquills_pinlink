@@ -19,8 +19,7 @@ dependencies:
   flutter_bloc: 
   get_it: 
   flutter_secure_storage: 
-  equatable: 
-  linked_scroll_controller:
+  equatable:  
   pin_code_fields:
   video_player: ^2.11.0
   video_thumbnail:

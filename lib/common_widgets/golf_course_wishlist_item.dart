@@ -30,13 +30,16 @@ class GolfCourseWishListItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: context.colors.bACKGROUND_darkCard,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: context.colors.bACKGROUND_darkCardBoarder, width: 1.4),
+        border: Border.all(
+          color: context.colors.bACKGROUND_darkCardBoarder,
+          width: 1.4,
+        ),
       ),
       child: Column(
         children: [
           Row(
             children: [
-              TextToAvatar(text: (index + 1).toString(), color: Colors.green),
+              TextToAvatar(text: (index + 1).toString(), color: Colors.red),
               Column(
                 crossAxisAlignment: .start,
                 children: [

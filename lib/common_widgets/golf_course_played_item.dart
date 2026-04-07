@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:pinlink/common_widgets/text_to_avater.dart';
@@ -6,22 +8,83 @@ import 'package:pinlink/constant/enums.dart';
 import 'package:pinlink/features/course_comparision/model/course_model.dart';
 import 'package:pinlink/features/golf_map/widgets/golf_primary_color.dart';
 
-class GolfCoursePlayedItem extends StatelessWidget {
+class GolfCoursePlayedItem extends StatefulWidget {
   const GolfCoursePlayedItem({
     super.key,
     required this.course,
     required this.index,
     required this.selectedFilter,
-    required this.scrollController,
+    required this.controllers,
   });
   final CourseModel course;
   final int index;
   final MapFilters? selectedFilter;
-  final ScrollController scrollController;
+  final Map<String, ScrollController> controllers;
+
+  @override
+  State<GolfCoursePlayedItem> createState() => _GolfCoursePlayedItemState();
+}
+
+class _GolfCoursePlayedItemState extends State<GolfCoursePlayedItem> {
+  late ScrollController controller;
+  late String id;
+  bool _isSyncingScroll = false;
+
+  @override
+  void initState() {
+    id = DateTime.now().microsecondsSinceEpoch.toString();
+
+    double initialOffset = 0;
+    if (widget.controllers.isNotEmpty) {
+      final existing = widget.controllers.values.firstWhere(
+        (c) => c.hasClients,
+        orElse: () => ScrollController(),
+      );
+      if (existing.hasClients) initialOffset = existing.offset;
+    }
+
+    controller = ScrollController(initialScrollOffset: initialOffset);
+
+    controller.addListener(() {
+      if (_isSyncingScroll) return;
+
+      if (!controller.position.isScrollingNotifier.value &&
+          controller.position.activity is! DragScrollActivity) {
+        return;
+      }
+
+      _isSyncingScroll = true;
+      final sourceOffset = controller.offset;
+
+      for (final entry in widget.controllers.entries) {
+        if (entry.key == id) continue;
+        final target = entry.value;
+
+        if (target.hasClients) {
+          if ((target.offset - sourceOffset).abs() > 0.1) {
+            target.jumpTo(
+              sourceOffset.clamp(0.0, target.position.maxScrollExtent),
+            );
+          }
+        }
+      }
+      _isSyncingScroll = false;
+    });
+
+    widget.controllers[id] = controller;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    widget.controllers.remove(id);
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return _buildCourseCard(context, course, index);
+    return _buildCourseCard(context, widget.course, widget.index);
   }
 
   Widget _buildCourseCard(BuildContext context, CourseModel course, int index) {
@@ -45,7 +108,7 @@ class GolfCoursePlayedItem extends StatelessWidget {
               TextToAvatar(
                 size: 35,
                 text: (index + 1).toString(),
-                color: getGolfPrimaryColor(selectedFilter),
+                color: getGolfPrimaryColor(widget.selectedFilter),
               ),
               SizedBox(
                 width: (constrains.maxWidth * .40) - 35,
@@ -85,10 +148,12 @@ class GolfCoursePlayedItem extends StatelessWidget {
                 child: SizedBox(
                   height: 60,
                   child: ListView.builder(
-                    controller: scrollController,
-                    itemCount: 5,
+                    physics: const AlwaysScrollableScrollPhysics(
+                      parent: ClampingScrollPhysics(),
+                    ),
+                    controller: controller,
+                    itemCount: RatingCategories.values.length,
                     shrinkWrap: true,
-
                     scrollDirection: .horizontal,
                     itemBuilder: (context, index) {
                       return Padding(
