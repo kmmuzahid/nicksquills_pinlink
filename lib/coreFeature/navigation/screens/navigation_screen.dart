@@ -43,7 +43,7 @@ class NavigationScreen extends StatelessWidget {
       NavigatorItem(
         imagePath: Assets.navigators.social,
         screen: const SocialScreen(),
-        label: 'Socia',
+        label: 'Social',
       ),
       NavigatorItem(
         imagePath: Assets.navigators.leaderboard,
