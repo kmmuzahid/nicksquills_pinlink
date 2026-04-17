@@ -16,7 +16,7 @@ class AuthBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     
-    return Scaffold(   
+    return Scaffold(
       backgroundColor: context.colors.background,
       body: SizedBox(
         width: CoreScreenUtils.deviceSize.width,

@@ -131,7 +131,7 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
               child: Center(
                 child: Text(
                   cells[index].character ?? '',
-                  style: TextStyle(fontSize: 25, color: context.colors.bACKGROUND_darkPage),
+                  style: TextStyle(fontSize: 25, color: context.colors.tEXT_white),
                 ),
               ),
             );
