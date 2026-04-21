@@ -13,9 +13,7 @@ import 'package:pinlink/config/storage/storage_key.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/gen/assets.gen.dart';
 
-
-class CoreKitConfigImpl extends CoreKitConfig with CoreKitConfigDefaults {  
-
+class CoreKitConfigImpl extends CoreKitConfig with CoreKitConfigDefaults {
   @override
   String get imageBaseUrl => ApiEndPoint.instance.domain;
 
@@ -34,7 +32,8 @@ class CoreKitConfigImpl extends CoreKitConfig with CoreKitConfigDefaults {
   @override
   TokenProvider get tokenProvider {
     return TokenProvider(
-      accessToken: () async => (await StorageService.instance.accessToken) ?? '',
+      accessToken: () async =>
+          (await StorageService.instance.accessToken) ?? '',
       refreshToken: () async {
         AppLogger.debug(
           (await StorageService.instance.refreshToken).toString(),
@@ -44,7 +43,10 @@ class CoreKitConfigImpl extends CoreKitConfig with CoreKitConfigDefaults {
       },
       updateTokens: (data) async {
         AppLogger.debug('Update Tokens', tag: 'updateTokens');
-        await context.read<AuthCubit>().updateTokens(data['accessToken'], data['refreshToken']);
+        await context.read<AuthCubit>().updateTokens(
+          data['accessToken'],
+          data['refreshToken'],
+        );
       },
     );
   }
@@ -56,7 +58,10 @@ class CoreKitConfigImpl extends CoreKitConfig with CoreKitConfigDefaults {
       titleAlignment: .center,
       decoration: () => BoxDecoration(
         border: Border(
-          bottom: BorderSide(color: context.colors.bACKGROUND_darkCardBoarder, width: 1.5),
+          bottom: BorderSide(
+            color: context.colors.bACKGROUND_darkCardBoarder,
+            width: 1.5,
+          ),
         ),
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(20),

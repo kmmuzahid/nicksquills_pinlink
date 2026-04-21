@@ -19,6 +19,7 @@ class SplashScreen extends StatelessWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<AuthCubit>().init();
     });
+    
     return Scaffold(
       body: SizedBox(
         width: double.infinity,

@@ -26,51 +26,140 @@ class ProfileScreen extends StatelessWidget {
       body: CubitScope(
         create: () => ProfileCubit(),
         builder: (context, cubit, state) {
-          return SmartTabListLoader(
-            appbar: _appbar(context, cubit, state),
-            padding: Constants.bodyPadding,
-            onColapsAppbar: _onColupse(context, cubit, state),
-            tabs: [
-              const SmartTabConfig(tab: FilterProfile.MyCourses, itemCount: 80),
-              SmartTabConfig(
-                tab: FilterProfile.MyPosts,
-                itemCount: 30,
-                gridConfig: GridConfig(itemInRow: 2),
-              ),
-              const SmartTabConfig(
-                tab: FilterProfile.MyWishlist,
-                itemCount: 30,
-              ),
-            ],
-            itemBuilder: (tab, index) {
-              if (tab.tab == FilterProfile.MyCourses) {
-                return GolfCoursePlayedItem(
-                  controllers: cubit.controllers,
-                  course: CourseModel(
-                    name: 'Royal Melbourne',
-                    address: 'Australia',
-                    isAlreadyPlayed: false,
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              final fixedWidth = (constraints.maxWidth * 0.4);
+              final rattingWidth = (constraints.maxWidth - fixedWidth) / 4;
+              return SmartTabListLoader(
+                appbar: _appbar(context, cubit, state),
+                onColapsAppbar: _onColupseGenral(context, cubit, state),
+                padding: Constants.bodyPadding,
+                tabs: [
+                  SmartTabConfig(
+                    subAppBar: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        children: [
+                          _headline(context, state),
+                          10.height,
+                          _subHeader(
+                            cubit,
+                            state.selectedFilter,
+                            fixedWidth: fixedWidth,
+                            rattingWidth: rattingWidth,
+                          ),
+                        ],
+                      ),
+                    ),
+                    subOnColapsAppbar: Container(
+                      color: context.colors.background,
+                      padding: const EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                        bottom: 4,
+                      ),
+                      child: Column(
+                        children: [
+                          _headline(context, state),
+                          10.height,
+                          _subHeader(
+                            cubit,
+                            state.selectedFilter,
+                            fixedWidth: fixedWidth,
+                            rattingWidth: rattingWidth,
+                          ),
+                        ],
+                      ),
+                    ),
+                    tab: FilterProfile.MyCourses,
+                    itemCount: 80,
                   ),
-                  selectedFilter: null,
-                  index: index,
-                );
-              } else if (tab.tab == .MyPosts) {
-                return _buildRowItem(context, index);
-              } else {
-                return GolfCourseWishListItem(
-                  course: CourseModel(
-                    name: 'Royal Melbourne',
-                    address: 'Australia',
-                    isAlreadyPlayed: false,
+                  SmartTabConfig(
+                    tab: FilterProfile.MyPosts,
+                    subOnColapsAppbar: _subHeaderForPost(context),
+                    subAppBar: _subHeaderForPost(context),
+                    itemCount: 30,
+                    gridConfig: GridConfig(itemInRow: 2),
                   ),
-                  selectedFilter: null,
-                  index: index,
-                );
-              }
+                  SmartTabConfig(
+                    subOnColapsAppbar: Container(
+                      color: context.colors.background,
+                      padding: const EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                        bottom: 4,
+                      ),
+                      child: _headline(context, state),
+                    ),
+                    tab: FilterProfile.MyWishlist,
+                    itemCount: 30,
+                  ),
+                ],
+                itemBuilder: (tab, index) {
+                  if (tab.tab == FilterProfile.MyCourses) {
+                    return GolfCoursePlayedItem(
+                      controllers: cubit.controllers,
+                      fixedWidth: fixedWidth,
+                      rattingWidth: rattingWidth,
+                      course: CourseModel(
+                        name: 'Royal Melbourne',
+                        address: 'Australia',
+                        isAlreadyPlayed: false,
+                      ),
+                      selectedFilter: null,
+                      index: index,
+                    );
+                  } else if (tab.tab == FilterProfile.MyPosts) {
+                    return _buildRowItem(context, index);
+                  } else {
+                    return GolfCourseWishListItem(
+                      course: CourseModel(
+                        name: 'Royal Melbourne',
+                        address: 'Australia',
+                        isAlreadyPlayed: false,
+                      ),
+                      selectedFilter: null,
+                      index: index,
+                      fixedWidth: fixedWidth,
+                    );
+                  }
+                },
+                value: state.selectedFilter,
+              );
             },
-            value: state.selectedFilter,
           );
         },
+      ),
+    );
+  }
+
+  Container _subHeaderForPost(BuildContext context) {
+    return Container(
+      color: context.colors.background,
+      padding: .only(left: 16.w, bottom: 4.h),
+      child: Row(
+        children: [
+          CommonButton(
+            titleText: 'Create Post',
+            prefix: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.transparent,
+                border: Border.all(color: Colors.white, width: 1.4.r),
+              ),
+              child: const Icon(Icons.add, color: Colors.white),
+            ),
+            onTap: () {
+              appRouter.push(const CreatePostRoute());
+            },
+          ),
+          10.width,
+          CommonText(
+            text: 'Golf memories and scorecards',
+            textColor: context.colors.tEXT_subDark,
+            fontSize: 14,
+          ),
+        ],
       ),
     );
   }
@@ -125,18 +214,12 @@ class ProfileScreen extends StatelessWidget {
             totalPosts: 20,
             totalWishlist: 30,
           ),
-          10.height,
-          if (state.selectedFilter != FilterProfile.MyPosts) ...[
-            _headline(context, state),
-            4.height,
-            _subHeader(cubit, state.selectedFilter),
-          ],
         ],
       ),
     );
   }
 
-  Widget _onColupse(
+  Widget _onColupseGenral(
     BuildContext context,
     ProfileCubit cubit,
     ProfileCubitState state,
@@ -156,46 +239,56 @@ class ProfileScreen extends StatelessWidget {
             totalPosts: 20,
             totalWishlist: 30,
           ),
-          4.height,
-          if (state.selectedFilter != FilterProfile.MyPosts)
-            _subHeader(cubit, state.selectedFilter),
         ],
       ),
     );
   }
 
-  Widget _subHeader(ProfileCubit cubit, FilterProfile filter) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final rattingWidth = ((constraints.maxWidth * .68) - 35) / 4;
-        return Row(
-          crossAxisAlignment: .end,
-          children: [
-            SizedBox(
-              width: (constraints.maxWidth * .32) + 35,
-              child: const Row(
-                children: [
-                  CommonText(
-                    left: 15,
+  Widget _subHeader(
+    ProfileCubit cubit,
+    FilterProfile filter, {
+    required double fixedWidth,
+    required double rattingWidth,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 6),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          SizedBox(
+            width: fixedWidth,
+
+            child: const Row(
+              children: [
+                SizedBox(
+                  width: 35,
+                  child: CommonText(
                     text: 'Rank',
                     fontSize: 11,
-                    fontWeight: .bold,
+                    fontWeight: FontWeight.bold,
+                    textAlign: .center,
                   ),
-                  Spacer(),
-                  CommonText(text: 'Courses', fontSize: 11, fontWeight: .bold),
-                  Spacer(),
-                ],
-              ),
+                ),
+                Spacer(),
+                CommonText(
+                  text: 'Courses',
+                  fontSize: 11,
+                  left: 10,
+                  fontWeight: FontWeight.bold,
+                  textAlign: .center,
+                ),
+                Spacer(),
+              ],
             ),
-            Expanded(
-              child: CategoryScrolledList(
-                rattingWidth: rattingWidth,
-                controllers: cubit.controllers,
-              ),
+          ),
+          Expanded(
+            child: CategoryScrolledList(
+              rattingWidth: rattingWidth,
+              controllers: cubit.controllers,
             ),
-          ],
-        );
-      },
+          ),
+        ],
+      ),
     );
   }
 

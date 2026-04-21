@@ -4,8 +4,6 @@
  * @Email: km.muzahid@gmail.com
  */
 
-
-
 class SignUpEntity {
   String? fullName;
   String? email;
@@ -15,5 +13,6 @@ class SignUpEntity {
   String? homeCourse;
   String? handicap;
   String? hometown;
+  String? phoneNumber;
   bool isAgree = false;
 }

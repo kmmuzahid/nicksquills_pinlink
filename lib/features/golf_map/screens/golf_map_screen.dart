@@ -56,33 +56,6 @@ class GolfMapScreen extends StatelessWidget {
     );
   }
 
-  Widget _headline(BuildContext context, GolfMapCubitState state) {
-    return Row(
-      children: [
-        CommonText(
-          text: 'All Courses',
-          fontSize: 16,
-          fontWeight: .bold,
-          textColor: context.colors.tEXT_white,
-        ),
-        const Spacer(),
-        GestureDetector(
-          onTap: () {
-            appRouter.push(
-              GolfMapViewRoute(selectedFilter: state.selectedFilter),
-            );
-          },
-          child: const CommonText(
-            text: 'View on Map (5)',
-            fontSize: 14,
-            fontWeight: .bold,
-            textColor: Color(0xff10B981),
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildFilterSection(
     BuildContext context,
     GolfMapCubit cubit,

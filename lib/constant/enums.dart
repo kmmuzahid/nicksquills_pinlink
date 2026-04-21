@@ -100,7 +100,7 @@ enum RatingCategories {
   teeBoxAndFairwayConditions("Tee Box & Fairway"),
   greensSpeed("Greens Speed"),
   greensCondition("Greens Condition"),
-  clubhouse("Clubhouse"),
+  clubhouse("Club House"),
   foodAndDrink("Food & Drink");
 
   final String displayName;

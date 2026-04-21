@@ -18,7 +18,12 @@ class SocialScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: SmartStaggeredLoader(
-        topWidget: _topWidget(context),
+        appbar: _topWidget(context),
+        onColapsAppbar: Container(
+          padding: const .only(bottom: 4),
+          color: context.colors.background,
+          child: _header(),
+        ),
         gridConfig: GridConfig(aspectRatio: 0.65),
         itemCount: 20,
         onRefresh: () {},
@@ -32,16 +37,36 @@ class SocialScreen extends StatelessWidget {
   Column _topWidget(BuildContext context) {
     return Column(
       children: [
-        18.height,
+        8.height,
         CommonText(
           text: 'See what your friends are playing and sharing',
           fontSize: 16,
           textColor: context.colors.tEXT_subDark,
           maxLines: 2,
         ).center,
-        18.height,
-        consentCard(context),
+        8.height,
+        _header(),
+        // 18.height,
+        // consentCard(context),
+        // 8.height,
+        // .end,
         10.height,
+      ],
+    );
+  }
+
+  Row _header() {
+    return Row(
+      children: [
+        Expanded(
+          child: CommonTextField(
+            hintText: 'Search content',
+            validationType: .notRequired,
+            borderRadius: 10,
+            onChanged: (value) {},
+          ),
+        ),
+        8.width,
         CommonButton(
           titleText: 'Create Post',
           prefix: Container(
@@ -55,8 +80,7 @@ class SocialScreen extends StatelessWidget {
           onTap: () {
             appRouter.push(const CreatePostRoute());
           },
-        ).end,
-        10.height,
+        ),
       ],
     );
   }

@@ -65,7 +65,7 @@ class ComparisonScreen extends StatelessWidget {
                   ),
               ],
             ),
-            onBackPress: () { 
+            onBackPress: () {
               if (questinIndex > 0) {
                 appRouter.replace(
                   ComparisonRoute(
@@ -81,7 +81,7 @@ class ComparisonScreen extends StatelessWidget {
           ),
           body: Column(
             children: [
-              20.height,
+              // 20.height,
               _flagIcon(context),
               CommonText(
                 text: rankingType == RankingType.courseRanking
@@ -102,18 +102,10 @@ class ComparisonScreen extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
               Expanded(
-                child: ListView.builder(
-                  padding: Constants.bodyPadding,
-                  itemCount: state.comparison[questinIndex].options.length,
-                  itemBuilder: (context, index) {
-                    final comparison = state.comparison[questinIndex].options[index];
-                    return GestureDetector(
-                      onTap: () {
-                        _onTapAnswer(state, cubit, context);
-                      },
-                      child: _answerBuilder(context, comparison),
-                    );
-                  },
+                child: SafeArea(
+                  top: false,
+                  bottom: true,
+                  child: _questions(state, context),
                 ),
               ),
               if (rankingType == RankingType.wishlistRanking)
@@ -124,7 +116,8 @@ class ComparisonScreen extends StatelessWidget {
                     children: [
                       4.height,
                       CommonText(
-                        text: 'This takes just a second and improves your recommendations.',
+                        text:
+                            'This takes just a second and improves your recommendations.',
                         fontSize: 12,
                         textColor: context.colors.tEXT_subDark,
                       ).center,
@@ -136,7 +129,8 @@ class ComparisonScreen extends StatelessWidget {
                           titleText: 'Skip the wishlist at this time',
                           buttonColor: Colors.transparent,
                           buttonRadius: 40,
-                          borderColor: context.colors.bACKGROUND_darkCardBoarder,
+                          borderColor:
+                              context.colors.bACKGROUND_darkCardBoarder,
                           titleColor: context.colors.tEXT_white,
                           suffix: Icon(
                             Icons.arrow_forward,
@@ -158,10 +152,44 @@ class ComparisonScreen extends StatelessWidget {
     );
   }
 
-  void _onTapAnswer(AddCourseState state, AddCourseCubit cubit, BuildContext context) {
-    if ((questinIndex < state.comparison.length - 1) && rankingType == RankingType.courseRanking) {
+  Widget _questions(AddCourseState state, BuildContext context) {
+    final comparison1 = state.comparison[questinIndex].options[0];
+    final comparison2 = state.comparison[questinIndex].options[1];
+    return Column(
+      children: [
+        Expanded(
+          child: GestureDetector(
+            onTap: () {
+              _onTapAnswer(state, cubit, context);
+            },
+            child: _answerBuilder(context, comparison1),
+          ),
+        ),
+        Expanded(
+          child: GestureDetector(
+            onTap: () {
+              _onTapAnswer(state, cubit, context);
+            },
+            child: _answerBuilder(context, comparison2),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _onTapAnswer(
+    AddCourseState state,
+    AddCourseCubit cubit,
+    BuildContext context,
+  ) {
+    if ((questinIndex < state.comparison.length - 1) &&
+        rankingType == RankingType.courseRanking) {
       appRouter.replace(
-        ComparisonRoute(cubit: cubit, questinIndex: questinIndex + 1, rankingType: rankingType),
+        ComparisonRoute(
+          cubit: cubit,
+          questinIndex: questinIndex + 1,
+          rankingType: rankingType,
+        ),
       );
     } else if (rankingType == RankingType.wishlistRanking &&
         questinIndex < state.comparison.length) {
@@ -170,14 +198,20 @@ class ComparisonScreen extends StatelessWidget {
       if (!isNaviagtion) appRouter.replaceAll([const NavigationRoute()]);
       context.read<NavigationCubit>().changeIndex(
         4,
-        filter: rankingType == RankingType.courseRanking ? .MyCourses : .MyWishlist,
+        filter: rankingType == RankingType.courseRanking
+            ? .MyCourses
+            : .MyWishlist,
       );
     }
   }
 
   void _goToWishList(AddCourseCubit cubit) {
     appRouter.replace(
-      ComparisonRoute(cubit: cubit, questinIndex: questinIndex, rankingType: rankingType),
+      ComparisonRoute(
+        cubit: cubit,
+        questinIndex: questinIndex,
+        rankingType: rankingType,
+      ),
     );
   }
 
@@ -188,12 +222,19 @@ class ComparisonScreen extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(32),
         color: context.colors.bACKGROUND_darkCard,
-        border: Border.all(color: context.colors.bACKGROUND_darkCardBoarder, width: 1.4),
+        border: Border.all(
+          color: context.colors.bACKGROUND_darkCardBoarder,
+          width: 1.4,
+        ),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
-          CommonText(text: 'Skip', fontSize: 16, textColor: context.colors.tEXT_white),
+          CommonText(
+            text: 'Skip',
+            fontSize: 16,
+            textColor: context.colors.tEXT_white,
+          ),
           4.width,
           Icon(Icons.arrow_forward, color: context.colors.tEXT_white, size: 15),
         ],
@@ -201,7 +242,10 @@ class ComparisonScreen extends StatelessWidget {
     );
   }
 
-  AspectRatio _answerBuilder(BuildContext context, ComparisonOptionModel comparison) {
+  AspectRatio _answerBuilder(
+    BuildContext context,
+    ComparisonOptionModel comparison,
+  ) {
     return AspectRatio(
       aspectRatio: 1.2,
       child: Container(
@@ -209,7 +253,10 @@ class ComparisonScreen extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           color: context.colors.bACKGROUND_darkCard,
-          border: Border.all(color: context.colors.bACKGROUND_darkCardBoarder, width: 1.4),
+          border: Border.all(
+            color: context.colors.bACKGROUND_darkCardBoarder,
+            width: 1.4,
+          ),
         ),
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -217,7 +264,7 @@ class ComparisonScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: CommonImage(
-                    width: constraints.maxWidth,
+                    // width: constraints.maxWidth,
                     src: comparison.image,
                     borderRadiusCustom: const BorderRadius.only(
                       topLeft: Radius.circular(16),
@@ -226,7 +273,7 @@ class ComparisonScreen extends StatelessWidget {
                     fill: .fill,
                   ),
                 ),
-                20.height,
+                10.height,
                 CommonText(
                   text: comparison.title,
                   fontSize: 20,
@@ -238,7 +285,7 @@ class ComparisonScreen extends StatelessWidget {
                   fontSize: 16,
                   textColor: context.colors.tEXT_subDark,
                 ).center,
-                20.height,
+                10.height,
               ],
             );
           },

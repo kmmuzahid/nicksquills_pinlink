@@ -13,10 +13,12 @@ class GolfCourseWishListItem extends StatelessWidget {
     required this.course,
     required this.index,
     required this.selectedFilter,
+    required this.fixedWidth,
   });
   final CourseModel course;
   final int index;
   final MapFilters? selectedFilter;
+  final double fixedWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class GolfCourseWishListItem extends StatelessWidget {
 
   Widget _buildCourseCard(BuildContext context, CourseModel course, int index) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 6),
       margin: const EdgeInsets.symmetric(vertical: 4),
       decoration: BoxDecoration(
         color: context.colors.bACKGROUND_darkCard,
@@ -35,40 +37,49 @@ class GolfCourseWishListItem extends StatelessWidget {
           width: 1.4,
         ),
       ),
-      child: Column(
+      child: Row(
         children: [
-          Row(
-            children: [
-              TextToAvatar(text: (index + 1).toString(), color: Colors.red),
-              Column(
-                crossAxisAlignment: .start,
-                children: [
-                  CommonText(
-                    text: course.name,
-                    fontSize: 16,
-                    left: 10,
-                    textColor: context.colors.tEXT_white,
-                    fontWeight: FontWeight.bold,
-                  ).start,
-                  CommonText(
-                    text: course.address,
-                    left: 10,
-                    fontSize: 14,
-                    textColor: context.colors.pRIMARY_priSoft,
-                    fontWeight: FontWeight.w400,
-                  ).start,
-                ],
-              ),
-              const Spacer(),
-              CommonButton(
-                titleText: 'Mark Played',
-                titleColor: const Color(0xff10B981),
-                buttonHeight: 40,
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                buttonRadius: 30,
-                buttonColor: const Color(0xff10B981).withValues(alpha: 0.1),
-              ),
-            ],
+          SizedBox(
+            width: fixedWidth,
+            child: Row(
+              children: [
+                TextToAvatar(
+                  size: 35,
+                  text: (index + 1).toString(),
+                  color: Colors.red,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CommonText(
+                        text: course.name,
+                        fontSize: 16,
+                        left: 10,
+                        textColor: context.colors.tEXT_white,
+                        fontWeight: FontWeight.bold,
+                      ).start,
+                      CommonText(
+                        text: course.address,
+                        left: 10,
+                        fontSize: 14,
+                        textColor: context.colors.pRIMARY_priSoft,
+                        fontWeight: FontWeight.w400,
+                      ).start,
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Spacer(),
+          CommonButton(
+            titleText: 'Mark Played',
+            titleColor: const Color(0xff10B981),
+            buttonHeight: 40,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            buttonRadius: 30,
+            buttonColor: const Color(0xff10B981).withValues(alpha: 0.1),
           ),
         ],
       ),

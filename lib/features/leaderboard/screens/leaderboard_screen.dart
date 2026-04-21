@@ -12,10 +12,18 @@ import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/constant/enums.dart';
 import 'package:pinlink/features/leaderboard/cubit/leaderboard_cubit.dart';
 import 'package:pinlink/features/leaderboard/cubit/leaderboard_state.dart';
+import 'package:pinlink/features/leaderboard/widgets/how_points_earned_dialog.dart';
 import 'package:pinlink/gen/assets.gen.dart';
 
-class LeaderboardScreen extends StatelessWidget {
+class LeaderboardScreen extends StatefulWidget {
   const LeaderboardScreen({super.key});
+
+  @override
+  State<LeaderboardScreen> createState() => _LeaderboardScreenState();
+}
+
+class _LeaderboardScreenState extends State<LeaderboardScreen> {
+  final GlobalKey _infoIconKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -30,15 +38,30 @@ class LeaderboardScreen extends StatelessWidget {
               if (index == 0) {
                 return _topChild(context, state, cubit);
               }
-              if (index == 1) return _buildPodiumSection(context, state.searchType, maxLength: 20);
+              if (index == 1)
+                return _buildPodiumSection(
+                  context,
+                  state.searchType,
+                  maxLength: 20,
+                );
               return _buildRankList(
                 context,
                 name: "Emma Davis",
                 points: 100,
-                miles: state.searchType == LeaderboardSearchType.TravelDistance ? 100 : null,
-                rounds: state.searchType == LeaderboardSearchType.MostRoundPlayed ? 80 : null,
-                course: state.searchType == LeaderboardSearchType.MostCoursesPlayed ? 128 : null,
-                times: state.searchType == LeaderboardSearchType.PlayedMostPinLinks5Courses
+                miles: state.searchType == LeaderboardSearchType.TravelDistance
+                    ? 100
+                    : null,
+                rounds:
+                    state.searchType == LeaderboardSearchType.MostRoundPlayed
+                    ? 80
+                    : null,
+                course:
+                    state.searchType == LeaderboardSearchType.MostCoursesPlayed
+                    ? 128
+                    : null,
+                times:
+                    state.searchType ==
+                        LeaderboardSearchType.PlayedMostPinLinks5Courses
                     ? 85
                     : null,
                 rank: index + 2,
@@ -50,7 +73,11 @@ class LeaderboardScreen extends StatelessWidget {
     );
   }
 
-  Column _topChild(BuildContext context, LeaderboardState state, LeaderboardCubit cubit) {
+  Column _topChild(
+    BuildContext context,
+    LeaderboardState state,
+    LeaderboardCubit cubit,
+  ) {
     return Column(
       children: [
         Row(
@@ -62,8 +89,44 @@ class LeaderboardScreen extends StatelessWidget {
             ),
             const Spacer(),
             IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.info_outline, size: 20, color: context.colors.tEXT_subDark),
+              key: _infoIconKey,
+              onPressed: () {
+                final RenderBox renderBox = _infoIconKey.currentContext!
+                    .findRenderObject() as RenderBox;
+                final Offset offset = renderBox.localToGlobal(Offset.zero);
+                final Size size = renderBox.size;
+
+                showGeneralDialog(
+                  context: context,
+                  barrierDismissible: true,
+                  barrierLabel: 'Dismiss',
+                  barrierColor: Colors.black.withOpacity(0.3),
+                  transitionDuration: const Duration(milliseconds: 200),
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return Stack(
+                      children: [
+                        Positioned(
+                          left: 20,
+                          right: 20,
+                          top: offset.dy + size.height + 10,
+                          child: FadeTransition(
+                            opacity: animation,
+                            child: const Material(
+                              color: Colors.transparent,
+                              child: HowPointsEarnedDialog(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              icon: Icon(
+                Icons.info_outline,
+                size: 20,
+                color: context.colors.tEXT_subDark,
+              ),
             ),
           ],
         ),
@@ -87,7 +150,10 @@ class LeaderboardScreen extends StatelessWidget {
         CommonDropDown<LeaderboardSearchType>(
           borderRadius: 8,
           backgroundColor: context.colors.bACKGROUND_darkCard,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 10,
+          ),
           textStyle: TextStyle(color: context.colors.tEXT_white, fontSize: 14),
           initalValue: state.searchType,
           hint: "Search by",
@@ -103,13 +169,11 @@ class LeaderboardScreen extends StatelessWidget {
     );
   }
 
-
-
   // Button row (Build Tournament / Add Friend)
   Widget _buildActionButtons(BuildContext context) {
     return Row(
+      mainAxisAlignment: .center,
       children: [
-        const Spacer(),
         CommonButton(
           buttonHeight: 36,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
@@ -194,10 +258,20 @@ class LeaderboardScreen extends StatelessWidget {
                   name: "Emma Davis",
                   points: 100,
                   rankSvg: rankSvg,
-                  miles: searchType == LeaderboardSearchType.TravelDistance ? 100 : null,
-                  rounds: searchType == LeaderboardSearchType.MostRoundPlayed ? 80 : null,
-                  course: searchType == LeaderboardSearchType.MostCoursesPlayed ? 128 : null,
-                  times: searchType == LeaderboardSearchType.PlayedMostPinLinks5Courses ? 85 : null,
+                  miles: searchType == LeaderboardSearchType.TravelDistance
+                      ? 100
+                      : null,
+                  rounds: searchType == LeaderboardSearchType.MostRoundPlayed
+                      ? 80
+                      : null,
+                  course: searchType == LeaderboardSearchType.MostCoursesPlayed
+                      ? 128
+                      : null,
+                  times:
+                      searchType ==
+                          LeaderboardSearchType.PlayedMostPinLinks5Courses
+                      ? 85
+                      : null,
                   rank: rank,
                 );
               }),
@@ -241,7 +315,8 @@ class LeaderboardScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: SvgPicture.asset(rankSvg!, height: 30, width: 23),
           ),
-        if (rank == 1) TextToAvatar(size: height + 10, text: name, gradient: gradient),
+        if (rank == 1)
+          TextToAvatar(size: height + 10, text: name, gradient: gradient),
         if (rank != 1)
           SizedBox(
             height: height,
@@ -251,7 +326,11 @@ class LeaderboardScreen extends StatelessWidget {
                 Positioned.fill(
                   child: Container(
                     padding: const EdgeInsets.only(right: 5),
-                    child: TextToAvatar(size: height + 10, text: name, gradient: gradient),
+                    child: TextToAvatar(
+                      size: height + 10,
+                      text: name,
+                      gradient: gradient,
+                    ),
                   ),
                 ),
                 if (rankSvg != null)
@@ -271,10 +350,19 @@ class LeaderboardScreen extends StatelessWidget {
           fontWeight: .bold,
           textColor: context.colors.tEXT_white,
         ),
-        CommonText(text: '$points points', fontSize: 12, textColor: context.colors.tEXT_white),
+        CommonText(
+          text: '$points points',
+          fontSize: 12,
+          textColor: context.colors.tEXT_white,
+        ),
         if (rounds != null || course != null || miles != null || times != null)
           CommonText(
-            text: _getMiddleText(rounds: rounds, course: course, miles: miles, times: times),
+            text: _getMiddleText(
+              rounds: rounds,
+              course: course,
+              miles: miles,
+              times: times,
+            ),
             fontSize: 12,
             textColor: context.colors.tEXT_subDark,
           ),
@@ -333,10 +421,24 @@ class LeaderboardScreen extends StatelessWidget {
               mainAxisSize: .min,
               crossAxisAlignment: .start,
               children: [
-                Text(name, style: TextStyle(color: context.colors.tEXT_white, fontSize: 16)),
                 Text(
-                  _getMiddleText(rounds: rounds, course: course, miles: miles, times: times),
-                  style: TextStyle(color: context.colors.tEXT_subDark, fontSize: 14),
+                  name,
+                  style: TextStyle(
+                    color: context.colors.tEXT_white,
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  _getMiddleText(
+                    rounds: rounds,
+                    course: course,
+                    miles: miles,
+                    times: times,
+                  ),
+                  style: TextStyle(
+                    color: context.colors.tEXT_subDark,
+                    fontSize: 14,
+                  ),
                 ),
               ],
             ),
@@ -378,7 +480,10 @@ class LeaderboardScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: context.colors.bACKGROUND_darkCard,
         borderRadius: BorderRadius.circular(40),
-        border: Border.all(color: context.colors.bACKGROUND_darkCard, width: 1.2),
+        border: Border.all(
+          color: context.colors.bACKGROUND_darkCard,
+          width: 1.2,
+        ),
       ),
 
       child: Row(

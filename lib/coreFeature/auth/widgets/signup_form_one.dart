@@ -41,13 +41,21 @@ class SignupFormOne extends StatelessWidget {
           onSaved: (value, controller) => entity.username = value,
         ),
         10.height,
-// Email Field
+        // Email Field
         BuildLabel(AppString.email),
         CommonTextField(
           hintText: 'Enter Your Email',
           validationType: ValidationType.validateEmail,
           prefixIcon: const Icon(Icons.email_outlined),
           onSaved: (value, controller) => entity.email = value,
+        ),
+        10.height,
+        BuildLabel(AppString.phone_number),
+        CommonTextField(
+          hintText: 'Enter Your Phone Number',
+          validationType: ValidationType.validatePhone,
+          prefixIcon: const Icon(Icons.phone_outlined),
+          onSaved: (value, controller) => entity.phoneNumber = value,
         ),
         10.height,
         // Password Field

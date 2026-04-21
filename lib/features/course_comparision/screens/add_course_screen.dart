@@ -20,7 +20,11 @@ import 'package:pinlink/features/course_comparision/widgets/new_course_dailoge_w
 
 @RoutePage()
 class AddCourseScreen extends StatelessWidget {
-  const AddCourseScreen({super.key, this.enableSafeArea = true, this.isInNavigation = false});
+  const AddCourseScreen({
+    super.key,
+    this.enableSafeArea = true,
+    this.isInNavigation = false,
+  });
   final bool enableSafeArea;
   final bool isInNavigation;
 
@@ -33,7 +37,8 @@ class AddCourseScreen extends StatelessWidget {
               disableBack: true,
               hideBack: true,
               appbarConfig: AppbarConfig(
-                decoration: () => const BoxDecoration(color: Colors.transparent),
+                decoration: () =>
+                    const BoxDecoration(color: Colors.transparent),
               ),
             ),
       body: CubitScope(
@@ -61,7 +66,6 @@ class AddCourseScreen extends StatelessWidget {
                   ),
                 ),
               ],
-            
 
               Flexible(
                 child: SmartListLoader(
@@ -76,10 +80,9 @@ class AddCourseScreen extends StatelessWidget {
                     child: _appbar(context, state),
                   ),
 
-                  itemCount: state.courses.length + state.selectedCourses.length + 1,
+                  itemCount:
+                      state.courses.length + state.selectedCourses.length + 1,
                   itemBuilder: (context, index) {
-                  
-
                     if (index < state.selectedCourses.length) {
                       return _buildCourseCard(
                         context,
@@ -116,7 +119,7 @@ class AddCourseScreen extends StatelessWidget {
                     titleColor: context.colors.tEXT_white,
                     borderWidth: 2,
                     buttonWidth: double.infinity,
-                    titleText: 'Continue to Course Rnaking',
+                    titleText: 'Continue to Course Ranking',
                     onTap: () {
                       if (state.comparison.isNotEmpty) {
                         context.router.push(
@@ -206,13 +209,19 @@ class AddCourseScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: context.colors.bACKGROUND_darkCard,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: context.colors.bACKGROUND_darkCardBoarder, width: 1.4),
+        border: Border.all(
+          color: context.colors.bACKGROUND_darkCardBoarder,
+          width: 1.4,
+        ),
       ),
       child: Column(
         children: [
           Row(
             children: [
-              Icon(Icons.location_on_outlined, color: context.colors.tEXT_white),
+              Icon(
+                Icons.location_on_outlined,
+                color: context.colors.tEXT_white,
+              ),
               Column(
                 crossAxisAlignment: .start,
                 children: [
@@ -279,7 +288,9 @@ class AddCourseScreen extends StatelessWidget {
                     size: 24,
                     color: course.isAlreadyPlayed && isInNavigation && !isAdded
                         ? context.colors.ratingPremiumTags_goldAccent
-                        : context.colors.successVerifiedPositivestats_freshGrass,
+                        : context
+                              .colors
+                              .successVerifiedPositivestats_freshGrass,
                   ),
                 ),
               ),
@@ -300,7 +311,10 @@ class AddCourseScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: context.colors.bACKGROUND_darkCard,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: context.colors.bACKGROUND_darkCard, width: 1.2),
+        border: Border.all(
+          color: context.colors.bACKGROUND_darkCard,
+          width: 1.2,
+        ),
       ),
 
       child: Row(
@@ -351,7 +365,9 @@ class AddCourseScreen extends StatelessWidget {
                     ? Icons.golf_course_outlined
                     : Icons.favorite,
                 size: 16,
-                color: selectedTheme == rankingType ? Colors.red : context.colors.tEXT_white,
+                color: selectedTheme == rankingType
+                    ? Colors.red
+                    : context.colors.tEXT_white,
               ),
               text: rankingType.displayName,
               textColor: context.colors.tEXT_white,

@@ -21,31 +21,38 @@ class FilterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isSelected = selectedFilter == title;
+    final color = isSelected
+        ? context.colors.tEXT_white
+        : context.colors.tEXT_subDark;
+
     return GestureDetector(
       onTap: () => onTap(title),
       child: CustomCard(
         width: (CoreScreenUtils.deviceSize.width - 30.w) / 4,
         padding: .symmetric(horizontal: 5.w, vertical: 8.h),
-        borderColor: selectedFilter == title ? Colors.transparent : null,
-        backgroundColor: selectedFilter == title ? Colors.transparent : null,
+        margin: .only(bottom: 4.h),
+        borderColor: context.colors.iconBorder,
+        backgroundColor: context.colors.bACKGROUND_darkCard,
         child: Column(
           crossAxisAlignment: .center,
           children: [
-            Icon(iconData, color: context.colors.tEXT_subDark, size: 25),
+            Icon(iconData, color: color, size: 25),
             const SizedBox(width: 8),
             CommonText(
               text: title.displayName,
               maxLines: 1,
               fontSize: 14,
-              fontWeight: .bold,
-              textColor: context.colors.tEXT_white,
+              fontWeight: isSelected ? FontWeight.w800 : FontWeight.w700,
+              textColor: color,
             ),
             CommonText(
               textAlign: .left,
               text: subtitle,
               fontSize: 12,
               maxLines: 1,
-              textColor: context.colors.tEXT_subDark,
+              textColor: color,
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
             ),
           ],
         ),
