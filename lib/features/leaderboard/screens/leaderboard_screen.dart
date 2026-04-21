@@ -6,6 +6,7 @@ import 'package:pinlink/common_widgets/info_card_widget.dart';
 import 'package:pinlink/common_widgets/simple_background.dart';
 import 'package:pinlink/common_widgets/text_to_avater.dart';
 import 'package:pinlink/config/bloc/cubit_scope.dart';
+import 'package:pinlink/config/bloc/cubit_scope_value.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
@@ -91,8 +92,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             IconButton(
               key: _infoIconKey,
               onPressed: () {
-                final RenderBox renderBox = _infoIconKey.currentContext!
-                    .findRenderObject() as RenderBox;
+                final RenderBox renderBox =
+                    _infoIconKey.currentContext!.findRenderObject()
+                        as RenderBox;
                 final Offset offset = renderBox.localToGlobal(Offset.zero);
                 final Size size = renderBox.size;
 
@@ -135,9 +137,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
           description:
               'Rankings update automatically when you add or compare courses using Add / Play.',
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 15),
         _buildActionButtons(context),
-        const SizedBox(height: 20),
+        const SizedBox(height: 6),
         _buildSegmentedButton(
           selectedLeaderboardType: state.leaderboardType,
           onTap: (p0) {

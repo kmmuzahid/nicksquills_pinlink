@@ -10,8 +10,14 @@ import 'package:pinlink/coreFeature/navigation/cubit/navigation_state.dart';
 class NavigationCubit extends SafeCubit<NavigationState> {
   NavigationCubit() : super(NavigationState());
 
-
-  void changeIndex(int index, {FilterProfile filter = FilterProfile.MyCourses}) {
+  void changeIndex(
+    int index, {
+    FilterProfile filter = FilterProfile.MyCourses,
+  }) {
     emit(state.copyWith(currentIndex: index, filter: filter));
+  }
+
+  void togglePostVisibility() {
+    emit(state.copyWith(isPublicPostEnabled: !state.isPublicPostEnabled));
   }
 }

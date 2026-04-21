@@ -139,7 +139,7 @@ class _GolfCoursePlayedItemState extends State<GolfCoursePlayedItem> {
                         fontWeight: FontWeight.w400,
                       ).start,
                       CommonText(
-                        text: '🤾‍♂️ 2024-01-15',
+                        text: '2024-01-15',
                         left: 10,
                         fontSize: 11,
                         textColor: context.colors.tEXT_sub,

@@ -81,7 +81,9 @@ class NavigationScreen extends StatelessWidget {
       builder: (context, cubit, state) {
         var title = 'Rank';
         if (state.currentIndex == 0) {
-          title = 'Friends Feed';
+          title = state.isPublicPostEnabled
+              ? "PinLinks Public"
+              : 'Friends Feed';
         } else if (state.currentIndex == 1) {
           title = 'Leaderboard';
         } else if (state.currentIndex == 2) {
@@ -93,7 +95,12 @@ class NavigationScreen extends StatelessWidget {
         }
         return SimpleBackground(
           key: scaffoldKey,
-          appBar: _appbar(title),
+          appBar: _appbar(
+            title,
+            state.currentIndex,
+            state: state,
+            cubit: cubit,
+          ),
 
           body: AnimatedSwitcher(
             duration: const Duration(milliseconds: 350),
@@ -132,7 +139,12 @@ class NavigationScreen extends StatelessWidget {
     );
   }
 
-  CommonAppBar _appbar(String title) {
+  CommonAppBar _appbar(
+    String title,
+    int index, {
+    required NavigationState state,
+    required NavigationCubit cubit,
+  }) {
     return CommonAppBar(
       disableBack: true,
       hideBack: false,
@@ -147,24 +159,57 @@ class NavigationScreen extends StatelessWidget {
         height: 70,
         titleSpacing: 16,
         actions: [
-          IconButton(
-            onPressed: () {
+          if (index == 1)
+            GestureDetector(
+              onTap: () {},
+              child: SizedBox(
+                width: 25,
+                height: 25,
+                child: CommonImage(src: Assets.images.invite, fill: .contain),
+              ),
+            ),
+          if (index == 0)
+            GestureDetector(
+              onTap: () {
+                cubit.togglePostVisibility();
+              },
+              child: SizedBox(
+                width: 25,
+                height: 25,
+                child: CommonImage(
+                  src: state.isPublicPostEnabled
+                      ? Assets.images.public
+                      : Assets.images.friend,
+                  fill: .contain,
+                ),
+              ),
+            ),
+          6.width,
+          GestureDetector(
+            onTap: () {
               appRouter.push(const SettingRoute());
             },
-            icon: SizedBox(
+            child: SizedBox(
               width: 25,
               height: 25,
-              child: CommonImage(src: Assets.images.settingIcon),
+              child: CommonImage(
+                src: Assets.images.settingIcon,
+                fill: .contain,
+              ),
             ),
           ),
-          IconButton(
-            onPressed: () {},
-            icon: SizedBox(
+          8.width,
+          GestureDetector(
+            onTap: () {},
+            child: SizedBox(
               width: 25,
               height: 25,
               child: Badge.count(
                 count: 1,
-                child: CommonImage(src: Assets.images.notificationIcon),
+                child: CommonImage(
+                  src: Assets.images.notificationIcon,
+                  fill: .contain,
+                ),
               ),
             ),
           ),

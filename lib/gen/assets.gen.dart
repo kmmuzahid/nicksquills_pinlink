@@ -41,6 +41,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/facebook.svg
   String get facebook => 'assets/images/facebook.svg';
 
+  /// File path: assets/images/friend.svg
+  String get friend => 'assets/images/friend.svg';
+
   /// File path: assets/images/globe.png
   AssetGenImage get globe => const AssetGenImage('assets/images/globe.png');
 
@@ -49,6 +52,9 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/instagram.svg
   String get instagram => 'assets/images/instagram.svg';
+
+  /// File path: assets/images/invite.svg
+  String get invite => 'assets/images/invite.svg';
 
   /// File path: assets/images/map_sample.png
   AssetGenImage get mapSample =>
@@ -82,6 +88,9 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/privacy_icon.svg
   String get privacyIcon => 'assets/images/privacy_icon.svg';
+
+  /// File path: assets/images/public.svg
+  String get public => 'assets/images/public.svg';
 
   /// File path: assets/images/raffle_icon.svg
   String get raffleIcon => 'assets/images/raffle_icon.svg';
@@ -119,9 +128,11 @@ class $AssetsImagesGen {
     authBackground,
     back,
     facebook,
+    friend,
     globe,
     google,
     instagram,
+    invite,
     mapSample,
     marker,
     notificationIcon,
@@ -131,6 +142,7 @@ class $AssetsImagesGen {
     onboarding3,
     onboarding4,
     privacyIcon,
+    public,
     raffleIcon,
     rank1,
     rank2,

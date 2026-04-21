@@ -28,7 +28,7 @@ class ProfileScreen extends StatelessWidget {
         builder: (context, cubit, state) {
           return LayoutBuilder(
             builder: (context, constraints) {
-              final fixedWidth = (constraints.maxWidth * 0.4);
+              final fixedWidth = (constraints.maxWidth * 0.42);
               final rattingWidth = (constraints.maxWidth - fixedWidth) / 4;
               return SmartTabListLoader(
                 appbar: _appbar(context, cubit, state),

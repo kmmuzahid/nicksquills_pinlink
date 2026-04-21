@@ -198,7 +198,7 @@ class CreatePostScreen extends StatelessWidget {
                             controller.clear();
                             cubit.addLink(value);
                           },
-                          child: const Icon(Icons.send),
+                          child: const Icon(Icons.add),
                         );
                       },
                     ),

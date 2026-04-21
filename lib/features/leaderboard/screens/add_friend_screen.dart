@@ -32,9 +32,13 @@ class FriendsScreen extends StatelessWidget {
       children: [
         10.height,
         _buildAddFriendSection(context),
-        const SizedBox(height: 16),
-        _buildStatusMessage(context),
-        const SizedBox(height: 24),
+        10.height,
+        // _buildStatusMessage(context),
+        CommonButton(
+          titleText: 'Invite Friends to Join PinLinks!',
+          onTap: () {},
+        ),
+        10.height,
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -75,6 +79,7 @@ class FriendsScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
+
           CommonText(
             text: 'Add friend by username or email (they must have an account)',
             style: TextStyle(color: context.colors.tEXT_subDark, fontSize: 12),
