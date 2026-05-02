@@ -163,7 +163,11 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             if (value == null) return;
             cubit.changeSearchType(value);
           },
-          nameBuilder: (value) => value.displayName,
+          nameBuilder: (value) => CommonText(
+            text: value.item.displayName,
+            textColor: context.colors.tEXT_subDark,
+            fontSize: 14,
+          ),
         ),
         10.height,
       ],

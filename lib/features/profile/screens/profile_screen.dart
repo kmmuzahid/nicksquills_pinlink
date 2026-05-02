@@ -36,9 +36,13 @@ class ProfileScreen extends StatelessWidget {
               return SmartTabListLoader(
                 appbar: _appbar(context, cubit, state),
                 onColapsAppbar: _onColupseGenral(context, cubit, state),
+
                 padding: Constants.bodyPadding,
                 tabs: [
                   SmartTabConfig(
+                    onReorder: (oldIndex, newIndex) {
+                      cubit.reorderCourses(oldIndex, newIndex);
+                    },
                     subAppBar: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
@@ -75,7 +79,7 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                     tab: FilterProfile.MyCourses,
-                    itemCount: 80,
+                    itemCount: state.courses.length,
                   ),
                   SmartTabConfig(
                     tab: FilterProfile.MyPosts,
@@ -101,14 +105,11 @@ class ProfileScreen extends StatelessWidget {
                 itemBuilder: (tab, index) {
                   if (tab.tab == FilterProfile.MyCourses) {
                     return GolfCoursePlayedItem(
+                      key: ValueKey(state.courses[index].name),
                       controllers: cubit.controllers,
                       fixedWidth: fixedWidth,
                       rattingWidth: rattingWidth,
-                      course: CourseModel(
-                        name: 'Royal Melbourne',
-                        address: 'Australia',
-                        isAlreadyPlayed: false,
-                      ),
+                      course: state.courses[index],
                       selectedFilter: null,
                       index: index,
                     );

@@ -161,18 +161,29 @@ class TournamentListScreen extends StatelessWidget {
         Expanded(
           child: CommonDropDown(
             hint: 'Status',
-            suffixIcon: Icon(Icons.arrow_forward_ios, color: context.colors.tEXT_subDark),
-            contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            suffixIcon: Icon(
+              Icons.arrow_forward_ios,
+              color: context.colors.tEXT_subDark,
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 10,
+              horizontal: 10,
+            ),
             backgroundColor: Colors.transparent,
             borderRadius: 8,
             items: const [],
             onChanged: (value) {},
-            nameBuilder: (value) => value,
+            nameBuilder: (value) => CommonText(
+              text: value.item,
+              textColor: context.colors.tEXT_subDark,
+            ),
           ),
         ),
         10.width,
 
-        Expanded(child: CommonDateInputTextField(backgroundColor: Colors.transparent)),
+        Expanded(
+          child: CommonDateInputTextField(backgroundColor: Colors.transparent),
+        ),
       ],
     );
   }
@@ -227,7 +238,12 @@ class TournamentListScreen extends StatelessWidget {
             textColor: context.colors.tEXT_subDark,
             maxLines: 2,
           ),
-          CommonText(text: value, textColor: color, fontWeight: FontWeight.w500, fontSize: 22),
+          CommonText(
+            text: value,
+            textColor: color,
+            fontWeight: FontWeight.w500,
+            fontSize: 22,
+          ),
         ],
       ),
     );

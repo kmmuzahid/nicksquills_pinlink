@@ -3,6 +3,7 @@ import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:pinlink/common_widgets/show_url_widget.dart';
 import 'package:pinlink/common_widgets/simple_background.dart';
+import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/constant/constants.dart';
 import 'package:pinlink/features/social/widgets/post_text_widget.dart';
 
@@ -23,7 +24,8 @@ class PostDetailsScreen extends StatelessWidget {
             right: 0,
             child: CommonAppBar(
               appbarConfig: AppbarConfig(
-                decoration: () => const BoxDecoration(color: Colors.transparent),
+                decoration: () =>
+                    const BoxDecoration(color: Colors.transparent),
               ),
             ),
           ),
@@ -49,19 +51,36 @@ class PostDetailsScreen extends StatelessWidget {
                         mainAxisAlignment: .center,
                         crossAxisAlignment: .center,
                         children: [
-                          _buildActionButton(Icons.favorite, "42", Colors.red).end,
+                          _buildActionButton(
+                            Icons.favorite,
+                            "42",
+                            Colors.red,
+                          ).end,
                           const SizedBox(height: 20),
-                          _buildActionButton(Icons.chat_bubble_outline, "35", Colors.white).end,
+                          _buildActionButton(
+                            Icons.chat_bubble_outline,
+                            "35",
+                            Colors.white,
+                          ).end,
                           const SizedBox(height: 20),
-                          _buildActionButton(Icons.share, "52", Colors.white).end,
+                          _buildActionButton(
+                            Icons.share,
+                            "52",
+                            Colors.white,
+                          ).end,
                           const SizedBox(height: 20),
                           CommonPopupMenu(
-                            showIconTrigger: true,
-                            showTextTrigger: false,
-                            primaryColor: Colors.white,
-                            onPrimaryColor: Colors.white,
-                            menuTextStyle: const TextStyle(color: Colors.black),
+                            triggerBuilder: (property) => const Icon(
+                              Icons.more_vert_outlined,
+                              color: Colors.black,
+                              size: 30,
+                            ),
+
                             items: const ['Report User', 'Report Post'],
+                            itemBuilder: (property) => CommonText(
+                              text: property.item ?? '',
+                              textColor: context.colors.tEXT_sub,
+                            ),
                             onItemSelected: (value) {},
                           ),
                         ],
@@ -83,7 +102,10 @@ class PostDetailsScreen extends StatelessWidget {
                           scrollDirection: .horizontal,
                           child: Row(
                             children: [
-                              ShowUrlWidget(url: 'https://www.youtube.com/watch?v=1234567890'),
+                              ShowUrlWidget(
+                                url:
+                                    'https://www.youtube.com/watch?v=1234567890',
+                              ),
                               ShowUrlWidget(url: 'https://www.instagram.com/'),
                               ShowUrlWidget(url: 'https://www.facebook.com/'),
                             ],
@@ -93,7 +115,8 @@ class PostDetailsScreen extends StatelessWidget {
                         _buildPostStats(),
                         const SizedBox(height: 12),
                         const CommonText(
-                          text: "Amazing weather today! Course was in perfect condition.",
+                          text:
+                              "Amazing weather today! Course was in perfect condition.",
                           maxLines: 2,
                           textAlign: .start,
                           textColor: Colors.white,
@@ -118,7 +141,6 @@ class PostDetailsScreen extends StatelessWidget {
     );
   }
 
-
   Widget _buildActionButton(IconData icon, String label, Color color) {
     return Padding(
       padding: const EdgeInsets.only(right: 10),
@@ -128,7 +150,10 @@ class PostDetailsScreen extends StatelessWidget {
         crossAxisAlignment: .center,
         children: [
           Icon(icon, color: color, size: 30),
-          Text(label, style: const TextStyle(color: Colors.white, fontSize: 12)),
+          Text(
+            label,
+            style: const TextStyle(color: Colors.white, fontSize: 12),
+          ),
         ],
       ),
     );
@@ -181,7 +206,10 @@ class PostDetailsScreen extends StatelessWidget {
             ],
           ),
         ),
-        const Text("23 minutes ago", style: TextStyle(color: Colors.white54, fontSize: 10)),
+        const Text(
+          "23 minutes ago",
+          style: TextStyle(color: Colors.white54, fontSize: 10),
+        ),
       ],
     );
   }

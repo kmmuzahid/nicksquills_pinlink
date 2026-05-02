@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:pinlink/common_widgets/text_to_avater.dart';
@@ -92,7 +90,7 @@ class _GolfCoursePlayedItemState extends State<GolfCoursePlayedItem> {
   }
 
   Widget _buildCourseCard(BuildContext context, CourseModel course, int index) {
-    return Container(
+    final child = Container(
       alignment: Alignment.center,
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 6),
       decoration: BoxDecoration(
@@ -221,6 +219,11 @@ class _GolfCoursePlayedItemState extends State<GolfCoursePlayedItem> {
         ],
       ),
     );
+
+    if (widget.selectedFilter == MapFilters.Played) {
+      return ReorderableDragStartListener(index: index, child: child);
+    }
+    return child;
   }
 
   //ratting icon

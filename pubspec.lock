@@ -245,8 +245,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "1.0.88"
-      resolved-ref: "0db26a90a9ab3f1224de54344e8a96e79899f151"
+      ref: "1.1.9"
+      resolved-ref: a8eaf9fb7abc66d38b702dc202adf734e0658d87
       url: "https://github.com/kmmuzahid/flutter_core_kit.git"
     source: git
     version: "0.0.1"
@@ -471,6 +471,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.34"
+  flutter_reorderable_grid_view:
+    dependency: transitive
+    description:
+      name: flutter_reorderable_grid_view
+      sha256: "4b7752425dba3f5dec03dd8d11c63027592535c7b7ece65e2c9573a2ea310206"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.6.0"
   flutter_secure_storage:
     dependency: "direct main"
     description:
