@@ -102,28 +102,21 @@ class NavigationScreen extends StatelessWidget {
             cubit: cubit,
           ),
 
-          body: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 350),
-
-            transitionBuilder: (child, animation) {
-              return SlideTransition(
-                position: Tween(begin: const Offset(0.2, 0), end: Offset.zero)
-                    .animate(
-                      CurvedAnimation(
-                        parent: animation,
-                        curve: Curves.easeOutCubic,
-                      ),
-                    ),
-                child: FadeTransition(opacity: animation, child: child),
+          body: Stack(
+            children: getpage().asMap().entries.map((entry) {
+              final index = entry.key;
+              final item = entry.value;
+              final isActive = state.currentIndex == index;
+              return IgnorePointer(
+                ignoring: !isActive,
+                child: AnimatedOpacity(
+                  opacity: isActive ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 350),
+                  curve: Curves.easeOutCubic,
+                  child: item.screen,
+                ),
               );
-            },
-            child: KeyedSubtree(
-              key: ValueKey(state.currentIndex),
-              child: Align(
-                alignment: .topStart,
-                child: currentPage(state.currentIndex, context),
-              ),
-            ),
+            }).toList(),
           ),
           bottomNavigationBar: CustomBottomNavBar(
             currentIndex: state.currentIndex,
@@ -218,14 +211,6 @@ class NavigationScreen extends StatelessWidget {
     );
   }
 
-  Widget currentPage(int index, BuildContext context) {
-    final screen = getpage()[index].screen;
-    AppLogger.info(
-      'Switched to -> ${screen.runtimeType.toString()}',
-      tag: 'Navigation',
-    );
-    return screen;
-  }
 
   BottomNavigationBarItem _navBuilder({
     required int index,

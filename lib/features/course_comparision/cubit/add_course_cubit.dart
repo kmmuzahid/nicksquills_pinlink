@@ -41,7 +41,6 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
                 address: 'Scotland, United States',
                 image: Constants.sampleImage,
               ),
-              
             ],
           ),
 
@@ -59,7 +58,7 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
                 isSelected: false,
                 address: 'Scotland, United States',
                 image: Constants.sampleImage,
-              ), 
+              ),
             ],
           ),
         ],
@@ -86,10 +85,10 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
   void unselectCourse(CourseModel course) {
     emit(
       state.copyWith(
-        selectedCourses: state.selectedCourses.where((e) => e.name != course.name).toList(),
+        selectedCourses: state.selectedCourses
+            .where((e) => e.name != course.name)
+            .toList(),
       ),
     );
   }
-
-  
 }

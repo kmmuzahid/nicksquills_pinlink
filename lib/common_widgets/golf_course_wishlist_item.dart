@@ -14,11 +14,13 @@ class GolfCourseWishListItem extends StatelessWidget {
     required this.index,
     required this.selectedFilter,
     required this.fixedWidth,
+    required this.onMarkPlayed,
   });
   final CourseModel course;
   final int index;
   final MapFilters? selectedFilter;
   final double fixedWidth;
+  final VoidCallback? onMarkPlayed;
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +77,7 @@ class GolfCourseWishListItem extends StatelessWidget {
           const Spacer(),
           CommonButton(
             titleText: 'Mark Played',
+            onTap: onMarkPlayed,
             titleColor: const Color(0xff10B981),
             buttonHeight: 40,
             padding: const EdgeInsets.symmetric(horizontal: 10),

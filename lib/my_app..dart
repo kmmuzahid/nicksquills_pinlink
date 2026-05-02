@@ -14,6 +14,7 @@ import 'package:pinlink/config/theme/custom_theme.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/coreFeature/navigation/cubit/navigation_cubit.dart';
 import 'package:pinlink/coreFeature/notification/cubit/notification_cubit.dart';
+import 'package:pinlink/features/course_comparision/cubit/add_course_cubit.dart';
 import 'package:pinlink/corekit_config_impl.dart';
 
 final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => AuthCubit()),
         BlocProvider(create: (_) => NotificationCubit()),
         BlocProvider(create: (_) => NavigationCubit()),
+        BlocProvider(create: (_) => AddCourseCubit()..init()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, themeState) { 

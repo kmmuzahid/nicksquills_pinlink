@@ -1,6 +1,7 @@
 import 'package:core_kit/core_kit.dart';
 import 'package:core_kit/list_loader/smart_tab_list_loader.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinlink/common_widgets/golf_course_played_item.dart';
 import 'package:pinlink/common_widgets/golf_course_wishlist_item.dart';
 import 'package:pinlink/common_widgets/simple_background.dart';
@@ -11,6 +12,8 @@ import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/constant/constants.dart';
 import 'package:pinlink/constant/enums.dart';
+import 'package:pinlink/coreFeature/navigation/cubit/navigation_cubit.dart';
+import 'package:pinlink/features/course_comparision/cubit/add_course_cubit.dart';
 import 'package:pinlink/features/course_comparision/model/course_model.dart';
 import 'package:pinlink/features/profile/cubit/profile_cubit.dart';
 import 'package:pinlink/features/profile/cubit/profile_cubit_state.dart';
@@ -113,6 +116,9 @@ class ProfileScreen extends StatelessWidget {
                     return _buildRowItem(context, index);
                   } else {
                     return GolfCourseWishListItem(
+                      onMarkPlayed: () {
+                        showReRankDailoge(context, isPinlin5: index % 2 == 0);
+                      },
                       course: CourseModel(
                         name: 'Royal Melbourne',
                         address: 'Australia',
@@ -130,6 +136,100 @@ class ProfileScreen extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+
+  void showReRankDailoge(BuildContext context, {bool isPinlin5 = false}) {
+    final title = isPinlin5
+        ? 'Hey! You just played a PinLinks 5.'
+        : 'Course Completed!';
+    final subtitle = isPinlin5
+        ? 'Join Pro & get 100 points.'
+        : 'Would you like to rate this course now?';
+
+    final primaryButtonTitle = isPinlin5 ? 'Get Pro' : 'Later';
+    final primaryButtonAction = isPinlin5
+        ? () {
+            appRouter.push(SubscriptionsRoute());
+          }
+        : () {};
+
+    final widget = Container(
+      decoration: BoxDecoration(
+        color: context.colors.bACKGROUND_darkCard,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      padding: const EdgeInsets.only(top: 8, bottom: 10, left: 16, right: 16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.close, color: context.colors.tEXT_subDark),
+          ).end,
+          CommonText(
+            text: title,
+            fontSize: 24,
+            maxLines: 2,
+            textAlign: TextAlign.center,
+            textColor: context.colors.tEXT_white,
+            fontWeight: FontWeight.w500,
+          ),
+          16.height,
+          CommonText(
+            text: subtitle,
+            fontSize: 14,
+            maxLines: 5,
+            textAlign: TextAlign.center,
+            textColor: context.colors.tEXT_sub,
+            fontWeight: FontWeight.w500,
+          ),
+          20.height,
+
+          Row(
+            children: [
+              Expanded(
+                child: CommonButton(
+                  buttonWidth: .infinity,
+                  titleText: primaryButtonTitle,
+                  onTap: () {
+                    Navigator.pop(context);
+                    primaryButtonAction();
+                  },
+                ),
+              ),
+              10.width,
+              Expanded(
+                child: CommonButton(
+                  titleColor: context.colors.tEXT_dark,
+                  buttonColor: context.colors.ratingPremiumTags_goldAccent,
+                  buttonWidth: .infinity,
+                  titleText: 'Add Rank',
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.read<AddCourseCubit>().selectCourse(
+                      CourseModel(
+                        name: 'Royal Melbourne',
+                        address: 'St-5 New York, 10001',
+                        isAlreadyPlayed: false,
+                      ),
+                    );
+                    context.read<NavigationCubit>().changeIndex(2);
+                  },
+                ),
+              ),
+              20.height,
+            ],
+          ),
+        ],
+      ),
+    );
+    showDialog(
+      context: context,
+      builder: (context) =>
+          Dialog(insetPadding: const EdgeInsets.all(16), child: widget),
     );
   }
 
