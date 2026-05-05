@@ -553,6 +553,7 @@ class SendOtpRoute extends _i26.PageRouteInfo<SendOtpRouteArgs> {
     onSuccess,
     required String username,
     bool showSendToField = false,
+    String? token,
     List<_i26.PageRouteInfo>? children,
   }) : super(
          SendOtpRoute.name,
@@ -561,6 +562,7 @@ class SendOtpRoute extends _i26.PageRouteInfo<SendOtpRouteArgs> {
            onSuccess: onSuccess,
            username: username,
            showSendToField: showSendToField,
+           token: token,
          ),
          initialChildren: children,
        );
@@ -576,6 +578,7 @@ class SendOtpRoute extends _i26.PageRouteInfo<SendOtpRouteArgs> {
         onSuccess: args.onSuccess,
         username: args.username,
         showSendToField: args.showSendToField,
+        token: args.token,
       );
     },
   );
@@ -587,6 +590,7 @@ class SendOtpRouteArgs {
     required this.onSuccess,
     required this.username,
     this.showSendToField = false,
+    this.token,
   });
 
   final _i27.Key? key;
@@ -598,9 +602,11 @@ class SendOtpRouteArgs {
 
   final bool showSendToField;
 
+  final String? token;
+
   @override
   String toString() {
-    return 'SendOtpRouteArgs{key: $key, onSuccess: $onSuccess, username: $username, showSendToField: $showSendToField}';
+    return 'SendOtpRouteArgs{key: $key, onSuccess: $onSuccess, username: $username, showSendToField: $showSendToField, token: $token}';
   }
 
   @override
@@ -609,12 +615,16 @@ class SendOtpRouteArgs {
     if (other is! SendOtpRouteArgs) return false;
     return key == other.key &&
         username == other.username &&
-        showSendToField == other.showSendToField;
+        showSendToField == other.showSendToField &&
+        token == other.token;
   }
 
   @override
   int get hashCode =>
-      key.hashCode ^ username.hashCode ^ showSendToField.hashCode;
+      key.hashCode ^
+      username.hashCode ^
+      showSendToField.hashCode ^
+      token.hashCode;
 }
 
 /// generated route for

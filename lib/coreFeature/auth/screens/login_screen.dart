@@ -32,21 +32,22 @@ class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     return AuthBackground(
-      appBar: CommonAppBar( 
+      appBar: CommonAppBar(
         disableBack: true,
         hideBack: true,
         appbarConfig: AppbarConfig(
           decoration: () => const BoxDecoration(color: Colors.transparent),
         ),
-        
       ),
       body: Padding(
         padding: Constants.bodyPadding,
         child: AuthSigmentedContainer(
-          loginWidget: (changeToLogin) => _loginForm(changeToSingup: changeToLogin),
-          signupWidget: (changeToSignup) => SignUpScreen(changeToLogin: changeToSignup),
+          loginWidget: (changeToLogin) =>
+              _loginForm(changeToSingup: changeToLogin),
+          signupWidget: (changeToSignup) =>
+              SignUpScreen(changeToLogin: changeToSignup),
         ),
       ),
     );
@@ -98,7 +99,12 @@ class _loginForm extends StatelessWidget {
                 appRouter.push(
                   SendOtpRoute(
                     onSuccess: ({required email, required token}) {
-                      appRouter.push(ResetPasswordRoute(verificationToken: token, email: email));
+                      appRouter.push(
+                        ResetPasswordRoute(
+                          verificationToken: token,
+                          email: email,
+                        ),
+                      );
                     },
                     username: email,
                   ),
@@ -129,10 +135,9 @@ class _loginForm extends StatelessWidget {
                     CommonButton(
                       isLoading: state,
                       onTap: () {
-                        formKey.currentState?.save();
-                        // if ((formKey.currentState?.validate() ?? false)) {
-                        cubit.login(entity);
-                        // }
+                        if ((formKey.validateAndSave())) {
+                          cubit.login(entity);
+                        }
                       },
                       titleText: 'Sign In',
                       buttonWidth: double.infinity,

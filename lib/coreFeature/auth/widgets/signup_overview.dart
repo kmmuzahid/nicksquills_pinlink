@@ -19,6 +19,7 @@ class SignUpOverview extends StatelessWidget {
         _buildText(context, 'Name', entity.fullName ?? ''),
         _buildText(context, 'Username', entity.username ?? ''),
         _buildText(context, 'Email', entity.email ?? ''),
+        _buildText(context, 'Phone Number', entity.phoneNumber ?? ''),
         _buildText(context, 'Hometown', entity.hometown ?? ''),
         _buildText(context, 'Home Course', entity.homeCourse ?? ''),
         _buildText(

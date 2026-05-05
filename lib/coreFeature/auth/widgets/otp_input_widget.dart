@@ -63,7 +63,7 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
               titleSize: 12,
               titleWeight: FontWeight.w500,
               onTap: () {
-                if (formKey.currentState?.validate() == true) {
+                if (formKey.validateAndSave() == true) {
                   context.read<OtpCubit>().verifyOtp(otp, widget.onSuccess);
                 }
               },
@@ -79,7 +79,8 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
         ? _resendMessageBuilder(state)
         : CommonText(
             alignment: MainAxisAlignment.end,
-            text: '${AppString.resend_code_in} ${state.count} ${AppString.seconds}',
+            text:
+                '${AppString.resend_code_in} ${state.count} ${AppString.seconds}',
             fontWeight: FontWeight.bold,
             textColor: context.colors.sTATUS_info,
           );
@@ -104,9 +105,16 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
             text: AppString.resend_code,
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                context.read<OtpCubit>().sendOtp(widget.username, isResend: true);
+                context.read<OtpCubit>().sendOtp(
+                  widget.username,
+                  isResend: true,
+                );
               },
-            style: const TextStyle(color: Colors.blue, fontSize: 16, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+              color: Colors.blue,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),
@@ -126,27 +134,38 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
               height: 40,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
-                border: Border.all(color: context.colors.bACKGROUND_darkCardBoarder, width: 1.5),
+                border: Border.all(
+                  color: context.colors.bACKGROUND_darkCardBoarder,
+                  width: 1.5,
+                ),
               ),
               child: Center(
                 child: Text(
                   cells[index].character ?? '',
-                  style: TextStyle(fontSize: 25, color: context.colors.tEXT_white),
+                  style: TextStyle(
+                    fontSize: 25,
+                    color: context.colors.tEXT_white,
+                  ),
                 ),
               ),
             );
           }),
         );
       },
+      onSaved: (value) {
+        otp = value ?? '';
+      },
       keyboardType: InputHelper.getKeyboardType(ValidationType.validateOTP),
-      inputFormatters: InputHelper.getInputFormatters(ValidationType.validateOTP),
+      inputFormatters: InputHelper.getInputFormatters(
+        ValidationType.validateOTP,
+      ),
       autovalidateMode: AutovalidateMode.disabled,
       enableAutofill: true,
       enableHapticFeedback: true,
       enablePaste: true,
-      validator: (value) => InputHelper.validate(ValidationType.validateOTP, value),
+      validator: (value) =>
+          InputHelper.validate(ValidationType.validateOTP, value),
     );
-  
   }
 
   @override
