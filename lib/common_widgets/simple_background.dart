@@ -5,26 +5,29 @@
  */
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:pinlink/gen/assets.gen.dart';
+import 'package:pinlink/config/color/app_color.dart';
 
+ 
 class SimpleBackground extends StatelessWidget {
-  const SimpleBackground({super.key, required this.body, this.appBar, this.bottomNavigationBar});
+  const SimpleBackground({
+    super.key,
+    required this.body,
+    this.appBar,
+    this.bottomNavigationBar,
+    this.buildContext,
+  });
   final Widget body;
   final PreferredSizeWidget? appBar;
   final Widget? bottomNavigationBar;
+  final BuildContext? buildContext;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return Scaffold(
-      body: Container(
+      backgroundColor: context.colors.background,
+      body: SizedBox(
         width: CoreScreenUtils.deviceSize.width,
         height: CoreScreenUtils.deviceSize.height,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(Assets.images.simpleBackground.path),
-            fit: BoxFit.cover,
-          ),
-        ),
         child: Column(
           children: [
             appBar ?? const SizedBox.shrink(),

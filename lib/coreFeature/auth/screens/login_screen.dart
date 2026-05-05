@@ -26,20 +26,21 @@ import 'package:pinlink/coreFeature/auth/entity/login_entity.dart';
 import 'package:pinlink/coreFeature/auth/screens/sign_up_screen.dart';
 import 'package:pinlink/coreFeature/auth/widgets/action_spawn_widget.dart';
 import 'package:pinlink/coreFeature/auth/widgets/auth_sigmented_container.dart';
-import 'package:pinlink/gen/assets.gen.dart';
 
 @RoutePage()
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return AuthBackground(
-      appBar: CommonAppBar(
-        title: '',
+      appBar: CommonAppBar( 
         disableBack: true,
         hideBack: true,
-        appbarConfig: AppbarConfig(backgroundColor: Colors.transparent),
+        appbarConfig: AppbarConfig(
+          decoration: () => const BoxDecoration(color: Colors.transparent),
+        ),
+        
       ),
       body: Padding(
         padding: Constants.bodyPadding,
@@ -53,7 +54,7 @@ class LoginScreen extends StatelessWidget {
 }
 
 class _loginForm extends StatelessWidget {
-  const _loginForm({super.key, required this.changeToSingup});
+  const _loginForm({required this.changeToSingup});
 
   final Function() changeToSingup;
 
@@ -62,7 +63,7 @@ class _loginForm extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
       decoration: BoxDecoration(
-        color: const Color(0xFF052217).withOpacity(0.9),
+        color: context.colors.bACKGROUND_darkCard,
         borderRadius: const BorderRadius.all(Radius.circular(16)),
       ),
       child: FormBuilder(
@@ -105,13 +106,13 @@ class _loginForm extends StatelessWidget {
               },
               child: CommonText(
                 text: AppString.forget_password,
-                textColor: AppColor.errorColor,
+                textColor: context.colors.sTATUS_error,
                 fontSize: 12,
                 style: TextStyle(
                   decoration: TextDecoration.underline,
                   decorationThickness: 2,
                   fontStyle: FontStyle.italic,
-                  decorationColor: AppColor.errorColor,
+                  decorationColor: context.colors.sTATUS_error,
                 ),
                 fontWeight: FontWeight.bold,
               ).end,
@@ -143,48 +144,48 @@ class _loginForm extends StatelessWidget {
                     ),
 
                     25.height,
-                    Center(
-                      child: CommonText(
-                        text: AppString.or_continue_with,
-                        textColor: AppColor.textGray,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    15.height,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: CommonButton(
-                            titleText: 'Google',
-                            buttonColor: Colors.transparent,
-                            borderColor: const Color(0xFF6FAE97),
-                            prefix: CommonImage(
-                              size: 25,
-                              fill: BoxFit.contain,
-                              src: Assets.images.google,
-                            ),
-                            onTap: () {},
-                          ),
-                        ),
-                        20.width,
-                        Expanded(
-                          child: CommonButton(
-                            titleText: 'Google',
-                            buttonColor: Colors.transparent,
-                            borderColor: const Color(0xFF6FAE97),
-                            prefix: CommonImage(
-                              size: 25,
-                              fill: BoxFit.contain,
-                              src: Assets.images.apple.path,
-                              imageColor: Colors.white,
-                            ),
-                            onTap: () {},
-                          ),
-                        ),
-                      ],
-                    ),
+                    // Center(
+                    //   child: CommonText(
+                    //     text: AppString.or_continue_with,
+                    //     textColor: AppColor.tEXT_sub,
+                    //     fontSize: 15,
+                    //     fontWeight: FontWeight.w500,
+                    //   ),
+                    // ),
+                    // 15.height,
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     Expanded(
+                    //       child: CommonButton(
+                    //         titleText: 'Google',
+                    //         buttonColor: Colors.transparent,
+                    //         borderColor: const Color(0xFF6FAE97),
+                    //         prefix: CommonImage(
+                    //           size: 25,
+                    //           fill: BoxFit.contain,
+                    //           src: Assets.images.google,
+                    //         ),
+                    //         onTap: () {},
+                    //       ),
+                    //     ),
+                    //     20.width,
+                    //     Expanded(
+                    //       child: CommonButton(
+                    //         titleText: 'Google',
+                    //         buttonColor: Colors.transparent,
+                    //         borderColor: const Color(0xFF6FAE97),
+                    //         prefix: CommonImage(
+                    //           size: 25,
+                    //           fill: BoxFit.contain,
+                    //           src: Assets.images.apple.path,
+                    //           imageColor: Colors.white,
+                    //         ),
+                    //         onTap: () {},
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                   ],
                 );
               },

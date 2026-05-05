@@ -8,6 +8,9 @@ import 'package:core_kit/app_bar/common_app_bar.dart';
 import 'package:core_kit/text/common_text.dart';
 import 'package:flutter/material.dart';
 import 'package:pinlink/common_widgets/simple_background.dart';
+import 'package:pinlink/config/bloc/cubit_scope.dart';
+import 'package:pinlink/coreFeature/terms/cubit/policy_cubit.dart';
+import 'package:pinlink/coreFeature/terms/cubit/policy_state.dart';
 
 @RoutePage()
 class TermsOfUseScreen extends StatelessWidget {
@@ -15,10 +18,25 @@ class TermsOfUseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SimpleBackground(
-      appBar: CommonAppBar(title: "Terms of Use"),
-      body: Center(
-        child: CommonText(text: "Terms of Use", fontSize: 20, fontWeight: FontWeight.bold),
+    return SimpleBackground(
+      appBar: const CommonAppBar(title: "Terms of Use"),
+      body: CubitScope<PolicyCubit, PolicyState>(
+        create: () => PolicyCubit()..fetchTermsAndConditions(),
+        builder: (context, cubit, state) {
+          if (state.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return Container(
+            alignment: Alignment.topLeft,
+            child: CommonText(
+              text: state.termsAndConditions,
+              left: 16,
+              right: 16,
+              fontWeight: FontWeight.bold,
+              isDescription: true,
+            ),
+          );
+        },
       ),
     );
   }

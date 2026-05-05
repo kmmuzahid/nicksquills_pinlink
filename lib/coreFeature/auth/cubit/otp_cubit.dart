@@ -5,6 +5,7 @@
  */
 import 'dart:async';
 
+import 'package:core_kit/snackbar/snackbar.dart';
 import 'package:pinlink/config/bloc/safe_cubit.dart';
 import 'package:pinlink/coreFeature/auth/cubit/otp_state.dart';
 import 'package:pinlink/coreFeature/auth/repository/auth_repository.dart';
@@ -19,26 +20,47 @@ class OtpCubit extends SafeCubit<OtpState> {
   }
 
   Future<void> sendOtp(String? username, {bool isResend = false}) async {
-    //remove it on integration
-    emit(state.copyWith(isLoading: false, isOtpSent: true));
-    _startTimer();
-    //uncomment it on integration
-    // if (state.isLoading) {
-    //   showSnackBar('Please wait for the current request to complete', type: SnackBarType.warning);
-    //   return;
-    // }
-    // if (_timer?.isActive == true) {
-    //   showSnackBar('Resent Code in ${state.count} seconds', type: SnackBarType.warning);
-    //   return;
-    // }
-    // emit(state.copyWith(isLoading: true, isOtpSent: false, username: username, isResend: isResend));
-    // final result = await _authRepository.sendOtp(username ?? state.username);
-    // if (result.isSuccess) {
-    //   emit(state.copyWith(isLoading: false, isOtpSent: true));
-    //   _startTimer();
-    // } else {
-    //   emit(state.copyWith(isLoading: false));
-    // }
+    if (state.isLoading) {
+      showSnackBar(
+        'Please wait for the current request to complete',
+        type: SnackBarType.warning,
+      );
+      return;
+    }
+    if (_timer?.isActive == true) {
+      showSnackBar(
+        'Resent Code in ${state.count} seconds',
+        type: SnackBarType.warning,
+      );
+      return;
+    }
+    emit(
+      state.copyWith(
+        isLoading: true,
+        isOtpSent: false,
+        username: username,
+        isResend: isResend,
+      ),
+    );
+
+    final result = await _authRepository.sendOtp(
+      username ?? state.username,
+      isResend: isResend,
+      resendToken: state.resendToken,
+    );
+
+    if (result.isSuccess) {
+      emit(
+        state.copyWith(
+          isLoading: false,
+          isOtpSent: true,
+          resendToken: result.data?['forgetToken']?.toString() ?? '',
+        ),
+      );
+      _startTimer();
+    } else {
+      emit(state.copyWith(isLoading: false));
+    }
   }
 
   Future<void> verifyOtp(
@@ -77,7 +99,7 @@ class OtpCubit extends SafeCubit<OtpState> {
     _timer = null;
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       emit(state.copyWith(count: state.count - 1));
-      if (state.count == 0) {
+      if (state.count <= 0) {
         _timer?.cancel();
         _timer = null;
       }

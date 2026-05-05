@@ -30,19 +30,22 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
   String otp = '';
   GlobalKey<FormState> formKey = GlobalKey();
   @override
-  void initState() { 
+  void initState() {
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) => Container(
     padding: EdgeInsets.only(top: 25.h, bottom: 30.h, left: 16.w, right: 16.w),
-    decoration: BoxDecoration(color: AppColor.cardColor, borderRadius: BorderRadius.circular(12)),
+    decoration: BoxDecoration(
+      color: context.colors.bACKGROUND_darkCard,
+      borderRadius: BorderRadius.circular(12),
+    ),
     child: Column(
       children: [
         CommonText(
           text: AppString.enter_verification_code,
-          textColor: AppColor.textGray,
+          textColor: context.colors.tEXT_white,
           fontSize: 12,
           bottom: 4,
         ).start,
@@ -54,7 +57,6 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
           cubit: widget.cubit,
           builder: (context, cubit, state) {
             return CommonButton(
-              
               titleText: AppString.verify_otp,
               isLoading: state.isLoading,
               buttonWidth: double.infinity,
@@ -79,7 +81,7 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
             alignment: MainAxisAlignment.end,
             text: '${AppString.resend_code_in} ${state.count} ${AppString.seconds}',
             fontWeight: FontWeight.bold,
-            textColor: AppColor.primary,
+            textColor: context.colors.sTATUS_info,
           );
   }
 
@@ -101,7 +103,7 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
           TextSpan(
             text: AppString.resend_code,
             recognizer: TapGestureRecognizer()
-              ..onTap = () { 
+              ..onTap = () {
                 context.read<OtpCubit>().sendOtp(widget.username, isResend: true);
               },
             style: const TextStyle(color: Colors.blue, fontSize: 16, fontWeight: FontWeight.bold),
@@ -113,40 +115,42 @@ class _OtpVerifyWidgetState extends State<OtpInputWidget> {
   );
 
   Widget _otpBuilder(BuildContext context) {
-    return PinCodeTextField(  
-      cursorColor: AppColor.primary,
-      backgroundColor: Colors.transparent,
-      textStyle: getTheme.textTheme.bodyMedium?.copyWith(fontSize: 25, color: AppColor.primary),
-      appContext: context,
-      autoFocus: true,
-      onChanged: (value) {
-        otp = value;
+    return PinInputFormField(
+      length: 6,
+      pinBuilder: (BuildContext context, List<PinCellData> cells) {
+        return Wrap(
+          spacing: 10,
+          children: List.generate(cells.length, (index) {
+            return Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(color: context.colors.bACKGROUND_darkCardBoarder, width: 1.5),
+              ),
+              child: Center(
+                child: Text(
+                  cells[index].character ?? '',
+                  style: TextStyle(fontSize: 25, color: context.colors.tEXT_white),
+                ),
+              ),
+            );
+          }),
+        );
       },
-      pinTheme: PinTheme(
-        
-        shape: PinCodeFieldShape.box,
-        borderRadius: BorderRadius.circular(4),
-        fieldHeight: 40,
-        fieldWidth: 40,
-        activeFillColor: AppColor.infoBoxColor,
-        selectedFillColor: AppColor.infoBoxColor,
-        inactiveFillColor: AppColor.infoBoxColor,
-        borderWidth: 0.1,
-        selectedColor: AppColor.infoBoxColor,
-        activeColor: AppColor.infoBoxColor,
-        inactiveColor: AppColor.infoBoxColor,
-      ),
-      length: 6, 
       keyboardType: InputHelper.getKeyboardType(ValidationType.validateOTP),
       inputFormatters: InputHelper.getInputFormatters(ValidationType.validateOTP),
       autovalidateMode: AutovalidateMode.disabled,
-      enableActiveFill: true,
+      enableAutofill: true,
+      enableHapticFeedback: true,
+      enablePaste: true,
       validator: (value) => InputHelper.validate(ValidationType.validateOTP, value),
     );
+  
   }
 
   @override
-  void dispose() { 
+  void dispose() {
     super.dispose();
   }
 }

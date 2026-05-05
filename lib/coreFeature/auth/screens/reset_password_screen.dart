@@ -8,12 +8,13 @@ import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinlink/common_widgets/common_widget.dart';
+import 'package:pinlink/common_widgets/simple_background.dart';
 import 'package:pinlink/config/bloc/cubit_scope.dart';
+import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/constant/constants.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_flow_cubit.dart';
 import 'package:pinlink/coreFeature/auth/entity/forget_pass_entity.dart';
-import 'package:pinlink/gen/assets.gen.dart';
 
 @RoutePage()
 class ResetPasswordScreen extends StatelessWidget {
@@ -24,8 +25,8 @@ class ResetPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
   
-    return Scaffold(
-      appBar: const CommonAppBar(),
+    return SimpleBackground(
+      appBar: const CommonAppBar(title: "Reset Password"),
       body: FormBuilder(
         entity: ForgetPassEntity()
           ..verificationToken = verificationToken
@@ -35,14 +36,15 @@ class ResetPasswordScreen extends StatelessWidget {
             padding: Constants.bodyPadding,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(child: CommonImage(size: 80, src: Assets.images.appIcon.path)),
+              children: [ 
                 40.height,
-                const CommonText(
+                CommonText(
                   text: "Enter your new password below.",
-                  textColor: Colors.white70,
+                  textColor: context.colors.pRIMARY_priSoft,
                   fontSize: 16,
                 ).center,
+
+                20.height,
 
                 // Password Field
                 const BuildLabel("Password"),
@@ -61,7 +63,7 @@ class ResetPasswordScreen extends StatelessWidget {
                   prefixIcon: const Icon(Icons.lock_outline),
                   onSaved: (value, controller) => entity.confirmPassword = value,
                 ),
-                10.height,
+                30.height,
 
                 CubitScope(
                   create: () => AuthFlowCubit(context.read<AuthCubit>()),
@@ -74,8 +76,7 @@ class ResetPasswordScreen extends StatelessWidget {
                       },
                       isLoading: state,
                       titleText: "Reset Password",
-                      buttonWidth: double.infinity,
-                      buttonRadius: 40,
+                      buttonWidth: double.infinity, 
                     );
                   },
                 ),

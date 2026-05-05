@@ -31,7 +31,7 @@ class _AppString {
 
   final String sign_in_now = 'Welcome Back!';
   final String please_sign_in_to_continue_our_app = 'Please Sign in to Continue Our App';
-  final String forget_password = 'Forget Password?'; 
+  final String forget_password = 'Forget Password?';
   final String sign_in_as_ev_owner = 'Sign In as EV Owner';
   final String or_continue_with = 'Or continue with';
   final String dont_have_an_account = 'Don’t have an account?';
@@ -65,7 +65,7 @@ class _AppString {
   final String otp_verification = 'OTP Verification';
   final String enter_verification_code = 'Enter verification code';
   final String schedule_booking = 'Schedule Booking';
- 
+
   final String profile = 'Profile';
   final String notification = 'Notification';
   final String account = 'Account';
@@ -74,7 +74,7 @@ class _AppString {
   final String faqs = 'FAQs';
   final String about_us = 'About Us';
   final String logout = 'Logout';
-  final String delete_account = 'Delete account'; 
+  final String delete_account = 'Delete account';
 
   final String are_you_sure_you_want_to_delete_your_account = 'Delete Account?';
 
@@ -82,14 +82,14 @@ class _AppString {
       'Please be aware that Deleted account cannot be undone. All your data will be lost.';
 
   final String enter_your_password_to_confirm = 'Enter your password to confirm.';
-  final String enter_your_password = 'Enter your password'; 
-  final String faq_help = 'FAQ/Help';
+  final String enter_your_password = 'Enter your password';
+  final String faq_help = 'FAQ\'s';
   final String yes = 'Yes';
   final String no = 'No';
   final String are_you_sure_you_want_to_logout_of_your_account =
-      'Are you sure you want to log out of your account?'; 
+      'Are you sure you want to log out of your account?';
 
-  final String phone_number = "Phone Number"; 
+  final String phone_number = "Phone Number";
   final String save_all_changes = "Save All Changes";
 
   final String set_your_password = "Set Your Password";
@@ -106,8 +106,5 @@ class _AppString {
 
   final String notifications = "Notifications";
 
-
   //
- 
-
 }

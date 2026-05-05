@@ -33,18 +33,18 @@ class TermsAgreementWidget extends StatelessWidget {
               children: [ 
                 Checkbox(
                   isError: field.hasError,
-                  checkColor: Colors.white,
+                  checkColor: context.colors.tEXT_white,
 
                   fillColor: WidgetStateProperty.resolveWith<Color>((states) {
                     if (states.contains(WidgetState.disabled)) {
-                      return AppColor.primary;
+                      return context.colors.tEXT_subDark;
                     }
                     if (states.contains(WidgetState.error) &&
                         !states.contains(WidgetState.selected)) {
-                      return AppColor.white;
+                      return context.colors.tEXT_white;
                     }
                     if (states.contains(WidgetState.selected)) {
-                      return AppColor.primary;
+                      return context.colors.successVerifiedPositivestats_freshGrass;
                     }
                     return Colors.white;
                   }),
@@ -62,12 +62,12 @@ class TermsAgreementWidget extends StatelessWidget {
                       children: [
                         // TextSpan(
                         //   text: "By creating an account, you agree to our ",
-                        //   style: TextStyle(color: AppColor.onPrimary),
+                        //   style: TextStyle(color: context.colors.onPrimary),
                         // ),
                         TextSpan(
                           text: "Privacy Policy",
-                          style: const TextStyle(
-                            color: Colors.blue,
+                          style: TextStyle(
+                            color: context.colors.sTATUS_info,
                             fontWeight: FontWeight.w600,
                             decoration: TextDecoration.underline,
                           ),
@@ -79,12 +79,12 @@ class TermsAgreementWidget extends StatelessWidget {
 
                         TextSpan(
                           text: " - ",
-                          style: TextStyle(color: AppColor.textGray),
+                          style: TextStyle(color: context.colors.tEXT_sub),
                         ),
                         TextSpan(
                           text: "Terms of Conditions",
-                          style: const TextStyle(
-                            color: Colors.blue,
+                          style: TextStyle(
+                            color: context.colors.sTATUS_info,
                             fontWeight: FontWeight.w600,
                             decoration: TextDecoration.underline,
                           ),

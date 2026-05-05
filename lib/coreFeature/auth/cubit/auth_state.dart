@@ -4,35 +4,35 @@
  * @Email: km.muzahid@gmail.com
  */
 import 'package:equatable/equatable.dart';
-import 'package:pinlink/constant/enums.dart';
+import 'package:pinlink/constant/subscriptions.dart';
 
 class AuthState extends Equatable {
   final String accessToken;
   final String refreshToken;
-  final bool isLoading; 
-  final SubscriptionType subscriptionType;
+  final bool isLoading;
+  final Plan subscriptionPlan;
 
   const AuthState({
     this.accessToken = '',
     this.refreshToken = '',
     this.isLoading = false,
-    this.subscriptionType = SubscriptionType.Free,
+    required this.subscriptionPlan,
   });
 
   AuthState copyWith({
     String? accessToken,
     String? refreshToken,
     bool? isLoading,
-    SubscriptionType? subscriptionType,
+    Plan? subscriptionPlan,
   }) {
     return AuthState(
       accessToken: accessToken ?? this.accessToken,
       refreshToken: refreshToken ?? this.refreshToken,
-      isLoading: isLoading ?? this.isLoading, 
-      subscriptionType: subscriptionType ?? this.subscriptionType,
+      isLoading: isLoading ?? this.isLoading,
+      subscriptionPlan: subscriptionPlan ?? this.subscriptionPlan,
     );
   }
 
   @override
-  List<Object?> get props => [accessToken, refreshToken, isLoading, subscriptionType];
+  List<Object?> get props => [accessToken, refreshToken, isLoading, subscriptionPlan];
 }

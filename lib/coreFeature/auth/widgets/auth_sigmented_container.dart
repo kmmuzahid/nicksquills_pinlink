@@ -53,6 +53,7 @@ class _AuthSigmentedContainerState extends State<AuthSigmentedContainer> {
           text: selectedIndex == 0 ? singUpTittle : signInTittle,
           fontSize: 24,
           fontWeight: FontWeight.w500,
+          textColor: context.colors.tEXT_white,
           
         ).center,
         CommonText(
@@ -60,7 +61,7 @@ class _AuthSigmentedContainerState extends State<AuthSigmentedContainer> {
           fontSize: 16,
           maxLines: 3,
           isDescription: true,
-          textColor: AppColor.subtitleColor,
+          textColor: context.colors.pRIMARY_priSoft,
         ).center,
         20.height,
         _buildSegmentedButton(
@@ -77,9 +78,9 @@ class _AuthSigmentedContainerState extends State<AuthSigmentedContainer> {
   Widget _buildSegmentedButton({required Function(int) onTap}) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColor.surfaceColor.withValues(alpha: .3),
+        color: context.colors.bACKGROUND_darkCard,
         borderRadius: BorderRadius.circular(40),
-        border: Border.all(color: AppColor.outlineColor, width: 1.2),
+        border: Border.all(color: context.colors.bACKGROUND_darkCardBoarder, width: 1.2),
       ),
 
       child: Row(
@@ -102,8 +103,10 @@ class _AuthSigmentedContainerState extends State<AuthSigmentedContainer> {
           decoration: BoxDecoration(
             color: selectedIndex == index ? null : Colors.transparent,
             gradient: selectedIndex == index
-                ? const LinearGradient(
-                    colors: [Color(0xFF184F3A), Color(0xFF2F6F57)],
+                ? LinearGradient(
+                    colors: [
+                      ThemeColor.dark.pRIMARY_priMedium, ThemeColor.dark.pRIMARY_priLight,
+                    ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                   )
@@ -113,7 +116,7 @@ class _AuthSigmentedContainerState extends State<AuthSigmentedContainer> {
           child: Center(
             child: CommonText(
               text: segments[index],
-              textColor: AppColor.white,
+              textColor: selectedIndex == index ? Colors.white : context.colors.tEXT_white,
               fontSize: 15,
               fontWeight: FontWeight.w500,
             ),

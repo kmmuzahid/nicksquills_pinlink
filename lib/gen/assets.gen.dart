@@ -38,11 +38,33 @@ class $AssetsImagesGen {
   /// File path: assets/images/back.svg
   String get back => 'assets/images/back.svg';
 
+  /// File path: assets/images/facebook.svg
+  String get facebook => 'assets/images/facebook.svg';
+
+  /// File path: assets/images/friend.svg
+  String get friend => 'assets/images/friend.svg';
+
   /// File path: assets/images/globe.png
   AssetGenImage get globe => const AssetGenImage('assets/images/globe.png');
 
   /// File path: assets/images/google.svg
   String get google => 'assets/images/google.svg';
+
+  /// File path: assets/images/instagram.svg
+  String get instagram => 'assets/images/instagram.svg';
+
+  /// File path: assets/images/invite.svg
+  String get invite => 'assets/images/invite.svg';
+
+  /// File path: assets/images/map_sample.png
+  AssetGenImage get mapSample =>
+      const AssetGenImage('assets/images/map_sample.png');
+
+  /// File path: assets/images/marker.svg
+  String get marker => 'assets/images/marker.svg';
+
+  /// File path: assets/images/notification_icon.svg
+  String get notificationIcon => 'assets/images/notification_icon.svg';
 
   /// File path: assets/images/oboarding_1.png
   AssetGenImage get oboarding1 =>
@@ -64,6 +86,27 @@ class $AssetsImagesGen {
   AssetGenImage get onboarding4 =>
       const AssetGenImage('assets/images/onboarding_4.png');
 
+  /// File path: assets/images/privacy_icon.svg
+  String get privacyIcon => 'assets/images/privacy_icon.svg';
+
+  /// File path: assets/images/public.svg
+  String get public => 'assets/images/public.svg';
+
+  /// File path: assets/images/raffle_icon.svg
+  String get raffleIcon => 'assets/images/raffle_icon.svg';
+
+  /// File path: assets/images/rank1.svg
+  String get rank1 => 'assets/images/rank1.svg';
+
+  /// File path: assets/images/rank2.svg
+  String get rank2 => 'assets/images/rank2.svg';
+
+  /// File path: assets/images/rank3.svg
+  String get rank3 => 'assets/images/rank3.svg';
+
+  /// File path: assets/images/setting_icon.svg
+  String get settingIcon => 'assets/images/setting_icon.svg';
+
   /// File path: assets/images/simple_background.png
   AssetGenImage get simpleBackground =>
       const AssetGenImage('assets/images/simple_background.png');
@@ -75,22 +118,40 @@ class $AssetsImagesGen {
   /// File path: assets/images/splash.png
   AssetGenImage get splash => const AssetGenImage('assets/images/splash.png');
 
+  /// File path: assets/images/youtube.svg
+  String get youtube => 'assets/images/youtube.svg';
+
   /// List of all assets
   List<dynamic> get values => [
     appIcon,
     apple,
     authBackground,
     back,
+    facebook,
+    friend,
     globe,
     google,
+    instagram,
+    invite,
+    mapSample,
+    marker,
+    notificationIcon,
     oboarding1,
     oboarding2,
     onBoardingNextButtonPrefix,
     onboarding3,
     onboarding4,
+    privacyIcon,
+    public,
+    raffleIcon,
+    rank1,
+    rank2,
+    rank3,
+    settingIcon,
     simpleBackground,
     spImage1,
     splash,
+    youtube,
   ];
 }
 
@@ -116,12 +177,89 @@ class $AssetsNavigatorsGen {
   List<String> get values => [addCourse, leaderboard, map, profile, social];
 }
 
+class $AssetsSettingGen {
+  const $AssetsSettingGen();
+
+  /// File path: assets/setting/about_us.svg
+  String get aboutUs => 'assets/setting/about_us.svg';
+
+  /// File path: assets/setting/change_password.svg
+  String get changePassword => 'assets/setting/change_password.svg';
+
+  /// File path: assets/setting/comment.svg
+  String get comment => 'assets/setting/comment.svg';
+
+  /// File path: assets/setting/delete.svg
+  String get delete => 'assets/setting/delete.svg';
+
+  /// File path: assets/setting/edit_profile.svg
+  String get editProfile => 'assets/setting/edit_profile.svg';
+
+  /// File path: assets/setting/faq.svg
+  String get faq => 'assets/setting/faq.svg';
+
+  /// File path: assets/setting/filter.svg
+  String get filter => 'assets/setting/filter.svg';
+
+  /// File path: assets/setting/notification.svg
+  String get notification => 'assets/setting/notification.svg';
+
+  /// File path: assets/setting/palyed_courses.svg
+  String get palyedCourses => 'assets/setting/palyed_courses.svg';
+
+  /// File path: assets/setting/privacy.svg
+  String get privacy => 'assets/setting/privacy.svg';
+
+  /// File path: assets/setting/scores.svg
+  String get scores => 'assets/setting/scores.svg';
+
+  /// File path: assets/setting/show_handicap.svg
+  String get showHandicap => 'assets/setting/show_handicap.svg';
+
+  /// File path: assets/setting/subscriptions.svg
+  String get subscriptions => 'assets/setting/subscriptions.svg';
+
+  /// File path: assets/setting/support.svg
+  String get support => 'assets/setting/support.svg';
+
+  /// File path: assets/setting/talk_to_support.svg
+  String get talkToSupport => 'assets/setting/talk_to_support.svg';
+
+  /// File path: assets/setting/theme.svg
+  String get theme => 'assets/setting/theme.svg';
+
+  /// File path: assets/setting/tournament_list.svg
+  String get tournamentList => 'assets/setting/tournament_list.svg';
+
+  /// List of all assets
+  List<String> get values => [
+    aboutUs,
+    changePassword,
+    comment,
+    delete,
+    editProfile,
+    faq,
+    filter,
+    notification,
+    palyedCourses,
+    privacy,
+    scores,
+    showHandicap,
+    subscriptions,
+    support,
+    talkToSupport,
+    theme,
+    tournamentList,
+  ];
+}
+
 class Assets {
   const Assets._();
 
   static const $AssetsIconGen icon = $AssetsIconGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsNavigatorsGen navigators = $AssetsNavigatorsGen();
+  static const $AssetsSettingGen setting = $AssetsSettingGen();
 }
 
 class AssetGenImage {

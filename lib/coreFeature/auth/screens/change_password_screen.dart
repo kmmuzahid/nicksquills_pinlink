@@ -6,14 +6,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:pinlink/common_widgets/appbar/appbar_simple.dart';
 import 'package:pinlink/common_widgets/common_widget.dart';
+import 'package:pinlink/common_widgets/simple_background.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/constant/app_string.dart';
 import 'package:pinlink/constant/constants.dart';
-import 'package:pinlink/coreFeature/notification/notification_button.dart';
 
 @RoutePage()
 class ChangePasswordScreen extends StatelessWidget {
@@ -21,10 +20,10 @@ class ChangePasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold( 
-      appBar: AppBarSimple(
+    return SimpleBackground( 
+      appBar: CommonAppBar(
         title: AppString.change_password,
-        actions: const [NotificationIconWidget()],
+        
       ),
       body: Padding(
         padding: Constants.bodyPadding,
@@ -34,7 +33,7 @@ class ChangePasswordScreen extends StatelessWidget {
             40.height, 
             CommonText(
               text: AppString.set_your_password,
-              textColor: Colors.black,
+              textColor: context.colors.tEXT_white,
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ).center,
@@ -43,7 +42,7 @@ class ChangePasswordScreen extends StatelessWidget {
                   AppString.in_order_to_keep_your_account_safe_you_need_to_create_a_strong_password,
               maxLines: 2,
               textAlign: TextAlign.center,
-              textColor: AppColor.textGray,
+              textColor: context.colors.tEXT_subDark,
               fontSize: 16,
             ),
             20.height,
@@ -51,25 +50,22 @@ class ChangePasswordScreen extends StatelessWidget {
             // Password Field
             BuildLabel(AppString.current_password),
             CommonTextField(
-              hintText: AppString.enter_current_password_here,
-              validationType: ValidationType.validatePassword,
-              prefixIcon: const Icon(Icons.lock_outline),
+              hintText: 'Current password',
+              validationType: ValidationType.validatePassword, 
               onSaved: (value, controller) {},
             ),
             10.height,
             BuildLabel(AppString.new_password),
             CommonTextField(
-              hintText: AppString.enter_new_password_here,
-              validationType: ValidationType.validatePassword,
-              prefixIcon: const Icon(Icons.lock_outline),
+              hintText: 'New password',
+              validationType: ValidationType.validatePassword, 
               onSaved: (value, controller) {},
             ),
             10.height,
             BuildLabel(AppString.confirm_new_password),
             CommonTextField(
-              hintText: AppString.enter_confirm_new_password_here,
-              validationType: ValidationType.validatePassword,
-              prefixIcon: const Icon(Icons.lock_outline),
+              hintText: 'Confirm new password',
+              validationType: ValidationType.validatePassword, 
               onSaved: (value, controller) {},
             ),
             40.height,

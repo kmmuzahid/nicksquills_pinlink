@@ -211,3 +211,13 @@ git revert <commit>                     # Create a new commit that undoes a prev
 git tag                                 # List tags
 git tag <name>                           # Create a tag
 git push <remote> <tag>                 # Push a tag to remote
+
+# Generate key
+keytool -genkeypair -v -alias pinlink-release-key -keyalg RSA -keysize 2048 -validity 10000 -keystore C:/Users/KmMuzahid/Documents/key/pinlink-release.keystore -storetype PKCS12 -storepass examplestoreKey -keypass example_password -dname "CN=vincent, OU=private, O=private, L=usa, ST=usa, C=usa"
+
+# Build APK
+ key.properties
+ keyAlias=pinlink-release-key
+ keyPassword=example_password
+ storePassword=examplestoreKey
+ storeFile=C:/Users/KmMuzahid/Documents/key/pinlink-release.keystore

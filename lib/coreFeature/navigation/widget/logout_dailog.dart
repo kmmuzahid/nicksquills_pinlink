@@ -7,7 +7,6 @@ import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinlink/config/color/app_color.dart';
-import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/constant/app_string.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 
@@ -21,7 +20,10 @@ class LogoutAlertWidget extends StatelessWidget {
 
   Container _content(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: AppColor.background, borderRadius: BorderRadius.circular(8)),
+      decoration: BoxDecoration(
+        color: context.colors.bACKGROUND_darkCard,
+        borderRadius: BorderRadius.circular(8),
+      ),
       padding: const EdgeInsets.all(16),
       child: Column(
         mainAxisSize: .min,
@@ -38,7 +40,7 @@ class LogoutAlertWidget extends StatelessWidget {
           CommonText(
             text: AppString.are_you_sure_you_want_to_logout_of_your_account,
             maxLines: 2,
-            textColor: AppColor.textGray,
+            textColor: context.colors.tEXT_white,
             fontSize: 16,
           ),
 
@@ -48,13 +50,11 @@ class LogoutAlertWidget extends StatelessWidget {
             children: [
               CommonButton(
                 titleText: AppString.no,
-                titleColor: AppColor.primary,
+                titleColor: Colors.white,
                 buttonWidth: 100,
                 onTap: () {
-                  navigatorRouterKey.currentState?.pop();
-                },
-                buttonColor: AppColor.background,
-                borderColor: AppColor.outlineColor,
+                  Navigator.pop(context);
+                }, 
               ),
 
               const Spacer(),
