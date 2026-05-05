@@ -13,7 +13,7 @@ dependencies:
   core_kit:
     git:
       url: https://github.com/kmmuzahid/flutter_core_kit.git
-      ref: 1.1.9
+      ref: 1.1.10
 
   auto_route:
   flutter_bloc:
@@ -23,6 +23,13 @@ dependencies:
   pin_code_fields:
   video_player: ^2.11.0
   video_thumbnail:
+  #map
+  google_maps_flutter:  
+  flutter_polyline_points:  
+  geolocator:
+  widget_to_marker:
+  json_annotation:
+  json_serializable:
     # intl_utils:   # to generate from arb 
 
 
