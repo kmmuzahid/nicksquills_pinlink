@@ -17,10 +17,15 @@ class AuthRepository {
         endpoint: ApiEndPoint.instance.createUser,
         method: .POST,
         jsonBody: {
-          "name": entity.fullName,
+          "fullName": entity.fullName,
           "email": entity.email,
+          "username": entity.username,
           "password": entity.password,
-          "role": "USER", //USER, ADMIN
+          "role": "user", //ev_owner/ev_parking_owner
+          "homeCourse": entity.homeCourse,
+          "handicap": entity.handicap,
+          "latitude": entity.latitude,
+          "longitude": entity.longitude,
         },
       ),
       responseBuilder: (data) {
@@ -48,7 +53,10 @@ class AuthRepository {
   }) {
     return DioService.instance.request(
       input: RequestInput(
-        headers: {'refreshtoken': refreshToken, 'authorization': 'Bearer $accessToken'},
+        headers: {
+          'refreshtoken': refreshToken,
+          'authorization': 'Bearer $accessToken',
+        },
         endpoint: ApiEndPoint.instance.logout,
         method: .POST,
       ),
@@ -58,13 +66,20 @@ class AuthRepository {
     );
   }
 
-  Future<ResponseState<dynamic>> sendOtp(String email) {
+  Future<ResponseState<dynamic>> sendOtp(
+    String email, {
+    required bool isResend,
+    required String? resendToken,
+  }) {
     return DioService.instance.request(
       showMessage: true,
       input: RequestInput(
-        endpoint: ApiEndPoint.instance.resendOtp,
+        endpoint: isResend
+            ? ApiEndPoint.instance.resendOtp
+            : ApiEndPoint.instance.forgotPasswordOtp,
         method: .POST,
         jsonBody: {"email": email},
+        headers: {if (isResend) "token": "$resendToken"},
       ),
       responseBuilder: (data) {
         return data;
@@ -72,7 +87,10 @@ class AuthRepository {
     );
   }
 
-  Future<ResponseState<dynamic>> verifyOtp({required String email, required String otp}) {
+  Future<ResponseState<dynamic>> verifyOtp({
+    required String email,
+    required String otp,
+  }) {
     return DioService.instance.request(
       showMessage: true,
       input: RequestInput(

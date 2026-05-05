@@ -9,4 +9,5 @@ class Constants {
   static const EdgeInsets bodyPadding = EdgeInsets.symmetric(horizontal: 16.0);
   static const maxImageUpload = 9;
   static String sampleImage = 'https://picsum.photos/id/1/200/300';
+  static String mapScretKey = 'AIzaSyCcghkKL7Ah4bnRp5wg0YZL4BKHsColEh4';
 }

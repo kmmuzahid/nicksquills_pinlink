@@ -13,8 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinlink/config/bloc/cubit_scope.dart';
 import 'package:pinlink/config/color/app_color.dart';
-import 'package:pinlink/config/route/app_router.dart';
-import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/constant/app_string.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_flow_cubit.dart';
@@ -43,7 +41,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
       decoration: BoxDecoration(
         color: context.colors.bACKGROUND_darkCard,
         borderRadius: const BorderRadius.all(Radius.circular(16)),
-        border: Border.all(color: context.colors.bACKGROUND_darkCardBoarder, width: 1.4),
+        border: Border.all(
+          color: context.colors.bACKGROUND_darkCardBoarder,
+          width: 1.4,
+        ),
       ),
       child: FormBuilder(
         entity: SignUpEntity(),
@@ -98,26 +99,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           CommonButton(
                             onTap: () {
                               formKey.currentState?.save();
-                              if (page < 3) {
-                                setState(() {
-                                  page++;
-                                });
-                              }
                               if (page == 3) {
-                                appRouter.push(
-                                  SendOtpRoute(
-                                    onSuccess: ({required String email, required String token}) {},
-                                    username: entity.username ?? '',
-                                    showSendToField: true,
-                                  ),
-                                );
+                                if ((formKey.currentState?.validate() ??
+                                        false) &&
+                                    entity.isAgree &&
+                                    page == 3) {
+                                  cubit.signup(entity);
+                                }
+                                // appRouter.push(
+                                //   SendOtpRoute(
+                                //     onSuccess:
+                                //         ({
+                                //           required String email,
+                                //           required String token,
+                                //         }) {},
+                                //     username: entity.username ?? '',
+                                //     showSendToField: true,
+                                //   ),
+                                // );
+                                return;
                               }
-                              // if ((formKey.currentState?.validate() ?? false) && entity.isAgree &&  page == 3) {
-                              // cubit.signup(entity);
-                              // }
+                              if (page < 3) {
+                                if ((formKey.currentState?.validate() ??
+                                    false)) {
+                                  setState(() {
+                                    page++;
+                                  });
+                                }
+                              }
                             },
                             isLoading: state,
-                            titleText: page == 3 ? 'Create Account' : 'Continue',
+                            titleText: page == 3
+                                ? 'Create Account'
+                                : 'Continue',
                             buttonWidth: double.infinity,
                           ),
                         ],

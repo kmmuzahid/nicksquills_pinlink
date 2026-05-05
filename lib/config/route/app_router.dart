@@ -5,7 +5,6 @@
  */
 import 'package:auto_route/auto_route.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
- 
 
 final appRouter = AppRouter();
 
@@ -49,25 +48,26 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: OnboardingRoute.page),
     AutoRoute(page: LoginRoute.page),
     AutoRoute(page: PrivacyPolicyRoute.page),
-    AutoRoute(page: TermsOfUseRoute.page), 
+    AutoRoute(page: TermsOfUseRoute.page),
     AutoRoute(page: SendOtpRoute.page),
-    AutoRoute(page: NavigationRoute.page), 
+    AutoRoute(page: NavigationRoute.page),
     AutoRoute(page: ChangePasswordRoute.page),
     AutoRoute(page: NotificationRoute.page),
     AutoRoute(page: ResetPasswordRoute.page),
     AutoRoute(page: FaqRoute.page),
     AutoRoute(page: AboutUsRoute.page),
-    AutoRoute(page: EditProfileRoute.page), 
-    AutoRoute(page: SubscriptionsRoute.page), 
+    AutoRoute(page: EditProfileRoute.page),
+    AutoRoute(page: SubscriptionsRoute.page),
     AutoRoute(page: AddCourseRoute.page),
-    AutoRoute(page: ComparisonRoute.page), 
+    AutoRoute(page: ComparisonRoute.page),
     AutoRoute(page: CreatePostRoute.page),
-    AutoRoute(page: PostDetailsRoute.page), 
-    AutoRoute(page: FriendsRoute.page), 
+    AutoRoute(page: PostDetailsRoute.page),
+    AutoRoute(page: FriendsRoute.page),
     AutoRoute(page: BuildTournamentRoute.page),
     AutoRoute(page: GolfMapViewRoute.page),
-    AutoRoute(page: SettingRoute.page), 
+    AutoRoute(page: SettingRoute.page),
     AutoRoute(page: SupportRoute.page),
     AutoRoute(page: TournamentListRoute.page),
+    AutoRoute(page: CustomMapRoute.page),
   ];
 }

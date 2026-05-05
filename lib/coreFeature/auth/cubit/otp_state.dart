@@ -10,6 +10,7 @@ class OtpState {
     this.username = '',
     this.isOtpSent = false,
     this.isResend = false,
+    this.resendToken = '',
   });
   final String otp;
   final String verificationId;
@@ -20,6 +21,7 @@ class OtpState {
   final int count;
   final bool isOtpSent;
   final bool isResend;
+  final String resendToken;
 
   OtpState copyWith({
     String? otp,
@@ -30,6 +32,7 @@ class OtpState {
     int? count,
     bool? isOtpSent,
     bool? isResend,
+    String? resendToken,
   }) {
     return OtpState(
       otp: otp ?? this.otp,
@@ -40,6 +43,7 @@ class OtpState {
       count: count ?? this.count,
       isOtpSent: isOtpSent ?? this.isOtpSent,
       isResend: isResend ?? this.isResend,
+      resendToken: resendToken ?? this.resendToken,
     );
   }
 
@@ -55,7 +59,8 @@ class OtpState {
         other.isLoading == isLoading &&
         other.count == count &&
         other.isOtpSent == isOtpSent &&
-        other.isResend == isResend;
+        other.isResend == isResend &&
+        other.resendToken == resendToken;
   }
 
   @override

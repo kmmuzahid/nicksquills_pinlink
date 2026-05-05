@@ -13,6 +13,8 @@ class SignUpEntity {
   String? homeCourse;
   String? handicap;
   String? hometown;
+  double? latitude;
+  double? longitude;
   String? phoneNumber;
   bool isAgree = false;
 }

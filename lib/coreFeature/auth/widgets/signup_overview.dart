@@ -21,13 +21,21 @@ class SignUpOverview extends StatelessWidget {
         _buildText(context, 'Email', entity.email ?? ''),
         _buildText(context, 'Hometown', entity.hometown ?? ''),
         _buildText(context, 'Home Course', entity.homeCourse ?? ''),
-        _buildText(context, 'Estimated Handicap', entity.handicap ?? '', isLast: true),
+        _buildText(
+          context,
+          'Estimated Handicap',
+          entity.handicap ?? '',
+          isLast: true,
+        ),
         20.height,
         Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: context.colors.bACKGROUND_darkPage,
-            border: Border.all(color: context.colors.bACKGROUND_darkCardBoarder, width: 1.4),
+            border: Border.all(
+              color: context.colors.bACKGROUND_darkCardBoarder,
+              width: 1.4,
+            ),
             borderRadius: BorderRadius.circular(16),
           ),
           child: Text.rich(
@@ -58,17 +66,26 @@ class SignUpOverview extends StatelessWidget {
     );
   }
 
-  Widget _buildText(BuildContext context, String title, String value, {bool isLast = false}) {
+  Widget _buildText(
+    BuildContext context,
+    String title,
+    String value, {
+    bool isLast = false,
+  }) {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: !isLast
           ? BoxDecoration(
               border: Border(
-                bottom: BorderSide(color: context.colors.bACKGROUND_darkCardBoarder, width: 1.4),
+                bottom: BorderSide(
+                  color: context.colors.bACKGROUND_darkCardBoarder,
+                  width: 1.4,
+                ),
               ),
             )
           : null,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CommonText(
             text: title,
@@ -76,12 +93,19 @@ class SignUpOverview extends StatelessWidget {
             fontWeight: FontWeight.w500,
             textColor: context.colors.tEXT_subDark,
           ),
-          const Spacer(),
-          CommonText(
-            text: value,
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            textColor: context.colors.tEXT_white,
+          20.width,
+          Expanded(
+            child: Align(
+              alignment: .centerRight,
+              child: CommonText(
+                text: value,
+                textAlign: .right,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                textColor: context.colors.tEXT_white,
+                isDescription: true,
+              ),
+            ),
           ),
         ],
       ),
