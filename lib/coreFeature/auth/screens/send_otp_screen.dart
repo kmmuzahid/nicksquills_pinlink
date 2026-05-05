@@ -22,15 +22,19 @@ class SendOtpScreen extends StatelessWidget {
     required this.onSuccess,
     required this.username,
     this.showSendToField = false,
+    this.token,
   });
   final Function({required String token, required String email}) onSuccess;
   final String username;
   final bool showSendToField;
+  final String? token;
 
   @override
   Widget build(BuildContext context) => AuthBackground(
     appBar: CommonAppBar(
-      appbarConfig: AppbarConfig(decoration: () => const BoxDecoration(color: Colors.transparent)),
+      appbarConfig: AppbarConfig(
+        decoration: () => const BoxDecoration(color: Colors.transparent),
+      ),
     ),
     body: FormBuilder(
       entity: null,
@@ -39,7 +43,7 @@ class SendOtpScreen extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: CubitScope(
             create: () {
-              final cubit = OtpCubit();
+              final cubit = OtpCubit(token: token);
               if (showSendToField) {
                 cubit.alreadyOtpSent(username);
               }
@@ -49,8 +53,9 @@ class SendOtpScreen extends StatelessWidget {
               return Column(
                 children: [
                   50.height,
-                  if (!showSendToField && !state.isOtpSent && !state.isResend)
-                   ...[
+                  if (!showSendToField &&
+                      !state.isOtpSent &&
+                      !state.isResend) ...[
                     CommonText(
                       text: AppString.forget_password,
                       fontSize: 18,
@@ -59,7 +64,8 @@ class SendOtpScreen extends StatelessWidget {
                       alignment: MainAxisAlignment.center,
                     ),
                     CommonText(
-                      text: AppString.enter_your_email_account_to_rest_your_password,
+                      text: AppString
+                          .enter_your_email_account_to_rest_your_password,
                       fontSize: 16,
                       textColor: context.colors.pRIMARY_priSoft,
                       maxLines: 3,
@@ -83,13 +89,15 @@ class SendOtpScreen extends StatelessWidget {
                             onPressed: () {
                               context.read<OtpCubit>().resetState();
                             },
-                            icon: Icon(Icons.edit_note_outlined, color: context.colors.tEXT_white),
+                            icon: Icon(
+                              Icons.edit_note_outlined,
+                              color: context.colors.tEXT_white,
+                            ),
                           ),
                       ],
                     ),
                   ],
-                  if (state.isOtpSent)
-                    ...[
+                  if (state.isOtpSent) ...[
                     CommonText(
                       text:
                           '${AppString.verification_code_has_been_sent_to} ${username.isNotEmpty ? username : state.username}',
@@ -113,10 +121,13 @@ class SendOtpScreen extends StatelessWidget {
                       username: showSendToField ? username : null,
                       cubit: cubit,
                     ),
-                    crossFadeState: showSendToField || state.isOtpSent || state.isResend
+                    crossFadeState:
+                        showSendToField || state.isOtpSent || state.isResend
                         ? CrossFadeState.showSecond
                         : CrossFadeState.showFirst,
-                    duration: const Duration(milliseconds: 300), // Increase the duration
+                    duration: const Duration(
+                      milliseconds: 300,
+                    ), // Increase the duration
                   ),
 
                   85.height,
@@ -125,7 +136,7 @@ class SendOtpScreen extends StatelessWidget {
             },
           ),
         );
-      }
+      },
     ),
   );
 }

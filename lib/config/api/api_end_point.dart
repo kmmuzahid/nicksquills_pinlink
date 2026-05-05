@@ -13,9 +13,9 @@ class ApiEndPoint {
   final String baseUrl = '$_domain/api/v1';
   final String refreshTokenEndpoint = '/auth/refresh-token';
   final String createUser = '/users/create';
-  final String verifyOtp = '/auth/verify-email';
+  final String verifyOtp = '/users/verify-otp';
   final String login = '/auth/login';
-  final String resetPassword = '/auth/reset-password';
+  final String resetPassword = '/auth/forgot-password-reset';
   final String getProfile = '/user/profile';
   final String setting = '/setting';
 

@@ -11,7 +11,7 @@ import 'package:pinlink/coreFeature/auth/cubit/otp_state.dart';
 import 'package:pinlink/coreFeature/auth/repository/auth_repository.dart';
 
 class OtpCubit extends SafeCubit<OtpState> {
-  OtpCubit() : super(const OtpState());
+  OtpCubit({String? token}) : super(OtpState(resendToken: token ?? ''));
   final AuthRepository _authRepository = AuthRepository();
   Timer? _timer;
 
@@ -54,7 +54,9 @@ class OtpCubit extends SafeCubit<OtpState> {
         state.copyWith(
           isLoading: false,
           isOtpSent: true,
-          resendToken: result.data?['forgetToken']?.toString() ?? '',
+          resendToken:
+              result.data?['forgetToken']?.toString() ??
+              (result.data?['createUserToken']?.toString() ?? ''),
         ),
       );
       _startTimer();
@@ -67,18 +69,23 @@ class OtpCubit extends SafeCubit<OtpState> {
     String otp,
     Function({required String token, required String email}) onSuccess,
   ) async {
+    print("token ${state.resendToken}");
     //remove it on integration
-    onSuccess(token: '', email: state.username);
+    // onSuccess(token: '', email: state.username);
 
     //uncomment it on integration
-    // if (state.isLoading) return;
-    // final result = await _authRepository.verifyOtp(email: state.username, otp: otp);
-    // if (result.isSuccess) {
-    //   emit(state.copyWith(isVerified: true, isLoading: false));
-    //   onSuccess(token: result.data ?? '', email: state.username);
-    // } else {
-    //   emit(state.copyWith(isLoading: false));
-    // }
+    if (state.isLoading) return;
+    final result = await _authRepository.verifyOtp(
+      email: state.username,
+      otp: otp,
+      token: state.resendToken,
+    );
+    if (result.isSuccess) {
+      emit(state.copyWith(isVerified: true, isLoading: false));
+      onSuccess(token: state.resendToken, email: state.username);
+    } else {
+      emit(state.copyWith(isLoading: false));
+    }
   }
 
   void alreadyOtpSent(String? username) {

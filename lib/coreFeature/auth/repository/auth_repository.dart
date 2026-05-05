@@ -90,11 +90,15 @@ class AuthRepository {
   Future<ResponseState<dynamic>> verifyOtp({
     required String email,
     required String otp,
+    required String? token,
   }) {
+    print(otp);
+    print(email);
     return DioService.instance.request(
       showMessage: true,
       input: RequestInput(
         endpoint: ApiEndPoint.instance.verifyOtp,
+        headers: {"token": "$token"},
         method: .POST,
         jsonBody: {"email": email, "otp": int.parse(otp)},
       ),
@@ -108,13 +112,12 @@ class AuthRepository {
     return DioService.instance.request(
       input: RequestInput(
         endpoint: ApiEndPoint.instance.resetPassword,
-        method: .POST,
+        method: .PATCH,
         jsonBody: {
-          "email": entity.email ?? '',
           "newPassword": entity.password,
           "confirmPassword": entity.confirmPassword,
-          "token": entity.verificationToken,
         },
+        headers: {"token": "${entity.verificationToken}"},
       ),
       responseBuilder: (data) {
         return data;

@@ -34,7 +34,6 @@ class AuthFlowCubit extends SafeCubit<bool> {
     } else {
       showSnackBar(result.message ?? '', type: SnackBarType.error);
       if (result.statusCode == 424) {
-        // _authRepository.sendOtp(entity.email!, isResend: false, resendToken: '');
         appRouter.push(
           SendOtpRoute(
             onSuccess: ({required email, required token}) async {
@@ -43,6 +42,7 @@ class AuthFlowCubit extends SafeCubit<bool> {
               loginEntity.password = entity.password;
               login(loginEntity);
             },
+            token: result.data?['token']?.toString() ?? '',
             username: entity.email!,
             showSendToField: true,
           ),

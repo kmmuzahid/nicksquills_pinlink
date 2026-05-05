@@ -18,13 +18,16 @@ import 'package:pinlink/coreFeature/auth/entity/forget_pass_entity.dart';
 
 @RoutePage()
 class ResetPasswordScreen extends StatelessWidget {
-  const ResetPasswordScreen({super.key, required this.verificationToken, required this.email});
+  const ResetPasswordScreen({
+    super.key,
+    required this.verificationToken,
+    required this.email,
+  });
   final String verificationToken;
   final String email;
 
   @override
   Widget build(BuildContext context) {
-  
     return SimpleBackground(
       appBar: const CommonAppBar(title: "Reset Password"),
       body: FormBuilder(
@@ -36,7 +39,7 @@ class ResetPasswordScreen extends StatelessWidget {
             padding: Constants.bodyPadding,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [ 
+              children: [
                 40.height,
                 CommonText(
                   text: "Enter your new password below.",
@@ -61,7 +64,8 @@ class ResetPasswordScreen extends StatelessWidget {
                   originalPassword: () => entity.password ?? '',
                   validationType: ValidationType.validateConfirmPassword,
                   prefixIcon: const Icon(Icons.lock_outline),
-                  onSaved: (value, controller) => entity.confirmPassword = value,
+                  onSaved: (value, controller) =>
+                      entity.confirmPassword = value,
                 ),
                 30.height,
 
@@ -76,7 +80,7 @@ class ResetPasswordScreen extends StatelessWidget {
                       },
                       isLoading: state,
                       titleText: "Reset Password",
-                      buttonWidth: double.infinity, 
+                      buttonWidth: double.infinity,
                     );
                   },
                 ),
