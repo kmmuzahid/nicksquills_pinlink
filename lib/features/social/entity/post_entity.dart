@@ -5,4 +5,5 @@ class PostEntity {
   DateTime? date;
   String? holes;
   String? totalScore;
+  String? courseName;
 }

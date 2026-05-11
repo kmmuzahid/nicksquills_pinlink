@@ -5,11 +5,13 @@ import 'package:pinlink/common_widgets/show_url_widget.dart';
 import 'package:pinlink/common_widgets/simple_background.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/constant/constants.dart';
+import 'package:pinlink/features/social/model/post_model.dart';
 import 'package:pinlink/features/social/widgets/post_text_widget.dart';
 
 @RoutePage()
 class PostDetailsScreen extends StatelessWidget {
-  const PostDetailsScreen({super.key});
+  const PostDetailsScreen({super.key, required this.postModel});
+  final PostModel postModel;
 
   @override
   Widget build(BuildContext context) {

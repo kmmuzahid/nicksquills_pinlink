@@ -6,16 +6,61 @@
 import 'dart:io';
 
 import 'package:core_kit/core_kit.dart';
+import 'package:core_kit/network/request_input.dart';
+import 'package:pinlink/config/api/api_end_point.dart';
 import 'package:pinlink/config/bloc/safe_cubit.dart';
+import 'package:pinlink/config/dependency/dependency_injection.dart';
+import 'package:pinlink/config/route/app_router.dart';
+import 'package:pinlink/features/course_comparision/model/user_course_model.dart';
+import 'package:pinlink/features/course_comparision/repository/course_repository.dart';
 import 'package:pinlink/features/social/cubit/social_state.dart';
+import 'package:pinlink/features/social/entity/post_entity.dart';
+import 'package:pinlink/features/social/repository/social_repository.dart';
 import 'package:video_player/video_player.dart';
 
-class CreateSocialPostCubit extends SafeCubit<CreateSocialPostState> {
-  CreateSocialPostCubit() : super(const CreateSocialPostState());
+class SocialCubit extends SafeCubit<CreateSocialPostState> {
+  SocialCubit() : super(const CreateSocialPostState());
+
+  final courseRepository = getIt<CourseRepository>();
+
+  final socialRepository = getIt<SocialBase>();
 
   final ImagePicker _imagePicker = ImagePicker();
 
-  bool isVideo(File file) {
+  final debounce = Debouncer(milliseconds: 300);
+
+  String searchTex = '';
+
+  Future<void> getAllPost({
+    bool isRefresh = false,
+    int page = 1,
+    String? searchText,
+  }) async {
+    if (state.isPostLoaing) return;
+
+    searchText = searchText;
+
+    emit(
+      state.copyWith(isPostLoaing: true, posts: isRefresh ? [] : state.posts),
+    );
+
+    final result = await socialRepository.getAllPost(page, searchText);
+
+    emit(state.copyWith(isPostLoaing: false));
+    if (result.isSuccess) {
+      emit(state.copyWith(posts: [...state.posts, ...(result.data ?? [])]));
+    }
+  }
+
+  Future<void> searchPost(String query) async {
+    if (searchTex == query) return;
+    searchTex = query;
+    debounce.run(() async {
+      await getAllPost(searchText: query, isRefresh: true);
+    });
+  }
+
+  bool isVideo(XFile file) {
     final extension = file.path.split('.').last.toLowerCase();
     final videoExtensions = ['mp4', 'mov', 'avi', 'mkv', 'webm'];
     return videoExtensions.contains(extension);
@@ -31,7 +76,7 @@ class CreateSocialPostCubit extends SafeCubit<CreateSocialPostState> {
     if (file.isEmpty) return;
 
     for (var element in file) {
-      final pickedFile = File(element.path);
+      final pickedFile = element;
 
       if (isVideo(pickedFile)) {
         final isValid = await _validateVideoDuration(
@@ -50,15 +95,15 @@ class CreateSocialPostCubit extends SafeCubit<CreateSocialPostState> {
   }
 
   Future<void> removeImage(int index) async {
-    final updatedFiles = List<File>.from(state.files)..removeAt(index);
+    final updatedFiles = List<XFile>.from(state.files)..removeAt(index);
     emit(state.copyWith(files: updatedFiles));
   }
 
   static Future<bool> _validateVideoDuration(
-    File file, {
+    XFile file, {
     Duration maxVideoDuration = const Duration(seconds: 30),
   }) async {
-    final controller = VideoPlayerController.file(file);
+    final controller = VideoPlayerController.file(File(file.path));
 
     await controller.initialize();
 
@@ -73,24 +118,79 @@ class CreateSocialPostCubit extends SafeCubit<CreateSocialPostState> {
     return true;
   }
 
-  void addCourse(String course) {
-    final updatedCourses = List<String>.from(state.courses)..add(course);
-    emit(CreateSocialPostState(courses: updatedCourses, links: state.links));
+  final List<String> _allCourses = [
+    'Augusta National Golf Club',
+    'Pine Valley Golf Club',
+    'Cypress Point Club',
+    'St Andrews Links',
+    'Pebble Beach Golf Links',
+    'Shinnecock Hills Golf Club',
+    'Oakmont Country Club',
+    'Merion Golf Club',
+    'Winged Foot Golf Club',
+    'Fisher\'s Island Club',
+  ];
+
+  Future<void> createPost(PostEntity entity) async {
+    emit(state.copyWith(isPosting: true));
+
+    final result = await DioService.instance.request(
+      showMessage: true,
+      input: RequestInput(
+        endpoint: ApiEndPoint.instance.createPostData,
+        method: .POST,
+        formFields: {
+          'coursename': state.courses.first.courseId?.name,
+          'headline': entity.headline,
+          'description': entity.description,
+          'isScorecard': !state.isPublic,
+          'scorecardDate': entity.date?.toIso8601String(),
+          'scorecardHoles': int.tryParse(entity.holes ?? '0'),
+          'scorecardTotalScore': int.tryParse(entity.totalScore ?? '0'),
+          'links': state.links,
+        },
+        files: {'mediaLinks': state.files},
+      ),
+      responseBuilder: (data) {
+        return data;
+      },
+    );
+    emit(state.copyWith(isPosting: false));
+    if (result.isSuccess) {
+      appRouter.pop();
+    }
   }
 
-  void removeCourse(String course) {
-    final updatedCourses = List<String>.from(state.courses)..remove(course);
-    emit(CreateSocialPostState(courses: updatedCourses, links: state.links));
+  Future<void> searchCourses(String query) async {
+    if (query.isEmpty) {
+      emit(state.copyWith(searchResults: []));
+      return;
+    }
+    final result = await courseRepository.getUserPlayedCourse(query: query);
+    if (result.isSuccess) {
+      emit(state.copyWith(searchResults: result.data ?? []));
+    }
+  }
+
+  void addCourse(UserCourseModel course) {
+    final updatedCourses = [course];
+    emit(state.copyWith(courses: updatedCourses, searchResults: []));
+  }
+
+  void removeCourse(UserCourseModel course) {
+    final updatedCourses = List<UserCourseModel>.from(state.courses)
+      ..remove(course);
+    emit(state.copyWith(courses: updatedCourses));
   }
 
   void addLink(String link) {
     final updatedLinks = List<String>.from(state.links)..add(link);
-    emit(CreateSocialPostState(courses: state.courses, links: updatedLinks));
+    emit(state.copyWith(links: updatedLinks));
   }
 
   void removeLink(String link) {
     final updatedLinks = List<String>.from(state.links)..remove(link);
-    emit(CreateSocialPostState(courses: state.courses, links: updatedLinks));
+    emit(state.copyWith(links: updatedLinks));
   }
 
   void changePrivacy() {

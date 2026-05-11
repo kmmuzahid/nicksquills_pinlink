@@ -1,6 +1,5 @@
 import 'package:get_it/get_it.dart';
 import 'package:pinlink/config/dependency/core_dependency.dart';
-import 'package:pinlink/config/dependency/mock_repository_dependency.dart';
 import 'package:pinlink/config/dependency/real_repository_dependency.dart';
 
 GetIt getIt = GetIt.instance;
@@ -10,7 +9,7 @@ class DependencyInjection {
     CoreDependency.dependencies();
 
     //repositroy
-    MockRepositoryDependency.dependencies();
+    // MockRepositoryDependency.dependencies();
     RealRepositoryDependency.dependencies();
   }
 }

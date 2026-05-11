@@ -19,6 +19,7 @@ import 'package:pinlink/features/profile/cubit/profile_cubit.dart';
 import 'package:pinlink/features/profile/cubit/profile_cubit_state.dart';
 import 'package:pinlink/features/profile/widgets/category_scrolled_list.dart';
 import 'package:pinlink/features/profile/widgets/profile_card_widget.dart';
+import 'package:pinlink/features/social/model/post_model.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -280,7 +281,9 @@ class ProfileScreen extends StatelessWidget {
       ),
       child: AspectRatio(
         aspectRatio: 0.8,
-        child: showItem ? const SocialItemWidget() : const SizedBox.shrink(),
+        child: showItem
+            ? SocialItemWidget(postModel: PostModel())
+            : const SizedBox.shrink(),
       ),
     );
   }

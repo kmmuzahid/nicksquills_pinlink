@@ -46,6 +46,7 @@ import 'package:pinlink/features/leaderboard/screens/add_friend_screen.dart'
     as _i10;
 import 'package:pinlink/features/leaderboard/screens/build_tournament_screen.dart'
     as _i3;
+import 'package:pinlink/features/social/model/post_model.dart' as _i30;
 import 'package:pinlink/features/social/screens/create_post_screen.dart' as _i6;
 import 'package:pinlink/features/social/screens/post_details_screen.dart'
     as _i16;
@@ -449,18 +450,49 @@ class OnboardingRoute extends _i26.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i16.PostDetailsScreen]
-class PostDetailsRoute extends _i26.PageRouteInfo<void> {
-  const PostDetailsRoute({List<_i26.PageRouteInfo>? children})
-    : super(PostDetailsRoute.name, initialChildren: children);
+class PostDetailsRoute extends _i26.PageRouteInfo<PostDetailsRouteArgs> {
+  PostDetailsRoute({
+    _i27.Key? key,
+    required _i30.PostModel postModel,
+    List<_i26.PageRouteInfo>? children,
+  }) : super(
+         PostDetailsRoute.name,
+         args: PostDetailsRouteArgs(key: key, postModel: postModel),
+         initialChildren: children,
+       );
 
   static const String name = 'PostDetailsRoute';
 
   static _i26.PageInfo page = _i26.PageInfo(
     name,
     builder: (data) {
-      return const _i16.PostDetailsScreen();
+      final args = data.argsAs<PostDetailsRouteArgs>();
+      return _i16.PostDetailsScreen(key: args.key, postModel: args.postModel);
     },
   );
+}
+
+class PostDetailsRouteArgs {
+  const PostDetailsRouteArgs({this.key, required this.postModel});
+
+  final _i27.Key? key;
+
+  final _i30.PostModel postModel;
+
+  @override
+  String toString() {
+    return 'PostDetailsRouteArgs{key: $key, postModel: $postModel}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! PostDetailsRouteArgs) return false;
+    return key == other.key && postModel == other.postModel;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ postModel.hashCode;
 }
 
 /// generated route for

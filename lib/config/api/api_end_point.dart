@@ -30,4 +30,10 @@ class ApiEndPoint {
   final String deleteAccount = '/user/delete-account';
 
   //app based
+
+  final String userPlayedCourse = '/compareCourse/user'; //get
+
+  final String createPostData = '/postData/create-postData';
+
+  final String userPost = '/post/user';
 }

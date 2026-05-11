@@ -6,9 +6,11 @@
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:pinlink/common_widgets/social_item_widget.dart';
+import 'package:pinlink/config/bloc/cubit_scope.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
+import 'package:pinlink/features/social/cubit/social_cubit.dart';
 
 class SocialScreen extends StatelessWidget {
   const SocialScreen({super.key});
@@ -17,24 +19,35 @@ class SocialScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: SmartStaggeredLoader(
-        appbar: _topWidget(context),
-        onColapsAppbar: Container(
-          padding: const .only(bottom: 4),
-          color: context.colors.background,
-          child: _header(),
-        ),
-        gridConfig: GridConfig(aspectRatio: 0.65),
-        itemCount: 20,
-        onRefresh: () {},
-        onLoadMore: (page) {},
-        limit: 20,
-        itemBuilder: (context, index) => const SocialItemWidget(),
+      child: CubitScope(
+        create: () => SocialCubit()..getAllPost(),
+        builder: (context, cubit, state) {
+          return SmartStaggeredLoader(
+            appbar: _topWidget(context, cubit),
+            onColapsAppbar: Container(
+              padding: const .only(bottom: 4),
+              color: context.colors.background,
+              child: _header(cubit),
+            ),
+            isLoading: state.isPostLoaing,
+            gridConfig: GridConfig(aspectRatio: 0.65),
+            itemCount: state.posts.length,
+            onRefresh: () {
+              cubit.getAllPost(isRefresh: true, page: 1);
+            },
+            onLoadMore: (page) {
+              cubit.getAllPost(page: page);
+            },
+            limit: 10,
+            itemBuilder: (context, index) =>
+                SocialItemWidget(postModel: state.posts[index]),
+          );
+        },
       ),
     );
   }
 
-  Column _topWidget(BuildContext context) {
+  Column _topWidget(BuildContext context, SocialCubit cubit) {
     return Column(
       children: [
         8.height,
@@ -45,7 +58,7 @@ class SocialScreen extends StatelessWidget {
           maxLines: 2,
         ).center,
         8.height,
-        _header(),
+        _header(cubit),
         // 18.height,
         // consentCard(context),
         // 8.height,
@@ -55,7 +68,7 @@ class SocialScreen extends StatelessWidget {
     );
   }
 
-  Row _header() {
+  Row _header(SocialCubit cubit) {
     return Row(
       children: [
         Expanded(
@@ -63,7 +76,9 @@ class SocialScreen extends StatelessWidget {
             hintText: 'Search content',
             validationType: .notRequired,
             borderRadius: 10,
-            onChanged: (value) {},
+            onChanged: (value) {
+              cubit.searchPost(value);
+            },
           ),
         ),
         8.width,

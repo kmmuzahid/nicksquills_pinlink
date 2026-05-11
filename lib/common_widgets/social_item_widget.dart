@@ -6,9 +6,12 @@ import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/constant/constants.dart';
+import 'package:pinlink/features/social/model/post_model.dart';
 
 class SocialItemWidget extends StatelessWidget {
-  const SocialItemWidget({super.key});
+  const SocialItemWidget({super.key, required this.postModel});
+
+  final PostModel postModel;
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +21,17 @@ class SocialItemWidget extends StatelessWidget {
   Widget _item(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        appRouter.push(const PostDetailsRoute());
+        appRouter.push(PostDetailsRoute(postModel: postModel));
       },
       child: Stack(
         children: [
           Positioned.fill(
-            child: CommonImage(src: Constants.sampleImage, borderRadius: 6),
+            child: CommonImage(
+              src: postModel.postDataId?.mediaLinks?.isNotEmpty ?? false
+                  ? postModel.postDataId!.mediaLinks!.first ?? ''
+                  : Constants.sampleImage,
+              borderRadius: 6,
+            ),
           ),
           Positioned(
             right: 0,
@@ -49,8 +57,8 @@ class SocialItemWidget extends StatelessWidget {
             child: Container(
               color: Colors.black.withValues(alpha: 0.05),
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              child: const CommonText(
-                text: 'Amazing weather today! Course was in perfect condition.',
+              child: CommonText(
+                text: postModel.postDataId?.description ?? '',
                 maxLines: 3,
                 textAlign: .left,
                 fontSize: 14,
