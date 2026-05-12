@@ -320,10 +320,22 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               children: [
                                 const BuildLabel('Holes'),
                                 CommonTextField(
-                                  validationType:
-                                      ValidationType.validateRequired,
+                                  validationType: ValidationType.validateNumber,
                                   hintText: 'e.g., 9/18',
                                   onChanged: (value) => entity.holes = value,
+                                  validation: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Holes is required';
+                                    }
+
+                                    final holes = int.tryParse(value.trim());
+
+                                    if (holes != 9 && holes != 18) {
+                                      return 'Holes must be 9 or 18';
+                                    }
+
+                                    return null;
+                                  },
                                 ),
                               ],
                             ),
