@@ -15,6 +15,7 @@ import 'package:pinlink/features/course_comparision/model/user_course_model.dart
 import 'package:pinlink/features/course_comparision/repository/course_repository.dart';
 import 'package:pinlink/features/social/cubit/social_state.dart';
 import 'package:pinlink/features/social/entity/post_entity.dart';
+import 'package:pinlink/features/social/model/post_model.dart';
 import 'package:pinlink/features/social/repository/social_repository.dart';
 import 'package:video_player/video_player.dart';
 
@@ -209,6 +210,15 @@ class SocialCubit extends SafeCubit<SocialState> {
         final updatedPosts = state.posts.where((e) => e.id != postId).toList();
         emit(state.copyWith(posts: updatedPosts));
       }
+    }
+  }
+
+  void updatePost(PostModel updatedPost) {
+    final updatedPosts = List<PostModel>.from(state.posts);
+    final index = updatedPosts.indexWhere((e) => e.id == updatedPost.id);
+    if (index != -1) {
+      updatedPosts[index] = updatedPost;
+      emit(state.copyWith(posts: updatedPosts));
     }
   }
 }

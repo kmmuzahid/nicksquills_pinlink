@@ -287,6 +287,7 @@ class ProfileScreen extends StatelessWidget {
         child: showItem
             ? SocialItemWidget(
                 postModel: PostModel(),
+                onChanged: (postModel) {},
                 onReportPost: () {
                   showDialog(
                     context: context,

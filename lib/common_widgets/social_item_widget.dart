@@ -13,10 +13,12 @@ class SocialItemWidget extends StatelessWidget {
     super.key,
     required this.postModel,
     required this.onReportPost,
+    required this.onChanged,
   });
 
   final PostModel postModel;
   final VoidCallback onReportPost;
+  final void Function(PostModel postModel) onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +45,7 @@ class SocialItemWidget extends StatelessWidget {
             reportPost: () {
               onReportPost();
             },
+            onChanged: onChanged,
           ),
         );
       },

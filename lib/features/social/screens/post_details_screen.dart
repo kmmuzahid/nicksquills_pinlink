@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:pinlink/common_widgets/show_url_widget.dart';
 import 'package:pinlink/common_widgets/simple_background.dart';
+import 'package:pinlink/common_widgets/text_to_avater.dart';
 import 'package:pinlink/config/bloc/cubit_scope.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/constant/constants.dart';
@@ -20,9 +21,11 @@ class PostDetailsScreen extends StatelessWidget {
     super.key,
     required this.postModel,
     required this.reportPost,
+    required this.onChanged,
   });
   final PostModel postModel;
   final void Function() reportPost;
+  final void Function(PostModel postModel) onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -106,20 +109,27 @@ class PostDetailsScreen extends StatelessWidget {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  cubit.likePost(postStateModel.id ?? '');
+                                  cubit.likePost(
+                                    postStateModel.id ?? '',
+                                    onChanged,
+                                  );
                                 },
                                 child: _buildActionButton(
-                                  Icons.favorite,
+                                  cubit.isLiked(postStateModel.id ?? '')
+                                      ? Icons.favorite
+                                      : Icons.favorite_border_outlined,
                                   "${postStateModel.likesCount ?? 0}",
-                                  Colors.red,
+                                  cubit.isLiked(postStateModel.id ?? '')
+                                      ? Colors.red
+                                      : Colors.white,
                                 ).end,
                               ),
-                              const SizedBox(height: 20),
-                              _buildActionButton(
-                                Icons.chat_bubble_outline,
-                                "${postStateModel.commentsCount ?? 0}",
-                                Colors.white,
-                              ).end,
+                              // const SizedBox(height: 20),
+                              // _buildActionButton(
+                              //   Icons.chat_bubble_outline,
+                              //   "${postStateModel.commentsCount ?? 0}",
+                              //   Colors.white,
+                              // ).end,
                               const SizedBox(height: 20),
                               GestureDetector(
                                 onTap: () {
@@ -258,11 +268,16 @@ class PostDetailsScreen extends StatelessWidget {
 
     return Row(
       children: [
-        CommonImage(
-          src: user?.profile ?? Constants.sampleImage,
-          borderRadius: 46,
-          size: 46,
+        TextToAvatar(
+          text: user?.fullName?.substring(0, 1) ?? "",
+          size: 50.w,
+          color: const Color(0xFF00BC7D),
         ),
+        // CommonImage(
+        //   src: user?.profile ?? Constants.sampleImage,
+        //   borderRadius: 46,
+        //   size: 46,
+        // ),
         const SizedBox(width: 10),
         Expanded(
           child: Column(
@@ -279,20 +294,22 @@ class PostDetailsScreen extends StatelessWidget {
                     ),
                   ),
                   10.width,
-                  CommonButton(
-                    titleText: 'Follow',
-                    buttonHeight: 20,
-                    onTap: () {
-                      cubit.follow(postModel.userId?.id ?? '');
-                    },
-                    buttonRadius: 4,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 2,
-                      horizontal: 5,
+                  if (postModel.userId?.id !=
+                      context.read<AuthCubit>().state.profile?.id)
+                    CommonButton(
+                      titleText: 'Follow',
+                      buttonHeight: 20,
+                      onTap: () {
+                        cubit.follow(postModel.userId?.id ?? '');
+                      },
+                      buttonRadius: 4,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 2,
+                        horizontal: 5,
+                      ),
+                      titleColor: Colors.black,
+                      buttonColor: const Color(0xffE3C97A),
                     ),
-                    titleColor: Colors.black,
-                    buttonColor: const Color(0xffE3C97A),
-                  ),
                 ],
               ),
               Row(

@@ -42,6 +42,8 @@ class ProfileModel {
   final int? followerCount;
   @JsonKey(name: 'pointCount')
   final int? pointCount;
+  @JsonKey(name: 'address')
+  final String? address;
 
   ProfileModel({
     this.friendCount,
@@ -63,8 +65,10 @@ class ProfileModel {
     this.followingCount,
     this.followerCount,
     this.pointCount,
+    this.address,
   });
 
-  factory ProfileModel.fromJson(Map<String, dynamic> json) => _$ProfileModelFromJson(json);
+  factory ProfileModel.fromJson(Map<String, dynamic> json) =>
+      _$ProfileModelFromJson(json);
   Map<String, dynamic> toJson() => _$ProfileModelToJson(this);
 }

@@ -43,7 +43,10 @@ class PostDetailsCubit extends SafeCubit<PostDetailsState> {
     }
   }
 
-  Future<void> likePost(String postId) async {
+  Future<void> likePost(
+    String postId,
+    void Function(PostModel postModel) onChanged,
+  ) async {
     final response = await socialRepository.likePost(postId);
 
     if (response.isSuccess) {
@@ -70,7 +73,13 @@ class PostDetailsCubit extends SafeCubit<PostDetailsState> {
             : post.likesCount! + 1,
       );
       emit(state.copyWith(postModel: updatedPost));
+      onChanged(updatedPost);
     }
+  }
+
+  bool isLiked(String postId) {
+    return state.postModel.likes?.contains(authCubit.state.profile?.id) ??
+        false;
   }
 
   Future<void> follow(String userId) async {

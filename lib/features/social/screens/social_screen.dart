@@ -43,6 +43,9 @@ class SocialScreen extends StatelessWidget {
             limit: 10,
             itemBuilder: (context, index) => SocialItemWidget(
               postModel: state.posts[index],
+              onChanged: (postModel) {
+                cubit.updatePost(postModel);
+              },
               onReportPost: () {
                 showDialog(
                   context: context,

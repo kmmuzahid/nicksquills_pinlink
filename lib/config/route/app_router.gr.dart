@@ -455,6 +455,7 @@ class PostDetailsRoute extends _i26.PageRouteInfo<PostDetailsRouteArgs> {
     _i27.Key? key,
     required _i30.PostModel postModel,
     required void Function() reportPost,
+    required void Function(_i30.PostModel) onChanged,
     List<_i26.PageRouteInfo>? children,
   }) : super(
          PostDetailsRoute.name,
@@ -462,6 +463,7 @@ class PostDetailsRoute extends _i26.PageRouteInfo<PostDetailsRouteArgs> {
            key: key,
            postModel: postModel,
            reportPost: reportPost,
+           onChanged: onChanged,
          ),
          initialChildren: children,
        );
@@ -476,6 +478,7 @@ class PostDetailsRoute extends _i26.PageRouteInfo<PostDetailsRouteArgs> {
         key: args.key,
         postModel: args.postModel,
         reportPost: args.reportPost,
+        onChanged: args.onChanged,
       );
     },
   );
@@ -486,6 +489,7 @@ class PostDetailsRouteArgs {
     this.key,
     required this.postModel,
     required this.reportPost,
+    required this.onChanged,
   });
 
   final _i27.Key? key;
@@ -494,9 +498,11 @@ class PostDetailsRouteArgs {
 
   final void Function() reportPost;
 
+  final void Function(_i30.PostModel) onChanged;
+
   @override
   String toString() {
-    return 'PostDetailsRouteArgs{key: $key, postModel: $postModel, reportPost: $reportPost}';
+    return 'PostDetailsRouteArgs{key: $key, postModel: $postModel, reportPost: $reportPost, onChanged: $onChanged}';
   }
 
   @override
