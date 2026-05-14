@@ -6,21 +6,22 @@
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:pinlink/common_widgets/social_item_widget.dart';
-import 'package:pinlink/config/bloc/cubit_scope.dart';
+import 'package:pinlink/config/bloc/cubit_scope_value.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/features/social/cubit/social_cubit.dart';
 
 class SocialScreen extends StatelessWidget {
-  const SocialScreen({super.key});
+  const SocialScreen({super.key, required this.socialCubit});
+  final SocialCubit socialCubit;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: CubitScope(
-        create: () => SocialCubit()..getAllPost(),
+      child: CubitScopeValue(
+        cubit: socialCubit..getAllPost(),
         builder: (context, cubit, state) {
           return SmartStaggeredLoader(
             appbar: _topWidget(context, cubit),
@@ -73,6 +74,7 @@ class SocialScreen extends StatelessWidget {
       children: [
         Expanded(
           child: CommonTextField(
+            key: ValueKey('social_search_${cubit.state.isPublicPostEnabled}'),
             hintText: 'Search content',
             validationType: .notRequired,
             borderRadius: 10,

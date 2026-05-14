@@ -211,7 +211,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         ),
                       ),
                       // Listener to update overlay when state changes
-                      BlocListener<SocialCubit, CreateSocialPostState>(
+                      BlocListener<SocialCubit, SocialState>(
                         bloc: cubit,
                         listenWhen: (previous, current) =>
                             previous.searchResults != current.searchResults,
@@ -424,7 +424,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   Widget _imageItems(
     BuildContext context,
     int index,
-    CreateSocialPostState state,
+    SocialState state,
     SocialCubit cubit,
   ) {
     if (index == state.files.length) {

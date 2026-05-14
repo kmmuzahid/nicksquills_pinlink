@@ -58,7 +58,7 @@ class SocialItemWidget extends StatelessWidget {
               color: Colors.black.withValues(alpha: 0.05),
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               child: CommonText(
-                text: postModel.postDataId?.description ?? '',
+                text: postModel.postDataId?.headline ?? '',
                 maxLines: 3,
                 textAlign: .left,
                 fontSize: 14,

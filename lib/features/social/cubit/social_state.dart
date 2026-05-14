@@ -8,7 +8,7 @@ import 'package:equatable/equatable.dart';
 import 'package:pinlink/features/course_comparision/model/user_course_model.dart';
 import 'package:pinlink/features/social/model/post_model.dart';
 
-class CreateSocialPostState extends Equatable {
+class SocialState extends Equatable {
   final List<UserCourseModel> courses;
   final List<String> links;
   final List<XFile> files;
@@ -18,7 +18,9 @@ class CreateSocialPostState extends Equatable {
   final List<PostModel> posts;
   final bool isPostLoaing;
 
-  const CreateSocialPostState({
+  final bool isPublicPostEnabled;
+
+  const SocialState({
     this.courses = const [],
     this.links = const [],
     this.files = const [],
@@ -27,8 +29,9 @@ class CreateSocialPostState extends Equatable {
     this.searchResults = const [],
     this.posts = const [],
     this.isPostLoaing = false,
+    this.isPublicPostEnabled = true,
   });
-  CreateSocialPostState copyWith({
+  SocialState copyWith({
     List<UserCourseModel>? courses,
     List<String>? links,
     List<XFile>? files,
@@ -37,8 +40,9 @@ class CreateSocialPostState extends Equatable {
     List<UserCourseModel>? searchResults,
     List<PostModel>? posts,
     bool? isPostLoaing,
+    bool? isPublicPostEnabled,
   }) {
-    return CreateSocialPostState(
+    return SocialState(
       courses: courses ?? this.courses,
       links: links ?? this.links,
       isPublic: isPublic ?? this.isPublic,
@@ -47,6 +51,7 @@ class CreateSocialPostState extends Equatable {
       searchResults: searchResults ?? this.searchResults,
       posts: posts ?? this.posts,
       isPostLoaing: isPostLoaing ?? this.isPostLoaing,
+      isPublicPostEnabled: isPublicPostEnabled ?? this.isPublicPostEnabled,
     );
   }
 
@@ -60,5 +65,6 @@ class CreateSocialPostState extends Equatable {
     isPosting,
     posts,
     isPostLoaing,
+    isPublicPostEnabled,
   ];
 }

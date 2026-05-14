@@ -7,13 +7,11 @@ import 'package:pinlink/constant/enums.dart';
 
 class NavigationState {
   int currentIndex = 0;
-  bool isPublicPostEnabled;
   FilterProfile filter = FilterProfile.MyCourses;
 
   NavigationState({
     this.currentIndex = 0,
     this.filter = FilterProfile.MyCourses,
-    this.isPublicPostEnabled = true,
   });
 
   NavigationState copyWith({
@@ -24,13 +22,11 @@ class NavigationState {
     return NavigationState(
       currentIndex: currentIndex ?? this.currentIndex,
       filter: filter ?? this.filter,
-      isPublicPostEnabled: isPublicPostEnabled ?? this.isPublicPostEnabled,
     );
   }
 
   @override
-  int get hashCode =>
-      currentIndex.hashCode ^ filter.hashCode ^ isPublicPostEnabled.hashCode;
+  int get hashCode => currentIndex.hashCode ^ filter.hashCode;
 
   @override
   bool operator ==(Object other) {
@@ -38,7 +34,6 @@ class NavigationState {
 
     return other is NavigationState &&
         other.currentIndex == currentIndex &&
-        other.filter == filter &&
-        other.isPublicPostEnabled == isPublicPostEnabled;
+        other.filter == filter;
   }
 }

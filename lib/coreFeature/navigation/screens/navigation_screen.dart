@@ -29,6 +29,8 @@ import 'package:pinlink/features/course_comparision/screens/add_course_screen.da
 import 'package:pinlink/features/golf_map/screens/golf_map_screen.dart';
 import 'package:pinlink/features/leaderboard/screens/leaderboard_screen.dart';
 import 'package:pinlink/features/profile/screens/profile_screen.dart';
+import 'package:pinlink/features/social/cubit/social_cubit.dart';
+import 'package:pinlink/features/social/cubit/social_state.dart';
 import 'package:pinlink/features/social/screens/social_screen.dart';
 import 'package:pinlink/gen/assets.gen.dart';
 
@@ -38,11 +40,11 @@ final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 class NavigationScreen extends StatelessWidget {
   const NavigationScreen({super.key});
 
-  List<NavigatorItem> getpage() {
+  List<NavigatorItem> getpage(SocialCubit socialCubit) {
     final evItems = <NavigatorItem>[
       NavigatorItem(
         imagePath: Assets.navigators.social,
-        screen: const SocialScreen(),
+        screen: SocialScreen(socialCubit: socialCubit),
         label: 'Social',
       ),
       NavigatorItem(
@@ -76,59 +78,70 @@ class NavigationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CubitScopeValue(
-      cubit: context.read<NavigationCubit>(),
-      builder: (context, cubit, state) {
-        var title = 'Rank';
-        if (state.currentIndex == 0) {
-          title = state.isPublicPostEnabled
-              ? "PinLinks Public"
-              : 'Friends Feed';
-        } else if (state.currentIndex == 1) {
-          title = 'Leaderboard';
-        } else if (state.currentIndex == 2) {
-          title = 'Rank Your Courses';
-        } else if (state.currentIndex == 3) {
-          title = 'Golf Map';
-        } else if (state.currentIndex == 4) {
-          title = 'Profile';
-        }
-        return SimpleBackground(
-          key: scaffoldKey,
-          appBar: _appbar(
-            title,
-            state.currentIndex,
-            state: state,
-            cubit: cubit,
-          ),
-
-          body: Stack(
-            children: getpage().asMap().entries.map((entry) {
-              final index = entry.key;
-              final item = entry.value;
-              final isActive = state.currentIndex == index;
-              return IgnorePointer(
-                ignoring: !isActive,
-                child: AnimatedOpacity(
-                  opacity: isActive ? 1.0 : 0.0,
-                  duration: const Duration(milliseconds: 350),
-                  curve: Curves.easeOutCubic,
-                  child: item.screen,
+    return BlocProvider(
+      create: (context) => SocialCubit(),
+      child: CubitScopeValue(
+        cubit: context.read<NavigationCubit>(),
+        builder: (context, cubit, state) {
+          return BlocSelector<SocialCubit, SocialState, bool>(
+            selector: (state) => state.isPublicPostEnabled,
+            builder: (context, isPublicPostEnabled) {
+              final socialCubit = context.read<SocialCubit>();
+              var title = 'Rank';
+              if (state.currentIndex == 0) {
+                title = isPublicPostEnabled
+                    ? "PinLinks Public"
+                    : 'Friends Feed';
+              } else if (state.currentIndex == 1) {
+                title = 'Leaderboard';
+              } else if (state.currentIndex == 2) {
+                title = 'Rank Your Courses';
+              } else if (state.currentIndex == 3) {
+                title = 'Golf Map';
+              } else if (state.currentIndex == 4) {
+                title = 'Profile';
+              }
+              return SimpleBackground(
+                key: scaffoldKey,
+                appBar: _appbar(
+                  title,
+                  state.currentIndex,
+                  state: state,
+                  cubit: cubit,
+                  isPublicPostEnabled: isPublicPostEnabled,
+                  context: context,
                 ),
+
+                body: Stack(
+                  children: getpage(socialCubit).asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final item = entry.value;
+                    final isActive = state.currentIndex == index;
+                    return IgnorePointer(
+                      ignoring: !isActive,
+                      child: AnimatedOpacity(
+                        opacity: isActive ? 1.0 : 0.0,
+                        duration: const Duration(milliseconds: 350),
+                        curve: Curves.easeOutCubic,
+                        child: item.screen,
+                      ),
+                    );
+                  }).toList(),
+                ),
+                bottomNavigationBar: CustomBottomNavBar(
+                  currentIndex: state.currentIndex,
+                  onTap: (index) => cubit.changeIndex(index),
+                  items: getpage(socialCubit),
+                  onCenterTap: () {
+                    cubit.changeIndex(2);
+                  },
+                ),
+                // drawer: const DrawerWidget(),
               );
-            }).toList(),
-          ),
-          bottomNavigationBar: CustomBottomNavBar(
-            currentIndex: state.currentIndex,
-            onTap: (index) => cubit.changeIndex(index),
-            items: getpage(),
-            onCenterTap: () {
-              cubit.changeIndex(2);
             },
-          ),
-          // drawer: const DrawerWidget(),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
@@ -137,6 +150,8 @@ class NavigationScreen extends StatelessWidget {
     int index, {
     required NavigationState state,
     required NavigationCubit cubit,
+    required bool isPublicPostEnabled,
+    required BuildContext context,
   }) {
     return CommonAppBar(
       disableBack: true,
@@ -164,13 +179,13 @@ class NavigationScreen extends StatelessWidget {
           if (index == 0)
             GestureDetector(
               onTap: () {
-                cubit.togglePostVisibility();
+                context.read<SocialCubit>().togglePostVisibility();
               },
               child: SizedBox(
                 width: 25,
                 height: 25,
                 child: CommonImage(
-                  src: state.isPublicPostEnabled
+                  src: isPublicPostEnabled
                       ? Assets.images.public
                       : Assets.images.friend,
                   fill: .contain,
@@ -210,7 +225,6 @@ class NavigationScreen extends StatelessWidget {
       ),
     );
   }
-
 
   BottomNavigationBarItem _navBuilder({
     required int index,

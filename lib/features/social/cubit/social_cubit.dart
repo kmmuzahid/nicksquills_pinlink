@@ -18,8 +18,8 @@ import 'package:pinlink/features/social/entity/post_entity.dart';
 import 'package:pinlink/features/social/repository/social_repository.dart';
 import 'package:video_player/video_player.dart';
 
-class SocialCubit extends SafeCubit<CreateSocialPostState> {
-  SocialCubit() : super(const CreateSocialPostState());
+class SocialCubit extends SafeCubit<SocialState> {
+  SocialCubit() : super(const SocialState());
 
   final courseRepository = getIt<CourseRepository>();
 
@@ -44,7 +44,11 @@ class SocialCubit extends SafeCubit<CreateSocialPostState> {
       state.copyWith(isPostLoaing: true, posts: isRefresh ? [] : state.posts),
     );
 
-    final result = await socialRepository.getAllPost(page, searchText);
+    final result = await socialRepository.getAllPost(
+      page,
+      searchText,
+      state.isPublicPostEnabled ? 'public' : null,
+    );
 
     emit(state.copyWith(isPostLoaing: false));
     if (result.isSuccess) {
@@ -118,19 +122,6 @@ class SocialCubit extends SafeCubit<CreateSocialPostState> {
     return true;
   }
 
-  final List<String> _allCourses = [
-    'Augusta National Golf Club',
-    'Pine Valley Golf Club',
-    'Cypress Point Club',
-    'St Andrews Links',
-    'Pebble Beach Golf Links',
-    'Shinnecock Hills Golf Club',
-    'Oakmont Country Club',
-    'Merion Golf Club',
-    'Winged Foot Golf Club',
-    'Fisher\'s Island Club',
-  ];
-
   Future<void> createPost(PostEntity entity) async {
     emit(state.copyWith(isPosting: true));
 
@@ -195,5 +186,10 @@ class SocialCubit extends SafeCubit<CreateSocialPostState> {
 
   void changePrivacy() {
     emit(state.copyWith(isPublic: !state.isPublic));
+  }
+
+  void togglePostVisibility() {
+    emit(state.copyWith(isPublicPostEnabled: !state.isPublicPostEnabled));
+    getAllPost(isRefresh: true);
   }
 }

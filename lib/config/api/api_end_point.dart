@@ -35,5 +35,8 @@ class ApiEndPoint {
 
   final String createPostData = '/postData/create-postData';
 
-  final String userPost = '/post/user';
+  final String user = '/post';
+
+  //course
+  final String coursePublic = '/course/public';
 }

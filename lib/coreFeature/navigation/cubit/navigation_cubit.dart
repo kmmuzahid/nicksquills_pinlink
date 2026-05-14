@@ -16,8 +16,4 @@ class NavigationCubit extends SafeCubit<NavigationState> {
   }) {
     emit(state.copyWith(currentIndex: index, filter: filter));
   }
-
-  void togglePostVisibility() {
-    emit(state.copyWith(isPublicPostEnabled: !state.isPublicPostEnabled));
-  }
 }

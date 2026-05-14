@@ -78,7 +78,7 @@ class ResetPasswordScreen extends StatelessWidget {
                           cubit.resetPassword(entity);
                         }
                       },
-                      isLoading: state,
+                      isLoading: state.isLoading,
                       titleText: "Reset Password",
                       buttonWidth: double.infinity,
                     );

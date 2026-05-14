@@ -22,6 +22,7 @@ import 'package:pinlink/constant/app_string.dart';
 import 'package:pinlink/constant/constants.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_flow_cubit.dart';
+import 'package:pinlink/coreFeature/auth/cubit/auth_flow_state.dart';
 import 'package:pinlink/coreFeature/auth/entity/login_entity.dart';
 import 'package:pinlink/coreFeature/auth/screens/sign_up_screen.dart';
 import 'package:pinlink/coreFeature/auth/widgets/action_spawn_widget.dart';
@@ -41,23 +42,39 @@ class LoginScreen extends StatelessWidget {
           decoration: () => const BoxDecoration(color: Colors.transparent),
         ),
       ),
-      body: Padding(
-        padding: Constants.bodyPadding,
-        child: AuthSigmentedContainer(
-          loginWidget: (changeToLogin) =>
-              _loginForm(changeToSingup: changeToLogin),
-          signupWidget: (changeToSignup) =>
-              SignUpScreen(changeToLogin: changeToSignup),
-        ),
+      body: CubitScope(
+        create: () => AuthFlowCubit(context.read<AuthCubit>()),
+        builder: (context, cubit, state) {
+          return Padding(
+            padding: Constants.bodyPadding,
+            child: AuthSigmentedContainer(
+              loginWidget: (changeToLogin) => _loginForm(
+                changeToSingup: changeToLogin,
+                authFlowCubit: cubit,
+                authFlowState: state,
+              ),
+              signupWidget: (changeToSignup) => SignUpScreen(
+                changeToLogin: changeToSignup,
+                authFlowCubit: cubit,
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 }
 
 class _loginForm extends StatelessWidget {
-  const _loginForm({required this.changeToSingup});
+  const _loginForm({
+    required this.changeToSingup,
+    required this.authFlowCubit,
+    required this.authFlowState,
+  });
 
   final Function() changeToSingup;
+  final AuthFlowCubit authFlowCubit;
+  final AuthFlowState authFlowState;
 
   @override
   Widget build(BuildContext context) {
@@ -126,74 +143,69 @@ class _loginForm extends StatelessWidget {
 
             30.height,
 
-            CubitScope(
-              create: () => AuthFlowCubit(context.read<AuthCubit>()),
-              builder: (context, cubit, state) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CommonButton(
-                      isLoading: state,
-                      onTap: () {
-                        if ((formKey.validateAndSave())) {
-                          cubit.login(entity);
-                        }
-                      },
-                      titleText: 'Sign In',
-                      buttonWidth: double.infinity,
-                      // gradient: const LinearGradient(
-                      //   colors: [Color(0xFF184F3A), Color(0xFF2F6F57)],
-                      //   begin: Alignment.topCenter,
-                      //   end: Alignment.bottomCenter,
-                      // ),
-                    ),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CommonButton(
+                  isLoading: authFlowState.isLoading,
+                  onTap: () {
+                    if ((formKey.validateAndSave())) {
+                      authFlowCubit.login(entity);
+                    }
+                  },
+                  titleText: 'Sign In',
+                  buttonWidth: double.infinity,
+                  // gradient: const LinearGradient(
+                  //   colors: [Color(0xFF184F3A), Color(0xFF2F6F57)],
+                  //   begin: Alignment.topCenter,
+                  //   end: Alignment.bottomCenter,
+                  // ),
+                ),
 
-                    25.height,
-                    // Center(
-                    //   child: CommonText(
-                    //     text: AppString.or_continue_with,
-                    //     textColor: AppColor.tEXT_sub,
-                    //     fontSize: 15,
-                    //     fontWeight: FontWeight.w500,
-                    //   ),
-                    // ),
-                    // 15.height,
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   children: [
-                    //     Expanded(
-                    //       child: CommonButton(
-                    //         titleText: 'Google',
-                    //         buttonColor: Colors.transparent,
-                    //         borderColor: const Color(0xFF6FAE97),
-                    //         prefix: CommonImage(
-                    //           size: 25,
-                    //           fill: BoxFit.contain,
-                    //           src: Assets.images.google,
-                    //         ),
-                    //         onTap: () {},
-                    //       ),
-                    //     ),
-                    //     20.width,
-                    //     Expanded(
-                    //       child: CommonButton(
-                    //         titleText: 'Google',
-                    //         buttonColor: Colors.transparent,
-                    //         borderColor: const Color(0xFF6FAE97),
-                    //         prefix: CommonImage(
-                    //           size: 25,
-                    //           fill: BoxFit.contain,
-                    //           src: Assets.images.apple.path,
-                    //           imageColor: Colors.white,
-                    //         ),
-                    //         onTap: () {},
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-                  ],
-                );
-              },
+                25.height,
+                // Center(
+                //   child: CommonText(
+                //     text: AppString.or_continue_with,
+                //     textColor: AppColor.tEXT_sub,
+                //     fontSize: 15,
+                //     fontWeight: FontWeight.w500,
+                //   ),
+                // ),
+                // 15.height,
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     Expanded(
+                //       child: CommonButton(
+                //         titleText: 'Google',
+                //         buttonColor: Colors.transparent,
+                //         borderColor: const Color(0xFF6FAE97),
+                //         prefix: CommonImage(
+                //           size: 25,
+                //           fill: BoxFit.contain,
+                //           src: Assets.images.google,
+                //         ),
+                //         onTap: () {},
+                //       ),
+                //     ),
+                //     20.width,
+                //     Expanded(
+                //       child: CommonButton(
+                //         titleText: 'Google',
+                //         buttonColor: Colors.transparent,
+                //         borderColor: const Color(0xFF6FAE97),
+                //         prefix: CommonImage(
+                //           size: 25,
+                //           fill: BoxFit.contain,
+                //           src: Assets.images.apple.path,
+                //           imageColor: Colors.white,
+                //         ),
+                //         onTap: () {},
+                //       ),
+                //     ),
+                //   ],
+                // ),
+              ],
             ),
 
             30.height,

@@ -24,9 +24,14 @@ import 'package:pinlink/coreFeature/auth/widgets/signup_overview.dart';
 import 'package:pinlink/coreFeature/auth/widgets/singup_form_three.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key, required this.changeToLogin});
+  const SignUpScreen({
+    super.key,
+    required this.changeToLogin,
+    required this.authFlowCubit,
+  });
 
   final Function() changeToLogin;
+  final AuthFlowCubit authFlowCubit;
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -87,76 +92,54 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               Divider(color: context.colors.bACKGROUND_darkCardBoarder),
 
-              Column(
-                children: [
-                  getPage(page, formKey, entity),
-
-                  CubitScope(
-                    create: () => AuthFlowCubit(context.read<AuthCubit>()),
-                    builder: (context, cubit, state) {
-                      return Column(
-                        children: [
-                          CommonButton(
-                            onTap: () {
-                              formKey.currentState?.save();
-                              if (page == 3) {
-                                if ((formKey.currentState?.validate() ??
-                                        false) &&
-                                    entity.isAgree &&
-                                    page == 3) {
-                                  cubit.signup(entity);
-                                }
-                                // appRouter.push(
-                                //   SendOtpRoute(
-                                //     onSuccess:
-                                //         ({
-                                //           required String email,
-                                //           required String token,
-                                //         }) {},
-                                //     username: entity.username ?? '',
-                                //     showSendToField: true,
-                                //   ),
-                                // );
-                                return;
-                              }
-                              if (page < 3) {
-                                if ((formKey.currentState?.validate() ??
-                                    false)) {
-                                  setState(() {
-                                    page++;
-                                  });
-                                }
-                              }
-                            },
-                            isLoading: state,
-                            titleText: page == 3
-                                ? 'Create Account'
-                                : 'Continue',
-                            buttonWidth: double.infinity,
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-
-                  if (page > 0)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: CommonButton(
+              CubitScope(
+                create: () => AuthFlowCubit(context.read<AuthCubit>()),
+                builder: (context, cubit, state) {
+                  return Column(
+                    children: [
+                      getPage(page, formKey, entity),
+                      CommonButton(
                         onTap: () {
-                          setState(() {
-                            page--;
-                          });
+                          formKey.currentState?.save();
+                          if (page == 3) {
+                            if ((formKey.currentState?.validate() ?? false) &&
+                                entity.isAgree &&
+                                page == 3) {
+                              cubit.signup(entity);
+                            }
+                            return;
+                          }
+                          if (page < 3) {
+                            if ((formKey.currentState?.validate() ?? false)) {
+                              setState(() {
+                                page++;
+                              });
+                            }
+                          }
                         },
-                        titleText: 'Back',
-                        buttonColor: context.colors.bACKGROUND_darkCardBoarder,
-                        borderColor: Colors.transparent,
+                        isLoading: state.isLoading,
+                        titleText: page == 3 ? 'Create Account' : 'Continue',
                         buttonWidth: double.infinity,
                       ),
-                    ),
-
-                  30.height,
-                ],
+                      if (page > 0)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16),
+                          child: CommonButton(
+                            onTap: () {
+                              setState(() {
+                                page--;
+                              });
+                            },
+                            titleText: 'Back',
+                            buttonColor:
+                                context.colors.bACKGROUND_darkCardBoarder,
+                            borderColor: Colors.transparent,
+                            buttonWidth: double.infinity,
+                          ),
+                        ),
+                    ],
+                  );
+                },
               ),
 
               ActionSpawnWidget(
@@ -179,7 +162,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
       case 0:
         return SignupFormOne(formKey: formKey, entity: entity);
       case 1:
-        return SignupFormTwo(formKey: formKey, entity: entity);
+        return SignupFormTwo(
+          formKey: formKey,
+          entity: entity,
+          authFlowCubit: widget.authFlowCubit,
+        );
       case 2:
         return SignupFormThree(formKey: formKey, entity: entity);
       default:
