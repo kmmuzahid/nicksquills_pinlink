@@ -16,7 +16,7 @@ class ApiEndPoint {
   final String verifyOtp = '/users/verify-otp';
   final String login = '/auth/login';
   final String resetPassword = '/auth/forgot-password-reset';
-  final String getProfile = '/user/profile';
+  final String getProfile = '/users/my-profile';
   final String setting = '/setting';
 
   final String resendOtp = '/auth/resend-otp';
@@ -39,4 +39,12 @@ class ApiEndPoint {
 
   //course
   final String coursePublic = '/course/public';
+
+  final String sharePost = '/post/share-post';
+
+  final String createPostReport = '/postReport/create-post-report';
+
+  final String likePost = '/comments/like';
+
+  final String follow = '/follow/create-follow';
 }

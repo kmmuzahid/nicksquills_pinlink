@@ -19,7 +19,10 @@ import 'package:pinlink/features/profile/cubit/profile_cubit.dart';
 import 'package:pinlink/features/profile/cubit/profile_cubit_state.dart';
 import 'package:pinlink/features/profile/widgets/category_scrolled_list.dart';
 import 'package:pinlink/features/profile/widgets/profile_card_widget.dart';
+import 'package:pinlink/features/social/cubit/social_cubit.dart'
+    show SocialCubit;
 import 'package:pinlink/features/social/model/post_model.dart';
+import 'package:pinlink/features/social/widgets/report_dailoge.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -282,7 +285,23 @@ class ProfileScreen extends StatelessWidget {
       child: AspectRatio(
         aspectRatio: 0.8,
         child: showItem
-            ? SocialItemWidget(postModel: PostModel())
+            ? SocialItemWidget(
+                postModel: PostModel(),
+                onReportPost: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => ReportDialog(
+                      postId: '', // Placeholder since no real post yet
+                      onReport: (reason) {
+                        context.read<SocialCubit>().createPostReport(
+                          '', // Placeholder
+                          reason,
+                        );
+                      },
+                    ),
+                  );
+                },
+              )
             : const SizedBox.shrink(),
       ),
     );

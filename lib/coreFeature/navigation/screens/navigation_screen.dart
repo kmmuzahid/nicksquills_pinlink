@@ -22,6 +22,7 @@ import 'package:pinlink/config/bloc/cubit_scope_value.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
+import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/coreFeature/navigation/cubit/navigation_cubit.dart';
 import 'package:pinlink/coreFeature/navigation/cubit/navigation_state.dart';
 import 'package:pinlink/coreFeature/navigation/nav_utils/navigator_item.dart';
@@ -78,8 +79,11 @@ class NavigationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context.read<AuthCubit>().getProfile();
+    });
     return BlocProvider(
-      create: (context) => SocialCubit(),
+      create: (context) => SocialCubit()..getAllPost(),
       child: CubitScopeValue(
         cubit: context.read<NavigationCubit>(),
         builder: (context, cubit, state) {

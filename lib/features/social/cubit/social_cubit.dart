@@ -23,7 +23,7 @@ class SocialCubit extends SafeCubit<SocialState> {
 
   final courseRepository = getIt<CourseRepository>();
 
-  final socialRepository = getIt<SocialBase>();
+  final socialRepository = getIt<SocialRepository>();
 
   final ImagePicker _imagePicker = ImagePicker();
 
@@ -139,6 +139,7 @@ class SocialCubit extends SafeCubit<SocialState> {
           'scorecardHoles': int.tryParse(entity.holes ?? '0'),
           'scorecardTotalScore': int.tryParse(entity.totalScore ?? '0'),
           'links': state.links,
+          'courseId': state.courses.first.courseId?.id,
         },
         files: {'mediaLinks': state.files},
       ),
@@ -191,5 +192,23 @@ class SocialCubit extends SafeCubit<SocialState> {
   void togglePostVisibility() {
     emit(state.copyWith(isPublicPostEnabled: !state.isPublicPostEnabled));
     getAllPost(isRefresh: true);
+  }
+
+  Future<void> sharePost(String postId) async {
+    socialRepository.sharePost(postId);
+  }
+
+  Future<void> createPostReport(String postId, String reportReason) async {
+    final result = await socialRepository.createPostReport(
+      postId,
+      reportReason,
+    );
+    if (result.isSuccess) {
+      final index = state.posts.indexWhere((e) => e.id == postId);
+      if (index != -1) {
+        final updatedPosts = state.posts.where((e) => e.id != postId).toList();
+        emit(state.copyWith(posts: updatedPosts));
+      }
+    }
   }
 }

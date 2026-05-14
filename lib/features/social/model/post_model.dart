@@ -44,7 +44,38 @@ class PostModel {
     this.updatedAt,
   });
 
-  factory PostModel.fromJson(Map<String, dynamic> json) => _$PostModelFromJson(json);
+  PostModel copyWith({
+    String? id,
+    UserId? userId,
+    PostDataId? postDataId,
+    bool? isScorecard,
+    List<dynamic>? likes,
+    int? commentsCount,
+    int? likesCount,
+    int? shareCount,
+    int? reportCount,
+    bool? isDeleted,
+    String? createdAt,
+    String? updatedAt,
+  }) {
+    return PostModel(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      postDataId: postDataId ?? this.postDataId,
+      isScorecard: isScorecard ?? this.isScorecard,
+      likes: likes ?? this.likes,
+      commentsCount: commentsCount ?? this.commentsCount,
+      likesCount: likesCount ?? this.likesCount,
+      shareCount: shareCount ?? this.shareCount,
+      reportCount: reportCount ?? this.reportCount,
+      isDeleted: isDeleted ?? this.isDeleted,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  factory PostModel.fromJson(Map<String, dynamic> json) =>
+      _$PostModelFromJson(json);
   Map<String, dynamic> toJson() => _$PostModelToJson(this);
 }
 
@@ -52,8 +83,8 @@ class PostModel {
 class PostDataId {
   @JsonKey(name: '_id')
   final String? id;
-  @JsonKey(name: 'coursename')
-  final String? coursename;
+  @JsonKey(name: 'courseId')
+  final CourseId? courseId;
   @JsonKey(name: 'headline')
   final String? headline;
   @JsonKey(name: 'description')
@@ -73,7 +104,7 @@ class PostDataId {
 
   PostDataId({
     this.id,
-    this.coursename,
+    this.courseId,
     this.headline,
     this.description,
     this.isScorecard,
@@ -84,8 +115,25 @@ class PostDataId {
     this.mediaLinks,
   });
 
-  factory PostDataId.fromJson(Map<String, dynamic> json) => _$PostDataIdFromJson(json);
+  factory PostDataId.fromJson(Map<String, dynamic> json) =>
+      _$PostDataIdFromJson(json);
   Map<String, dynamic> toJson() => _$PostDataIdToJson(this);
+}
+
+@JsonSerializable()
+class CourseId {
+  @JsonKey(name: '_id')
+  final String? id;
+  @JsonKey(name: 'name')
+  final String? name;
+  @JsonKey(name: 'locationName')
+  final String? locationName;
+
+  CourseId({this.id, this.name, this.locationName});
+
+  factory CourseId.fromJson(Map<String, dynamic> json) =>
+      _$CourseIdFromJson(json);
+  Map<String, dynamic> toJson() => _$CourseIdToJson(this);
 }
 
 @JsonSerializable()
@@ -97,11 +145,7 @@ class UserId {
   @JsonKey(name: 'fullName')
   final String? fullName;
 
-  UserId({
-    this.id,
-    this.profile,
-    this.fullName,
-  });
+  UserId({this.id, this.profile, this.fullName});
 
   factory UserId.fromJson(Map<String, dynamic> json) => _$UserIdFromJson(json);
   Map<String, dynamic> toJson() => _$UserIdToJson(this);

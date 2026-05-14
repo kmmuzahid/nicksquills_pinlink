@@ -13,7 +13,7 @@ class RealRepositoryDependency {
   static void dependencies() {
     getIt.registerLazySingleton(() => CourseRepository());
 
-    getIt.registerLazySingleton<SocialBase>(() => SocialRepository());
+    getIt.registerLazySingleton<SocialRepository>(() => SocialRepository());
 
     AppLogger.debug('Real repository dependency initalized', tag: 'dependency');
   }

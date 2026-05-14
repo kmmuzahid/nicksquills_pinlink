@@ -454,10 +454,15 @@ class PostDetailsRoute extends _i26.PageRouteInfo<PostDetailsRouteArgs> {
   PostDetailsRoute({
     _i27.Key? key,
     required _i30.PostModel postModel,
+    required void Function() reportPost,
     List<_i26.PageRouteInfo>? children,
   }) : super(
          PostDetailsRoute.name,
-         args: PostDetailsRouteArgs(key: key, postModel: postModel),
+         args: PostDetailsRouteArgs(
+           key: key,
+           postModel: postModel,
+           reportPost: reportPost,
+         ),
          initialChildren: children,
        );
 
@@ -467,21 +472,31 @@ class PostDetailsRoute extends _i26.PageRouteInfo<PostDetailsRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<PostDetailsRouteArgs>();
-      return _i16.PostDetailsScreen(key: args.key, postModel: args.postModel);
+      return _i16.PostDetailsScreen(
+        key: args.key,
+        postModel: args.postModel,
+        reportPost: args.reportPost,
+      );
     },
   );
 }
 
 class PostDetailsRouteArgs {
-  const PostDetailsRouteArgs({this.key, required this.postModel});
+  const PostDetailsRouteArgs({
+    this.key,
+    required this.postModel,
+    required this.reportPost,
+  });
 
   final _i27.Key? key;
 
   final _i30.PostModel postModel;
 
+  final void Function() reportPost;
+
   @override
   String toString() {
-    return 'PostDetailsRouteArgs{key: $key, postModel: $postModel}';
+    return 'PostDetailsRouteArgs{key: $key, postModel: $postModel, reportPost: $reportPost}';
   }
 
   @override

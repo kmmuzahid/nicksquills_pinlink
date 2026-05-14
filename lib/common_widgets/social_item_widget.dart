@@ -9,29 +9,47 @@ import 'package:pinlink/constant/constants.dart';
 import 'package:pinlink/features/social/model/post_model.dart';
 
 class SocialItemWidget extends StatelessWidget {
-  const SocialItemWidget({super.key, required this.postModel});
+  const SocialItemWidget({
+    super.key,
+    required this.postModel,
+    required this.onReportPost,
+  });
 
   final PostModel postModel;
+  final VoidCallback onReportPost;
 
   @override
   Widget build(BuildContext context) {
     return _item(context);
   }
 
+  String getFirstAvailImage() {
+    for (var element in (postModel.postDataId?.mediaLinks ?? [])) {
+      if (element?.endsWith('mp4') != true &&
+          element?.endsWith('mov') != true &&
+          element?.endsWith('avi') != true) {
+        return element ?? '';
+      }
+    }
+    return Constants.sampleImage;
+  }
+
   Widget _item(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        appRouter.push(PostDetailsRoute(postModel: postModel));
+        appRouter.push(
+          PostDetailsRoute(
+            postModel: postModel,
+            reportPost: () {
+              onReportPost();
+            },
+          ),
+        );
       },
       child: Stack(
         children: [
           Positioned.fill(
-            child: CommonImage(
-              src: postModel.postDataId?.mediaLinks?.isNotEmpty ?? false
-                  ? postModel.postDataId!.mediaLinks!.first ?? ''
-                  : Constants.sampleImage,
-              borderRadius: 6,
-            ),
+            child: CommonImage(src: getFirstAvailImage(), borderRadius: 6),
           ),
           Positioned(
             right: 0,
@@ -39,14 +57,18 @@ class SocialItemWidget extends StatelessWidget {
             child: Container(
               color: Colors.black.withValues(alpha: 0.05),
               child: CommonPopupMenu(
+                menuBackgroundColor: context.colors.bACKGROUND_page,
+                separator: const PopupMenuDivider(thickness: 0, height: 10),
                 triggerBuilder: (property) =>
                     const Icon(Icons.more_vert, color: Colors.white, size: 30),
-                items: const ['Report User', 'Report Post'],
+                items: const ['Report Post'],
                 itemBuilder: (property) => CommonText(
                   text: property.item ?? '',
-                  textColor: context.colors.tEXT_sub,
+                  textColor: context.colors.tEXT_white,
                 ),
-                onItemSelected: (value) {},
+                onItemSelected: (value) {
+                  onReportPost();
+                },
               ),
             ),
           ),

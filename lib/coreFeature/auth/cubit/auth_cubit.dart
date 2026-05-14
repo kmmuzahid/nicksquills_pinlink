@@ -79,4 +79,11 @@ class AuthCubit extends SafeCubit<AuthState> {
       0,
     );
   }
+
+  Future<void> getProfile() async {
+    final result = await _authRepository.getProfile();
+    if (result.isSuccess) {
+      emit(state.copyWith(profile: result.data));
+    }
+  }
 }

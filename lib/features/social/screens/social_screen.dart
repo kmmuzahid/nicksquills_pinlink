@@ -11,6 +11,7 @@ import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/features/social/cubit/social_cubit.dart';
+import 'package:pinlink/features/social/widgets/report_dailoge.dart';
 
 class SocialScreen extends StatelessWidget {
   const SocialScreen({super.key, required this.socialCubit});
@@ -21,7 +22,7 @@ class SocialScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: CubitScopeValue(
-        cubit: socialCubit..getAllPost(),
+        cubit: socialCubit,
         builder: (context, cubit, state) {
           return SmartStaggeredLoader(
             appbar: _topWidget(context, cubit),
@@ -40,8 +41,23 @@ class SocialScreen extends StatelessWidget {
               cubit.getAllPost(page: page);
             },
             limit: 10,
-            itemBuilder: (context, index) =>
-                SocialItemWidget(postModel: state.posts[index]),
+            itemBuilder: (context, index) => SocialItemWidget(
+              postModel: state.posts[index],
+              onReportPost: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => ReportDialog(
+                    postId: state.posts[index].id ?? '',
+                    onReport: (reason) {
+                      cubit.createPostReport(
+                        state.posts[index].id ?? '',
+                        reason,
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
           );
         },
       ),

@@ -9,6 +9,7 @@ import 'package:pinlink/config/api/api_end_point.dart';
 import 'package:pinlink/coreFeature/auth/entity/forget_pass_entity.dart';
 import 'package:pinlink/coreFeature/auth/entity/login_entity.dart';
 import 'package:pinlink/coreFeature/auth/entity/signup_entity.dart';
+import 'package:pinlink/coreFeature/auth/model/profile_model.dart';
 
 class AuthRepository {
   Future<ResponseState<dynamic>> signup(SignUpEntity entity) async {
@@ -121,6 +122,18 @@ class AuthRepository {
       ),
       responseBuilder: (data) {
         return data;
+      },
+    );
+  }
+
+  Future<ResponseState<ProfileModel?>> getProfile() {
+    return DioService.instance.request(
+      input: RequestInput(
+        endpoint: ApiEndPoint.instance.getProfile,
+        method: .GET,
+      ),
+      responseBuilder: (data) {
+        return ProfileModel.fromJson(data);
       },
     );
   }
