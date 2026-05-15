@@ -1,13 +1,13 @@
 import 'package:equatable/equatable.dart';
-import 'package:pinlink/features/course_comparision/model/global_course_model.dart';
+import 'package:pinlink/features/course_comparision/model/course_model.dart';
 
 class AuthFlowState extends Equatable {
   final bool isLoading;
   final bool isSearching;
-  final List<GlobalCourseModel> searchResults;
+  final List<CourseModel> searchResults;
   final String? errorMessage;
 
-  final GlobalCourseModel? selectedCourse;
+  final CourseModel? selectedCourse;
 
   final String searchText;
 
@@ -23,9 +23,9 @@ class AuthFlowState extends Equatable {
   AuthFlowState copyWith({
     bool? isLoading,
     bool? isSearching,
-    List<GlobalCourseModel>? searchResults,
+    List<CourseModel>? searchResults,
     String? errorMessage,
-    GlobalCourseModel? selectedCourse,
+    CourseModel? selectedCourse,
     bool clearSelectedCourse = false,
     String? searchText,
   }) {
@@ -34,8 +34,9 @@ class AuthFlowState extends Equatable {
       isSearching: isSearching ?? this.isSearching,
       searchResults: searchResults ?? this.searchResults,
       errorMessage: errorMessage ?? this.errorMessage,
-      selectedCourse:
-          clearSelectedCourse ? null : selectedCourse ?? this.selectedCourse,
+      selectedCourse: clearSelectedCourse
+          ? null
+          : selectedCourse ?? this.selectedCourse,
       searchText: searchText ?? this.searchText,
     );
   }

@@ -5,13 +5,13 @@
  */
 import 'package:equatable/equatable.dart';
 import 'package:pinlink/constant/enums.dart';
-import 'package:pinlink/features/course_comparision/model/user_course_model.dart';
+import 'package:pinlink/features/course_comparision/model/course_model.dart';
 
 class AddCourseState extends Equatable {
-  final List<UserCourseModel> courses;
-  final List<UserCourseModel> selectedCourses;
+  final List<CourseModel> courses;
+  final List<CourseModel> selectedCourses;
   final List<String> tags;
-  final List<UserCourseModel> comparison;
+  final List<CourseModel> comparison;
   final RankingType rankingType;
   final bool isCourseLoading;
 
@@ -35,10 +35,10 @@ class AddCourseState extends Equatable {
   ];
 
   AddCourseState copyWith({
-    List<UserCourseModel>? courses,
-    List<UserCourseModel>? selectedCourses,
+    List<CourseModel>? courses,
+    List<CourseModel>? selectedCourses,
     List<String>? tags,
-    List<UserCourseModel>? comparison,
+    List<CourseModel>? comparison,
     RankingType? rankingType,
     bool? isCourseLoading,
   }) {

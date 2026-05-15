@@ -1,9 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'user_course_model.g.dart';
+part 'course_model.g.dart';
 
 @JsonSerializable()
-class UserCourseModel {
+class CourseModel {
   @JsonKey(name: 'location')
   final Location? location;
   @JsonKey(name: '_id')
@@ -31,7 +31,7 @@ class UserCourseModel {
   @JsonKey(name: 'isPlay')
   final bool? isPlay;
 
-  UserCourseModel({
+  CourseModel({
     this.location,
     this.id,
     this.name,
@@ -47,8 +47,9 @@ class UserCourseModel {
     this.isPlay,
   });
 
-  factory UserCourseModel.fromJson(Map<String, dynamic> json) => _$UserCourseModelFromJson(json);
-  Map<String, dynamic> toJson() => _$UserCourseModelToJson(this);
+  factory CourseModel.fromJson(Map<String, dynamic> json) =>
+      _$CourseModelFromJson(json);
+  Map<String, dynamic> toJson() => _$CourseModelToJson(this);
 }
 
 @JsonSerializable()
@@ -58,11 +59,9 @@ class Location {
   @JsonKey(name: 'coordinates')
   final List<double?>? coordinates;
 
-  Location({
-    this.type,
-    this.coordinates,
-  });
+  Location({this.type, this.coordinates});
 
-  factory Location.fromJson(Map<String, dynamic> json) => _$LocationFromJson(json);
+  factory Location.fromJson(Map<String, dynamic> json) =>
+      _$LocationFromJson(json);
   Map<String, dynamic> toJson() => _$LocationToJson(this);
 }

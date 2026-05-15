@@ -51,5 +51,7 @@ class ApiEndPoint {
 
   final String updateMyProfile = '/users/update-my-profile';
 
-  final String wishlistCourse = '/wishlistCourse';
+  final String wishlistCourse = '/wishlistCourse/user';
+
+  final String leaderboard = '/users/ranking';
 }

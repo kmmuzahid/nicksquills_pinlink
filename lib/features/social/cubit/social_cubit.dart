@@ -11,8 +11,8 @@ import 'package:pinlink/config/api/api_end_point.dart';
 import 'package:pinlink/config/bloc/safe_cubit.dart';
 import 'package:pinlink/config/dependency/dependency_injection.dart';
 import 'package:pinlink/config/route/app_router.dart';
-import 'package:pinlink/features/course_comparision/model/user_course_model.dart';
 import 'package:pinlink/features/course_comparision/repository/course_repository.dart';
+import 'package:pinlink/features/profile/model/user_course_model.dart';
 import 'package:pinlink/features/social/cubit/social_state.dart';
 import 'package:pinlink/features/social/entity/post_entity.dart';
 import 'package:pinlink/features/social/model/post_model.dart';
@@ -132,7 +132,7 @@ class SocialCubit extends SafeCubit<SocialState> {
         endpoint: ApiEndPoint.instance.createPostData,
         method: .POST,
         formFields: {
-          'coursename': state.courses.first.name,
+          'coursename': state.courses.first.courseId?.name,
           'headline': entity.headline,
           'description': entity.description,
           'isScorecard': !state.isPublic,

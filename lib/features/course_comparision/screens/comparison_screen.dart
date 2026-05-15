@@ -16,7 +16,7 @@ import 'package:pinlink/constant/enums.dart';
 import 'package:pinlink/coreFeature/navigation/cubit/navigation_cubit.dart';
 import 'package:pinlink/features/course_comparision/cubit/add_course_cubit.dart';
 import 'package:pinlink/features/course_comparision/cubit/add_course_state.dart';
-import 'package:pinlink/features/course_comparision/model/user_course_model.dart';
+import 'package:pinlink/features/course_comparision/model/course_model.dart';
 import 'package:pinlink/gen/assets.gen.dart';
 
 @RoutePage()
@@ -243,7 +243,7 @@ class ComparisonScreen extends StatelessWidget {
     );
   }
 
-  AspectRatio _answerBuilder(BuildContext context, UserCourseModel comparison) {
+  AspectRatio _answerBuilder(BuildContext context, CourseModel comparison) {
     return AspectRatio(
       aspectRatio: 1.2,
       child: Container(

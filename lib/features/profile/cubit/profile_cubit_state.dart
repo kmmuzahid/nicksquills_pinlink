@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:pinlink/constant/enums.dart';
-import 'package:pinlink/features/course_comparision/model/user_course_model.dart';
+import 'package:pinlink/features/profile/model/user_course_model.dart';
 import 'package:pinlink/features/social/model/post_model.dart';
 
 class ProfileCubitState extends Equatable {

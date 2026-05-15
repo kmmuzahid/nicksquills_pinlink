@@ -43,15 +43,19 @@ enum LeaderboardType {
 }
 
 enum LeaderboardSearchType {
-  Points("Points"),
-  MostCoursesPlayed("Most Courses Played"),
-  MostRoundPlayed("Most Round Played"),
-  TravelDistance("Travel Distance"),
-  PlayedMostPinLinks5Courses("Played Most PinLinks 5 Courses");
+  Points("Points", "points"),
+  MostCoursesPlayed("Most Courses Played", "most_courses_played"),
+  // MostRoundPlayed("Most Round Played"),
+  TravelDistance("Travel Distance", "distance"),
+  PlayedMostPinLinks5Courses(
+    "Played Most PinLinks 5 Courses",
+    "most_pinlink5_course_played",
+  );
 
   final String displayName;
+  final String value;
 
-  const LeaderboardSearchType(this.displayName);
+  const LeaderboardSearchType(this.displayName, this.value);
 }
 
 enum MapFilters {

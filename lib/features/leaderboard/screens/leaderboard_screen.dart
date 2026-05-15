@@ -12,6 +12,7 @@ import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/constant/enums.dart';
 import 'package:pinlink/features/leaderboard/cubit/leaderboard_cubit.dart';
 import 'package:pinlink/features/leaderboard/cubit/leaderboard_state.dart';
+import 'package:pinlink/features/leaderboard/model/leaderboard_model.dart';
 import 'package:pinlink/features/leaderboard/widgets/how_points_earned_dialog.dart';
 import 'package:pinlink/gen/assets.gen.dart';
 
@@ -29,40 +30,42 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   Widget build(BuildContext context) {
     return SimpleBackground(
       body: CubitScope(
-        create: () => LeaderboardCubit(),
+        create: () => LeaderboardCubit()..fetchLeaderboard(),
         builder: (context, cubit, state) {
           return SmartListLoader(
-            itemCount: 20,
+            itemCount: state.leaderboardList.isEmpty
+                ? 1
+                : 2 + (state.leaderboardList.length > 3 ? state.leaderboardList.length - 3 : 0),
             padding: const EdgeInsets.symmetric(horizontal: 16),
             itemBuilder: (context, index) {
               if (index == 0) {
                 return _topChild(context, state, cubit);
               }
-              if (index == 1)
+
+              if (index == 1) {
                 return _buildPodiumSection(
                   context,
                   state.searchType,
-                  maxLength: 20,
+                  state.leaderboardList.take(3).toList(),
                 );
+              }
+
+              final model = state.leaderboardList[index + 1];
               return _buildRankList(
                 context,
-                name: "Emma Davis",
-                points: 100,
+                name: model.name ?? "",
+                points: model.pointCount ?? 0,
                 miles: state.searchType == LeaderboardSearchType.TravelDistance
-                    ? 100
-                    : null,
-                rounds:
-                    state.searchType == LeaderboardSearchType.MostRoundPlayed
-                    ? 80
+                    ? model.miles
                     : null,
                 course:
                     state.searchType == LeaderboardSearchType.MostCoursesPlayed
-                    ? 128
+                    ? model.totalCourses
                     : null,
                 times:
                     state.searchType ==
-                        LeaderboardSearchType.PlayedMostPinLinks5Courses
-                    ? 85
+                            LeaderboardSearchType.PlayedMostPinLinks5Courses
+                    ? model.playCount
                     : null,
                 rank: index + 2,
               );
@@ -205,9 +208,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   // The 1, 2, 3 Podium section
   Widget _buildPodiumSection(
     BuildContext context,
-    LeaderboardSearchType searchType, {
-    required int maxLength,
-  }) {
+    LeaderboardSearchType searchType,
+    List<LeaderboardModel> users,
+  ) {
     const rank1Gradient = LinearGradient(
       colors: [Color(0xFFFEEF8A), Color(0xFFDD971B)],
       begin: Alignment.topCenter,
@@ -237,49 +240,64 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              ...List.generate(maxLength > 3 ? 3 : maxLength, (index) {
-                var height = 80.w;
-                if (index == 1) height = 100.w;
-                if (index == 0) height = 80.w;
-
-                Gradient gradient = rank3Gradient;
-                if (index == 1) gradient = rank1Gradient;
-                if (index == 0) gradient = rank2Gradient;
-
-                var rank = 0;
-                if (index == 0) rank = 3;
-                if (index == 1) rank = 1;
-                if (index == 2) rank = 2;
-
-                String? rankSvg;
-                if (rank == 1) rankSvg = Assets.images.rank1;
-                if (rank == 2) rankSvg = Assets.images.rank2;
-                if (rank == 3) rankSvg = Assets.images.rank3;
-
-                return _podiumUser(
+              // Podium order: Rank 2, Rank 1, Rank 3
+              if (users.length >= 2)
+                _podiumUser(
                   context,
-                  gradient,
-                  height,
-                  name: "Emma Davis",
-                  points: 100,
-                  rankSvg: rankSvg,
+                  rank2Gradient,
+                  80.w,
+                  name: users[1].name ?? "",
+                  points: users[1].pointCount ?? 0,
+                  rankSvg: Assets.images.rank2,
                   miles: searchType == LeaderboardSearchType.TravelDistance
-                      ? 100
-                      : null,
-                  rounds: searchType == LeaderboardSearchType.MostRoundPlayed
-                      ? 80
+                      ? users[1].miles
                       : null,
                   course: searchType == LeaderboardSearchType.MostCoursesPlayed
-                      ? 128
+                      ? users[1].totalCourses
                       : null,
-                  times:
-                      searchType ==
-                          LeaderboardSearchType.PlayedMostPinLinks5Courses
-                      ? 85
+                  times: searchType == LeaderboardSearchType.PlayedMostPinLinks5Courses
+                      ? users[1].playCount
                       : null,
-                  rank: rank,
-                );
-              }),
+                  rank: 2,
+                ),
+              if (users.isNotEmpty)
+                _podiumUser(
+                  context,
+                  rank1Gradient,
+                  100.w,
+                  name: users[0].name ?? "",
+                  points: users[0].pointCount ?? 0,
+                  rankSvg: Assets.images.rank1,
+                  miles: searchType == LeaderboardSearchType.TravelDistance
+                      ? users[0].miles
+                      : null,
+                  course: searchType == LeaderboardSearchType.MostCoursesPlayed
+                      ? users[0].totalCourses
+                      : null,
+                  times: searchType == LeaderboardSearchType.PlayedMostPinLinks5Courses
+                      ? users[0].playCount
+                      : null,
+                  rank: 1,
+                ),
+              if (users.length >= 3)
+                _podiumUser(
+                  context,
+                  rank3Gradient,
+                  80.w,
+                  name: users[2].name ?? "",
+                  points: users[2].pointCount ?? 0,
+                  rankSvg: Assets.images.rank3,
+                  miles: searchType == LeaderboardSearchType.TravelDistance
+                      ? users[2].miles
+                      : null,
+                  course: searchType == LeaderboardSearchType.MostCoursesPlayed
+                      ? users[2].totalCourses
+                      : null,
+                  times: searchType == LeaderboardSearchType.PlayedMostPinLinks5Courses
+                      ? users[2].playCount
+                      : null,
+                  rank: 3,
+                ),
             ],
           ),
         ],
@@ -288,12 +306,10 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   }
 
   String _getMiddleText({
-    required int? rounds,
     required int? course,
-    required int? miles,
+    required double? miles,
     required int? times,
   }) {
-    if (rounds != null) return "$rounds rounds";
     if (course != null) return "$course courses";
     if (miles != null) return "$miles miles";
     if (times != null) return "$times times";
@@ -305,9 +321,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     Gradient gradient,
     double height, {
     required String name,
-    int? rounds,
     int? course,
-    int? miles,
+    double? miles,
     int? times,
     required int rank,
     required int points,
@@ -360,14 +375,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
           fontSize: 12,
           textColor: context.colors.tEXT_white,
         ),
-        if (rounds != null || course != null || miles != null || times != null)
+        if (course != null || miles != null || times != null)
           CommonText(
-            text: _getMiddleText(
-              rounds: rounds,
-              course: course,
-              miles: miles,
-              times: times,
-            ),
+            text: _getMiddleText(course: course, miles: miles, times: times),
             fontSize: 12,
             textColor: context.colors.tEXT_subDark,
           ),
@@ -398,9 +408,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   Widget _buildRankList(
     BuildContext context, {
     required String name,
-    int? rounds,
     int? course,
-    int? miles,
+    double? miles,
     int? times,
     required int rank,
     required int points,
@@ -434,12 +443,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                   ),
                 ),
                 Text(
-                  _getMiddleText(
-                    rounds: rounds,
-                    course: course,
-                    miles: miles,
-                    times: times,
-                  ),
+                  _getMiddleText(course: course, miles: miles, times: times),
                   style: TextStyle(
                     color: context.colors.tEXT_subDark,
                     fontSize: 14,

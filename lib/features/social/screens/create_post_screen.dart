@@ -12,7 +12,7 @@ import 'package:pinlink/common_widgets/simple_background.dart';
 import 'package:pinlink/config/bloc/cubit_scope.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/constant/constants.dart';
-import 'package:pinlink/features/course_comparision/model/user_course_model.dart';
+import 'package:pinlink/features/profile/model/user_course_model.dart';
 import 'package:pinlink/features/social/cubit/social_cubit.dart';
 import 'package:pinlink/features/social/cubit/social_state.dart';
 import 'package:pinlink/features/social/entity/post_entity.dart';
@@ -114,7 +114,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           final course = results[index];
                           return ListTile(
                             title: Text(
-                              course.name ?? '',
+                              course.courseId?.name ?? '',
                               style: TextStyle(
                                 color: context.colors.tEXT_white,
                               ),
@@ -488,11 +488,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     );
   }
 
-  Widget _chip(UserCourseModel text, SocialCubit cubit) {
+  Widget _chip(UserCourseModel course, SocialCubit cubit) {
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 150),
       child: Chip(
-        label: Text(text.name ?? '', overflow: TextOverflow.ellipsis),
+        label: Text(
+          course.courseId?.name ?? '',
+          overflow: TextOverflow.ellipsis,
+        ),
         backgroundColor: Colors.amber.withValues(
           alpha: 0.2,
         ), // change background color here
@@ -503,7 +506,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         labelStyle: TextStyle(color: Colors.amber.shade800),
         deleteIcon: Icon(Icons.close, size: 18, color: Colors.grey.shade400),
         onDeleted: () {
-          cubit.removeCourse(text);
+          cubit.removeCourse(course);
         },
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       ),

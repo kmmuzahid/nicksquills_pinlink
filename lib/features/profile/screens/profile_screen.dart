@@ -14,9 +14,10 @@ import 'package:pinlink/constant/constants.dart';
 import 'package:pinlink/constant/enums.dart';
 import 'package:pinlink/coreFeature/navigation/cubit/navigation_cubit.dart';
 import 'package:pinlink/features/course_comparision/cubit/add_course_cubit.dart';
-import 'package:pinlink/features/course_comparision/model/user_course_model.dart';
+import 'package:pinlink/features/course_comparision/model/course_model.dart';
 import 'package:pinlink/features/profile/cubit/profile_cubit.dart';
 import 'package:pinlink/features/profile/cubit/profile_cubit_state.dart';
+import 'package:pinlink/features/profile/model/user_course_model.dart';
 import 'package:pinlink/features/profile/widgets/category_scrolled_list.dart';
 import 'package:pinlink/features/profile/widgets/profile_card_widget.dart';
 import 'package:pinlink/features/social/cubit/social_cubit.dart'
@@ -62,6 +63,7 @@ class ProfileScreen extends StatelessWidget {
                 padding: Constants.bodyPadding,
                 tabs: [
                   SmartTabConfig(
+                    isLoading: state.isPostLoading,
                     onReorder: (oldIndex, newIndex) {
                       cubit.reorderCourses(oldIndex, newIndex);
                     },
@@ -104,6 +106,7 @@ class ProfileScreen extends StatelessWidget {
                     itemCount: state.userCourses.length,
                   ),
                   SmartTabConfig(
+                    isLoading: state.isUserPlayedCourseLoading,
                     tab: FilterProfile.MyPosts,
                     subOnColapsAppbar: _subHeaderForPost(context),
                     subAppBar: _subHeaderForPost(context),
@@ -111,6 +114,7 @@ class ProfileScreen extends StatelessWidget {
                     gridConfig: GridConfig(itemInRow: 2),
                   ),
                   SmartTabConfig(
+                    isLoading: state.isWishListLoading,
                     subOnColapsAppbar: Container(
                       color: context.colors.background,
                       padding: const EdgeInsets.only(
@@ -128,7 +132,7 @@ class ProfileScreen extends StatelessWidget {
                   if (tab.tab == FilterProfile.MyCourses) {
                     final course = state.userCourses[index];
                     return GolfCoursePlayedItem(
-                      key: ValueKey(course.name),
+                      key: ValueKey(course.courseId?.name),
                       controllers: cubit.controllers,
                       fixedWidth: fixedWidth,
                       rattingWidth: rattingWidth,
@@ -242,7 +246,17 @@ class ProfileScreen extends StatelessWidget {
                   titleText: 'Add Rank',
                   onTap: () {
                     Navigator.pop(context);
-                    context.read<AddCourseCubit>().selectCourse(course);
+                    context.read<AddCourseCubit>().selectCourse(
+                      CourseModel(
+                        id: course.courseId?.id,
+                        name: course.courseId?.name,
+                        locationName: course.courseId?.locationName,
+                        image: course.courseId?.image,
+                        latitude: course.courseId?.latitude,
+                        longitude: course.courseId?.longitude,
+                        isPinkLink5: course.isPinkLink5,
+                      ),
+                    );
                     context.read<NavigationCubit>().changeIndex(2);
                   },
                 ),

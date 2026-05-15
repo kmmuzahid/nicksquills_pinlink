@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:pinlink/config/bloc/safe_cubit.dart';
 import 'package:pinlink/config/dependency/dependency_injection.dart';
 import 'package:pinlink/constant/enums.dart';
-import 'package:pinlink/features/course_comparision/model/user_course_model.dart';
 import 'package:pinlink/features/course_comparision/repository/course_repository.dart';
 import 'package:pinlink/features/profile/cubit/profile_cubit_state.dart';
+import 'package:pinlink/features/profile/model/user_course_model.dart';
 import 'package:pinlink/features/social/model/post_model.dart';
 import 'package:pinlink/features/social/repository/social_repository.dart';
 

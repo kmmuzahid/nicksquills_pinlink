@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:pinlink/common_widgets/text_to_avater.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/constant/enums.dart';
-import 'package:pinlink/features/course_comparision/model/user_course_model.dart';
 import 'package:pinlink/features/golf_map/widgets/golf_primary_color.dart';
+import 'package:pinlink/features/profile/model/user_course_model.dart';
 
 class GolfCoursePlayedItem extends StatefulWidget {
   const GolfCoursePlayedItem({
@@ -122,7 +122,7 @@ class _GolfCoursePlayedItemState extends State<GolfCoursePlayedItem> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CommonText(
-                        text: course.name ?? '',
+                        text: course.courseId?.name ?? '',
                         fontSize: 12,
                         left: 10,
                         maxLines: 1,
@@ -132,7 +132,7 @@ class _GolfCoursePlayedItemState extends State<GolfCoursePlayedItem> {
                         fontWeight: FontWeight.bold,
                       ).start,
                       CommonText(
-                        text: course.locationName ?? '',
+                        text: course.courseId?.locationName ?? '',
                         left: 10,
                         fontSize: 12,
                         overflow: TextOverflow.ellipsis,

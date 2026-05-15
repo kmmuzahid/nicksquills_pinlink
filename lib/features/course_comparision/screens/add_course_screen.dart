@@ -15,7 +15,7 @@ import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/constant/enums.dart';
 import 'package:pinlink/features/course_comparision/cubit/add_course_cubit.dart';
 import 'package:pinlink/features/course_comparision/cubit/add_course_state.dart';
-import 'package:pinlink/features/course_comparision/model/user_course_model.dart';
+import 'package:pinlink/features/course_comparision/model/course_model.dart';
 import 'package:pinlink/features/course_comparision/widgets/already_added_course_dailoge_wiget.dart';
 import 'package:pinlink/features/course_comparision/widgets/new_course_dailoge_widgets.dart';
 
@@ -122,20 +122,20 @@ class AddCourseScreen extends StatelessWidget {
                     buttonWidth: double.infinity,
                     titleText: 'Continue to Course Ranking',
                     onTap: () {
-                      if (state.selectedCourses.isNotEmpty) {
-                        context.router.push(
-                          ComparisonRoute(
-                            cubit: cubit,
-                            questinIndex: 0,
-                            rankingType: state.rankingType,
-                            isNaviagtion: isInNavigation,
-                          ),
-                        );
-                      } else if (state.courses.isEmpty) {
-                        if (!isInNavigation) {
-                          context.router.replace(const NavigationRoute());
-                        }
-                      }
+                      // if (state.selectedCourses.isNotEmpty) {
+                      //   context.router.push(
+                      //     ComparisonRoute(
+                      //       cubit: cubit,
+                      //       questinIndex: 0,
+                      //       rankingType: state.rankingType,
+                      //       isNaviagtion: isInNavigation,
+                      //     ),
+                      //   );
+                      // } else if (state.courses.isEmpty) {
+                      //   if (!isInNavigation) {
+                      context.router.replace(const NavigationRoute());
+                      // }
+                      // }
                     },
                   ),
                 ),
@@ -204,7 +204,7 @@ class AddCourseScreen extends StatelessWidget {
 
   Widget _buildCourseCard(
     BuildContext context,
-    UserCourseModel course,
+    CourseModel course,
     AddCourseCubit cubit, {
     bool isAdded = false,
   }) {

@@ -10,7 +10,7 @@ import 'package:pinlink/coreFeature/auth/entity/forget_pass_entity.dart';
 import 'package:pinlink/coreFeature/auth/entity/login_entity.dart';
 import 'package:pinlink/coreFeature/auth/entity/signup_entity.dart';
 import 'package:pinlink/coreFeature/auth/repository/auth_repository.dart';
-import 'package:pinlink/features/course_comparision/model/global_course_model.dart';
+import 'package:pinlink/features/course_comparision/model/course_model.dart';
 import 'package:pinlink/features/course_comparision/repository/course_repository.dart';
 import 'package:pinlink/features/course_comparision/utils/course_search_overlay_manager.dart';
 
@@ -128,7 +128,7 @@ class AuthFlowCubit extends SafeCubit<AuthFlowState> {
     overlayManager ??= CourseSearchOverlayManager(focusNode, layerLink);
   }
 
-  void selectCourse(GlobalCourseModel course) {
+  void selectCourse(CourseModel course) {
     overlayManager?.hideOverlay();
     emit(
       state.copyWith(selectedCourse: course, searchResults: [], searchText: ''),
@@ -143,7 +143,7 @@ class AuthFlowCubit extends SafeCubit<AuthFlowState> {
 
   void showOverlay(
     BuildContext context,
-    List<GlobalCourseModel> results,
+    List<CourseModel> results,
     bool isSearching,
   ) {
     overlayManager?.showOverlay(

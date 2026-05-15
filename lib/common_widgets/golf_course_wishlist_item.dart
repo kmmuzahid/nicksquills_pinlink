@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:pinlink/common_widgets/text_to_avater.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/constant/enums.dart';
-import 'package:pinlink/features/course_comparision/model/user_course_model.dart';
+import 'package:pinlink/features/profile/model/user_course_model.dart';
 
 class GolfCourseWishListItem extends StatelessWidget {
   const GolfCourseWishListItem({
@@ -59,14 +59,14 @@ class GolfCourseWishListItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CommonText(
-                        text: course.name ?? '',
+                        text: course.courseId?.name ?? '',
                         fontSize: 16,
                         left: 10,
                         textColor: context.colors.tEXT_white,
                         fontWeight: FontWeight.bold,
                       ).start,
                       CommonText(
-                        text: course.locationName ?? '',
+                        text: course.courseId?.locationName ?? '',
                         left: 10,
                         fontSize: 14,
                         textColor: context.colors.pRIMARY_priSoft,

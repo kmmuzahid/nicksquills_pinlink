@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/constant/constants.dart';
-import 'package:pinlink/features/course_comparision/model/global_course_model.dart';
+import 'package:pinlink/features/course_comparision/model/course_model.dart';
 
 class CourseSearchOverlayManager {
   final FocusNode focusNode;
@@ -20,10 +20,10 @@ class CourseSearchOverlayManager {
 
   void showOverlay({
     required BuildContext context,
-    required List<GlobalCourseModel> results,
+    required List<CourseModel> results,
     required bool isSearching,
     required String searchText,
-    required void Function(GlobalCourseModel) onCourseSelected,
+    required void Function(CourseModel) onCourseSelected,
   }) {
     hideOverlay();
 

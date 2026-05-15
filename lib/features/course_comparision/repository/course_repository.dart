@@ -1,8 +1,8 @@
 import 'package:core_kit/core_kit.dart';
 import 'package:core_kit/network/request_input.dart';
 import 'package:pinlink/config/api/api_end_point.dart';
-import 'package:pinlink/features/course_comparision/model/global_course_model.dart';
-import 'package:pinlink/features/course_comparision/model/user_course_model.dart';
+import 'package:pinlink/features/course_comparision/model/course_model.dart';
+import 'package:pinlink/features/profile/model/user_course_model.dart';
 
 class CourseRepository {
   Future<ResponseState<List<UserCourseModel>?>> getUserPlayedCourse({
@@ -27,7 +27,7 @@ class CourseRepository {
     );
   }
 
-  Future<ResponseState<List<UserCourseModel>?>> getUserAvailableCourse({
+  Future<ResponseState<List<CourseModel>?>> getUserAvailableCourse({
     String? query,
     int page = 1,
   }) async {
@@ -44,12 +44,12 @@ class CourseRepository {
       ),
 
       responseBuilder: (data) {
-        return List.from(data).map((e) => UserCourseModel.fromJson(e)).toList();
+        return List.from(data).map((e) => CourseModel.fromJson(e)).toList();
       },
     );
   }
 
-  Future<ResponseState<List<GlobalCourseModel>?>> getGlobalCourses({
+  Future<ResponseState<List<CourseModel>?>> getGlobalCourses({
     String? query,
     int retry = 3,
   }) async {
@@ -62,9 +62,7 @@ class CourseRepository {
       ),
 
       responseBuilder: (data) {
-        return List.from(
-          data,
-        ).map((e) => GlobalCourseModel.fromJson(e)).toList();
+        return List.from(data).map((e) => CourseModel.fromJson(e)).toList();
       },
     );
   }

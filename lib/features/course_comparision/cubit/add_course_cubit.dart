@@ -7,7 +7,7 @@ import 'package:pinlink/config/bloc/safe_cubit.dart';
 import 'package:pinlink/config/dependency/dependency_injection.dart';
 import 'package:pinlink/constant/enums.dart';
 import 'package:pinlink/features/course_comparision/cubit/add_course_state.dart';
-import 'package:pinlink/features/course_comparision/model/user_course_model.dart';
+import 'package:pinlink/features/course_comparision/model/course_model.dart';
 import 'package:pinlink/features/course_comparision/repository/course_repository.dart';
 
 class AddCourseCubit extends SafeCubit<AddCourseState> {
@@ -27,11 +27,11 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
     emit(state.copyWith(tags: state.tags.where((e) => e != tag).toList()));
   }
 
-  void selectCourse(UserCourseModel course) {
+  void selectCourse(CourseModel course) {
     emit(state.copyWith(selectedCourses: [...state.selectedCourses, course]));
   }
 
-  void unselectCourse(UserCourseModel course) {
+  void unselectCourse(CourseModel course) {
     emit(
       state.copyWith(
         selectedCourses: state.selectedCourses

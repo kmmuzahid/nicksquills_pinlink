@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pinlink/common_widgets/text_to_avater.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/constant/enums.dart';
-import 'package:pinlink/features/course_comparision/model/user_course_model.dart';
+import 'package:pinlink/features/course_comparision/model/course_model.dart';
 import 'package:pinlink/features/golf_map/widgets/golf_primary_color.dart';
 
 class GolfCourseItem extends StatelessWidget {
@@ -14,7 +14,7 @@ class GolfCourseItem extends StatelessWidget {
     required this.index,
     required this.selectedFilter,
   });
-  final UserCourseModel course;
+  final CourseModel course;
   final int index;
   final MapFilters? selectedFilter;
 
@@ -23,11 +23,7 @@ class GolfCourseItem extends StatelessWidget {
     return _buildCourseCard(context, course, index);
   }
 
-  Widget _buildCourseCard(
-    BuildContext context,
-    UserCourseModel course,
-    int index,
-  ) {
+  Widget _buildCourseCard(BuildContext context, CourseModel course, int index) {
     return Container(
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.symmetric(vertical: 4),
