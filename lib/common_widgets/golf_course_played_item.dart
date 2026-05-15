@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pinlink/common_widgets/text_to_avater.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/constant/enums.dart';
-import 'package:pinlink/features/course_comparision/model/course_model.dart';
+import 'package:pinlink/features/course_comparision/model/user_course_model.dart';
 import 'package:pinlink/features/golf_map/widgets/golf_primary_color.dart';
 
 class GolfCoursePlayedItem extends StatefulWidget {
@@ -16,7 +16,7 @@ class GolfCoursePlayedItem extends StatefulWidget {
     required this.fixedWidth,
     required this.rattingWidth,
   });
-  final CourseModel course;
+  final UserCourseModel course;
   final int index;
   final MapFilters? selectedFilter;
   final Map<String, ScrollController> controllers;
@@ -89,7 +89,11 @@ class _GolfCoursePlayedItemState extends State<GolfCoursePlayedItem> {
     return _buildCourseCard(context, widget.course, widget.index);
   }
 
-  Widget _buildCourseCard(BuildContext context, CourseModel course, int index) {
+  Widget _buildCourseCard(
+    BuildContext context,
+    UserCourseModel course,
+    int index,
+  ) {
     final child = Container(
       alignment: Alignment.center,
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 6),
@@ -118,7 +122,7 @@ class _GolfCoursePlayedItemState extends State<GolfCoursePlayedItem> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CommonText(
-                        text: course.name,
+                        text: course.name ?? '',
                         fontSize: 12,
                         left: 10,
                         maxLines: 1,
@@ -128,7 +132,7 @@ class _GolfCoursePlayedItemState extends State<GolfCoursePlayedItem> {
                         fontWeight: FontWeight.bold,
                       ).start,
                       CommonText(
-                        text: course.address,
+                        text: course.locationName ?? '',
                         left: 10,
                         fontSize: 12,
                         overflow: TextOverflow.ellipsis,

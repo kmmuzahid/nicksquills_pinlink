@@ -12,12 +12,11 @@ import 'package:pinlink/config/bloc/cubit_scope_value.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
-import 'package:pinlink/constant/constants.dart';
 import 'package:pinlink/constant/enums.dart';
 import 'package:pinlink/coreFeature/navigation/cubit/navigation_cubit.dart';
 import 'package:pinlink/features/course_comparision/cubit/add_course_cubit.dart';
 import 'package:pinlink/features/course_comparision/cubit/add_course_state.dart';
-import 'package:pinlink/features/course_comparision/model/comparison_model.dart';
+import 'package:pinlink/features/course_comparision/model/user_course_model.dart';
 import 'package:pinlink/gen/assets.gen.dart';
 
 @RoutePage()
@@ -93,7 +92,7 @@ class ComparisonScreen extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
               CommonText(
-                text: state.comparison[questinIndex].question,
+                text: 'Which course is more memorable?',
                 fontSize: 16,
                 maxLines: 3,
                 top: 8,
@@ -105,7 +104,9 @@ class ComparisonScreen extends StatelessWidget {
                 child: SafeArea(
                   top: false,
                   bottom: true,
-                  child: _questions(state, context),
+                  child: state.comparison.isNotEmpty
+                      ? _questions(state, context)
+                      : const SizedBox.shrink(),
                 ),
               ),
               if (rankingType == RankingType.wishlistRanking)
@@ -153,8 +154,8 @@ class ComparisonScreen extends StatelessWidget {
   }
 
   Widget _questions(AddCourseState state, BuildContext context) {
-    final comparison1 = state.comparison[questinIndex].options[0];
-    final comparison2 = state.comparison[questinIndex].options[1];
+    final comparison1 = state.comparison.first;
+    final comparison2 = state.comparison.last;
     return Column(
       children: [
         Expanded(
@@ -242,10 +243,7 @@ class ComparisonScreen extends StatelessWidget {
     );
   }
 
-  AspectRatio _answerBuilder(
-    BuildContext context,
-    ComparisonOptionModel comparison,
-  ) {
+  AspectRatio _answerBuilder(BuildContext context, UserCourseModel comparison) {
     return AspectRatio(
       aspectRatio: 1.2,
       child: Container(
@@ -265,7 +263,7 @@ class ComparisonScreen extends StatelessWidget {
                 Expanded(
                   child: CommonImage(
                     // width: constraints.maxWidth,
-                    src: comparison.image,
+                    src: comparison.image ?? '',
                     borderRadiusCustom: const BorderRadius.only(
                       topLeft: Radius.circular(16),
                       topRight: Radius.circular(16),
@@ -275,13 +273,13 @@ class ComparisonScreen extends StatelessWidget {
                 ),
                 10.height,
                 CommonText(
-                  text: comparison.title,
+                  text: comparison.name ?? '',
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
                   textColor: context.colors.tEXT_white,
                 ).center,
                 CommonText(
-                  text: comparison.address,
+                  text: comparison.locationName ?? '',
                   fontSize: 16,
                   textColor: context.colors.tEXT_subDark,
                 ).center,

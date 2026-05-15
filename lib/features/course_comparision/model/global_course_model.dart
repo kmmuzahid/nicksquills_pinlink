@@ -47,7 +47,8 @@ class GlobalCourseModel {
     this.isPlay,
   });
 
-  factory GlobalCourseModel.fromJson(Map<String, dynamic> json) => _$GlobalCourseModelFromJson(json);
+  factory GlobalCourseModel.fromJson(Map<String, dynamic> json) =>
+      _$GlobalCourseModelFromJson(json);
   Map<String, dynamic> toJson() => _$GlobalCourseModelToJson(this);
 }
 
@@ -58,11 +59,9 @@ class Location {
   @JsonKey(name: 'coordinates')
   final List<double?>? coordinates;
 
-  Location({
-    this.type,
-    this.coordinates,
-  });
+  Location({this.type, this.coordinates});
 
-  factory Location.fromJson(Map<String, dynamic> json) => _$LocationFromJson(json);
+  factory Location.fromJson(Map<String, dynamic> json) =>
+      _$LocationFromJson(json);
   Map<String, dynamic> toJson() => _$LocationToJson(this);
 }

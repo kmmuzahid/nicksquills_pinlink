@@ -4,14 +4,17 @@ import 'package:pinlink/config/api/api_end_point.dart';
 import 'package:pinlink/features/social/model/post_model.dart';
 
 class SocialRepository {
-  Future<ResponseState<List<PostModel>?>> getAllPost(
-    int page,
+  Future<ResponseState<List<PostModel>?>> getAllPost({
+    required int page,
     String? searchText,
     String? type,
-  ) async {
+    bool userPostOnly = false,
+  }) async {
     return DioService.instance.request(
       input: RequestInput(
-        endpoint: ApiEndPoint.instance.user,
+        endpoint: userPostOnly
+            ? ApiEndPoint.instance.userPost
+            : ApiEndPoint.instance.user,
         method: .GET,
         queryParams: {
           'page': page,

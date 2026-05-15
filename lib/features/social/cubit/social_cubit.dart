@@ -46,9 +46,9 @@ class SocialCubit extends SafeCubit<SocialState> {
     );
 
     final result = await socialRepository.getAllPost(
-      page,
-      searchText,
-      state.isPublicPostEnabled ? 'public' : null,
+      page: page,
+      searchText: searchText,
+      type: state.isPublicPostEnabled ? 'public' : null,
     );
 
     emit(state.copyWith(isPostLoaing: false));
@@ -132,7 +132,7 @@ class SocialCubit extends SafeCubit<SocialState> {
         endpoint: ApiEndPoint.instance.createPostData,
         method: .POST,
         formFields: {
-          'coursename': state.courses.first.courseId?.name,
+          'coursename': state.courses.first.name,
           'headline': entity.headline,
           'description': entity.description,
           'isScorecard': !state.isPublic,
@@ -140,7 +140,7 @@ class SocialCubit extends SafeCubit<SocialState> {
           'scorecardHoles': int.tryParse(entity.holes ?? '0'),
           'scorecardTotalScore': int.tryParse(entity.totalScore ?? '0'),
           'links': state.links,
-          'courseId': state.courses.first.courseId?.id,
+          'courseId': state.courses.first.id,
         },
         files: {'mediaLinks': state.files},
       ),

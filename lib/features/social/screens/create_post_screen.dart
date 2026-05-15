@@ -114,7 +114,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           final course = results[index];
                           return ListTile(
                             title: Text(
-                              course.courseId?.name ?? '',
+                              course.name ?? '',
                               style: TextStyle(
                                 color: context.colors.tEXT_white,
                               ),
@@ -492,7 +492,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 150),
       child: Chip(
-        label: Text(text.courseId?.name ?? '', overflow: TextOverflow.ellipsis),
+        label: Text(text.name ?? '', overflow: TextOverflow.ellipsis),
         backgroundColor: Colors.amber.withValues(
           alpha: 0.2,
         ), // change background color here

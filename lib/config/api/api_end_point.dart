@@ -24,7 +24,6 @@ class ApiEndPoint {
 
   final String changePassword = '/auth/change-password';
 
-  final String updateProfile = '/user/profile'; //patch
   final String logout = '/auth/logout';
 
   final String deleteAccount = '/user/delete-account';
@@ -36,9 +35,11 @@ class ApiEndPoint {
   final String createPostData = '/postData/create-postData';
 
   final String user = '/post';
+  final String userPost = '/post/user';
 
   //course
   final String coursePublic = '/course/public';
+  final String courseUser = '/course/user';
 
   final String sharePost = '/post/share-post';
 
@@ -47,4 +48,8 @@ class ApiEndPoint {
   final String likePost = '/comments/like';
 
   final String follow = '/follow/create-follow';
+
+  final String updateMyProfile = '/users/update-my-profile';
+
+  final String wishlistCourse = '/wishlistCourse';
 }

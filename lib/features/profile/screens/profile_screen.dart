@@ -14,7 +14,7 @@ import 'package:pinlink/constant/constants.dart';
 import 'package:pinlink/constant/enums.dart';
 import 'package:pinlink/coreFeature/navigation/cubit/navigation_cubit.dart';
 import 'package:pinlink/features/course_comparision/cubit/add_course_cubit.dart';
-import 'package:pinlink/features/course_comparision/model/course_model.dart';
+import 'package:pinlink/features/course_comparision/model/user_course_model.dart';
 import 'package:pinlink/features/profile/cubit/profile_cubit.dart';
 import 'package:pinlink/features/profile/cubit/profile_cubit_state.dart';
 import 'package:pinlink/features/profile/widgets/category_scrolled_list.dart';
@@ -31,13 +31,31 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SimpleBackground(
       body: CubitScope(
-        create: () => ProfileCubit(),
+        create: () => ProfileCubit()..getUserPlayedCourse(1),
         builder: (context, cubit, state) {
           return LayoutBuilder(
             builder: (context, constraints) {
               final fixedWidth = (constraints.maxWidth * 0.42);
               final rattingWidth = (constraints.maxWidth - fixedWidth) / 4;
               return SmartTabListLoader(
+                onLoadMore: (ctx, page) {
+                  if (ctx.tab == .MyPosts) {
+                    cubit.getUserPosts(page);
+                  } else if (ctx.tab == .MyCourses) {
+                    cubit.getUserPlayedCourse(page);
+                  } else if (ctx.tab == .MyWishlist) {
+                    cubit.getUserWishlistCourse(page);
+                  }
+                },
+                onRefresh: (ctx) async {
+                  if (ctx.tab == .MyPosts) {
+                    cubit.getUserPosts(1, isRefresh: true);
+                  } else if (ctx.tab == .MyCourses) {
+                    cubit.getUserPlayedCourse(1, isRefresh: true);
+                  } else if (ctx.tab == .MyWishlist) {
+                    cubit.getUserWishlistCourse(1, isRefresh: true);
+                  }
+                },
                 appbar: _appbar(context, cubit, state),
                 onColapsAppbar: _onColupseGenral(context, cubit, state),
 
@@ -83,13 +101,13 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                     tab: FilterProfile.MyCourses,
-                    itemCount: state.courses.length,
+                    itemCount: state.userCourses.length,
                   ),
                   SmartTabConfig(
                     tab: FilterProfile.MyPosts,
                     subOnColapsAppbar: _subHeaderForPost(context),
                     subAppBar: _subHeaderForPost(context),
-                    itemCount: 30,
+                    itemCount: state.posts.length,
                     gridConfig: GridConfig(itemInRow: 2),
                   ),
                   SmartTabConfig(
@@ -103,32 +121,38 @@ class ProfileScreen extends StatelessWidget {
                       child: _headline(context, state),
                     ),
                     tab: FilterProfile.MyWishlist,
-                    itemCount: 30,
+                    itemCount: state.wishListCourses.length,
                   ),
                 ],
                 itemBuilder: (tab, index) {
                   if (tab.tab == FilterProfile.MyCourses) {
+                    final course = state.userCourses[index];
                     return GolfCoursePlayedItem(
-                      key: ValueKey(state.courses[index].name),
+                      key: ValueKey(course.name),
                       controllers: cubit.controllers,
                       fixedWidth: fixedWidth,
                       rattingWidth: rattingWidth,
-                      course: state.courses[index],
+                      course: course,
                       selectedFilter: null,
                       index: index,
                     );
                   } else if (tab.tab == FilterProfile.MyPosts) {
-                    return _buildRowItem(context, index);
+                    return _buildRowItem(
+                      context,
+                      postModel: state.posts[index],
+                      cubit: cubit,
+                    );
                   } else {
+                    final course = state.wishListCourses[index];
                     return GolfCourseWishListItem(
                       onMarkPlayed: () {
-                        showReRankDailoge(context, isPinlin5: index % 2 == 0);
+                        showReRankDailoge(
+                          context,
+                          isPinlin5: course.isPinkLink5 ?? false,
+                          course: course,
+                        );
                       },
-                      course: CourseModel(
-                        name: 'Royal Melbourne',
-                        address: 'Australia',
-                        isAlreadyPlayed: false,
-                      ),
+                      course: course,
                       selectedFilter: null,
                       index: index,
                       fixedWidth: fixedWidth,
@@ -144,7 +168,11 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  void showReRankDailoge(BuildContext context, {bool isPinlin5 = false}) {
+  void showReRankDailoge(
+    BuildContext context, {
+    bool isPinlin5 = false,
+    required UserCourseModel course,
+  }) {
     final title = isPinlin5
         ? 'Hey! You just played a PinLinks 5.'
         : 'Course Completed!';
@@ -214,13 +242,7 @@ class ProfileScreen extends StatelessWidget {
                   titleText: 'Add Rank',
                   onTap: () {
                     Navigator.pop(context);
-                    context.read<AddCourseCubit>().selectCourse(
-                      CourseModel(
-                        name: 'Royal Melbourne',
-                        address: 'St-5 New York, 10001',
-                        isAlreadyPlayed: false,
-                      ),
-                    );
+                    context.read<AddCourseCubit>().selectCourse(course);
                     context.read<NavigationCubit>().changeIndex(2);
                   },
                 ),
@@ -270,41 +292,35 @@ class ProfileScreen extends StatelessWidget {
   }
 
   Widget _buildRowItem(
-    BuildContext context,
-    int index, {
+    BuildContext context, {
     bool showItem = true,
+    required PostModel postModel,
+    required ProfileCubit cubit,
   }) {
-    final isEven = index.isEven;
-
-    return Padding(
-      padding: EdgeInsets.only(
-        left: isEven ? 0 : 4,
-        right: isEven ? 4 : 0,
-        bottom: 8,
-      ),
-      child: AspectRatio(
-        aspectRatio: 0.8,
-        child: showItem
-            ? SocialItemWidget(
-                postModel: PostModel(),
-                onChanged: (postModel) {},
-                onReportPost: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => ReportDialog(
-                      postId: '', // Placeholder since no real post yet
-                      onReport: (reason) {
-                        context.read<SocialCubit>().createPostReport(
-                          '', // Placeholder
-                          reason,
-                        );
-                      },
-                    ),
-                  );
-                },
-              )
-            : const SizedBox.shrink(),
-      ),
+    return AspectRatio(
+      aspectRatio: 0.8,
+      child: showItem
+          ? SocialItemWidget(
+              postModel: postModel,
+              onChanged: (postModel) {
+                cubit.onChangePost(postModel);
+              },
+              onReportPost: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => ReportDialog(
+                    postId: '', // Placeholder since no real post yet
+                    onReport: (reason) {
+                      context.read<SocialCubit>().createPostReport(
+                        '', // Placeholder
+                        reason,
+                      );
+                    },
+                  ),
+                );
+              },
+            )
+          : const SizedBox.shrink(),
     );
   }
 

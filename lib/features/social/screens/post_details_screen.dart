@@ -268,16 +268,14 @@ class PostDetailsScreen extends StatelessWidget {
 
     return Row(
       children: [
-        TextToAvatar(
-          text: user?.fullName?.substring(0, 1) ?? "",
-          size: 50.w,
-          color: const Color(0xFF00BC7D),
-        ),
-        // CommonImage(
-        //   src: user?.profile ?? Constants.sampleImage,
-        //   borderRadius: 46,
-        //   size: 46,
-        // ),
+        if (user?.profile == null)
+          TextToAvatar(
+            text: user?.fullName?.substring(0, 1) ?? "",
+            size: 50.w,
+            color: const Color(0xFF00BC7D),
+          ),
+        if (user?.profile != null)
+          CommonImage(src: user?.profile ?? '', borderRadius: 46, size: 46),
         const SizedBox(width: 10),
         Expanded(
           child: Column(

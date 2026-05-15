@@ -4,67 +4,16 @@
  * @Email: km.muzahid@gmail.com
  */
 import 'package:pinlink/config/bloc/safe_cubit.dart';
-import 'package:pinlink/constant/constants.dart';
+import 'package:pinlink/config/dependency/dependency_injection.dart';
 import 'package:pinlink/constant/enums.dart';
 import 'package:pinlink/features/course_comparision/cubit/add_course_state.dart';
-import 'package:pinlink/features/course_comparision/model/comparison_model.dart';
-import 'package:pinlink/features/course_comparision/model/course_model.dart';
+import 'package:pinlink/features/course_comparision/model/user_course_model.dart';
+import 'package:pinlink/features/course_comparision/repository/course_repository.dart';
 
 class AddCourseCubit extends SafeCubit<AddCourseState> {
   AddCourseCubit() : super(const AddCourseState(tags: ['Alex', 'Bob']));
-
-  Future<void> init() async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    emit(
-      state.copyWith(
-        courses: List.generate(
-          10,
-          (index) => CourseModel(
-            name: 'Augusta National $index',
-            address: 'Scotland, United States $index',
-            isAlreadyPlayed: index % 2 == 0,
-          ),
-        ),
-        comparison: [
-          ComparisonModel(
-            question: 'Which course do you prefer?',
-            options: [
-              ComparisonOptionModel(
-                title: 'Augusta National 1',
-                isSelected: false,
-                address: 'Scotland, United States',
-                image: Constants.sampleImage,
-              ),
-              ComparisonOptionModel(
-                title: 'Augusta National 3',
-                isSelected: false,
-                address: 'Scotland, United States',
-                image: Constants.sampleImage,
-              ),
-            ],
-          ),
-
-          ComparisonModel(
-            question: 'Which course was more challenging?',
-            options: [
-              ComparisonOptionModel(
-                title: 'Augusta National',
-                isSelected: false,
-                address: 'Scotland, United States',
-                image: Constants.sampleImage,
-              ),
-              ComparisonOptionModel(
-                title: 'Augusta National 2',
-                isSelected: false,
-                address: 'Scotland, United States',
-                image: Constants.sampleImage,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+  final courseRepository = getIt<CourseRepository>();
+  Future<void> init() async {}
 
   void setRankingType(RankingType rankingType) {
     emit(state.copyWith(rankingType: rankingType));
@@ -78,17 +27,40 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
     emit(state.copyWith(tags: state.tags.where((e) => e != tag).toList()));
   }
 
-  void selectCourse(CourseModel course) {
+  void selectCourse(UserCourseModel course) {
     emit(state.copyWith(selectedCourses: [...state.selectedCourses, course]));
   }
 
-  void unselectCourse(CourseModel course) {
+  void unselectCourse(UserCourseModel course) {
     emit(
       state.copyWith(
         selectedCourses: state.selectedCourses
-            .where((e) => e.name != course.name)
+            .where((e) => e.id != course.id)
             .toList(),
       ),
     );
+  }
+
+  Future<void> getAllCourses({
+    String? query,
+    int page = 1,
+    bool isRefresh = false,
+  }) async {
+    if (state.isCourseLoading) return;
+    emit(
+      state.copyWith(
+        isCourseLoading: true,
+        courses: isRefresh ? [] : state.courses,
+      ),
+    );
+    final result = await courseRepository.getUserAvailableCourse(
+      query: query,
+      page: page,
+    );
+    if (result.isSuccess) {
+      emit(state.copyWith(courses: result.data ?? [], isCourseLoading: false));
+    } else {
+      emit(state.copyWith(isCourseLoading: false));
+    }
   }
 }

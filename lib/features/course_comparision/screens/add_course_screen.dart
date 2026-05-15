@@ -15,7 +15,7 @@ import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/constant/enums.dart';
 import 'package:pinlink/features/course_comparision/cubit/add_course_cubit.dart';
 import 'package:pinlink/features/course_comparision/cubit/add_course_state.dart';
-import 'package:pinlink/features/course_comparision/model/course_model.dart';
+import 'package:pinlink/features/course_comparision/model/user_course_model.dart';
 import 'package:pinlink/features/course_comparision/widgets/already_added_course_dailoge_wiget.dart';
 import 'package:pinlink/features/course_comparision/widgets/new_course_dailoge_widgets.dart';
 
@@ -43,7 +43,7 @@ class AddCourseScreen extends StatelessWidget {
               ),
             ),
       body: CubitScopeValue(
-        cubit: context.read<AddCourseCubit>(),
+        cubit: context.read<AddCourseCubit>()..getAllCourses(),
         builder: (context, cubit, state) {
           return Column(
             children: [
@@ -122,7 +122,7 @@ class AddCourseScreen extends StatelessWidget {
                     buttonWidth: double.infinity,
                     titleText: 'Continue to Course Ranking',
                     onTap: () {
-                      if (state.comparison.isNotEmpty) {
+                      if (state.selectedCourses.isNotEmpty) {
                         context.router.push(
                           ComparisonRoute(
                             cubit: cubit,
@@ -131,6 +131,10 @@ class AddCourseScreen extends StatelessWidget {
                             isNaviagtion: isInNavigation,
                           ),
                         );
+                      } else if (state.courses.isEmpty) {
+                        if (!isInNavigation) {
+                          context.router.replace(const NavigationRoute());
+                        }
                       }
                     },
                   ),
@@ -200,7 +204,7 @@ class AddCourseScreen extends StatelessWidget {
 
   Widget _buildCourseCard(
     BuildContext context,
-    CourseModel course,
+    UserCourseModel course,
     AddCourseCubit cubit, {
     bool isAdded = false,
   }) {
@@ -227,14 +231,14 @@ class AddCourseScreen extends StatelessWidget {
                 crossAxisAlignment: .start,
                 children: [
                   CommonText(
-                    text: course.name,
+                    text: course.name ?? '',
                     fontSize: 16,
                     left: 10,
                     textColor: context.colors.tEXT_white,
                     fontWeight: FontWeight.bold,
                   ).start,
                   CommonText(
-                    text: course.address,
+                    text: course.locationName ?? '',
                     left: 10,
                     fontSize: 14,
                     textColor: context.colors.pRIMARY_priSoft,
@@ -253,7 +257,7 @@ class AddCourseScreen extends StatelessWidget {
                     cubit.selectCourse(course);
                     return;
                   }
-                  if (course.isAlreadyPlayed) {
+                  if (course.isPlay == true) {
                     showDialog(
                       context: context,
                       builder: (context) => Dialog(
@@ -287,7 +291,7 @@ class AddCourseScreen extends StatelessWidget {
                   child: Icon(
                     isAdded ? Icons.close : Icons.add,
                     size: 24,
-                    color: course.isAlreadyPlayed && isInNavigation && !isAdded
+                    color: course.isPlay == true && isInNavigation && !isAdded
                         ? context.colors.ratingPremiumTags_goldAccent
                         : context
                               .colors

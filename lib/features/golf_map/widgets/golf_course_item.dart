@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pinlink/common_widgets/text_to_avater.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/constant/enums.dart';
-import 'package:pinlink/features/course_comparision/model/course_model.dart';
+import 'package:pinlink/features/course_comparision/model/user_course_model.dart';
 import 'package:pinlink/features/golf_map/widgets/golf_primary_color.dart';
 
 class GolfCourseItem extends StatelessWidget {
@@ -14,7 +14,7 @@ class GolfCourseItem extends StatelessWidget {
     required this.index,
     required this.selectedFilter,
   });
-  final CourseModel course;
+  final UserCourseModel course;
   final int index;
   final MapFilters? selectedFilter;
 
@@ -23,14 +23,21 @@ class GolfCourseItem extends StatelessWidget {
     return _buildCourseCard(context, course, index);
   }
 
-  Widget _buildCourseCard(BuildContext context, CourseModel course, int index) {
+  Widget _buildCourseCard(
+    BuildContext context,
+    UserCourseModel course,
+    int index,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.symmetric(vertical: 4),
       decoration: BoxDecoration(
         color: context.colors.bACKGROUND_darkCard,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: context.colors.bACKGROUND_darkCardBoarder, width: 1.4),
+        border: Border.all(
+          color: context.colors.bACKGROUND_darkCardBoarder,
+          width: 1.4,
+        ),
       ),
       child: Column(
         children: [
@@ -44,14 +51,14 @@ class GolfCourseItem extends StatelessWidget {
                 crossAxisAlignment: .start,
                 children: [
                   CommonText(
-                    text: course.name,
+                    text: course.name ?? '',
                     fontSize: 16,
                     left: 10,
                     textColor: context.colors.tEXT_white,
                     fontWeight: FontWeight.bold,
                   ).start,
                   CommonText(
-                    text: course.address,
+                    text: course.locationName ?? '',
                     left: 10,
                     fontSize: 14,
                     textColor: context.colors.pRIMARY_priSoft,
@@ -65,11 +72,13 @@ class GolfCourseItem extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Icon(
-                    course.isAlreadyPlayed ? Icons.close : Icons.add,
+                    course.isPlay == true ? Icons.close : Icons.add,
                     size: 24,
-                    color: course.isAlreadyPlayed
+                    color: course.isPlay == true
                         ? context.colors.ratingPremiumTags_goldAccent
-                        : context.colors.successVerifiedPositivestats_freshGrass,
+                        : context
+                              .colors
+                              .successVerifiedPositivestats_freshGrass,
                   ),
                 ),
               ),

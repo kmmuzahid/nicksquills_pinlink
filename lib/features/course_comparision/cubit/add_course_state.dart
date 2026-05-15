@@ -5,15 +5,15 @@
  */
 import 'package:equatable/equatable.dart';
 import 'package:pinlink/constant/enums.dart';
-import 'package:pinlink/features/course_comparision/model/comparison_model.dart';
-import 'package:pinlink/features/course_comparision/model/course_model.dart';
+import 'package:pinlink/features/course_comparision/model/user_course_model.dart';
 
 class AddCourseState extends Equatable {
-  final List<CourseModel> courses;
-  final List<CourseModel> selectedCourses;
+  final List<UserCourseModel> courses;
+  final List<UserCourseModel> selectedCourses;
   final List<String> tags;
-  final List<ComparisonModel> comparison;
+  final List<UserCourseModel> comparison;
   final RankingType rankingType;
+  final bool isCourseLoading;
 
   const AddCourseState({
     this.courses = const [],
@@ -21,17 +21,26 @@ class AddCourseState extends Equatable {
     this.tags = const [],
     this.comparison = const [],
     this.rankingType = RankingType.courseRanking,
+    this.isCourseLoading = false,
   });
 
   @override
-  List<Object?> get props => [courses, selectedCourses, tags, comparison, rankingType];
+  List<Object?> get props => [
+    courses,
+    selectedCourses,
+    tags,
+    comparison,
+    rankingType,
+    isCourseLoading,
+  ];
 
   AddCourseState copyWith({
-    List<CourseModel>? courses,
-    List<CourseModel>? selectedCourses,
+    List<UserCourseModel>? courses,
+    List<UserCourseModel>? selectedCourses,
     List<String>? tags,
-    List<ComparisonModel>? comparison,
+    List<UserCourseModel>? comparison,
     RankingType? rankingType,
+    bool? isCourseLoading,
   }) {
     return AddCourseState(
       courses: courses ?? this.courses,
@@ -39,6 +48,7 @@ class AddCourseState extends Equatable {
       tags: tags ?? this.tags,
       comparison: comparison ?? this.comparison,
       rankingType: rankingType ?? this.rankingType,
+      isCourseLoading: isCourseLoading ?? this.isCourseLoading,
     );
   }
 }

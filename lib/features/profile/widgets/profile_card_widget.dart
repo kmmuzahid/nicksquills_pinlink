@@ -1,3 +1,4 @@
+import 'package:core_kit/image/common_image.dart';
 import 'package:core_kit/text/common_text.dart';
 import 'package:core_kit/utils/core_screen_utils.dart';
 import 'package:flutter/material.dart';
@@ -24,11 +25,18 @@ class ProfileCardWidget extends StatelessWidget {
               // Header Section: Avatar, Name, and Location
               Row(
                 children: [
-                  TextToAvatar(
-                    text: state.profile?.fullName?.substring(0, 1) ?? "",
-                    size: 50.w,
-                    color: const Color(0xFF00BC7D),
-                  ),
+                  if (state.profile?.profile == null)
+                    TextToAvatar(
+                      text: state.profile?.fullName?.substring(0, 1) ?? "",
+                      size: 50.w,
+                      color: const Color(0xFF00BC7D),
+                    ),
+                  if (state.profile?.profile != null)
+                    CommonImage(
+                      src: state.profile?.profile ?? '',
+                      borderRadius: 46,
+                      size: 46,
+                    ),
                   const SizedBox(width: 16),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:pinlink/common_widgets/text_to_avater.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/constant/enums.dart';
-import 'package:pinlink/features/course_comparision/model/course_model.dart';
+import 'package:pinlink/features/course_comparision/model/user_course_model.dart';
 
 class GolfCourseWishListItem extends StatelessWidget {
   const GolfCourseWishListItem({
@@ -16,7 +16,7 @@ class GolfCourseWishListItem extends StatelessWidget {
     required this.fixedWidth,
     required this.onMarkPlayed,
   });
-  final CourseModel course;
+  final UserCourseModel course;
   final int index;
   final MapFilters? selectedFilter;
   final double fixedWidth;
@@ -27,7 +27,11 @@ class GolfCourseWishListItem extends StatelessWidget {
     return _buildCourseCard(context, course, index);
   }
 
-  Widget _buildCourseCard(BuildContext context, CourseModel course, int index) {
+  Widget _buildCourseCard(
+    BuildContext context,
+    UserCourseModel course,
+    int index,
+  ) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 6),
       margin: const EdgeInsets.symmetric(vertical: 4),
@@ -55,14 +59,14 @@ class GolfCourseWishListItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CommonText(
-                        text: course.name,
+                        text: course.name ?? '',
                         fontSize: 16,
                         left: 10,
                         textColor: context.colors.tEXT_white,
                         fontWeight: FontWeight.bold,
                       ).start,
                       CommonText(
-                        text: course.address,
+                        text: course.locationName ?? '',
                         left: 10,
                         fontSize: 14,
                         textColor: context.colors.pRIMARY_priSoft,

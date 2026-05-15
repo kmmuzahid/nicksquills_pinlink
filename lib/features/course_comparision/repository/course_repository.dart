@@ -7,12 +7,40 @@ import 'package:pinlink/features/course_comparision/model/user_course_model.dart
 class CourseRepository {
   Future<ResponseState<List<UserCourseModel>?>> getUserPlayedCourse({
     String? query,
+    int page = 1,
   }) async {
     return DioService.instance.request(
       input: RequestInput(
         endpoint: ApiEndPoint.instance.userPlayedCourse,
         method: .GET,
-        queryParams: {'searchText': query},
+        queryParams: {
+          'searchText': ?query,
+          'page': page,
+          'limit': 10,
+          'sort': 'rank',
+        },
+      ),
+
+      responseBuilder: (data) {
+        return List.from(data).map((e) => UserCourseModel.fromJson(e)).toList();
+      },
+    );
+  }
+
+  Future<ResponseState<List<UserCourseModel>?>> getUserAvailableCourse({
+    String? query,
+    int page = 1,
+  }) async {
+    return DioService.instance.request(
+      input: RequestInput(
+        endpoint: ApiEndPoint.instance.courseUser,
+        method: .GET,
+        queryParams: {
+          'searchText': ?query,
+          'page': page,
+          'limit': 10,
+          'sort': 'rank',
+        },
       ),
 
       responseBuilder: (data) {
@@ -30,13 +58,29 @@ class CourseRepository {
       input: RequestInput(
         endpoint: ApiEndPoint.instance.coursePublic,
         method: .GET,
-        queryParams: {'searchTerm': query},
+        queryParams: {'searchTerm': ?query},
       ),
 
       responseBuilder: (data) {
         return List.from(
           data,
         ).map((e) => GlobalCourseModel.fromJson(e)).toList();
+      },
+    );
+  }
+
+  Future<ResponseState<List<UserCourseModel>?>> getUserWishlistCourse({
+    required int page,
+  }) async {
+    return DioService.instance.request(
+      input: RequestInput(
+        endpoint: ApiEndPoint.instance.wishlistCourse,
+        method: .GET,
+        queryParams: {'page': page, 'limit': 10, 'sort': 'rank'},
+      ),
+
+      responseBuilder: (data) {
+        return List.from(data).map((e) => UserCourseModel.fromJson(e)).toList();
       },
     );
   }

@@ -15,6 +15,7 @@ import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/constant/app_string.dart';
 import 'package:pinlink/constant/constants.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
+import 'package:pinlink/coreFeature/setting/entity/update_profile_entity.dart';
 import 'package:pinlink/coreFeature/setting/screens/cubit/edit_profile_cubit.dart';
 import 'package:pinlink/coreFeature/setting/screens/cubit/edit_profile_state.dart';
 
@@ -25,13 +26,15 @@ class EditProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authCubit = context.read<AuthCubit>();
+
+    final user = authCubit.state.profile;
     return Scaffold(
       appBar: const CommonAppBar(title: 'Edit Profile'),
       body: Padding(
         padding: Constants.bodyPadding,
         child: SafeArea(
           child: FormBuilder(
-            entity: null,
+            entity: UpdateProfileEntity(),
             builder: (context, formKey, entity) {
               return CubitScope(
                 create: () => PersonalInfoCubit(),
@@ -40,62 +43,75 @@ class EditProfileScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       20.height,
-                      _imageBuilder(state, cubit, context).center,
+                      _imageBuilder(
+                        state,
+                        cubit,
+                        context,
+                        user?.profile,
+                      ).center,
                       20.height,
                       _sectionHeader('Personal Information', context),
                       buildLabel('Name'),
-                      const CommonTextField(
+                      CommonTextField(
                         hintText: "Enter your name",
-                        initialText: 'Niks',
+                        initialText: user?.fullName,
                         validationType: ValidationType.notRequired,
                         isReadOnly: false,
+                        onSaved: (value, _) => entity.name = value,
                       ),
                       10.height,
 
                       buildLabel('Username'),
-                      const CommonTextField(
+                      CommonTextField(
                         hintText: "Enter your username",
-                        initialText: 'niks01',
+                        initialText: user?.username,
                         validationType: ValidationType.validateAlphaNumeric,
                         isReadOnly: true,
                       ),
                       10.height,
                       buildLabel(AppString.email),
-                      const CommonTextField(
+                      CommonTextField(
                         hintText: "Enter your email",
-                        initialText: 'niks@gmail.com',
+                        initialText: user?.email,
                         validationType: ValidationType.validateEmail,
                         isReadOnly: true,
                       ),
                       _sectionHeader('Location Details', context),
                       buildLabel('Hometown'),
-                      const CommonTextField(
+                      CommonTextField(
                         hintText: "Enter your hometown",
-                        initialText: 'Tallinn, EST',
+                        initialText: user?.address,
                         validationType: ValidationType.notRequired,
                         isReadOnly: false,
+                        onSaved: (value, _) => entity.address = value,
                       ),
                       10.height,
                       buildLabel('Home course'),
-                      const CommonTextField(
+                      CommonTextField(
                         hintText: "Enter your home course",
-                        initialText: 'Pabble Beach Golf Links',
+                        initialText: user?.homeCourse,
                         validationType: ValidationType.notRequired,
                         isReadOnly: false,
+                        onSaved: (value, _) => entity.homeCourse = value,
                       ),
                       _sectionHeader('Golf Details', context),
                       buildLabel('Estimated Handicap'),
-                      const CommonTextField(
+                      CommonTextField(
                         hintText: "Enter your estimated handicap",
-                        initialText: '12',
+                        initialText: user?.handicap,
                         validationType: ValidationType.validateNumber,
                         isReadOnly: false,
+                        onSaved: (value, _) => entity.handicap = value,
                       ),
                       40.height,
                       CommonButton(
                         titleText: AppString.save_all_changes,
                         buttonWidth: double.infinity,
-                        onTap: () {},
+                        onTap: () {
+                          if (formKey.validateAndSave()) {
+                            cubit.updateProfile(entity, authCubit);
+                          }
+                        },
                       ),
                       40.height,
                     ],
@@ -120,13 +136,21 @@ class EditProfileScreen extends StatelessWidget {
           fontWeight: FontWeight.w600,
           textColor: context.colors.tEXT_subDark,
         ),
-        const Padding(padding: EdgeInsets.only(left: 10, right: 10), child: CustomDivider()),
+        const Padding(
+          padding: EdgeInsets.only(left: 10, right: 10),
+          child: CustomDivider(),
+        ),
         5.height,
       ],
     );
   }
 
-  Widget _imageBuilder(PersonalInfoState state, PersonalInfoCubit cubit, BuildContext context) {
+  Widget _imageBuilder(
+    PersonalInfoState state,
+    PersonalInfoCubit cubit,
+    BuildContext context,
+    String? profileImage,
+  ) {
     return Container(
       padding: const EdgeInsets.all(1),
       decoration: BoxDecoration(
@@ -136,7 +160,10 @@ class EditProfileScreen extends StatelessWidget {
       child: Stack(
         children: [
           CommonImage(
-            src: state.profileImage?.path ?? 'https://picsum.photos/id/28/200/300',
+            src:
+                state.profileImage?.path ??
+                profileImage ??
+                'https://picsum.photos/id/28/200/300',
             borderRadius: 100,
             height: 100,
             width: 100,
@@ -148,7 +175,10 @@ class EditProfileScreen extends StatelessWidget {
               onTap: cubit.setProfileImage,
               child: Container(
                 padding: const EdgeInsets.all(4),
-                decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
                 child: const Icon(Icons.camera_alt, color: Colors.green),
               ),
             ),
@@ -162,7 +192,11 @@ class EditProfileScreen extends StatelessWidget {
     return BuildLabel(text);
   }
 
-  Widget buildTextField(String hint, {bool isReadonly = false, Widget? prefixIcon}) {
+  Widget buildTextField(
+    String hint, {
+    bool isReadonly = false,
+    Widget? prefixIcon,
+  }) {
     return CommonTextField(
       hintText: hint,
       validationType: ValidationType.notRequired,

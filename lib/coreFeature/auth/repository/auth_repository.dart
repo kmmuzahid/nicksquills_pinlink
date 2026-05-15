@@ -27,6 +27,7 @@ class AuthRepository {
           "handicap": entity.handicap,
           "latitude": entity.latitude,
           "longitude": entity.longitude,
+          "address": entity.hometown,
         },
       ),
       responseBuilder: (data) {
