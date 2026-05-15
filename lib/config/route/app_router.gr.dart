@@ -42,10 +42,10 @@ import 'package:pinlink/features/course_comparision/screens/comparison_screen.da
     as _i5;
 import 'package:pinlink/features/golf_map_view/golf_map_view_screen.dart'
     as _i11;
-import 'package:pinlink/features/leaderboard/screens/add_friend_screen.dart'
-    as _i10;
 import 'package:pinlink/features/leaderboard/screens/build_tournament_screen.dart'
     as _i3;
+import 'package:pinlink/features/leaderboard/screens/friend_screen.dart'
+    as _i10;
 import 'package:pinlink/features/social/model/post_model.dart' as _i30;
 import 'package:pinlink/features/social/screens/create_post_screen.dart' as _i6;
 import 'package:pinlink/features/social/screens/post_details_screen.dart'

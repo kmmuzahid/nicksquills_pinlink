@@ -54,4 +54,6 @@ class ApiEndPoint {
   final String wishlistCourse = '/wishlistCourse/user';
 
   final String leaderboard = '/users/ranking';
+
+  final String createFriend = '/friend/create-friend';
 }

@@ -35,7 +35,10 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
           return SmartListLoader(
             itemCount: state.leaderboardList.isEmpty
                 ? 1
-                : 2 + (state.leaderboardList.length > 3 ? state.leaderboardList.length - 3 : 0),
+                : 2 +
+                      (state.leaderboardList.length > 3
+                          ? state.leaderboardList.length - 3
+                          : 0),
             padding: const EdgeInsets.symmetric(horizontal: 16),
             itemBuilder: (context, index) {
               if (index == 0) {
@@ -64,7 +67,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                     : null,
                 times:
                     state.searchType ==
-                            LeaderboardSearchType.PlayedMostPinLinks5Courses
+                        LeaderboardSearchType.PlayedMostPinLinks5Courses
                     ? model.playCount
                     : null,
                 rank: index + 2,
@@ -255,7 +258,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                   course: searchType == LeaderboardSearchType.MostCoursesPlayed
                       ? users[1].totalCourses
                       : null,
-                  times: searchType == LeaderboardSearchType.PlayedMostPinLinks5Courses
+                  times:
+                      searchType ==
+                          LeaderboardSearchType.PlayedMostPinLinks5Courses
                       ? users[1].playCount
                       : null,
                   rank: 2,
@@ -274,7 +279,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                   course: searchType == LeaderboardSearchType.MostCoursesPlayed
                       ? users[0].totalCourses
                       : null,
-                  times: searchType == LeaderboardSearchType.PlayedMostPinLinks5Courses
+                  times:
+                      searchType ==
+                          LeaderboardSearchType.PlayedMostPinLinks5Courses
                       ? users[0].playCount
                       : null,
                   rank: 1,
@@ -293,7 +300,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                   course: searchType == LeaderboardSearchType.MostCoursesPlayed
                       ? users[2].totalCourses
                       : null,
-                  times: searchType == LeaderboardSearchType.PlayedMostPinLinks5Courses
+                  times:
+                      searchType ==
+                          LeaderboardSearchType.PlayedMostPinLinks5Courses
                       ? users[2].playCount
                       : null,
                   rank: 3,
