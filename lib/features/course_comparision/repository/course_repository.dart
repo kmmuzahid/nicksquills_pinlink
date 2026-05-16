@@ -127,7 +127,40 @@ class CourseRepository {
     );
   }
 
-  Future<void> saveRank({required List<UserCourseModel> courses}) async {
-    print(courses.map((e) => e.toJson()).toList());
+  Future<ResponseState<dynamic>> saveRank({
+    required List<UserCourseModel> courses,
+    required bool isWishListRank,
+  }) async {
+    return DioService.instance.request(
+      input: RequestInput(
+        endpoint: isWishListRank
+            ? ApiEndPoint.instance.createWishlistCourse
+            : ApiEndPoint.instance.createCompareCourse,
+        method: .POST,
+        listBody: [
+          for (var course in courses) ...{
+            if (isWishListRank)
+              {"courseId": course.courseId?.id, "rank": course.customRank}
+            else
+              {
+                "courseId": course.courseId?.id,
+                "rank": course.customRank,
+                "favorite": course.favorite,
+                "scenery": course.scenery,
+                "difficulty": course.difficulty,
+                "teeBoxFairwayCondition": course.teeBoxFairwayCondition,
+                "greenSpeed": course.greenSpeed,
+                "greenCondition": course.greenCondition,
+                "clubHouse": course.clubHouse,
+                "foodDrink": course.foodDrink,
+                "isWishlistCourse": isWishListRank,
+              },
+          },
+        ],
+      ),
+      responseBuilder: (data) {
+        return data;
+      },
+    );
   }
 }

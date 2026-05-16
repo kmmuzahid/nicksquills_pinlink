@@ -83,58 +83,25 @@ class ComparisonScreen extends StatelessWidget {
               }
             },
           ),
-          body: Column(
-            children: [
-              _flagIcon(context),
-              CommonText(
-                text: rankingType == RankingType.courseRanking
-                    ? 'Build Your Course Rankings'
-                    : 'Rank Your Wishlist',
-                fontSize: 24,
-                top: 10,
-                textColor: context.colors.tEXT_white,
-                fontWeight: FontWeight.w500,
-              ),
-              // ─── Dynamic question text with FADE animation ───
-              SizedBox(
-                height: 80,
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 400),
-                  transitionBuilder:
-                      (Widget child, Animation<double> animation) {
-                        return FadeTransition(opacity: animation, child: child);
-                      },
-                  child: CommonText(
-                    key: ValueKey(questionText),
-                    text: questionText,
-                    fontSize: 16,
-                    maxLines: 3,
-                    top: 8,
-                    bottom: 4,
-                    textColor: context.colors.pRIMARY_priSoft,
-                    fontWeight: FontWeight.w500,
-                    textAlign: TextAlign.center,
-                  ),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              children: [
+                _flagIcon(context),
+                CommonText(
+                  text: rankingType == RankingType.courseRanking
+                      ? 'Build Your Course Rankings'
+                      : 'Rank Your Wishlist',
+                  fontSize: 24,
+                  top: 10,
+                  textColor: context.colors.tEXT_white,
+                  fontWeight: FontWeight.w500,
                 ),
-              ),
-              // ─── Question progress indicator ───
-              AnimatedOpacity(
-                opacity: state.comparison.isNotEmpty ? 1.0 : 0.0,
-                duration: const Duration(milliseconds: 300),
-                child: CommonText(
-                  text:
-                      '${state.currentQuestionIndex + 1} / ${cubit.questions.length}',
-                  fontSize: 13,
-                  bottom: 10,
-                  textColor: context.colors.tEXT_subDark,
-                ),
-              ),
-              Expanded(
-                child: SafeArea(
-                  top: false,
-                  bottom: true,
+                // ─── Dynamic question text with FADE animation ───
+                SizedBox(
+                  height: 80,
                   child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 500),
+                    duration: const Duration(milliseconds: 400),
                     transitionBuilder:
                         (Widget child, Animation<double> animation) {
                           return FadeTransition(
@@ -142,57 +109,96 @@ class ComparisonScreen extends StatelessWidget {
                             child: child,
                           );
                         },
-                    child: state.isComparisonLoading
-                        ? Center(
-                            key: const ValueKey('loader'),
-                            child: CircularProgressIndicator(
-                              color: context.colors.pRIMARY_priSoft,
-                            ),
-                          )
-                        : state.comparison.isNotEmpty
-                        ? _questions(state, context)
-                        : const SizedBox.shrink(key: ValueKey('empty')),
+                    child: CommonText(
+                      key: ValueKey(questionText),
+                      text: questionText,
+                      fontSize: 16,
+                      maxLines: 3,
+                      top: 8,
+                      bottom: 4,
+                      textColor: context.colors.pRIMARY_priSoft,
+                      fontWeight: FontWeight.w500,
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
-              ),
-              if (rankingType == RankingType.wishlistRanking)
-                SafeArea(
-                  top: false,
-                  bottom: true,
-                  child: Column(
-                    children: [
-                      4.height,
-                      CommonText(
-                        text:
-                            'This takes just a second and improves your recommendations.',
-                        fontSize: 12,
-                        textColor: context.colors.tEXT_subDark,
-                      ).center,
-                      10.height,
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 64),
-                        child: CommonButton(
-                          buttonWidth: .infinity,
-                          titleText: 'Skip the wishlist at this time',
-                          buttonColor: Colors.transparent,
-                          buttonRadius: 40,
-                          borderColor:
-                              context.colors.bACKGROUND_darkCardBoarder,
-                          titleColor: context.colors.tEXT_white,
-                          suffix: Icon(
-                            Icons.arrow_forward,
-                            color: context.colors.tEXT_white,
-                            size: 15,
-                          ),
-                          onTap: () {
-                            appRouter.replaceAll([const NavigationRoute()]);
+                // ─── Question progress indicator ───
+                AnimatedOpacity(
+                  opacity: state.comparison.isNotEmpty ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 300),
+                  child: CommonText(
+                    text:
+                        '${state.currentQuestionIndex + 1} / ${cubit.questions.length}',
+                    fontSize: 13,
+                    bottom: 10,
+                    textColor: context.colors.tEXT_subDark,
+                  ),
+                ),
+                Expanded(
+                  child: SafeArea(
+                    top: false,
+                    bottom: true,
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 500),
+                      transitionBuilder:
+                          (Widget child, Animation<double> animation) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
                           },
-                        ),
-                      ),
-                    ],
+                      child: state.isComparisonLoading
+                          ? Center(
+                              key: const ValueKey('loader'),
+                              child: CircularProgressIndicator(
+                                color: context.colors.pRIMARY_priSoft,
+                              ),
+                            )
+                          : state.comparison.isNotEmpty
+                          ? _questions(state, context)
+                          : const SizedBox.shrink(key: ValueKey('empty')),
+                    ),
                   ),
                 ),
-            ],
+                if (rankingType == RankingType.wishlistRanking)
+                  SafeArea(
+                    top: false,
+                    bottom: true,
+                    child: Column(
+                      children: [
+                        4.height,
+                        CommonText(
+                          text:
+                              'This takes just a second and improves your recommendations.',
+                          fontSize: 12,
+                          textColor: context.colors.tEXT_subDark,
+                        ).center,
+                        10.height,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 64),
+                          child: CommonButton(
+                            buttonWidth: .infinity,
+                            titleText: 'Skip the wishlist at this time',
+                            buttonColor: Colors.transparent,
+                            buttonRadius: 40,
+                            borderColor:
+                                context.colors.bACKGROUND_darkCardBoarder,
+                            titleColor: context.colors.tEXT_white,
+                            suffix: Icon(
+                              Icons.arrow_forward,
+                              color: context.colors.tEXT_white,
+                              size: 15,
+                            ),
+                            onTap: () {
+                              appRouter.replaceAll([const NavigationRoute()]);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
           ),
         );
       },
@@ -213,6 +219,7 @@ class ComparisonScreen extends StatelessWidget {
             course: comparison1,
             onTap: () => _onTapAnswer(state, cubit, context, 0),
             delay: const Duration(milliseconds: 0),
+            rankingType: rankingType,
           ),
         ),
         Expanded(
@@ -221,6 +228,7 @@ class ComparisonScreen extends StatelessWidget {
             course: comparison2,
             onTap: () => _onTapAnswer(state, cubit, context, 1),
             delay: const Duration(milliseconds: 100),
+            rankingType: rankingType,
           ),
         ),
       ],
@@ -234,7 +242,11 @@ class ComparisonScreen extends StatelessWidget {
     int index,
   ) {
     cubit.onSelectComparisonCourse(index, () {
-      if (!isNaviagtion) appRouter.replaceAll([const NavigationRoute()]);
+      if (!isNaviagtion) {
+        appRouter.replaceAll([const NavigationRoute()]);
+      } else {
+        appRouter.popUntil((r) => r.settings.name == NavigationRoute.name);
+      }
       context.read<NavigationCubit>().changeIndex(
         4,
         filter: rankingType == RankingType.courseRanking
@@ -312,12 +324,14 @@ class _AnimatedCourseCard extends StatefulWidget {
   final CourseModel course;
   final VoidCallback onTap;
   final Duration delay;
+  final RankingType rankingType;
 
   const _AnimatedCourseCard({
     required super.key,
     required this.course,
     required this.onTap,
     required this.delay,
+    required this.rankingType,
   });
 
   @override
@@ -366,7 +380,9 @@ class _AnimatedCourseCardState extends State<_AnimatedCourseCard>
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           transform: Matrix4.identity()..scale(_isTapped ? 0.98 : 1.0),
-          margin: const EdgeInsets.only(bottom: 10),
+          margin: EdgeInsets.only(
+            bottom: widget.rankingType == RankingType.wishlistRanking ? 4 : 8,
+          ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             color: context.colors.bACKGROUND_darkCard,
@@ -385,35 +401,32 @@ class _AnimatedCourseCardState extends State<_AnimatedCourseCard>
                 ),
             ],
           ),
-          child: AspectRatio(
-            aspectRatio: 1.2,
-            child: Column(
-              children: [
-                Expanded(
-                  child: CommonImage(
-                    src: widget.course.image ?? '',
-                    borderRadiusCustom: const BorderRadius.only(
-                      topLeft: Radius.circular(16),
-                      topRight: Radius.circular(16),
-                    ),
-                    fill: .fill,
+          child: Column(
+            children: [
+              Expanded(
+                child: CommonImage(
+                  src: widget.course.image ?? '',
+                  borderRadiusCustom: const BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
                   ),
+                  fill: .fill,
                 ),
-                10.height,
-                CommonText(
-                  text: widget.course.name ?? '',
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  textColor: context.colors.tEXT_white,
-                ).center,
-                CommonText(
-                  text: widget.course.locationName ?? '',
-                  fontSize: 16,
-                  textColor: context.colors.tEXT_subDark,
-                ).center,
-                10.height,
-              ],
-            ),
+              ),
+              4.height,
+              CommonText(
+                text: widget.course.name ?? '',
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                textColor: context.colors.tEXT_white,
+              ).center,
+              CommonText(
+                text: widget.course.locationName ?? '',
+                fontSize: 16,
+                textColor: context.colors.tEXT_subDark,
+              ).center,
+              4.height,
+            ],
           ),
         ),
       ),
