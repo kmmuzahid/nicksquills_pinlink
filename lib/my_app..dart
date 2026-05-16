@@ -14,8 +14,8 @@ import 'package:pinlink/config/theme/custom_theme.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/coreFeature/navigation/cubit/navigation_cubit.dart';
 import 'package:pinlink/coreFeature/notification/cubit/notification_cubit.dart';
-import 'package:pinlink/features/course_comparision/cubit/add_course_cubit.dart';
 import 'package:pinlink/corekit_config_impl.dart';
+import 'package:pinlink/features/course_comparision/cubit/add_course_cubit.dart';
 
 final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
@@ -26,7 +26,9 @@ class CustomScrollBehavior extends MaterialScrollBehavior {
   }
 
   @override
-  ScrollViewKeyboardDismissBehavior getKeyboardDismissBehavior(BuildContext context) {
+  ScrollViewKeyboardDismissBehavior getKeyboardDismissBehavior(
+    BuildContext context,
+  ) {
     return ScrollViewKeyboardDismissBehavior.onDrag;
   }
 }
@@ -43,18 +45,23 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => AuthCubit()),
         BlocProvider(create: (_) => NotificationCubit()),
         BlocProvider(create: (_) => NavigationCubit()),
-        BlocProvider(create: (_) => AddCourseCubit()..init()),
+        BlocProvider(
+          create: (context) =>
+              AddCourseCubit(authCubit: context.read<AuthCubit>())..init(),
+        ),
       ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(
-        builder: (context, themeState) { 
+        builder: (context, themeState) {
           return CoreKit.router(
             config: CoreKitConfigImpl(),
             navigatorKey: appRouter.navigatorKey,
             scrollBehavior: CustomScrollBehavior(),
             debugShowCheckedModeBanner: false,
-            routerConfig: appRouter.config(navigatorObservers: () => [AppRouterObserver()]),
+            routerConfig: appRouter.config(
+              navigatorObservers: () => [AppRouterObserver()],
+            ),
             theme: commonThemeData(ThemeColor.light),
-            darkTheme: commonThemeData(ThemeColor.dark), 
+            darkTheme: commonThemeData(ThemeColor.dark),
             themeMode: themeState,
           );
         },
@@ -62,4 +69,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

@@ -82,4 +82,40 @@ class CourseRepository {
       },
     );
   }
+
+  Future<void> reorderRank({
+    required int requestedRank,
+    required List<UserCourseModel> courses,
+  }) async {
+    if (courses.isEmpty) return;
+    double top = 0;
+    double bottom = 0;
+
+    if (requestedRank == 0) {
+      bottom = courses.first.customRank!;
+    } else if (requestedRank == courses.length) {
+      top = courses[requestedRank - 1].customRank!;
+      bottom = top + 1000;
+    } else {
+      top = courses[requestedRank - 1].customRank!;
+      bottom = courses[requestedRank + 1].customRank!;
+    }
+
+    final updatedRank = (top + bottom) / 2;
+
+    print(updatedRank);
+  }
+
+  // Future<bool> rankCourse({
+  //   required CourseModel desiredCourse,
+  //   required CourseModel pickedCourse,
+  //   required String
+  //   required Map<int, UserCourseModel> courses,
+  //   required Function() onRankDone,
+  //   required Function(List<UserCourseModel>) onNextCompare,
+  // }) async {
+
+  //   // if disired course
+
+  // }
 }

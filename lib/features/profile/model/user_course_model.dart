@@ -27,9 +27,9 @@ class UserCourseModel {
   @JsonKey(name: 'foodDrink')
   final int? foodDrink;
   @JsonKey(name: 'rank')
-  final int? rank;
+  final double? rank;
   @JsonKey(name: 'customRank')
-  final int? customRank;
+  final double? customRank;
   @JsonKey(name: 'isPinkLink5')
   final bool? isPinkLink5;
   @JsonKey(name: 'createdAt')
@@ -56,7 +56,8 @@ class UserCourseModel {
     this.updatedAt,
   });
 
-  factory UserCourseModel.fromJson(Map<String, dynamic> json) => _$UserCourseModelFromJson(json);
+  factory UserCourseModel.fromJson(Map<String, dynamic> json) =>
+      _$UserCourseModelFromJson(json);
   Map<String, dynamic> toJson() => _$UserCourseModelToJson(this);
 }
 
@@ -87,6 +88,7 @@ class CourseId {
     this.longitude,
   });
 
-  factory CourseId.fromJson(Map<String, dynamic> json) => _$CourseIdFromJson(json);
+  factory CourseId.fromJson(Map<String, dynamic> json) =>
+      _$CourseIdFromJson(json);
   Map<String, dynamic> toJson() => _$CourseIdToJson(this);
 }

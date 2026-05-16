@@ -105,7 +105,11 @@ class ProfileCubit extends SafeCubit<ProfileCubitState> {
     }
   }
 
-  void reorderCourses(int oldIndex, int newIndex) {
+  Future<void> reorderCourses(int oldIndex, int newIndex) async {
+    final result = await _courseRepository.reorderRank(
+      requestedRank: newIndex,
+      courses: state.userCourses,
+    );
     if (oldIndex < newIndex) {
       newIndex -= 1;
     }

@@ -81,8 +81,7 @@ class AddCourseScreen extends StatelessWidget {
                     child: _appbar(context, state),
                   ),
 
-                  itemCount:
-                      state.courses.length + state.selectedCourses.length + 1,
+                  itemCount: state.courses.length + 1,
                   itemBuilder: (context, index) {
                     if (index < state.selectedCourses.length) {
                       return _buildCourseCard(
@@ -102,7 +101,13 @@ class AddCourseScreen extends StatelessWidget {
                     }
                     return _buildCourseCard(
                       context,
-                      state.courses[index - state.selectedCourses.length - 1],
+                      state.courses
+                          .where(
+                            (element) => !state.selectedCourses.any(
+                              (e) => e.id == element.id,
+                            ),
+                          )
+                          .toList()[index - state.selectedCourses.length - 1],
                       cubit,
                     );
                   },
@@ -122,20 +127,20 @@ class AddCourseScreen extends StatelessWidget {
                     buttonWidth: double.infinity,
                     titleText: 'Continue to Course Ranking',
                     onTap: () {
-                      // if (state.selectedCourses.isNotEmpty) {
-                      //   context.router.push(
-                      //     ComparisonRoute(
-                      //       cubit: cubit,
-                      //       questinIndex: 0,
-                      //       rankingType: state.rankingType,
-                      //       isNaviagtion: isInNavigation,
-                      //     ),
-                      //   );
-                      // } else if (state.courses.isEmpty) {
-                      //   if (!isInNavigation) {
-                      context.router.replace(const NavigationRoute());
-                      // }
-                      // }
+                      if (state.selectedCourses.isNotEmpty) {
+                        context.router.push(
+                          ComparisonRoute(
+                            cubit: cubit,
+                            questinIndex: 0,
+                            rankingType: state.rankingType,
+                            isNaviagtion: isInNavigation,
+                          ),
+                        );
+                      } else if (state.courses.isEmpty) {
+                        if (!isInNavigation) {
+                          context.router.replace(const NavigationRoute());
+                        }
+                      }
                     },
                   ),
                 ),

@@ -36,7 +36,7 @@ class ComparisonScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CubitScopeValue(
-      cubit: cubit,
+      cubit: cubit..showCompareSet(isSelectedCourseRank: true),
       builder: (context, cubit, state) {
         return SimpleBackground(
           appBar: CommonAppBar(
@@ -44,21 +44,16 @@ class ComparisonScreen extends StatelessWidget {
             appbarConfig: AppbarConfig(
               decoration: () => const BoxDecoration(color: Colors.transparent),
               actions: [
-                if (rankingType == RankingType.wishlistRanking &&
-                    questinIndex < state.comparison.length - 1)
+                if (state.showSkip)
                   GestureDetector(
                     onTap: () {
-                      if (questinIndex < state.comparison.length - 1) {
-                        appRouter.replace(
-                          ComparisonRoute(
-                            cubit: cubit,
-                            questinIndex: questinIndex + 1,
-                            rankingType: rankingType,
-                          ),
-                        );
-                      } else if (questinIndex == state.comparison.length - 1) {
-                        _goToWishList(cubit);
-                      }
+                      appRouter.replace(
+                        ComparisonRoute(
+                          cubit: cubit,
+                          questinIndex: questinIndex + 1,
+                          rankingType: rankingType,
+                        ),
+                      );
                     },
                     child: _skipButton(context),
                   ),
@@ -161,7 +156,7 @@ class ComparisonScreen extends StatelessWidget {
         Expanded(
           child: GestureDetector(
             onTap: () {
-              _onTapAnswer(state, cubit, context);
+              _onTapAnswer(state, cubit, context, 0);
             },
             child: _answerBuilder(context, comparison1),
           ),
@@ -169,7 +164,7 @@ class ComparisonScreen extends StatelessWidget {
         Expanded(
           child: GestureDetector(
             onTap: () {
-              _onTapAnswer(state, cubit, context);
+              _onTapAnswer(state, cubit, context, 1);
             },
             child: _answerBuilder(context, comparison2),
           ),
@@ -182,20 +177,9 @@ class ComparisonScreen extends StatelessWidget {
     AddCourseState state,
     AddCourseCubit cubit,
     BuildContext context,
+    int index,
   ) {
-    if ((questinIndex < state.comparison.length - 1) &&
-        rankingType == RankingType.courseRanking) {
-      appRouter.replace(
-        ComparisonRoute(
-          cubit: cubit,
-          questinIndex: questinIndex + 1,
-          rankingType: rankingType,
-        ),
-      );
-    } else if (rankingType == RankingType.wishlistRanking &&
-        questinIndex < state.comparison.length) {
-      _goToWishList(cubit);
-    } else {
+    cubit.onSelectComparisonCourse(index, () {
       if (!isNaviagtion) appRouter.replaceAll([const NavigationRoute()]);
       context.read<NavigationCubit>().changeIndex(
         4,
@@ -203,17 +187,7 @@ class ComparisonScreen extends StatelessWidget {
             ? .MyCourses
             : .MyWishlist,
       );
-    }
-  }
-
-  void _goToWishList(AddCourseCubit cubit) {
-    appRouter.replace(
-      ComparisonRoute(
-        cubit: cubit,
-        questinIndex: questinIndex,
-        rankingType: rankingType,
-      ),
-    );
+    });
   }
 
   Container _skipButton(BuildContext context) {
