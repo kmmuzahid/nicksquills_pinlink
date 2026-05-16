@@ -61,7 +61,9 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
   AuthCubit? _authCubit;
   VoidCallback? _onComplete;
 
-  Future<void> init() async {}
+  Future<void> init() async {
+    emit(const AddCourseState());
+  }
 
   // ═══════════════════════════════════════════════════════════
   //  COURSE SELECTION (unchanged)
@@ -86,8 +88,9 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
   void unselectCourse(CourseModel course) {
     emit(
       state.copyWith(
-        selectedCourses:
-            state.selectedCourses.where((e) => e.id != course.id).toList(),
+        selectedCourses: state.selectedCourses
+            .where((e) => e.id != course.id)
+            .toList(),
       ),
     );
   }
@@ -181,7 +184,6 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
     final course = state.selectedCourses[_courseIndex];
     _rankCache.clear();
 
-    print('');
     print(
       '🔍 BINARY SEARCH for: "${course.name}" '
       '(course ${_courseIndex + 1}/${state.selectedCourses.length}, '
@@ -298,8 +300,7 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
     } else if (insertionIndex >= _currentTotalExisting) {
       // ── BOTTOM: below the last existing course ──
       final above = await _ensureCached(_currentTotalExisting - 1);
-      final aboveRank =
-          above?.customRank ?? (_currentTotalExisting * 1000.0);
+      final aboveRank = above?.customRank ?? (_currentTotalExisting * 1000.0);
       fractionalRank = aboveRank + 1000;
     } else {
       // ── BETWEEN two existing courses ──
@@ -415,7 +416,7 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
 
     final result = await courseRepository.rankData(
       courseId: state.selectedCourses[_courseIndex].id!,
-      rank: rank,
+      rank: rank + 1,
       isWishListRank: state.rankingType == RankingType.wishlistRanking,
     );
 

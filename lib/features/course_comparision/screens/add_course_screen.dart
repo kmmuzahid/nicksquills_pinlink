@@ -13,6 +13,8 @@ import 'package:pinlink/config/bloc/cubit_scope_value.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/constant/enums.dart';
+import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
+import 'package:pinlink/coreFeature/auth/cubit/auth_state.dart';
 import 'package:pinlink/features/course_comparision/cubit/add_course_cubit.dart';
 import 'package:pinlink/features/course_comparision/cubit/add_course_state.dart';
 import 'package:pinlink/features/course_comparision/model/course_model.dart';
@@ -43,7 +45,9 @@ class AddCourseScreen extends StatelessWidget {
               ),
             ),
       body: CubitScopeValue(
-        cubit: context.read<AddCourseCubit>()..getAllCourses(),
+        cubit: context.read<AddCourseCubit>()
+          ..init()
+          ..getAllCourses(isRefresh: true),
         builder: (context, cubit, state) {
           return Column(
             children: [
@@ -119,28 +123,44 @@ class AddCourseScreen extends StatelessWidget {
                 child: SafeArea(
                   top: false,
                   bottom: enableSafeArea,
-                  child: CommonButton(
-                    borderColor: context.colors.bACKGROUND_clickableBorder,
-                    buttonColor: context.colors.background,
-                    titleColor: context.colors.tEXT_white,
-                    borderWidth: 2,
-                    buttonWidth: double.infinity,
-                    titleText: 'Continue to Course Ranking',
-                    onTap: () {
-                      if (state.selectedCourses.isNotEmpty) {
-                        context.router.push(
-                          ComparisonRoute(
-                            cubit: cubit,
-                            questinIndex: 0,
-                            rankingType: state.rankingType,
-                            isNaviagtion: isInNavigation,
-                          ),
-                        );
-                      } else if (state.courses.isEmpty) {
-                        if (!isInNavigation) {
-                          context.router.replace(const NavigationRoute());
-                        }
-                      }
+                  child: BlocBuilder<AuthCubit, AuthState>(
+                    builder: (context, authState) {
+                      final profile = authState.profile;
+                      final existingCount = state.rankingType == RankingType.courseRanking
+                          ? (profile?.allCompareCourseCount ?? 0)
+                          : (profile?.allWishlishCount ?? 0);
+                      
+                      final canContinue = state.selectedCourses.length >= 2 || 
+                                         (state.selectedCourses.length == 1 && existingCount >= 1);
+
+                      return CommonButton(
+                        borderColor: canContinue 
+                            ? context.colors.pRIMARY_priSoft 
+                            : context.colors.bACKGROUND_clickableBorder,
+                        buttonColor: context.colors.background,
+                        titleColor: canContinue 
+                            ? context.colors.tEXT_white 
+                            : context.colors.tEXT_white.withOpacity(0.5),
+                        borderWidth: 2,
+                        buttonWidth: double.infinity,
+                        titleText: 'Continue to Course Ranking',
+                        onTap: () {
+                          if (canContinue) {
+                            context.router.push(
+                              ComparisonRoute(
+                                cubit: cubit,
+                                questinIndex: 0,
+                                rankingType: state.rankingType,
+                                isNaviagtion: isInNavigation,
+                              ),
+                            );
+                          } else if (state.selectedCourses.isEmpty && state.courses.isEmpty) {
+                            if (!isInNavigation) {
+                              context.router.replace(const NavigationRoute());
+                            }
+                          }
+                        },
+                      );
                     },
                   ),
                 ),
@@ -154,35 +174,46 @@ class AddCourseScreen extends StatelessWidget {
   }
 
   Widget _appbar(BuildContext context, AddCourseState state) {
-    return Column(
-      children: [
-        CommonText(
-          text: "Add at least ${isInNavigation ? 1 : 2} courses to continue",
-          fontSize: 16,
-          bottom: 20,
-          textColor: context.colors.pRIMARY_priSoft,
-          fontWeight: FontWeight.w400,
-        ),
-        CommonText(
-          text: 'Added Courses (${state.selectedCourses.length})',
-          bottom: 6,
-          fontSize: 18,
-          textColor: context.colors.tEXT_white,
-        ).start,
-        CommonText(
-          text: 'Search Courses',
-          fontSize: 14,
-          textColor: context.colors.tEXT_white,
-        ).start,
-        4.height,
-        CommonTextField(
-          hintText: 'Search Courses',
-          prefixIcon: Icon(Icons.search, color: context.colors.tEXT_sub),
-          validationType: ValidationType.notRequired,
-          borderRadius: 20,
-          onChanged: (value) {},
-        ),
-      ],
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (context, authState) {
+        final profile = authState.profile;
+        final existingCount = state.rankingType == RankingType.courseRanking
+            ? (profile?.allCompareCourseCount ?? 0)
+            : (profile?.allWishlishCount ?? 0);
+
+        final requiredCount = existingCount >= 1 ? 1 : 2;
+
+        return Column(
+          children: [
+            CommonText(
+              text: "Add at least $requiredCount course${requiredCount > 1 ? 's' : ''} to continue",
+              fontSize: 16,
+              bottom: 20,
+              textColor: context.colors.pRIMARY_priSoft,
+              fontWeight: FontWeight.w400,
+            ),
+            CommonText(
+              text: 'Added Courses (${state.selectedCourses.length})',
+              bottom: 6,
+              fontSize: 18,
+              textColor: context.colors.tEXT_white,
+            ).start,
+            CommonText(
+              text: 'Search Courses',
+              fontSize: 14,
+              textColor: context.colors.tEXT_white,
+            ).start,
+            4.height,
+            CommonTextField(
+              hintText: 'Search Courses',
+              prefixIcon: Icon(Icons.search, color: context.colors.tEXT_sub),
+              validationType: ValidationType.notRequired,
+              borderRadius: 20,
+              onChanged: (value) {},
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -299,8 +330,8 @@ class AddCourseScreen extends StatelessWidget {
                     color: course.isPlay == true && isInNavigation && !isAdded
                         ? context.colors.ratingPremiumTags_goldAccent
                         : context
-                              .colors
-                              .successVerifiedPositivestats_freshGrass,
+                               .colors
+                               .successVerifiedPositivestats_freshGrass,
                   ),
                 ),
               ),
