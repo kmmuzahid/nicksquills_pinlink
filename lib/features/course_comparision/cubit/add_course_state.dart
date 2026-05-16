@@ -15,7 +15,10 @@ class AddCourseState extends Equatable {
   final List<CourseModel> comparison; //compare set for the slectedCourseIndex
   final RankingType rankingType;
   final bool isCourseLoading;
+  final bool isComparisonLoading; // Loading flag for head-to-head fetch
   final bool showSkip;
+  final int currentQuestionIndex; // 0-7 for the 8 rating dimensions
+  final bool isRankingInProgress;
 
   const AddCourseState({
     this.courses = const [],
@@ -25,20 +28,26 @@ class AddCourseState extends Equatable {
     this.comparison = const [],
     this.rankingType = RankingType.courseRanking,
     this.isCourseLoading = false,
+    this.isComparisonLoading = false,
     this.showSkip = false,
+    this.currentQuestionIndex = 0,
+    this.isRankingInProgress = false,
   });
 
   @override
   List<Object?> get props => [
-    courses,
-    selectedCourses,
-    selectedComparisonCourseIndex,
-    tags,
-    comparison,
-    rankingType,
-    isCourseLoading,
-    showSkip,
-  ];
+        courses,
+        selectedCourses,
+        selectedComparisonCourseIndex,
+        tags,
+        comparison,
+        rankingType,
+        isCourseLoading,
+        isComparisonLoading,
+        showSkip,
+        currentQuestionIndex,
+        isRankingInProgress,
+      ];
 
   AddCourseState copyWith({
     List<CourseModel>? courses,
@@ -48,7 +57,10 @@ class AddCourseState extends Equatable {
     int? selectedComparisonCourseIndex,
     RankingType? rankingType,
     bool? isCourseLoading,
+    bool? isComparisonLoading,
     bool? showSkip,
+    int? currentQuestionIndex,
+    bool? isRankingInProgress,
   }) {
     return AddCourseState(
       courses: courses ?? this.courses,
@@ -59,7 +71,10 @@ class AddCourseState extends Equatable {
       comparison: comparison ?? this.comparison,
       rankingType: rankingType ?? this.rankingType,
       isCourseLoading: isCourseLoading ?? this.isCourseLoading,
+      isComparisonLoading: isComparisonLoading ?? this.isComparisonLoading,
       showSkip: showSkip ?? this.showSkip,
+      currentQuestionIndex: currentQuestionIndex ?? this.currentQuestionIndex,
+      isRankingInProgress: isRankingInProgress ?? this.isRankingInProgress,
     );
   }
 }

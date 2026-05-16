@@ -106,16 +106,28 @@ class CourseRepository {
     print(updatedRank);
   }
 
-  // Future<bool> rankCourse({
-  //   required CourseModel desiredCourse,
-  //   required CourseModel pickedCourse,
-  //   required String
-  //   required Map<int, UserCourseModel> courses,
-  //   required Function() onRankDone,
-  //   required Function(List<UserCourseModel>) onNextCompare,
-  // }) async {
+  Future<ResponseState<List<UserCourseModel>?>> rankData({
+    required String courseId,
+    required int rank,
+    required bool isWishListRank,
+  }) async {
+    return DioService.instance.request(
+      input: RequestInput(
+        endpoint: ApiEndPoint.instance.rankData,
+        method: .GET,
+        jsonBody: {
+          "type": isWishListRank ? "wishlistRank" : "compareCourseRank",
+          "rank": [rank],
+        },
+      ),
 
-  //   // if disired course
+      responseBuilder: (data) {
+        return List.from(data).map((e) => UserCourseModel.fromJson(e)).toList();
+      },
+    );
+  }
 
-  // }
+  Future<void> saveRank({required List<UserCourseModel> courses}) async {
+    print(courses.map((e) => e.toJson()).toList());
+  }
 }

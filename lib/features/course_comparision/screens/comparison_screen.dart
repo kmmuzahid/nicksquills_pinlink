@@ -13,6 +13,7 @@ import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/constant/enums.dart';
+import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/coreFeature/navigation/cubit/navigation_cubit.dart';
 import 'package:pinlink/features/course_comparision/cubit/add_course_cubit.dart';
 import 'package:pinlink/features/course_comparision/cubit/add_course_state.dart';
@@ -36,8 +37,17 @@ class ComparisonScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CubitScopeValue(
-      cubit: cubit..showCompareSet(isSelectedCourseRank: true),
+      cubit: cubit
+        ..showCompareSet(
+          isSelectedCourseRank: true,
+          authCubit: context.read<AuthCubit>(),
+        ),
       builder: (context, cubit, state) {
+        // Dynamic question text from the cubit's 8-question list
+        final questionText = state.comparison.isNotEmpty
+            ? cubit.questions[state.currentQuestionIndex]
+            : '';
+
         return SimpleBackground(
           appBar: CommonAppBar(
             disableBack: true,
@@ -75,7 +85,6 @@ class ComparisonScreen extends StatelessWidget {
           ),
           body: Column(
             children: [
-              // 20.height,
               _flagIcon(context),
               CommonText(
                 text: rankingType == RankingType.courseRanking
@@ -86,22 +95,64 @@ class ComparisonScreen extends StatelessWidget {
                 textColor: context.colors.tEXT_white,
                 fontWeight: FontWeight.w500,
               ),
-              CommonText(
-                text: 'Which course is more memorable?',
-                fontSize: 16,
-                maxLines: 3,
-                top: 8,
-                bottom: 10,
-                textColor: context.colors.pRIMARY_priSoft,
-                fontWeight: FontWeight.w500,
+              // ─── Dynamic question text with FADE animation ───
+              SizedBox(
+                height: 80,
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 400),
+                  transitionBuilder:
+                      (Widget child, Animation<double> animation) {
+                        return FadeTransition(opacity: animation, child: child);
+                      },
+                  child: CommonText(
+                    key: ValueKey(questionText),
+                    text: questionText,
+                    fontSize: 16,
+                    maxLines: 3,
+                    top: 8,
+                    bottom: 4,
+                    textColor: context.colors.pRIMARY_priSoft,
+                    fontWeight: FontWeight.w500,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              // ─── Question progress indicator ───
+              AnimatedOpacity(
+                opacity: state.comparison.isNotEmpty ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 300),
+                child: CommonText(
+                  text:
+                      '${state.currentQuestionIndex + 1} / ${cubit.questions.length}',
+                  fontSize: 13,
+                  bottom: 10,
+                  textColor: context.colors.tEXT_subDark,
+                ),
               ),
               Expanded(
                 child: SafeArea(
                   top: false,
                   bottom: true,
-                  child: state.comparison.isNotEmpty
-                      ? _questions(state, context)
-                      : const SizedBox.shrink(),
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 500),
+                    transitionBuilder:
+                        (Widget child, Animation<double> animation) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                    child: state.isComparisonLoading
+                        ? Center(
+                            key: const ValueKey('loader'),
+                            child: CircularProgressIndicator(
+                              color: context.colors.pRIMARY_priSoft,
+                            ),
+                          )
+                        : state.comparison.isNotEmpty
+                        ? _questions(state, context)
+                        : const SizedBox.shrink(key: ValueKey('empty')),
+                  ),
                 ),
               ),
               if (rankingType == RankingType.wishlistRanking)
@@ -151,22 +202,25 @@ class ComparisonScreen extends StatelessWidget {
   Widget _questions(AddCourseState state, BuildContext context) {
     final comparison1 = state.comparison.first;
     final comparison2 = state.comparison.last;
+    final matchupKey = "${comparison1.id}_${comparison2.id}";
+
     return Column(
+      key: ValueKey(matchupKey),
       children: [
         Expanded(
-          child: GestureDetector(
-            onTap: () {
-              _onTapAnswer(state, cubit, context, 0);
-            },
-            child: _answerBuilder(context, comparison1),
+          child: _AnimatedCourseCard(
+            key: ValueKey("${comparison1.id}_0"),
+            course: comparison1,
+            onTap: () => _onTapAnswer(state, cubit, context, 0),
+            delay: const Duration(milliseconds: 0),
           ),
         ),
         Expanded(
-          child: GestureDetector(
-            onTap: () {
-              _onTapAnswer(state, cubit, context, 1);
-            },
-            child: _answerBuilder(context, comparison2),
+          child: _AnimatedCourseCard(
+            key: ValueKey("${comparison2.id}_1"),
+            course: comparison2,
+            onTap: () => _onTapAnswer(state, cubit, context, 1),
+            delay: const Duration(milliseconds: 100),
           ),
         ),
       ],
@@ -187,7 +241,7 @@ class ComparisonScreen extends StatelessWidget {
             ? .MyCourses
             : .MyWishlist,
       );
-    });
+    }, context.read<AuthCubit>());
   }
 
   Container _skipButton(BuildContext context) {
@@ -213,55 +267,6 @@ class ComparisonScreen extends StatelessWidget {
           4.width,
           Icon(Icons.arrow_forward, color: context.colors.tEXT_white, size: 15),
         ],
-      ),
-    );
-  }
-
-  AspectRatio _answerBuilder(BuildContext context, CourseModel comparison) {
-    return AspectRatio(
-      aspectRatio: 1.2,
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: context.colors.bACKGROUND_darkCard,
-          border: Border.all(
-            color: context.colors.bACKGROUND_darkCardBoarder,
-            width: 1.4,
-          ),
-        ),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return Column(
-              children: [
-                Expanded(
-                  child: CommonImage(
-                    // width: constraints.maxWidth,
-                    src: comparison.image ?? '',
-                    borderRadiusCustom: const BorderRadius.only(
-                      topLeft: Radius.circular(16),
-                      topRight: Radius.circular(16),
-                    ),
-                    fill: .fill,
-                  ),
-                ),
-                10.height,
-                CommonText(
-                  text: comparison.name ?? '',
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  textColor: context.colors.tEXT_white,
-                ).center,
-                CommonText(
-                  text: comparison.locationName ?? '',
-                  fontSize: 16,
-                  textColor: context.colors.tEXT_subDark,
-                ).center,
-                10.height,
-              ],
-            );
-          },
-        ),
       ),
     );
   }
@@ -299,6 +304,119 @@ class ComparisonScreen extends StatelessWidget {
               imageColor: context.colors.tEXT_white,
             )
           : const Icon(Icons.favorite, color: Colors.red, size: 38),
+    );
+  }
+}
+
+class _AnimatedCourseCard extends StatefulWidget {
+  final CourseModel course;
+  final VoidCallback onTap;
+  final Duration delay;
+
+  const _AnimatedCourseCard({
+    required super.key,
+    required this.course,
+    required this.onTap,
+    required this.delay,
+  });
+
+  @override
+  State<_AnimatedCourseCard> createState() => _AnimatedCourseCardState();
+}
+
+class _AnimatedCourseCardState extends State<_AnimatedCourseCard>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _fadeAnimation;
+  bool _isTapped = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+
+    _fadeAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    );
+
+    Future.delayed(widget.delay, () {
+      if (mounted) _controller.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _fadeAnimation,
+      child: GestureDetector(
+        onTapDown: (_) => setState(() => _isTapped = true),
+        onTapUp: (_) => setState(() => _isTapped = false),
+        onTapCancel: () => setState(() => _isTapped = false),
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          transform: Matrix4.identity()..scale(_isTapped ? 0.98 : 1.0),
+          margin: const EdgeInsets.only(bottom: 10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            color: context.colors.bACKGROUND_darkCard,
+            border: Border.all(
+              color: _isTapped
+                  ? context.colors.pRIMARY_priSoft
+                  : context.colors.bACKGROUND_darkCardBoarder,
+              width: 1.4,
+            ),
+            boxShadow: [
+              if (_isTapped)
+                BoxShadow(
+                  color: context.colors.pRIMARY_priSoft.withOpacity(0.3),
+                  blurRadius: 10,
+                  spreadRadius: 2,
+                ),
+            ],
+          ),
+          child: AspectRatio(
+            aspectRatio: 1.2,
+            child: Column(
+              children: [
+                Expanded(
+                  child: CommonImage(
+                    src: widget.course.image ?? '',
+                    borderRadiusCustom: const BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16),
+                    ),
+                    fill: .fill,
+                  ),
+                ),
+                10.height,
+                CommonText(
+                  text: widget.course.name ?? '',
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  textColor: context.colors.tEXT_white,
+                ).center,
+                CommonText(
+                  text: widget.course.locationName ?? '',
+                  fontSize: 16,
+                  textColor: context.colors.tEXT_subDark,
+                ).center,
+                10.height,
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

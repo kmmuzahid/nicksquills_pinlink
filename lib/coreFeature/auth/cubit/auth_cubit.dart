@@ -25,6 +25,7 @@ class AuthCubit extends SafeCubit<AuthState> {
 
     final token = await StorageService.instance.accessToken;
     if (token != null && token.isNotEmpty) {
+      await getProfile();
       appRouter.replaceAll([SubscriptionsRoute(isBackDisabled: true)]);
       return;
     }
