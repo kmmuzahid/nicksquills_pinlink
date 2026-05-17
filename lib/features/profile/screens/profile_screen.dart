@@ -7,11 +7,13 @@ import 'package:pinlink/common_widgets/golf_course_wishlist_item.dart';
 import 'package:pinlink/common_widgets/simple_background.dart';
 import 'package:pinlink/common_widgets/social_item_widget.dart';
 import 'package:pinlink/config/bloc/cubit_scope.dart';
+import 'package:pinlink/config/bloc/cubit_scope_value.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/constant/constants.dart';
 import 'package:pinlink/constant/enums.dart';
+import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/coreFeature/navigation/cubit/navigation_cubit.dart';
 import 'package:pinlink/features/course_comparision/cubit/add_course_cubit.dart';
 import 'package:pinlink/features/course_comparision/model/course_model.dart';
@@ -358,15 +360,21 @@ class ProfileScreen extends StatelessWidget {
           ).center,
           const ProfileCardWidget(),
           const SizedBox(height: 10),
-          _buildSegmentedButton(
-            onTap: (value) {
-              cubit.changeFilter(value);
+          CubitScopeValue(
+            cubit: context.read<AuthCubit>(),
+            builder: (context, authCubit, authstate) {
+              return _buildSegmentedButton(
+                onTap: (value) {
+                  cubit.changeFilter(value);
+                },
+                selectedLeaderboardType: state.selectedFilter,
+                context: context,
+                totalCoursesPlayed:
+                    authstate.profile?.allCompareCourseCount ?? 0,
+                totalPosts: authstate.profile?.allPostCount ?? 0,
+                totalWishlist: authstate.profile?.allWishlishCount ?? 0,
+              );
             },
-            selectedLeaderboardType: state.selectedFilter,
-            context: context,
-            totalCoursesPlayed: 10,
-            totalPosts: 20,
-            totalWishlist: 30,
           ),
         ],
       ),
@@ -383,15 +391,21 @@ class ProfileScreen extends StatelessWidget {
       padding: const .symmetric(horizontal: 16),
       child: Column(
         children: [
-          _buildSegmentedButton(
-            onTap: (value) {
-              cubit.changeFilter(value);
+          CubitScopeValue(
+            cubit: context.read<AuthCubit>(),
+            builder: (context, authCubit, authstate) {
+              return _buildSegmentedButton(
+                onTap: (value) {
+                  cubit.changeFilter(value);
+                },
+                selectedLeaderboardType: state.selectedFilter,
+                context: context,
+                totalCoursesPlayed:
+                    authstate.profile?.allCompareCourseCount ?? 0,
+                totalPosts: authstate.profile?.allPostCount ?? 0,
+                totalWishlist: authstate.profile?.allWishlishCount ?? 0,
+              );
             },
-            selectedLeaderboardType: state.selectedFilter,
-            context: context,
-            totalCoursesPlayed: 10,
-            totalPosts: 20,
-            totalWishlist: 30,
           ),
         ],
       ),

@@ -54,16 +54,24 @@ class ComparisonScreen extends StatelessWidget {
             appbarConfig: AppbarConfig(
               decoration: () => const BoxDecoration(color: Colors.transparent),
               actions: [
-                if (state.showSkip)
+                if (state.currentQuestionIndex > 0)
                   GestureDetector(
                     onTap: () {
-                      appRouter.replace(
-                        ComparisonRoute(
-                          cubit: cubit,
-                          questinIndex: questinIndex + 1,
-                          rankingType: rankingType,
-                        ),
-                      );
+                      cubit.onSkipComparisonQuestion(() {
+                        if (!isNaviagtion) {
+                          appRouter.replaceAll([const NavigationRoute()]);
+                        } else {
+                          appRouter.popUntil(
+                            (r) => r.settings.name == NavigationRoute.name,
+                          );
+                        }
+                        context.read<NavigationCubit>().changeIndex(
+                          4,
+                          filter: rankingType == RankingType.courseRanking
+                              ? .MyCourses
+                              : .MyWishlist,
+                        );
+                      });
                     },
                     child: _skipButton(context),
                   ),
@@ -122,18 +130,18 @@ class ComparisonScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                // ─── Question progress indicator ───
-                AnimatedOpacity(
-                  opacity: state.comparison.isNotEmpty ? 1.0 : 0.0,
-                  duration: const Duration(milliseconds: 300),
-                  child: CommonText(
-                    text:
-                        '${state.currentQuestionIndex + 1} / ${cubit.questions.length}',
-                    fontSize: 13,
-                    bottom: 10,
-                    textColor: context.colors.tEXT_subDark,
-                  ),
-                ),
+                // // ─── Question progress indicator ───
+                // AnimatedOpacity(
+                //   opacity: state.comparison.isNotEmpty ? 1.0 : 0.0,
+                //   duration: const Duration(milliseconds: 300),
+                //   child: CommonText(
+                //     text:
+                //         '${state.currentQuestionIndex + 1} / ${cubit.questions.length}',
+                //     fontSize: 13,
+                //     bottom: 10,
+                //     textColor: context.colors.tEXT_subDark,
+                //   ),
+                // ),
                 Expanded(
                   child: SafeArea(
                     top: false,

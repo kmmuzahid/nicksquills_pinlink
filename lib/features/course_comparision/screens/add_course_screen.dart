@@ -19,7 +19,6 @@ import 'package:pinlink/features/course_comparision/cubit/add_course_cubit.dart'
 import 'package:pinlink/features/course_comparision/cubit/add_course_state.dart';
 import 'package:pinlink/features/course_comparision/model/course_model.dart';
 import 'package:pinlink/features/course_comparision/widgets/already_added_course_dailoge_wiget.dart';
-import 'package:pinlink/features/course_comparision/widgets/new_course_dailoge_widgets.dart';
 
 @RoutePage()
 class AddCourseScreen extends StatelessWidget {
@@ -126,20 +125,23 @@ class AddCourseScreen extends StatelessWidget {
                   child: BlocBuilder<AuthCubit, AuthState>(
                     builder: (context, authState) {
                       final profile = authState.profile;
-                      final existingCount = state.rankingType == RankingType.courseRanking
+                      final existingCount =
+                          state.rankingType == RankingType.courseRanking
                           ? (profile?.allCompareCourseCount ?? 0)
                           : (profile?.allWishlishCount ?? 0);
-                      
-                      final canContinue = state.selectedCourses.length >= 2 || 
-                                         (state.selectedCourses.length == 1 && existingCount >= 1);
+
+                      final canContinue =
+                          state.selectedCourses.length >= 2 ||
+                          (state.selectedCourses.length == 1 &&
+                              existingCount >= 1);
 
                       return CommonButton(
-                        borderColor: canContinue 
-                            ? context.colors.pRIMARY_priSoft 
+                        borderColor: canContinue
+                            ? context.colors.pRIMARY_priSoft
                             : context.colors.bACKGROUND_clickableBorder,
                         buttonColor: context.colors.background,
-                        titleColor: canContinue 
-                            ? context.colors.tEXT_white 
+                        titleColor: canContinue
+                            ? context.colors.tEXT_white
                             : context.colors.tEXT_white.withOpacity(0.5),
                         borderWidth: 2,
                         buttonWidth: double.infinity,
@@ -154,7 +156,8 @@ class AddCourseScreen extends StatelessWidget {
                                 isNaviagtion: isInNavigation,
                               ),
                             );
-                          } else if (state.selectedCourses.isEmpty && state.courses.isEmpty) {
+                          } else if (state.selectedCourses.isEmpty &&
+                              state.courses.isEmpty) {
                             if (!isInNavigation) {
                               context.router.replace(const NavigationRoute());
                             }
@@ -186,7 +189,8 @@ class AddCourseScreen extends StatelessWidget {
         return Column(
           children: [
             CommonText(
-              text: "Add at least $requiredCount course${requiredCount > 1 ? 's' : ''} to continue",
+              text:
+                  "Add at least $requiredCount course${requiredCount > 1 ? 's' : ''} to continue",
               fontSize: 16,
               bottom: 20,
               textColor: context.colors.pRIMARY_priSoft,
@@ -283,61 +287,80 @@ class AddCourseScreen extends StatelessWidget {
                 ],
               ),
               const Spacer(),
-              GestureDetector(
-                onTap: () {
-                  if (isAdded) {
-                    cubit.unselectCourse(course);
-                    return;
-                  }
-                  if (!isInNavigation) {
-                    cubit.selectCourse(course);
-                    return;
-                  }
-                  if (course.isPlay == true) {
-                    showDialog(
-                      context: context,
-                      builder: (context) => Dialog(
-                        child: AlreadyAddedCourseDailogeWiget(
-                          cubit: cubit,
-                          onPostNewScore: () {
-                            cubit.selectCourse(course);
-                          },
-                          onReRank: () {
-                            cubit.selectCourse(course);
-                          },
-                        ),
-                      ),
-                    );
-                  } else {
-                    showDialog(
-                      context: context,
-                      builder: (context) => Dialog(
-                        child: NewCourseDailogueWidget(
-                          cubit: cubit,
-                          onPostNewScore: () {
-                            cubit.selectCourse(course);
-                          },
-                        ),
-                      ),
-                    );
-                  }
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Icon(
-                    isAdded ? Icons.close : Icons.add,
-                    size: 24,
-                    color: course.isPlay == true && isInNavigation && !isAdded
-                        ? context.colors.ratingPremiumTags_goldAccent
-                        : context
-                               .colors
-                               .successVerifiedPositivestats_freshGrass,
-                  ),
-                ),
+              _actionButtion(
+                isAdded,
+                cubit,
+                course,
+                context,
+                cubit.state.rankingType,
               ),
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  GestureDetector _actionButtion(
+    bool isAdded,
+    AddCourseCubit cubit,
+    CourseModel course,
+    BuildContext context,
+    RankingType rankingType,
+  ) {
+    final isReRank =
+        (rankingType == RankingType.courseRanking && course.isPlay == true) ||
+        (rankingType == RankingType.wishlistRanking &&
+            course.isWishlist == true);
+    return GestureDetector(
+      onTap: () {
+        if (isAdded) {
+          cubit.unselectCourse(course);
+          return;
+        }
+        if (!isInNavigation) {
+          cubit.selectCourse(course);
+          return;
+        }
+        if (isReRank) {
+          showDialog(
+            context: context,
+            builder: (context) => Dialog(
+              child: AlreadyAddedCourseDailogeWiget(
+                rankingType: rankingType,
+                cubit: cubit,
+                onPostNewScore: () {
+                  cubit.selectCourse(course);
+                },
+                onReRank: () {
+                  cubit.selectCourse(course);
+                },
+              ),
+            ),
+          );
+        } else {
+          // showDialog(
+          //   context: context,
+          //   builder: (context) => Dialog(
+          //     child: NewCourseDailogueWidget(
+          //       cubit: cubit,
+          //       onPostNewScore: () {
+          cubit.selectCourse(course);
+          //       },
+          //     ),
+          //   ),
+          // );
+        }
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Icon(
+          isAdded ? Icons.close : Icons.add,
+          size: 24,
+          color: isReRank && isInNavigation && !isAdded
+              ? context.colors.ratingPremiumTags_goldAccent
+              : context.colors.successVerifiedPositivestats_freshGrass,
+        ),
       ),
     );
   }

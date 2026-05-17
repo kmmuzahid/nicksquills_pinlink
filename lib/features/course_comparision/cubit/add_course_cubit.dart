@@ -39,6 +39,7 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
   List<int> _matchupWinners = [];
 
   final Map<String, List<int>> _ratingWins = {};
+  final Map<String, List<int>> _ratingTotals = {};
   final Map<String, int> _matchupCounts = {};
 
   VoidCallback? _onComplete;
@@ -103,6 +104,7 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
     _courseIndex = 0;
     _matchupWinners.clear();
     _ratingWins.clear();
+    _ratingTotals.clear();
     _matchupCounts.clear();
     _rankCache.clear();
 
@@ -122,6 +124,20 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
   ) {
     _onComplete = onSuccess;
     _matchupWinners.add(pickedIndex);
+
+    if (state.currentQuestionIndex < 7) {
+      emit(
+        state.copyWith(currentQuestionIndex: state.currentQuestionIndex + 1),
+      );
+      return;
+    }
+
+    _onMatchupComplete();
+  }
+
+  void onSkipComparisonQuestion(VoidCallback onSuccess) {
+    _onComplete = onSuccess;
+    _matchupWinners.add(-1);
 
     if (state.currentQuestionIndex < 7) {
       emit(
@@ -280,23 +296,35 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
 
     _ratingWins.putIfAbsent(id1, () => List.filled(8, 0));
     _ratingWins.putIfAbsent(id2, () => List.filled(8, 0));
+    _ratingTotals.putIfAbsent(id1, () => List.filled(8, 0));
+    _ratingTotals.putIfAbsent(id2, () => List.filled(8, 0));
     _matchupCounts[id1] = (_matchupCounts[id1] ?? 0) + 1;
     _matchupCounts[id2] = (_matchupCounts[id2] ?? 0) + 1;
 
     for (var i = 0; i < 8; i++) {
-      if (_matchupWinners[i] == 0) {
-        _ratingWins[id1]![i]++;
-      } else {
-        _ratingWins[id2]![i]++;
+      if (i < _matchupWinners.length) {
+        if (_matchupWinners[i] == 0) {
+          _ratingWins[id1]![i]++;
+          _ratingTotals[id1]![i]++;
+          _ratingTotals[id2]![i]++;
+        } else if (_matchupWinners[i] == 1) {
+          _ratingWins[id2]![i]++;
+          _ratingTotals[id1]![i]++;
+          _ratingTotals[id2]![i]++;
+        }
       }
     }
   }
 
   List<int> _calculateStarRatings(String courseId) {
     final wins = _ratingWins[courseId] ?? List.filled(8, 0);
-    final total = _matchupCounts[courseId] ?? 0;
-    if (total == 0) return List.filled(8, 3);
+    final totals = _ratingTotals[courseId] ?? List.filled(8, 0);
+    final totalMatchups = _matchupCounts[courseId] ?? 0;
+    if (totalMatchups == 0) return List.filled(8, 3);
+    
     return List.generate(8, (i) {
+      final total = totals[i];
+      if (total == 0) return 0;
       final winRate = wins[i] / total;
       return (winRate * 4).round() + 1;
     });

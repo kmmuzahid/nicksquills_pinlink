@@ -40,24 +40,25 @@ class SubscriptionsScreen extends StatelessWidget {
               disableBack: isBackDisabled,
               title: isSubscriptionMangement ? 'Subscription Management' : '',
               appbarConfig: AppbarConfig(
-                decoration: () => const BoxDecoration(color: Colors.transparent),
+                decoration: () =>
+                    const BoxDecoration(color: Colors.transparent),
               ),
             ),
       body: Column(
         children: [
           if (!isSubscriptionMangement) ...[
             CommonText(
-            text: 'Choose Your Plan',
-            fontSize: 24,
-            textColor: context.colors.tEXT_white,
-            fontWeight: FontWeight.w500,
-          ),
-          18.height,
-          CommonText(
-            text: 'Select the plan that fits your golf journey',
-            fontSize: 16,
-            textColor: context.colors.pRIMARY_priSoft,
-            fontWeight: FontWeight.w400,
+              text: 'Choose Your Plan',
+              fontSize: 24,
+              textColor: context.colors.tEXT_white,
+              fontWeight: FontWeight.w500,
+            ),
+            18.height,
+            CommonText(
+              text: 'Select the plan that fits your golf journey',
+              fontSize: 16,
+              textColor: context.colors.pRIMARY_priSoft,
+              fontWeight: FontWeight.w400,
             ),
           ],
           Expanded(
@@ -88,9 +89,14 @@ class SubscriptionsScreen extends StatelessWidget {
   }) {
     return GestureDetector(
       onTap: () {
-        context.read<AuthCubit>().updateSubscriptionPlan(plan);
+        final authcubit = context.read<AuthCubit>();
+        authcubit.updateSubscriptionPlan(plan);
         if (isBackDisabled) {
-          appRouter.replaceAll([AddCourseRoute()]);
+          if ((authcubit.state.profile?.allCompareCourseCount ?? 0) >= 0) {
+            appRouter.replaceAll([const NavigationRoute()]);
+          } else {
+            appRouter.replaceAll([AddCourseRoute()]);
+          }
         } else {
           appRouter.pop();
         }
@@ -101,7 +107,10 @@ class SubscriptionsScreen extends StatelessWidget {
         decoration: BoxDecoration(
           color: context.colors.bACKGROUND_darkCard,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: context.colors.bACKGROUND_darkCardBoarder, width: 1.4),
+          border: Border.all(
+            color: context.colors.bACKGROUND_darkCardBoarder,
+            width: 1.4,
+          ),
         ),
         child: Column(
           children: [
@@ -114,7 +123,10 @@ class SubscriptionsScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(50),
                     color: context.colors.background,
                   ),
-                  child: Icon(Icons.electric_bolt_sharp, color: context.colors.tEXT_white),
+                  child: Icon(
+                    Icons.electric_bolt_sharp,
+                    color: context.colors.tEXT_white,
+                  ),
                 ),
                 Expanded(
                   child: Column(
@@ -141,8 +153,13 @@ class SubscriptionsScreen extends StatelessWidget {
                   CustomCard(
                     borderRadius: 40,
                     padding: const EdgeInsets.all(5),
-                    backgroundColor: context.colors.successVerifiedPositivestats_freshGrass,
-                    child: const Icon(Icons.check, size: 21, color: Colors.white),
+                    backgroundColor:
+                        context.colors.successVerifiedPositivestats_freshGrass,
+                    child: const Icon(
+                      Icons.check,
+                      size: 21,
+                      color: Colors.white,
+                    ),
                   ),
               ],
             ),
@@ -172,14 +189,20 @@ class SubscriptionsScreen extends StatelessWidget {
             if (plan.extraFeatures.isNotEmpty)
               Divider(color: context.colors.bACKGROUND_darkCardBoarder),
             if (plan.extraFeatures.isNotEmpty)
-              ...plan.extraFeatures.map((e) => _buildFeatureText(e, context, isExtra: true)),
+              ...plan.extraFeatures.map(
+                (e) => _buildFeatureText(e, context, isExtra: true),
+              ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildFeatureText(String text, BuildContext context, {bool isExtra = false}) {
+  Widget _buildFeatureText(
+    String text,
+    BuildContext context, {
+    bool isExtra = false,
+  }) {
     return Row(
       children: [
         10.width,
@@ -192,7 +215,9 @@ class SubscriptionsScreen extends StatelessWidget {
             text: '${isExtra ? '* ' : ''}$text',
             fontSize: 14,
             bottom: 8,
-            textColor: isExtra ? context.colors.pRIMARY_priSoft : context.colors.tEXT_white,
+            textColor: isExtra
+                ? context.colors.pRIMARY_priSoft
+                : context.colors.tEXT_white,
             fontWeight: FontWeight.w400,
           ).start,
         ),

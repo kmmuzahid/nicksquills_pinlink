@@ -30,6 +30,8 @@ class CourseModel {
   final String? updatedAt;
   @JsonKey(name: 'isPlay')
   final bool? isPlay;
+  @JsonKey(name: 'isWishlist')
+  final bool? isWishlist;
 
   CourseModel({
     this.location,
@@ -45,6 +47,7 @@ class CourseModel {
     this.createdAt,
     this.updatedAt,
     this.isPlay,
+    this.isWishlist,
   });
 
   factory CourseModel.fromJson(Map<String, dynamic> json) =>

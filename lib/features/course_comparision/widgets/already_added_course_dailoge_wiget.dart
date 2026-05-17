@@ -6,6 +6,7 @@
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:pinlink/config/color/app_color.dart';
+import 'package:pinlink/constant/enums.dart';
 import 'package:pinlink/features/course_comparision/cubit/add_course_cubit.dart';
 import 'package:pinlink/features/course_comparision/widgets/new_course_dailoge_widgets.dart';
 
@@ -15,12 +16,13 @@ class AlreadyAddedCourseDailogeWiget extends StatelessWidget {
     required this.cubit,
     required this.onReRank,
     required this.onPostNewScore,
+    required this.rankingType,
   });
 
   final AddCourseCubit cubit;
   final Function onReRank;
   final Function onPostNewScore;
-
+  final RankingType rankingType;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,7 +41,9 @@ class AlreadyAddedCourseDailogeWiget extends StatelessWidget {
             icon: Icon(Icons.close, color: context.colors.tEXT_subDark),
           ).end,
           CommonText(
-            text: 'You’ve already ranked this course.',
+            text: rankingType == RankingType.courseRanking
+                ? 'You’ve already ranked this course.'
+                : 'You’ve already wishlisted this course.',
             fontSize: 24,
             maxLines: 2,
             textAlign: TextAlign.center,
@@ -48,7 +52,9 @@ class AlreadyAddedCourseDailogeWiget extends StatelessWidget {
           ),
           16.height,
           CommonText(
-            text: 'You’ve previously played and ranked this course. What would you like to do?',
+            text: rankingType == RankingType.courseRanking
+                ? 'You’ve previously played and ranked this course. What would you like to do?'
+                : 'You’ve previously wishlisted this course. Would you like to re-rank it?',
             fontSize: 14,
             maxLines: 5,
             textAlign: TextAlign.center,
@@ -58,10 +64,10 @@ class AlreadyAddedCourseDailogeWiget extends StatelessWidget {
           50.height,
 
           Row(
+            mainAxisAlignment: .center,
             children: [
-              Expanded(
-                child: CommonButton(
-                  buttonWidth: .infinity,
+              if (rankingType == RankingType.courseRanking) ...[
+                CommonButton(
                   titleText: 'Post New Score',
                   onTap: () {
                     Navigator.pop(context);
@@ -76,19 +82,16 @@ class AlreadyAddedCourseDailogeWiget extends StatelessWidget {
                     );
                   },
                 ),
-              ),
-              10.width,
-              Expanded(
-                child: CommonButton(
-                  titleColor: context.colors.tEXT_dark,
-                  buttonColor: context.colors.ratingPremiumTags_goldAccent,
-                  buttonWidth: .infinity,
-                  titleText: 'Re-rank',
-                  onTap: () {
-                    Navigator.pop(context);
-                    onReRank();
-                  },
-                ),
+                10.width,
+              ],
+              CommonButton(
+                titleColor: context.colors.tEXT_dark,
+                buttonColor: context.colors.ratingPremiumTags_goldAccent,
+                titleText: 'Re-rank',
+                onTap: () {
+                  Navigator.pop(context);
+                  onReRank();
+                },
               ),
               20.height,
             ],
