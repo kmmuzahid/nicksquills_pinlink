@@ -46,7 +46,7 @@ enum LeaderboardSearchType {
   Points("Points", "points"),
   MostCoursesPlayed("Most Courses Played", "most_courses_played"),
   // MostRoundPlayed("Most Round Played"),
-  TravelDistance("Travel Distance", "distance"),
+  TravelDistance("Travel Distance", "travel_distance"),
   PlayedMostPinLinks5Courses(
     "Played Most PinLinks 5 Courses",
     "most_pinlink5_course_played",

@@ -33,6 +33,13 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
         create: () => LeaderboardCubit()..fetchLeaderboard(),
         builder: (context, cubit, state) {
           return SmartListLoader(
+            isLoading: state.isLeaderBoardLoading,
+            onRefresh: () {
+              cubit.fetchLeaderboard(page: 1, isRefresh: true);
+            },
+            onLoadMore: (page) {
+              cubit.fetchLeaderboard(page: page);
+            },
             itemCount: state.leaderboardList.isEmpty
                 ? 1
                 : 2 +

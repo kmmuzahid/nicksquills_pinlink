@@ -11,7 +11,7 @@ class LeaderboardCubit extends SafeCubit<LeaderboardState> {
 
   void changeLeaderboardType(LeaderboardType type) {
     emit(LeaderboardState(leaderboardType: type, searchType: state.searchType));
-    fetchLeaderboard();
+    fetchLeaderboard(page: 1, isRefresh: true);
   }
 
   void changeSearchType(LeaderboardSearchType type) {
@@ -21,7 +21,7 @@ class LeaderboardCubit extends SafeCubit<LeaderboardState> {
         leaderboardType: state.leaderboardType,
       ),
     );
-    fetchLeaderboard();
+    fetchLeaderboard(page: 1, isRefresh: true);
   }
 
   Future<void> fetchLeaderboard({int page = 1, bool isRefresh = false}) async {
@@ -58,6 +58,8 @@ class LeaderboardCubit extends SafeCubit<LeaderboardState> {
           leaderboardList: [...state.leaderboardList, ...(result.data ?? [])],
         ),
       );
+    } else {
+      emit(state.copyWith(isLeaderboardLoading: false));
     }
   }
 }

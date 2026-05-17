@@ -116,7 +116,7 @@ class CourseRepository {
         endpoint: ApiEndPoint.instance.rankData,
         method: .GET,
         jsonBody: {
-          "type": isWishListRank ? "wishlistRank" : "compareCourseRank",
+          "type": isWishListRank ? "wishlistCourseRank" : "compareCourseRank",
           "rank": rank,
           "sortBy": shortByRank ? "rank" : "customRank",
         },
