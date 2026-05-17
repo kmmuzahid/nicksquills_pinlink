@@ -485,8 +485,8 @@ class ProfileScreen extends StatelessWidget {
         GestureDetector(
           onTap: () {
             appRouter.push(
-              GolfMapViewRoute(
-                selectedFilter: state.selectedFilter == FilterProfile.MyCourses
+              CustomMapRoute(
+                mapFilters: state.selectedFilter == FilterProfile.MyCourses
                     ? MapFilters.Played
                     : MapFilters.Wishlist,
               ),

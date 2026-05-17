@@ -19,11 +19,11 @@ import 'package:video_player/video_player.dart';
 class PostDetailsScreen extends StatelessWidget {
   const PostDetailsScreen({
     super.key,
-    required this.postModel,
+    required this.postId,
     required this.reportPost,
     required this.onChanged,
   });
-  final PostModel postModel;
+  final String? postId;
   final void Function() reportPost;
   final void Function(PostModel postModel) onChanged;
 
@@ -31,10 +31,12 @@ class PostDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SimpleBackground(
       body: CubitScope(
-        create: () => PostDetailsCubit(context.read<AuthCubit>(), postModel),
+        create: () =>
+            PostDetailsCubit(context.read<AuthCubit>())
+              ..getPostDetails(postId ?? ''),
         builder: (context, cubit, state) {
           final postStateModel = state.postModel;
-          final postData = postStateModel.postDataId;
+          final postData = postStateModel?.postDataId;
           final mediaLinks = postData?.mediaLinks ?? [];
 
           return Stack(
@@ -110,16 +112,16 @@ class PostDetailsScreen extends StatelessWidget {
                               GestureDetector(
                                 onTap: () {
                                   cubit.likePost(
-                                    postStateModel.id ?? '',
+                                    postStateModel?.id ?? '',
                                     onChanged,
                                   );
                                 },
                                 child: _buildActionButton(
-                                  cubit.isLiked(postStateModel.id ?? '')
+                                  cubit.isLiked(postStateModel?.id ?? '')
                                       ? Icons.favorite
                                       : Icons.favorite_border_outlined,
-                                  "${postStateModel.likesCount ?? 0}",
-                                  cubit.isLiked(postStateModel.id ?? '')
+                                  "${postStateModel?.likesCount ?? 0}",
+                                  cubit.isLiked(postStateModel?.id ?? '')
                                       ? Colors.red
                                       : Colors.white,
                                 ).end,
@@ -133,11 +135,11 @@ class PostDetailsScreen extends StatelessWidget {
                               const SizedBox(height: 20),
                               GestureDetector(
                                 onTap: () {
-                                  cubit.sharePost(postStateModel.id ?? '');
+                                  cubit.sharePost(postStateModel?.id ?? '');
                                 },
                                 child: _buildActionButton(
                                   Icons.share,
-                                  "${postStateModel.shareCount ?? 0}",
+                                  "${postStateModel?.shareCount ?? 0}",
                                   Colors.white,
                                 ).end,
                               ),
@@ -244,15 +246,17 @@ class PostDetailsScreen extends StatelessWidget {
   Widget _buildUserInfo(
     BuildContext context,
     PostDetailsCubit cubit,
-    PostModel postModel,
+    PostModel? postModel,
   ) {
-    final user = postModel.userId;
-    final postData = postModel.postDataId;
+    final user = postModel?.userId;
+    final postData = postModel?.postDataId;
 
     var timeAgo = '';
-    if (postModel.createdAt != null) {
+    if (postModel?.createdAt != null) {
       try {
-        final date = DateTime.parse(postModel.createdAt!);
+        final date = DateTime.parse(
+          postModel?.createdAt ?? DateTime.now().toString(),
+        );
         final diff = DateTime.now().difference(date);
         if (diff.inDays > 0) {
           timeAgo = "${diff.inDays}d ago";
@@ -262,7 +266,7 @@ class PostDetailsScreen extends StatelessWidget {
           timeAgo = "${diff.inMinutes}m ago";
         }
       } catch (e) {
-        timeAgo = postModel.createdAt!;
+        timeAgo = postModel?.createdAt ?? "";
       }
     }
 
@@ -292,13 +296,13 @@ class PostDetailsScreen extends StatelessWidget {
                     ),
                   ),
                   10.width,
-                  if (postModel.userId?.id !=
+                  if (postModel?.userId?.id !=
                       context.read<AuthCubit>().state.profile?.id)
                     CommonButton(
                       titleText: 'Follow',
                       buttonHeight: 20,
                       onTap: () {
-                        cubit.follow(postModel.userId?.id ?? '');
+                        cubit.follow(postModel?.userId?.id ?? '');
                       },
                       buttonRadius: 4,
                       padding: const EdgeInsets.symmetric(
@@ -341,8 +345,8 @@ class PostDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPostStats(PostModel postModel) {
-    final postData = postModel.postDataId;
+  Widget _buildPostStats(PostModel? postModel) {
+    final postData = postModel?.postDataId;
     if (postData == null) return const SizedBox.shrink();
 
     var formattedDate = '';

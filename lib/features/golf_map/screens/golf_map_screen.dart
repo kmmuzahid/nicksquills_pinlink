@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:pinlink/common_widgets/simple_background.dart';
 import 'package:pinlink/config/bloc/cubit_scope.dart';
 import 'package:pinlink/config/color/app_color.dart';
-import 'package:pinlink/config/route/app_router.dart';
-import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/constant/enums.dart';
 import 'package:pinlink/features/golf_map/cubit/golf_map_cubit.dart';
 import 'package:pinlink/features/golf_map/cubit/golf_map_cubit_state.dart';

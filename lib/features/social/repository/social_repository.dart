@@ -88,4 +88,17 @@ class SocialRepository {
       },
     );
   }
+
+  Future<ResponseState<PostModel?>> getPostDetails(String postId) async {
+    return DioService.instance.request(
+      input: RequestInput(
+        endpoint: ApiEndPoint.instance.postDetails,
+        method: .GET,
+        pathParams: [postId],
+      ),
+      responseBuilder: (data) {
+        return PostModel.fromJson(data);
+      },
+    );
+  }
 }

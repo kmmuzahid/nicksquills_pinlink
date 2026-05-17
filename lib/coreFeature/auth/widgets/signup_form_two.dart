@@ -74,7 +74,7 @@ class SignupFormTwo extends StatelessWidget {
                     hintText: 'City, Country',
                     isReadOnly: true,
                     onTap: () {
-                      appRouter.push(const CustomMapRoute()).then((value) {
+                      appRouter.push(CustomMapRoute()).then((value) {
                         if (value is PlaceDetails) {
                           entity.hometown = value.address;
                           entity.latitude = value.coordinate.latitude;

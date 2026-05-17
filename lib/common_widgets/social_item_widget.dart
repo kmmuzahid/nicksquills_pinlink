@@ -39,15 +39,17 @@ class SocialItemWidget extends StatelessWidget {
   Widget _item(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        appRouter.push(
-          PostDetailsRoute(
-            postModel: postModel,
-            reportPost: () {
-              onReportPost();
-            },
-            onChanged: onChanged,
-          ),
-        );
+        if (postModel.postDataId?.id != null) {
+          appRouter.push(
+            PostDetailsRoute(
+              postId: postModel.id ?? '',
+              reportPost: () {
+                onReportPost();
+              },
+              onChanged: onChanged,
+            ),
+          );
+        }
       },
       child: Stack(
         children: [

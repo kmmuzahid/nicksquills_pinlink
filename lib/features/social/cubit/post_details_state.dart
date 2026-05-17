@@ -5,25 +5,34 @@ import 'package:video_player/video_player.dart';
 class PostDetailsState extends Equatable {
   final int currentIndex;
   final Map<int, VideoPlayerController> videoControllers;
-  final PostModel postModel;
+  final bool isLoading;
+  final PostModel? postModel;
   const PostDetailsState({
     this.currentIndex = 0,
     this.videoControllers = const {},
-    required this.postModel,
+    this.isLoading = false,
+    this.postModel,
   });
 
   PostDetailsState copyWith({
     int? currentIndex,
     Map<int, VideoPlayerController>? videoControllers,
     PostModel? postModel,
+    bool? isLoading,
   }) {
     return PostDetailsState(
       postModel: postModel ?? this.postModel,
       currentIndex: currentIndex ?? this.currentIndex,
       videoControllers: videoControllers ?? this.videoControllers,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 
   @override
-  List<Object?> get props => [currentIndex, videoControllers, postModel];
+  List<Object?> get props => [
+    currentIndex,
+    videoControllers,
+    postModel,
+    isLoading,
+  ];
 }

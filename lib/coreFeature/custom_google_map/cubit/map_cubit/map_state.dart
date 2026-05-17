@@ -17,6 +17,8 @@ class MapState extends Equatable {
     required this.initializing,
     required this.isLoading,
     this.destination,
+    required this.totalCourse,
+    required this.courseId,
   });
 
   // Create an initial state
@@ -31,9 +33,13 @@ class MapState extends Equatable {
         address: '',
         coordinate: LatLng(51.165691, 10.451526),
       ),
+      totalCourse = 0,
+      courseId = '',
       destination = null,
       // destination = const PlaceDetails(address: 'Merul Badda', coordinate: LatLng(23.772109, 90.419656)),
       initializing = true;
+  final int totalCourse; // business related
+  final String courseId; //
   final PointType lastPikedPointType;
   final PlaceDetails starting;
   final PlaceDetails? destination;
@@ -58,6 +64,8 @@ class MapState extends Equatable {
       initialized,
       initializing,
       lastPikedPointType,
+      totalCourse,
+      courseId,
     ];
   }
 
@@ -71,6 +79,8 @@ class MapState extends Equatable {
     TravelMode? travelMode,
     bool? initialized,
     bool? initializing,
+    int? totalCourse,
+    String? courseId,
   }) {
     return MapState(
       lastPikedPointType: lastPikedPointType ?? this.lastPikedPointType,
@@ -82,6 +92,8 @@ class MapState extends Equatable {
       travelMode: travelMode ?? this.travelMode,
       initialized: initialized ?? this.initialized,
       initializing: initializing ?? this.initializing,
+      totalCourse: totalCourse ?? this.totalCourse,
+      courseId: courseId ?? this.courseId,
     );
   }
 }

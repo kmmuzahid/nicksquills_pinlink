@@ -64,7 +64,6 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: PostDetailsRoute.page),
     AutoRoute(page: FriendsRoute.page),
     AutoRoute(page: BuildTournamentRoute.page),
-    AutoRoute(page: GolfMapViewRoute.page),
     AutoRoute(page: SettingRoute.page),
     AutoRoute(page: SupportRoute.page),
     AutoRoute(page: TournamentListRoute.page),

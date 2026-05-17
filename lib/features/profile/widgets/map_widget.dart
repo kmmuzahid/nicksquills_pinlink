@@ -22,7 +22,11 @@ class MapWidget extends StatelessWidget {
             child: MapPointsDetailsWishlish(),
           ),
         if (selectedFilter != MapFilters.Wishlist)
-          const Positioned(left: 30, top: 30, child: MapPointsDetails()),
+          const Positioned(
+            left: 30,
+            top: 30,
+            child: MapPointsDetails(courseId: ''),
+          ),
         marker(context),
 
         Positioned(

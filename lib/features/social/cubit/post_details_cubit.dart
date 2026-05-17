@@ -8,11 +8,17 @@ import 'package:pinlink/features/social/repository/social_repository.dart';
 import 'package:video_player/video_player.dart';
 
 class PostDetailsCubit extends SafeCubit<PostDetailsState> {
-  PostDetailsCubit(this.authCubit, PostModel postModel)
-    : super(PostDetailsState(postModel: postModel));
+  PostDetailsCubit(this.authCubit) : super(const PostDetailsState());
   final AuthCubit authCubit;
 
   final socialRepository = getIt<SocialRepository>();
+
+  Future<void> getPostDetails(String postId) async {
+    emit(state.copyWith(isLoading: true));
+    final response = await socialRepository.getPostDetails(postId);
+
+    emit(state.copyWith(postModel: response.data, isLoading: false));
+  }
 
   void changePage(int index) {
     emit(state.copyWith(currentIndex: index));
@@ -52,13 +58,13 @@ class PostDetailsCubit extends SafeCubit<PostDetailsState> {
     if (response.isSuccess) {
       final post = state.postModel;
       final isNeedToRemove =
-          post.likes?.contains(authCubit.state.profile?.id) ?? false;
+          post?.likes?.contains(authCubit.state.profile?.id) ?? false;
       if (isNeedToRemove) {
         showSnackBar("Post unliked successfully", type: .success);
       } else {
         showSnackBar("Post liked successfully", type: .success);
       }
-      final updatedPost = post.copyWith(
+      final updatedPost = post?.copyWith(
         likes: [
           if (!isNeedToRemove) authCubit.state.profile?.id ?? "",
           if (!isNeedToRemove) ...post.likes ?? [],
@@ -73,12 +79,12 @@ class PostDetailsCubit extends SafeCubit<PostDetailsState> {
             : post.likesCount! + 1,
       );
       emit(state.copyWith(postModel: updatedPost));
-      onChanged(updatedPost);
+      if (updatedPost != null) onChanged(updatedPost);
     }
   }
 
   bool isLiked(String postId) {
-    return state.postModel.likes?.contains(authCubit.state.profile?.id) ??
+    return state.postModel?.likes?.contains(authCubit.state.profile?.id) ??
         false;
   }
 

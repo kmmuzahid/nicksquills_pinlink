@@ -140,7 +140,7 @@ class SocialCubit extends SafeCubit<SocialState> {
           'scorecardHoles': int.tryParse(entity.holes ?? '0'),
           'scorecardTotalScore': int.tryParse(entity.totalScore ?? '0'),
           'links': state.links,
-          'courseId': state.courses.first.id,
+          'courseId': state.courses.first.courseId?.id,
         },
         files: {'mediaLinks': state.files},
       ),

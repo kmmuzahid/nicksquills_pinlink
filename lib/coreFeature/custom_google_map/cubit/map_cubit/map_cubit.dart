@@ -1,14 +1,23 @@
 import 'package:core_kit/core_kit.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pinlink/config/bloc/safe_cubit.dart';
+import 'package:pinlink/config/dependency/dependency_injection.dart';
+import 'package:pinlink/constant/enums.dart';
 import 'package:pinlink/coreFeature/custom_google_map/cubit/map_cubit/map_state.dart';
 import 'package:pinlink/coreFeature/custom_google_map/cubit/use_case/location_initialize_use_case.dart';
 import 'package:pinlink/coreFeature/custom_google_map/cubit/use_case/map_rendering_use_case.dart';
 import 'package:pinlink/coreFeature/custom_google_map/cubit/use_case/marker_creation_use_case.dart';
 import 'package:pinlink/coreFeature/custom_google_map/cubit/use_case/place_details_use_case.dart';
 import 'package:pinlink/coreFeature/custom_google_map/cubit/use_case/polyline_use_case.dart';
+import 'package:pinlink/coreFeature/custom_google_map/model/business_model/map_point_model.dart';
 import 'package:pinlink/coreFeature/custom_google_map/model/place_details.dart';
+import 'package:pinlink/coreFeature/custom_google_map/repository/map_business_repository.dart';
+import 'package:pinlink/features/golf_map/widgets/golf_primary_color.dart';
+import 'package:pinlink/gen/assets.gen.dart';
+import 'package:widget_to_marker/widget_to_marker.dart';
 
 class MapCubit extends SafeCubit<MapState> {
   MapCubit()
@@ -178,6 +187,7 @@ class MapCubit extends SafeCubit<MapState> {
           starting: details,
           markers: updatedMarkers,
           mapRoute: {},
+          courseId: '',
         ),
       );
 
@@ -228,143 +238,94 @@ class MapCubit extends SafeCubit<MapState> {
     await setPoint(coordinate: placeDetails.coordinate);
   }
 
-  //app based
-  // bool _isLoading = false;
-  // bool _ignoreCameraIdle = false;
+  // app based
+  bool _isLoading = false;
+  bool _ignoreCameraIdle = false;
+  final _mapBusinessRepository = getIt<MapBusinessRepository>();
 
-  // Future<void> onCameraIdle() async {
-  //   if (_isLoading || state.initializing || _ignoreCameraIdle) return;
-  //   _isLoading = true;
+  Future<void> onCameraIdle(MapFilters mapFilters) async {
+    if (_isLoading || state.initializing || _ignoreCameraIdle) return;
+    _isLoading = true;
 
-  //   try {
-  //     final bounds = await mapController.getVisibleRegion();
-  //     final payload = {
-  //       "topLat": bounds.northeast.latitude,
-  //       "bottomLat": bounds.southwest.latitude,
-  //       "leftLng": bounds.southwest.longitude,
-  //       "rightLng": bounds.northeast.longitude,
-  //     };
+    try {
+      final bounds = await mapController.getVisibleRegion();
 
-  //     final result = await DioService.instance.request(
-  //       input: RequestInput(
-  //         endpoint: ApiEndPoint.instance.allParkingPlaces,
-  //         method: .GET,
-  //         queryParams: payload,
-  //       ),
-  //       responseBuilder: (data) => List<MapSavedPointModel>.from(
-  //         data.map((x) => MapSavedPointModel.fromJson(x)),
-  //       ),
-  //     );
+      final result = await _mapBusinessRepository.getCourseMap(
+        topLat: bounds.northeast.latitude,
+        bottomLat: bounds.southwest.latitude,
+        leftLng: bounds.southwest.longitude,
+        rightLng: bounds.northeast.longitude,
+        mapFilters: mapFilters,
+      );
 
-  //     if (result.isSuccess && result.data != null) {
-  //       final dataList = result.data as List<MapSavedPointModel>;
+      if (result.isSuccess && result.data?.value != null) {
+        final dataList = result.data?.value as List<MapPointModel>;
+        emit(state.copyWith(totalCourse: result.data?.key ?? 0));
 
-  //       // Function to build marker for a parking point
-  //       Future<Marker> buildMarker(MapSavedPointModel data) async {
-  //         final bitmap = await ParkingPointWidgets(
-  //           cost: data.price ?? 0,
-  //           ratting: data.ratting ?? 0,
-  //           totalCount: data.totalCount ?? 0,
-  //           isAvailable: true,
-  //           evType: ChargerType.values.firstWhere(
-  //             (d) =>
-  //                 d.name.toLowerCase() ==
-  //                 data.chargerType?.toString().toLowerCase(),
-  //             orElse: () => ChargerType.AC,
-  //           ),
-  //         ).toBitmapDescriptor();
+        // Function to build marker for a parking point
+        Future<Marker> buildMarker(MapPointModel data) async {
+          final bitmap = await markerWidget(mapFilters).toBitmapDescriptor();
 
-  //         final position = LatLng(data.latitude!, data.longitude!);
+          final position = LatLng(data.latitude!, data.longitude!);
 
-  //         return Marker(
-  //           markerId: MarkerId(data.id.toString()),
-  //           position: position,
-  //           icon: bitmap,
-  //           onTap: () async {
-  //             _ignoreCameraIdle = true;
-  //             emit(state.copyWith(isLoading: true));
+          return Marker(
+            markerId: MarkerId(data.id.toString()),
+            position: position,
+            icon: bitmap,
+            onTap: () async {
+              _ignoreCameraIdle = true;
+              emit(state.copyWith(courseId: ''));
+              await Future.delayed(const Duration(milliseconds: 100));
+              emit(state.copyWith(courseId: data.id ?? ''));
+            },
+          );
+        }
 
-  //             final currentLocation = await locationInitUseCase
-  //                 .getCurrentPositionFast();
-  //             if (currentLocation == null) {
-  //               showSnackBar(
-  //                 AppString.makesure_gps_is_enabled,
-  //                 type: SnackBarType.warning,
-  //               );
-  //               emit(state.copyWith(isLoading: false));
-  //               _ignoreCameraIdle = false;
-  //               return;
-  //             }
+        // Build all parking markers in parallel
+        final markerFutures = dataList.map(buildMarker).toList();
 
-  //             final route = await polylineUseCase.getRouteBetweenPoints(
-  //               LatLng(currentLocation.latitude, position.longitude),
-  //               position,
-  //               TravelMode.driving,
-  //             );
+        // Also fetch current location in parallel
+        final results = await Future.wait([
+          Future.wait(markerFutures),
+          locationInitUseCase.getCurrentPositionFast(),
+        ]);
 
-  //             if (route.routes.isEmpty) {
-  //               emit(state.copyWith(isLoading: false));
-  //               _ignoreCameraIdle = false;
-  //               showSnackBar(
-  //                 AppString.no_route_found_with_your_current_location,
-  //                 type: SnackBarType.warning,
-  //               );
-  //               return;
-  //             }
+        final markers = results[0] as List<Marker>;
+        final location = results[1] as Position?;
 
-  //             final distance = polylineUseCase.calculateDistance(
-  //               route.routes.first,
-  //             );
+        // Add GPS marker if available
+        if (location != null) {
+          final gpsMarker = Marker(
+            markerId: const MarkerId('gps'),
+            position: LatLng(location.latitude, location.longitude),
+            icon: await const Icon(
+              Icons.my_location,
+              color: Colors.blue,
+            ).toBitmapDescriptor(),
+          );
+          markers.add(gpsMarker);
+        }
 
-  //             emit(state.copyWith(isLoading: false));
-  //             showModalBottomSheet(
-  //               context: appRouter.navigatorKey.currentState!.context,
-  //               isScrollControlled: true,
-  //               shape: const RoundedRectangleBorder(
-  //                 borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-  //               ),
-  //               builder: (_) =>
-  //                   ParkingBookingBottomSheet(data: data, distance: distance),
-  //             ).whenComplete(() {
-  //               Future.delayed(const Duration(milliseconds: 1000), () {
-  //                 _ignoreCameraIdle = false;
-  //               });
-  //             });
-  //           },
-  //         );
-  //       }
+        emit(state.copyWith(markers: markers.toSet()));
+      }
+    } catch (e, st) {
+      debugPrint('Error in onCameraIdle: $e\n$st');
+    } finally {
+      _isLoading = false;
+    }
+  }
 
-  //       // Build all parking markers in parallel
-  //       final markerFutures = dataList.map(buildMarker).toList();
-
-  //       // Also fetch current location in parallel
-  //       final results = await Future.wait([
-  //         Future.wait(markerFutures),
-  //         locationInitUseCase.getCurrentPositionFast(),
-  //       ]);
-
-  //       final markers = results[0] as List<Marker>;
-  //       final location = results[1] as Position?;
-
-  //       // Add GPS marker if available
-  //       if (location != null) {
-  //         final gpsMarker = Marker(
-  //           markerId: const MarkerId('gps'),
-  //           position: LatLng(location.latitude, location.longitude),
-  //           icon: await const Icon(
-  //             Icons.my_location,
-  //             color: Colors.blue,
-  //           ).toBitmapDescriptor(),
-  //         );
-  //         markers.add(gpsMarker);
-  //       }
-
-  //       emit(state.copyWith(markers: markers.toSet()));
-  //     }
-  //   } catch (e, st) {
-  //     debugPrint('Error in onCameraIdle: $e\n$st');
-  //   } finally {
-  //     _isLoading = false;
-  //   }
-  // }
+  Widget markerWidget(MapFilters selectedFilter) {
+    final color = getGolfPrimaryColor(selectedFilter);
+    return Positioned(
+      left: 30,
+      bottom: 75.h,
+      child: CommonImage(
+        src: Assets.images.marker,
+        width: 24.w,
+        height: 35.h,
+        imageColor: color,
+      ),
+    );
+  }
 }

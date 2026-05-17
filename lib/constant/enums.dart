@@ -59,14 +59,15 @@ enum LeaderboardSearchType {
 }
 
 enum MapFilters {
-  Played("Played"),
-  Wishlist("Wishlist"),
-  Friends("Friends"),
-  PinLinks5("PinLinks 5");
+  Played("Played", "played"),
+  Wishlist("Wishlist", "wishlist"),
+  Friends("Friends", "friends"),
+  PinLinks5("PinLinks 5", "pinkLink5");
 
   final String displayName;
+  final String value;
 
-  const MapFilters(this.displayName);
+  const MapFilters(this.displayName, this.value);
 }
 
 enum FilterProfile {

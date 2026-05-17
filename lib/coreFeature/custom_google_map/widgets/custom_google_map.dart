@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pinlink/config/color/app_color.dart';
+import 'package:pinlink/constant/enums.dart';
 import 'package:pinlink/coreFeature/custom_google_map/cubit/map_cubit/map_cubit.dart';
 import 'package:pinlink/coreFeature/custom_google_map/cubit/map_cubit/map_state.dart';
 import 'package:pinlink/coreFeature/custom_google_map/widgets/map_search_bar.dart';
+import 'package:pinlink/features/golf_map/widgets/map_points_details.dart';
 
 class CustomGoogleMap extends StatelessWidget {
   const CustomGoogleMap({
@@ -13,12 +15,12 @@ class CustomGoogleMap extends StatelessWidget {
     super.key,
     this.headerAction,
     this.liteMode = true,
-    this.enableReagionObserver = false,
+    this.mapFilters,
   });
   final List<Widget> Function(BuildContext context, MapState state) widgets;
   final Widget? headerAction;
   final bool liteMode;
-  final bool enableReagionObserver;
+  final MapFilters? mapFilters;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MapCubit, MapState>(
@@ -31,7 +33,11 @@ class CustomGoogleMap extends StatelessWidget {
               onTap: (coordinate) {
                 cubit.setPoint(coordinate: coordinate);
               },
-              // onCameraIdle: enableReagionObserver ? cubit.onCameraIdle : null,
+              onCameraIdle: () {
+                if (mapFilters != null) {
+                  cubit.onCameraIdle(mapFilters!);
+                }
+              },
               initialCameraPosition: CameraPosition(
                 target: state.starting.coordinate,
                 zoom: 20.0,
@@ -42,8 +48,21 @@ class CustomGoogleMap extends StatelessWidget {
                 context.read<MapCubit>().onMapCreated(cotroller);
               },
             ),
-            Align(alignment: Alignment.topCenter, child: _header(cubit, state)),
+            if (mapFilters == null)
+              Align(
+                alignment: Alignment.topCenter,
+                child: _header(cubit, state),
+              ),
             ...widgets(context, state),
+            if (state.courseId.isNotEmpty &&
+                mapFilters != null &&
+                mapFilters != .Wishlist)
+              Positioned(
+                left: 30,
+                top: 30,
+                child: MapPointsDetails(courseId: state.courseId),
+              ),
+
             if (state.isLoading)
               Center(
                 child: Container(
