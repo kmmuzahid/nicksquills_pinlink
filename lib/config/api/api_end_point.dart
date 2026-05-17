@@ -64,4 +64,6 @@ class ApiEndPoint {
   final String createCompareCourse = '/compareCourse/create';
 
   final String createWishlistCourse = '/wishlistCourse/create';
+
+  final String reorderRank = '/compareCourse/custom-rank-data';
 }

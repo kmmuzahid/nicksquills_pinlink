@@ -106,16 +106,86 @@ class ProfileCubit extends SafeCubit<ProfileCubitState> {
   }
 
   Future<void> reorderCourses(int oldIndex, int newIndex) async {
-    final result = await _courseRepository.reorderRank(
-      requestedRank: newIndex,
-      courses: state.userCourses,
-    );
+    if (oldIndex == newIndex) return;
+
+    var adjustedIndex = newIndex;
     if (oldIndex < newIndex) {
-      newIndex -= 1;
+      adjustedIndex -= 1;
     }
+    if (oldIndex == adjustedIndex) return;
+
+    final updatedRank = await reorderWishlistCourses(
+      oldIndex: oldIndex,
+      newIndex: newIndex,
+    );
+    if (updatedRank == null) return;
+
+    final oldSet = List<UserCourseModel>.from(state.userCourses);
+
     final courses = List<UserCourseModel>.from(state.userCourses);
     final item = courses.removeAt(oldIndex);
-    courses.insert(newIndex, item);
+    courses.insert(adjustedIndex, item.copyWith(customRank: updatedRank));
     emit(state.copyWith(userCourses: courses));
+
+    final result = await _courseRepository.reorderCompareCourses(
+      compareCourseId: item.id ?? '',
+      rank: updatedRank,
+      isRevert: false,
+    );
+    if (!result.isSuccess) {
+      emit(state.copyWith(userCourses: oldSet));
+    }
+  }
+
+  Future<double?> reorderWishlistCourses({
+    required int oldIndex,
+    required int newIndex,
+  }) async {
+    var adjustedIndex = newIndex;
+    if (oldIndex < newIndex) {
+      adjustedIndex -= 1;
+    }
+
+    int orig(int i) {
+      if (i >= oldIndex) return i + 1;
+      return i;
+    }
+
+    int? rankBefore;
+    if (adjustedIndex > 0) {
+      rankBefore = orig(adjustedIndex - 1) + 1;
+    }
+    final rankAfter = orig(adjustedIndex) + 1;
+
+    final indexesToFetch = <int>[];
+    if (rankBefore != null) indexesToFetch.add(rankBefore);
+    indexesToFetch.add(rankAfter);
+
+    final result = await _courseRepository.rankData(
+      rank: indexesToFetch,
+      isWishListRank: false,
+      shortByRank: false,
+    );
+    final fetchedCourses = result.data ?? [];
+    if (fetchedCourses.isEmpty) {
+      return null;
+    }
+
+    double top = 0;
+    double bottom = 0;
+
+    if (fetchedCourses.length == 2) {
+      top = fetchedCourses.first.customRank ?? 0;
+      bottom = fetchedCourses.last.customRank ?? 0;
+      return (top + bottom) / 2;
+    } else {
+      if (rankBefore == null) {
+        bottom = fetchedCourses.first.customRank ?? 0;
+        return bottom / 2;
+      } else {
+        top = fetchedCourses.first.customRank ?? 0;
+        return top + 1000.0;
+      }
+    }
   }
 }

@@ -56,6 +56,43 @@ class UserCourseModel {
     this.updatedAt,
   });
 
+  UserCourseModel copyWith({
+    String? id,
+    String? userId,
+    CourseId? courseId,
+    int? favorite,
+    int? scenery,
+    int? difficulty,
+    int? teeBoxFairwayCondition,
+    int? greenSpeed,
+    int? greenCondition,
+    int? clubHouse,
+    int? foodDrink,
+    double? rank,
+    double? customRank,
+    bool? isPinkLink5,
+    String? createdAt,
+    String? updatedAt,
+  }) => UserCourseModel(
+    id: id ?? this.id,
+    userId: userId ?? this.userId,
+    courseId: courseId ?? this.courseId,
+    favorite: favorite ?? this.favorite,
+    scenery: scenery ?? this.scenery,
+    difficulty: difficulty ?? this.difficulty,
+    teeBoxFairwayCondition:
+        teeBoxFairwayCondition ?? this.teeBoxFairwayCondition,
+    greenSpeed: greenSpeed ?? this.greenSpeed,
+    greenCondition: greenCondition ?? this.greenCondition,
+    clubHouse: clubHouse ?? this.clubHouse,
+    foodDrink: foodDrink ?? this.foodDrink,
+    rank: rank ?? this.rank,
+    customRank: customRank ?? this.customRank,
+    isPinkLink5: isPinkLink5 ?? this.isPinkLink5,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+
   factory UserCourseModel.fromJson(Map<String, dynamic> json) =>
       _$UserCourseModelFromJson(json);
   Map<String, dynamic> toJson() => _$UserCourseModelToJson(this);

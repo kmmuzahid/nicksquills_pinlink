@@ -71,7 +71,7 @@ class ComparisonScreen extends StatelessWidget {
                               ? .MyCourses
                               : .MyWishlist,
                         );
-                      });
+                      }, context.read<AuthCubit>());
                     },
                     child: _skipButton(context),
                   ),

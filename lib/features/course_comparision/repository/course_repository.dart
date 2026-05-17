@@ -107,9 +107,9 @@ class CourseRepository {
   }
 
   Future<ResponseState<List<UserCourseModel>?>> rankData({
-    required String courseId,
-    required int rank,
+    required List<int> rank,
     required bool isWishListRank,
+    bool shortByRank = true,
   }) async {
     return DioService.instance.request(
       input: RequestInput(
@@ -117,7 +117,8 @@ class CourseRepository {
         method: .GET,
         jsonBody: {
           "type": isWishListRank ? "wishlistRank" : "compareCourseRank",
-          "rank": [rank],
+          "rank": rank,
+          if (!shortByRank) "sortBy": "customRank",
         },
       ),
 
@@ -154,6 +155,28 @@ class CourseRepository {
             : ApiEndPoint.instance.createCompareCourse,
         method: .POST,
         listBody: listBody,
+      ),
+      responseBuilder: (data) {
+        return data;
+      },
+    );
+  }
+
+  Future<ResponseState<dynamic>> reorderCompareCourses({
+    required String compareCourseId,
+    required double rank,
+    required bool isRevert,
+  }) async {
+    return DioService.instance.request(
+      showMessage: true,
+      input: RequestInput(
+        endpoint: ApiEndPoint.instance.reorderRank,
+        method: .POST,
+        jsonBody: {
+          "type": isRevert ? "revert" : "create",
+          "compareCourseId": compareCourseId,
+          "rank": rank,
+        },
       ),
       responseBuilder: (data) {
         return data;

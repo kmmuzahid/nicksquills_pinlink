@@ -114,7 +114,7 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
 
     emit(state.copyWith(isRankingInProgress: true));
 
-    _processNextCourse();
+    _processNextCourse(authCubit);
   }
 
   void onSelectComparisonCourse(
@@ -132,10 +132,10 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
       return;
     }
 
-    _onMatchupComplete();
+    _onMatchupComplete(authCubit);
   }
 
-  void onSkipComparisonQuestion(VoidCallback onSuccess) {
+  void onSkipComparisonQuestion(VoidCallback onSuccess, AuthCubit authCubit) {
     _onComplete = onSuccess;
     _matchupWinners.add(-1);
 
@@ -146,12 +146,12 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
       return;
     }
 
-    _onMatchupComplete();
+    _onMatchupComplete(authCubit);
   }
 
-  void _processNextCourse() {
+  void _processNextCourse(AuthCubit authCubit) {
     if (_courseIndex >= state.selectedCourses.length) {
-      _onAllCoursesRanked();
+      _onAllCoursesRanked(authCubit);
       return;
     }
 
@@ -159,18 +159,18 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
     _rankCache.clear();
 
     if (_currentTotalExisting == 0) {
-      _saveCourseDirect(course, 1000.0, 0);
+      _saveCourseDirect(course, 1000.0, 0, authCubit);
       return;
     }
 
     _bsLow = 0;
     _bsHigh = _currentTotalExisting - 1;
-    _binarySearchStep();
+    _binarySearchStep(authCubit);
   }
 
-  Future<void> _binarySearchStep() async {
+  Future<void> _binarySearchStep(AuthCubit authCubit) async {
     if (_bsLow > _bsHigh) {
-      await _finalizeCourseRank(_bsLow);
+      await _finalizeCourseRank(_bsLow, authCubit);
       return;
     }
 
@@ -182,7 +182,7 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
 
     if (existingCourse == null) {
       emit(state.copyWith(isComparisonLoading: false));
-      await _finalizeCourseRank(_bsLow);
+      await _finalizeCourseRank(_bsLow, authCubit);
       return;
     }
 
@@ -198,17 +198,17 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
     );
   }
 
-  void _onMatchupComplete() {
+  void _onMatchupComplete(AuthCubit authCubit) {
     final q1Winner = _matchupWinners[0];
 
     _recordRatings(state.comparison[0], state.comparison[1]);
 
     _matchupWinners = [];
 
-    _handleBinarySearchAnswer(q1Winner);
+    _handleBinarySearchAnswer(q1Winner, authCubit);
   }
 
-  void _handleBinarySearchAnswer(int q1Winner) {
+  void _handleBinarySearchAnswer(int q1Winner, AuthCubit authCubit) {
     final mid = (_bsLow + _bsHigh) ~/ 2;
 
     if (q1Winner == 0) {
@@ -217,10 +217,13 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
       _bsLow = mid + 1;
     }
 
-    _binarySearchStep();
+    _binarySearchStep(authCubit);
   }
 
-  Future<void> _finalizeCourseRank(int insertionIndex) async {
+  Future<void> _finalizeCourseRank(
+    int insertionIndex,
+    AuthCubit authCubit,
+  ) async {
     final course = state.selectedCourses[_courseIndex];
     double fractionalRank;
 
@@ -242,13 +245,14 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
       fractionalRank = (aboveRank + belowRank) / 2;
     }
 
-    _saveCourseDirect(course, fractionalRank, insertionIndex);
+    _saveCourseDirect(course, fractionalRank, insertionIndex, authCubit);
   }
 
   Future<void> _saveCourseDirect(
     CourseModel course,
     double fractionalRank,
     int insertionIndex,
+    AuthCubit authCubit,
   ) async {
     final courseId = course.id ?? '';
     final stars = _calculateStarRatings(courseId);
@@ -278,12 +282,13 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
 
     _currentTotalExisting++;
     _courseIndex++;
-    _processNextCourse();
+    _processNextCourse(authCubit);
   }
 
-  void _onAllCoursesRanked() {
+  void _onAllCoursesRanked(AuthCubit authCubit) {
     emit(state.copyWith(comparison: const [], isRankingInProgress: false));
     _onComplete?.call();
+    authCubit.getProfile();
     showSnackBar(
       '${state.rankingType == RankingType.wishlistRanking ? 'Wishlist' : 'Course'} ranked successfully',
       type: .success,
@@ -321,7 +326,7 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
     final totals = _ratingTotals[courseId] ?? List.filled(8, 0);
     final totalMatchups = _matchupCounts[courseId] ?? 0;
     if (totalMatchups == 0) return List.filled(8, 3);
-    
+
     return List.generate(8, (i) {
       final total = totals[i];
       if (total == 0) return 0;
@@ -334,8 +339,7 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
     if (_rankCache.containsKey(rank)) return _rankCache[rank];
 
     final result = await courseRepository.rankData(
-      courseId: state.selectedCourses[_courseIndex].id!,
-      rank: rank + 1,
+      rank: [rank + 1],
       isWishListRank: state.rankingType == RankingType.wishlistRanking,
     );
 
