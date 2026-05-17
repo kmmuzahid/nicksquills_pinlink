@@ -14,6 +14,7 @@ class GolfCoursePlayedItem extends StatefulWidget {
     required this.selectedFilter,
     required this.controllers,
     required this.fixedWidth,
+    required this.hasSubscription,
     required this.rattingWidth,
   });
   final UserCourseModel course;
@@ -22,6 +23,7 @@ class GolfCoursePlayedItem extends StatefulWidget {
   final Map<String, ScrollController> controllers;
   final double fixedWidth;
   final double rattingWidth;
+  final bool hasSubscription;
 
   @override
   State<GolfCoursePlayedItem> createState() => _GolfCoursePlayedItemState();
@@ -165,6 +167,24 @@ class _GolfCoursePlayedItemState extends State<GolfCoursePlayedItem> {
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
+                  double ratting = 0;
+                  if (index == 0) {
+                    ratting = course.favorite ?? 0;
+                  } else if (index == 1) {
+                    ratting = course.scenery ?? 0;
+                  } else if (index == 2) {
+                    ratting = course.difficulty ?? 0;
+                  } else if (index == 3) {
+                    ratting = course.teeBoxFairwayCondition ?? 0;
+                  } else if (index == 4) {
+                    ratting = course.greenSpeed ?? 0;
+                  } else if (index == 5) {
+                    ratting = course.greenCondition ?? 0;
+                  } else if (index == 6) {
+                    ratting = course.clubHouse ?? 0;
+                  } else if (index == 7) {
+                    ratting = course.foodDrink ?? 0;
+                  }
                   return SizedBox(
                     width: widget.rattingWidth,
                     child: Column(
@@ -176,10 +196,15 @@ class _GolfCoursePlayedItemState extends State<GolfCoursePlayedItem> {
                           children: [
                             ...List.generate(
                               3,
-                              (_) => rattingIcon(
-                                index == 0
+                              (lIndex) => rattingIcon(
+                                color: index == 0 || widget.hasSubscription
                                     ? Colors.amber
                                     : context.colors.tEXT_sub,
+                                icon: index == 0 || widget.hasSubscription
+                                    ? (lIndex >= ratting
+                                          ? Icons.star_outline
+                                          : Icons.star)
+                                    : Icons.star,
                               ),
                             ),
                           ],
@@ -189,10 +214,15 @@ class _GolfCoursePlayedItemState extends State<GolfCoursePlayedItem> {
                           children: [
                             ...List.generate(
                               2,
-                              (_) => rattingIcon(
-                                index == 0
+                              (lIndex) => rattingIcon(
+                                color: index == 0 || widget.hasSubscription
                                     ? Colors.amber
                                     : context.colors.tEXT_sub,
+                                icon: index == 0 || widget.hasSubscription
+                                    ? (lIndex + 3 >= ratting
+                                          ? Icons.star_outline
+                                          : Icons.star)
+                                    : Icons.star,
                               ),
                             ),
                           ],
@@ -200,13 +230,13 @@ class _GolfCoursePlayedItemState extends State<GolfCoursePlayedItem> {
                         5.height,
                         if (index == 0)
                           Text(
-                            '5.0',
+                            ratting.toStringAsFixed(1),
                             style: TextStyle(
                               fontSize: 12,
                               color: context.colors.tEXT_white,
                             ),
                           ),
-                        if (index != 0) ...[
+                        if (!widget.hasSubscription && index != 0) ...[
                           Icon(
                             Icons.lock,
                             color: context.colors.tEXT_sub,
@@ -231,7 +261,7 @@ class _GolfCoursePlayedItemState extends State<GolfCoursePlayedItem> {
   }
 
   //ratting icon
-  Widget rattingIcon(Color color) {
-    return Icon(Icons.star, color: color, size: 12);
+  Widget rattingIcon({Color color = Colors.amber, required IconData icon}) {
+    return Icon(icon, color: color, size: 12);
   }
 }

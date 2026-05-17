@@ -118,7 +118,7 @@ class CourseRepository {
         jsonBody: {
           "type": isWishListRank ? "wishlistRank" : "compareCourseRank",
           "rank": rank,
-          if (!shortByRank) "sortBy": "customRank",
+          "sortBy": shortByRank ? "rank" : "customRank",
         },
       ),
 

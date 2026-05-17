@@ -11,21 +11,21 @@ class UserCourseModel {
   @JsonKey(name: 'courseId')
   final CourseId? courseId;
   @JsonKey(name: 'favorite')
-  final int? favorite;
+  final double? favorite;
   @JsonKey(name: 'scenery')
-  final int? scenery;
+  final double? scenery;
   @JsonKey(name: 'difficulty')
-  final int? difficulty;
+  final double? difficulty;
   @JsonKey(name: 'teeBoxFairwayCondition')
-  final int? teeBoxFairwayCondition;
+  final double? teeBoxFairwayCondition;
   @JsonKey(name: 'greenSpeed')
-  final int? greenSpeed;
+  final double? greenSpeed;
   @JsonKey(name: 'greenCondition')
-  final int? greenCondition;
+  final double? greenCondition;
   @JsonKey(name: 'clubHouse')
-  final int? clubHouse;
+  final double? clubHouse;
   @JsonKey(name: 'foodDrink')
-  final int? foodDrink;
+  final double? foodDrink;
   @JsonKey(name: 'rank')
   final double? rank;
   @JsonKey(name: 'customRank')
@@ -60,14 +60,14 @@ class UserCourseModel {
     String? id,
     String? userId,
     CourseId? courseId,
-    int? favorite,
-    int? scenery,
-    int? difficulty,
-    int? teeBoxFairwayCondition,
-    int? greenSpeed,
-    int? greenCondition,
-    int? clubHouse,
-    int? foodDrink,
+    double? favorite,
+    double? scenery,
+    double? difficulty,
+    double? teeBoxFairwayCondition,
+    double? greenSpeed,
+    double? greenCondition,
+    double? clubHouse,
+    double? foodDrink,
     double? rank,
     double? customRank,
     bool? isPinkLink5,

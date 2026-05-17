@@ -36,6 +36,15 @@ class ProfileScreen extends StatelessWidget {
       body: CubitScope(
         create: () => ProfileCubit()..getUserPlayedCourse(1),
         builder: (context, cubit, state) {
+          final hasSubscription =
+              context
+                  .read<AuthCubit>()
+                  .state
+                  .profile
+                  ?.subscription
+                  ?.where((e) => (e?.amount ?? 0) > 0)
+                  .isNotEmpty ??
+              false;
           return LayoutBuilder(
             builder: (context, constraints) {
               final fixedWidth = (constraints.maxWidth * 0.42);
@@ -141,6 +150,7 @@ class ProfileScreen extends StatelessWidget {
                       course: course,
                       selectedFilter: null,
                       index: index,
+                      hasSubscription: hasSubscription,
                     );
                   } else if (tab.tab == FilterProfile.MyPosts) {
                     return _buildRowItem(

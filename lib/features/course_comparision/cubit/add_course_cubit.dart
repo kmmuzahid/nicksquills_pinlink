@@ -321,7 +321,7 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
     }
   }
 
-  List<int> _calculateStarRatings(String courseId) {
+  List<double> _calculateStarRatings(String courseId) {
     final wins = _ratingWins[courseId] ?? List.filled(8, 0);
     final totals = _ratingTotals[courseId] ?? List.filled(8, 0);
     final totalMatchups = _matchupCounts[courseId] ?? 0;
