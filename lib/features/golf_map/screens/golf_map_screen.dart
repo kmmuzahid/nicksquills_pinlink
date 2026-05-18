@@ -18,7 +18,7 @@ class GolfMapScreen extends StatelessWidget {
           create: () => GolfMapCubit(),
           builder: (context, cubit, state) {
             return CustomGoogleMap(
-              enableSafeArea: false,
+              enableSafeArea: true,
               filterGameChoiceEnabled: true,
               widgets: (contex, state) {
                 return [];

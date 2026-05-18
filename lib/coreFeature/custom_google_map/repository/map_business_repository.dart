@@ -7,10 +7,10 @@ import 'package:pinlink/features/golf_map/model/map_point_details_model.dart';
 
 class MapBusinessRepository {
   Future<ResponseState<MapEntry<int, List<MapPointModel>>?>> getCourseMap({
-    required double topLat,
-    required double bottomLat,
-    required double leftLng,
-    required double rightLng,
+    double? topLat,
+    double? bottomLat,
+    double? leftLng,
+    double? rightLng,
     String? searchQuery,
     required MapFilters mapFilters,
     required CancelToken cancelToken,
@@ -22,10 +22,10 @@ class MapBusinessRepository {
         cancelToken: cancelToken,
         queryParams: {
           "type": mapFilters.value,
-          "topLat": topLat,
-          "bottomLat": bottomLat,
-          "leftLng": leftLng,
-          "rightLng": rightLng,
+          "topLat": ?topLat,
+          "bottomLat": ?bottomLat,
+          "leftLng": ?leftLng,
+          "rightLng": ?rightLng,
           "search": ?searchQuery,
         },
       ),

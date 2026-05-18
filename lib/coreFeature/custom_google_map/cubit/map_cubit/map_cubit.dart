@@ -1,4 +1,5 @@
 import 'package:core_kit/core_kit.dart';
+import 'package:core_kit/utils/debouncer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
@@ -331,6 +332,15 @@ class MapCubit extends SafeCubit<MapState> {
         }
 
         emit(state.copyWith(markers: markers.toSet()));
+
+        if (isFirstLoad && dataList.isNotEmpty) {
+          mapController.animateCamera(
+            CameraUpdate.newLatLngZoom(
+              LatLng(dataList.first.latitude!, dataList.first.longitude!),
+              15,
+            ),
+          );
+        }
       }
     } catch (e, st) {
       debugPrint('Error in onCameraIdle: $e\n$st');
@@ -362,5 +372,50 @@ class MapCubit extends SafeCubit<MapState> {
       ),
     );
     onCameraIdle(isFirstLoad: true);
+  }
+
+  final Debouncer _debouncer = Debouncer(milliseconds: 300);
+
+  Future<void> search(String query) async {
+    if (query.isEmpty) {
+      emit(state.copyWith(searchResults: [], selectedCourse: MapPointModel()));
+      return;
+    }
+    _debouncer.run(() async {
+      _cancelToken?.cancel();
+
+      _isLoading = true;
+      _cancelToken = CancelToken();
+
+      try {
+        final result = await _mapBusinessRepository.getCourseMap(
+          searchQuery: query,
+          mapFilters: state.selectedFilter,
+          cancelToken: _cancelToken!,
+        );
+        _isLoading = false;
+
+        if (result.isSuccess && result.data?.value != null) {
+          final dataList = result.data?.value as List<MapPointModel>;
+          emit(state.copyWith(searchResults: dataList));
+        }
+      } catch (e, st) {
+        debugPrint('Error in search: $e\n$st');
+      } finally {
+        _isLoading = false;
+        _cancelToken = null;
+      }
+    });
+  }
+
+  // Select a search result and move camera to it
+  Future<void> selectSearchResult(MapPointModel point) async {
+    // Close search results
+    emit(state.copyWith(searchResults: [], selectedCourse: point));
+
+    // Move camera to the selected point
+    await mapController.animateCamera(
+      CameraUpdate.newLatLngZoom(LatLng(point.latitude!, point.longitude!), 15),
+    );
   }
 }

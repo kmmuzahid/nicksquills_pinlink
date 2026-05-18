@@ -61,6 +61,21 @@ class CustomGoogleMap extends StatefulWidget {
 
 class _CustomGoogleMapState extends State<CustomGoogleMap> {
   Offset? _clickPosition;
+  late TextEditingController _searchController;
+  late FocusNode _searchFocusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+    _searchFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _searchFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   void didUpdateWidget(CustomGoogleMap oldWidget) {
@@ -159,9 +174,17 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
 
                   onCameraMoveStarted: () {
                     cubit.clearSelectedCourse();
+                    _searchFocusNode.unfocus();
+                    if (state.searchResults.isNotEmpty) {
+                      cubit.emit(state.copyWith(searchResults: []));
+                    }
                   },
 
                   onTap: (coordinate) {
+                    _searchFocusNode.unfocus();
+                    if (state.searchResults.isNotEmpty) {
+                      cubit.emit(state.copyWith(searchResults: []));
+                    }
                     if (widget.filterPlayedModeOnlyEnabled ||
                         widget.filterGameChoiceEnabled) {
                       cubit.clearSelectedCourse();
@@ -214,26 +237,98 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
                   ),
                 if (widget.filterGameChoiceEnabled ||
                     widget.filterPlayedModeOnlyEnabled) ...[
-                  Positioned(
-                    bottom: 10 + (widget.enableSafeArea ? 25.h : 0),
-                    left: 16,
-                    child: SizedBox(
-                      width: CoreScreenUtils.deviceSize.width * .7,
-                      child: CommonTextField(
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: context.colors.tEXT_sub,
+                  if (state.searchResults.isNotEmpty)
+                    Positioned(
+                      bottom: 10 + (widget.enableSafeArea ? 35.h : 0) + 55,
+                      left: 16,
+                      child: Container(
+                        width: CoreScreenUtils.deviceSize.width * .7,
+
+                        decoration: BoxDecoration(
+                          color: context.colors.bACKGROUND_darkCard,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: context.colors.bACKGROUND_darkCardBoarder,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.35),
+                              blurRadius: 12,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
                         ),
-                        validationType: .notRequired,
-                        backgroundColor: context.colors.background,
-                        hintText: 'Search courses on map...',
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: ListView.separated(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            itemCount: state.searchResults.length,
+                            separatorBuilder: (context, index) => Divider(
+                              color: context.colors.bACKGROUND_darkCardBoarder,
+                              height: 1,
+                            ),
+                            itemBuilder: (context, index) {
+                              final course = state.searchResults[index];
+                              return ListTile(
+                                dense: true,
+                                title: CommonText(
+                                  text: course.name ?? '',
+                                  fontSize: 13,
+                                  fontWeight: .bold,
+                                  textColor: context.colors.tEXT_white,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                subtitle: CommonText(
+                                  text: course.locationName ?? '',
+                                  fontSize: 11,
+                                  textColor: context.colors.tEXT_sub,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                onTap: () {
+                                  _searchController.text = course.name ?? '';
+                                  _searchFocusNode.unfocus();
+                                  cubit.selectSearchResult(course);
+                                },
+                              );
+                            },
+                          ),
+                        ),
                       ),
                     ),
+
+                  BlocBuilder<MapCubit, MapState>(
+                    buildWhen: (previous, current) => false,
+                    builder: (context, state) {
+                      final cubit = context.read<MapCubit>();
+                      return Positioned(
+                        bottom: 10 + (widget.enableSafeArea ? 35.h : 0),
+                        left: 16,
+                        child: SizedBox(
+                          width: CoreScreenUtils.deviceSize.width * .7,
+                          child: CommonTextField(
+                            controller: _searchController,
+                            prefixBuilder: (controller, focusNode) {
+                              _searchFocusNode = focusNode;
+                              return null;
+                            },
+                            validationType: .notRequired,
+                            backgroundColor: context.colors.background,
+                            hintText: 'Search courses on map...',
+                            onChanged: (value) {
+                              cubit.search(value);
+                            },
+                          ),
+                        ),
+                      );
+                    },
                   ),
 
                   Positioned(
                     right: 10,
-                    bottom: 10 + (widget.enableSafeArea ? 25.h : 0),
+                    bottom: 10 + (widget.enableSafeArea ? 35.h : 0),
                     child: _totalCourses(
                       context,
                       state.totalCourse,

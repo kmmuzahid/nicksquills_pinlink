@@ -23,6 +23,7 @@ class MapState extends Equatable {
     required this.selectedCourse,
     required this.selectedFilter,
     required this.isFirstTimeFetch,
+    required this.searchResults,
   });
 
   // Create an initial state
@@ -42,11 +43,13 @@ class MapState extends Equatable {
       destination = null,
       selectedFilter = MapFilters.Played,
       isFirstTimeFetch = false,
+      searchResults = const [],
       // destination = const PlaceDetails(address: 'Merul Badda', coordinate: LatLng(23.772109, 90.419656)),
       initializing = true;
   final int totalCourse; // business related
   final MapPointModel selectedCourse; // business related
   final MapFilters selectedFilter; // business related
+  final List<MapPointModel> searchResults; // business related
   final PointType lastPikedPointType;
   final PlaceDetails starting;
   final PlaceDetails? destination;
@@ -76,6 +79,7 @@ class MapState extends Equatable {
       selectedCourse,
       isFirstTimeFetch,
       selectedFilter,
+      searchResults,
     ];
   }
 
@@ -93,6 +97,7 @@ class MapState extends Equatable {
     MapPointModel? selectedCourse,
     bool? isInitalLoading,
     MapFilters? selectedFilter,
+    List<MapPointModel>? searchResults,
   }) {
     return MapState(
       isFirstTimeFetch: isInitalLoading ?? isFirstTimeFetch,
@@ -108,6 +113,7 @@ class MapState extends Equatable {
       initializing: initializing ?? this.initializing,
       totalCourse: totalCourse ?? this.totalCourse,
       selectedCourse: selectedCourse ?? this.selectedCourse,
+      searchResults: searchResults ?? this.searchResults,
     );
   }
 }
