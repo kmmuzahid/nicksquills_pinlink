@@ -44,7 +44,10 @@ class MapCubit extends SafeCubit<MapState> {
     }
   }
 
-  Future<void> onMapCreated(GoogleMapController controller) async {
+  Future<void> onMapCreated(
+    GoogleMapController controller, {
+    required MapFilters? mapFilters,
+  }) async {
     if (state.isLoading) return;
     emit(state.copyWith(isLoading: true));
     mapController = controller;
@@ -67,7 +70,7 @@ class MapCubit extends SafeCubit<MapState> {
     await setCurrentPosition();
     emit(state.copyWith(initializing: false, isLoading: false));
     //app logic
-    // onCameraIdle();
+    if (mapFilters != null) onCameraIdle(mapFilters);
   }
 
   Future<void> setCurrentPosition() async {
@@ -238,6 +241,10 @@ class MapCubit extends SafeCubit<MapState> {
     await setPoint(coordinate: placeDetails.coordinate);
   }
 
+  void clearCourseId() {
+    emit(state.copyWith(courseId: ''));
+  }
+
   // app based
   bool _isLoading = false;
   bool _ignoreCameraIdle = false;
@@ -272,6 +279,7 @@ class MapCubit extends SafeCubit<MapState> {
             markerId: MarkerId(data.id.toString()),
             position: position,
             icon: bitmap,
+            consumeTapEvents: true,
             onTap: () async {
               _ignoreCameraIdle = true;
               emit(state.copyWith(courseId: ''));
@@ -317,15 +325,11 @@ class MapCubit extends SafeCubit<MapState> {
 
   Widget markerWidget(MapFilters selectedFilter) {
     final color = getGolfPrimaryColor(selectedFilter);
-    return Positioned(
-      left: 30,
-      bottom: 75.h,
-      child: CommonImage(
-        src: Assets.images.marker,
-        width: 24.w,
-        height: 35.h,
-        imageColor: color,
-      ),
+    return CommonImage(
+      src: Assets.images.marker,
+      width: 24.w,
+      height: 35.h,
+      imageColor: color,
     );
   }
 }

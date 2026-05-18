@@ -9,7 +9,31 @@ import 'package:pinlink/coreFeature/custom_google_map/cubit/map_cubit/map_state.
 import 'package:pinlink/coreFeature/custom_google_map/widgets/map_search_bar.dart';
 import 'package:pinlink/features/golf_map/widgets/map_points_details.dart';
 
-class CustomGoogleMap extends StatelessWidget {
+const String mapStyle = '''
+[
+  {
+    "featureType": "poi",
+    "stylers": [
+      { "visibility": "off" }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "labels",
+    "stylers": [
+      { "visibility": "off" }
+    ]
+  },
+  {
+    "featureType": "transit",
+    "stylers": [
+      { "visibility": "off" }
+    ]
+  }
+]
+''';
+
+class CustomGoogleMap extends StatefulWidget {
   const CustomGoogleMap({
     required this.widgets,
     super.key,
@@ -21,66 +45,140 @@ class CustomGoogleMap extends StatelessWidget {
   final Widget? headerAction;
   final bool liteMode;
   final MapFilters? mapFilters;
+
+  @override
+  State<CustomGoogleMap> createState() => _CustomGoogleMapState();
+}
+
+class _CustomGoogleMapState extends State<CustomGoogleMap> {
+  Offset? _clickPosition;
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MapCubit, MapState>(
+    return BlocConsumer<MapCubit, MapState>(
+      listenWhen: (previous, current) => previous.courseId != current.courseId,
+      listener: (context, state) async {
+        if (state.courseId.isEmpty) {
+          setState(() {
+            _clickPosition = null;
+          });
+          return;
+        }
+
+        final cubit = context.read<MapCubit>();
+        await Future.delayed(const Duration(milliseconds: 150));
+        if (!mounted) return;
+
+        final marker = state.markers.firstWhere(
+          (m) => m.markerId.value == state.courseId,
+          orElse: () => const Marker(markerId: MarkerId('')),
+        );
+
+        if (marker.markerId.value.isNotEmpty) {
+          try {
+            final screenCoordinate = await cubit.mapController
+                .getScreenCoordinate(marker.position);
+            if (mounted) {
+              setState(() {
+                _clickPosition = Offset(
+                  screenCoordinate.x.toDouble(),
+                  screenCoordinate.y.toDouble(),
+                );
+              });
+            }
+          } catch (e) {
+            debugPrint('Error getting screen coordinate: $e');
+          }
+        }
+      },
       builder: (context, state) {
         final cubit = context.read<MapCubit>();
-        return Stack(
-          children: [
-            GoogleMap(
-              liteModeEnabled: liteMode,
-              onTap: (coordinate) {
-                cubit.setPoint(coordinate: coordinate);
-              },
-              onCameraIdle: () {
-                if (mapFilters != null) {
-                  cubit.onCameraIdle(mapFilters!);
-                }
-              },
-              initialCameraPosition: CameraPosition(
-                target: state.starting.coordinate,
-                zoom: 20.0,
-              ),
-              markers: state.markers,
-              polylines: state.mapRoute,
-              onMapCreated: (cotroller) {
-                context.read<MapCubit>().onMapCreated(cotroller);
-              },
-            ),
-            if (mapFilters == null)
-              Align(
-                alignment: Alignment.topCenter,
-                child: _header(cubit, state),
-              ),
-            ...widgets(context, state),
-            if (state.courseId.isNotEmpty &&
-                mapFilters != null &&
-                mapFilters != .Wishlist)
-              Positioned(
-                left: 30,
-                top: 30,
-                child: MapPointsDetails(courseId: state.courseId),
-              ),
+        final showDetails =
+            state.courseId.isNotEmpty &&
+            widget.mapFilters != null &&
+            widget.mapFilters != MapFilters.Wishlist;
 
-            if (state.isLoading)
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50.r),
-                    color: Colors.white54,
-                    border: Border.all(
-                      width: 1.w,
-                      color: context.colors.pRIMARY_brandClr,
-                    ),
-                  ),
-                  child: CircularProgressIndicator(
-                    color: context.colors.pRIMARY_brandClr,
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final mapHeight = constraints.maxHeight;
+
+            Widget? detailsCard;
+            if (showDetails && _clickPosition != null) {
+              final isBottomHalf = _clickPosition!.dy > mapHeight / 2;
+              detailsCard = Positioned(
+                top: isBottomHalf ? null : _clickPosition!.dy,
+                bottom: isBottomHalf ? (mapHeight - _clickPosition!.dy) : null,
+                left: 0,
+                right: 0,
+                child: Align(
+                  alignment: isBottomHalf
+                      ? Alignment.bottomCenter
+                      : Alignment.topCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: MapPointsDetails(courseId: state.courseId),
                   ),
                 ),
-              ),
-          ],
+              );
+            }
+
+            return Stack(
+              children: [
+                GoogleMap(
+                  liteModeEnabled: widget.liteMode,
+                  onTap: (coordinate) {
+                    if (widget.mapFilters != null) {
+                      cubit.clearCourseId();
+                    } else {
+                      cubit.setPoint(coordinate: coordinate);
+                    }
+                  },
+                  onCameraIdle: () {
+                    if (widget.mapFilters != null) {
+                      cubit.onCameraIdle(widget.mapFilters!);
+                    }
+                  },
+                  initialCameraPosition: CameraPosition(
+                    target: state.starting.coordinate,
+                    zoom: 20.0,
+                  ),
+                  markers: state.markers,
+                  style: mapStyle,
+                  polylines: state.mapRoute,
+                  onMapCreated: (cotroller) {
+                    context.read<MapCubit>().onMapCreated(
+                      cotroller,
+                      mapFilters: widget.mapFilters,
+                    );
+                  },
+                ),
+                if (widget.mapFilters == null)
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: _header(cubit, state),
+                  ),
+                ...widget.widgets(context, state),
+                if (detailsCard != null) detailsCard,
+                if (state.isLoading)
+                  Center(
+                    child: Container(
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50.r),
+                        color: Colors.white54,
+                        border: Border.all(
+                          width: 1.w,
+                          color: context.colors.pRIMARY_brandClr,
+                        ),
+                      ),
+                      child: CircularProgressIndicator(
+                        color: context.colors.pRIMARY_brandClr,
+                      ),
+                    ),
+                  ),
+              ],
+            );
+          },
         );
       },
     );
@@ -89,7 +187,7 @@ class CustomGoogleMap extends StatelessWidget {
   Widget _header(MapCubit cubit, MapState state) => Padding(
     padding: const EdgeInsets.all(8.0),
     child: MapSearchBar(
-      action: headerAction,
+      action: widget.headerAction,
       icon: GestureDetector(
         onTap: () {
           cubit.setPointType(PointType.starting).then((_) {
