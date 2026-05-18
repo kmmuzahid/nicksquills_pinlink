@@ -201,7 +201,7 @@ class ProfileScreen extends StatelessWidget {
               child: const Icon(Icons.add, color: Colors.white),
             ),
             onTap: () {
-              appRouter.push(const CreatePostRoute());
+              appRouter.push(CreatePostRoute());
             },
           ),
           10.width,

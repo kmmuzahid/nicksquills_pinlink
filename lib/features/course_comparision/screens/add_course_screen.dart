@@ -81,7 +81,7 @@ class AddCourseScreen extends StatelessWidget {
                   ),
                   appbar: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: _appbar(context, state),
+                    child: _appbar(context, state, cubit),
                   ),
 
                   itemCount: state.courses.length + 1,
@@ -177,7 +177,11 @@ class AddCourseScreen extends StatelessWidget {
     );
   }
 
-  Widget _appbar(BuildContext context, AddCourseState state) {
+  Widget _appbar(
+    BuildContext context,
+    AddCourseState state,
+    AddCourseCubit cubit,
+  ) {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, authState) {
         final profile = authState.profile;
@@ -214,7 +218,9 @@ class AddCourseScreen extends StatelessWidget {
               prefixIcon: Icon(Icons.search, color: context.colors.tEXT_sub),
               validationType: ValidationType.notRequired,
               borderRadius: 20,
-              onChanged: (value) {},
+              onChanged: (value) {
+                cubit.searchCourse(query: value, isRefresh: true);
+              },
             ),
           ],
         );
@@ -330,6 +336,7 @@ class AddCourseScreen extends StatelessWidget {
               child: AlreadyAddedCourseDailogeWiget(
                 rankingType: rankingType,
                 cubit: cubit,
+                course: course,
                 onPostNewScore: () {
                   cubit.selectCourse(course);
                 },

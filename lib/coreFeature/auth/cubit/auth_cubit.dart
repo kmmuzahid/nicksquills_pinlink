@@ -30,8 +30,6 @@ class AuthCubit extends SafeCubit<AuthState> {
       return;
     }
 
-    final roleData = await StorageService.instance.role;
-
     appRouter.replace(const OnboardingRoute());
 
     // final accessToken = await StorageService.instance.accessToken;
@@ -53,19 +51,19 @@ class AuthCubit extends SafeCubit<AuthState> {
       ),
     );
     StorageService.instance.accessToken = accessToken;
-    StorageService.instance.refreshToken = refreshToken;
+    StorageService.instance.refreshToken = refreshToken.startsWith('Bearer ')
+        ? refreshToken
+        : 'Bearer $refreshToken';
   }
 
   Future<void> logout() async {
-    // final result = await _authRepository.logout(
-    //   refreshToken: state.refreshToken,
-    //   accessToken: state.accessToken,
-    // );
-    // if (result.isSuccess) {
-    //   clearTokens();
-    // }
-
-    clearTokens();
+    final result = await _authRepository.logout(
+      refreshToken: state.refreshToken,
+      accessToken: state.accessToken,
+    );
+    if (result.isSuccess) {
+      clearTokens();
+    }
   }
 
   Future<void> updateSubscriptionPlan(Plan plan) async {

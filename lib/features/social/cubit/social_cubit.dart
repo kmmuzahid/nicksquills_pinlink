@@ -11,6 +11,7 @@ import 'package:pinlink/config/api/api_end_point.dart';
 import 'package:pinlink/config/bloc/safe_cubit.dart';
 import 'package:pinlink/config/dependency/dependency_injection.dart';
 import 'package:pinlink/config/route/app_router.dart';
+import 'package:pinlink/features/course_comparision/model/course_model.dart';
 import 'package:pinlink/features/course_comparision/repository/course_repository.dart';
 import 'package:pinlink/features/profile/model/user_course_model.dart';
 import 'package:pinlink/features/social/cubit/social_state.dart';
@@ -20,7 +21,8 @@ import 'package:pinlink/features/social/repository/social_repository.dart';
 import 'package:video_player/video_player.dart';
 
 class SocialCubit extends SafeCubit<SocialState> {
-  SocialCubit() : super(const SocialState());
+  final CourseModel? courseModel;
+  SocialCubit({this.courseModel}) : super(const SocialState());
 
   final courseRepository = getIt<CourseRepository>();
 
@@ -31,6 +33,16 @@ class SocialCubit extends SafeCubit<SocialState> {
   final debounce = Debouncer(milliseconds: 300);
 
   String searchTex = '';
+
+  void onInit() {
+    if (courseModel != null) {
+      addCourse(
+        UserCourseModel(
+          courseId: Course(id: courseModel!.id, name: courseModel!.name),
+        ),
+      );
+    }
+  }
 
   Future<void> getAllPost({
     bool isRefresh = false,

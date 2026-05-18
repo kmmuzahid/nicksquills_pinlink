@@ -72,12 +72,6 @@ class _CustomGoogleMapState extends State<CustomGoogleMap> {
   }
 
   @override
-  void dispose() {
-    _searchFocusNode.dispose();
-    super.dispose();
-  }
-
-  @override
   void didUpdateWidget(CustomGoogleMap oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.filterPlayedModeOnlyEnabled || widget.filterGameChoiceEnabled) {

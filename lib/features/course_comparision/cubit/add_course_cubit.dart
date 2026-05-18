@@ -74,11 +74,18 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
     );
   }
 
-  Future<void> getAllCourses({
-    String? query,
-    int page = 1,
-    bool isRefresh = false,
-  }) async {
+  final Debouncer _debouncer = Debouncer(milliseconds: 300);
+
+  final String query = '';
+
+  void searchCourse({String? query, int page = 1, bool isRefresh = false}) {
+    _debouncer.run(() {
+      query = '';
+      getAllCourses(page: page, isRefresh: isRefresh);
+    });
+  }
+
+  Future<void> getAllCourses({int page = 1, bool isRefresh = false}) async {
     if (state.isCourseLoading) return;
     emit(
       state.copyWith(

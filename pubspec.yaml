@@ -11,9 +11,11 @@ dependencies:
     sdk: flutter
 
   core_kit:
-    git:
-      url: https://github.com/kmmuzahid/flutter_core_kit.git
-      ref: 1.1.33
+    path: /Users/username/Documents/km muzahid/flutter_core_kit
+  # core_kit:
+  #   git:
+  #     url: https://github.com/kmmuzahid/flutter_core_kit.git
+  #     ref: 1.1.33
 
   auto_route:
   flutter_bloc:

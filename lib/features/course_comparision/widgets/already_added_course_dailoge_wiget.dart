@@ -6,9 +6,11 @@
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:pinlink/config/color/app_color.dart';
+import 'package:pinlink/config/route/app_router.dart';
+import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/constant/enums.dart';
 import 'package:pinlink/features/course_comparision/cubit/add_course_cubit.dart';
-import 'package:pinlink/features/course_comparision/widgets/new_course_dailoge_widgets.dart';
+import 'package:pinlink/features/course_comparision/model/course_model.dart';
 
 class AlreadyAddedCourseDailogeWiget extends StatelessWidget {
   const AlreadyAddedCourseDailogeWiget({
@@ -17,12 +19,15 @@ class AlreadyAddedCourseDailogeWiget extends StatelessWidget {
     required this.onReRank,
     required this.onPostNewScore,
     required this.rankingType,
+    required this.course,
   });
 
   final AddCourseCubit cubit;
   final Function onReRank;
   final Function onPostNewScore;
   final RankingType rankingType;
+  final CourseModel course;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -71,15 +76,7 @@ class AlreadyAddedCourseDailogeWiget extends StatelessWidget {
                   titleText: 'Post New Score',
                   onTap: () {
                     Navigator.pop(context);
-                    showDialog(
-                      context: context,
-                      builder: (context) => Dialog(
-                        child: NewCourseDailogueWidget(
-                          cubit: cubit,
-                          onPostNewScore: onPostNewScore,
-                        ),
-                      ),
-                    );
+                    appRouter.push(CreatePostRoute(courseModel: course));
                   },
                 ),
                 10.width,

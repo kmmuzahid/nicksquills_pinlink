@@ -1,10 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinlink/common_widgets/custom_card.dart';
 import 'package:pinlink/common_widgets/simple_background.dart';
-import 'package:pinlink/config/bloc/cubit_scope_value.dart';
+import 'package:pinlink/config/bloc/cubit_scope.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/features/leaderboard/cubit/friend_cubit.dart';
 import 'package:pinlink/features/leaderboard/cubit/friend_state.dart';
@@ -16,34 +15,43 @@ class FriendsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [BlocProvider(create: (context) => FriendCubit())],
-      child: SimpleBackground(
-        appBar: const CommonAppBar(),
-        body: SmartListLoader(
-          itemCount: 20 + 1,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              return _firstChild(context, 20);
-            }
-            return const FriendListItemWidget(name: 'Pete', course: 'Not set');
-          },
-        ),
+    return SimpleBackground(
+      appBar: const CommonAppBar(),
+      body: CubitScope(
+        create: () => FriendCubit()..getAllFrendList(),
+        builder: (context, cubit, state) {
+          return SmartListLoader(
+            itemCount: state.frendList.length + 1,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return _firstChild(
+                  context,
+                  state.frendList.length,
+                  cubit,
+                  state,
+                );
+              }
+              return FriendListItemWidget(friend: state.frendList[index - 1]);
+            },
+          );
+        },
       ),
     );
   }
 
-  Widget _firstChild(BuildContext context, int length) {
+  Widget _firstChild(
+    BuildContext context,
+    int length,
+    FriendCubit cubit,
+    FriendState state,
+  ) {
     return Column(
       children: [
         10.height,
-        CubitScopeValue(
-          cubit: context.read<FriendCubit>(),
-          builder: (context, cubit, state) {
-            return _buildAddFriendSection(context, cubit, state);
-          },
-        ),
+
+        _buildAddFriendSection(context, cubit, state),
+
         10.height,
         // _buildStatusMessage(context),
         CommonButton(

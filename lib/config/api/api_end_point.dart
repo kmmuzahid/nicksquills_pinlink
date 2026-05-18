@@ -57,8 +57,6 @@ class ApiEndPoint {
 
   final String createFriend = '/friend/create-friend';
 
-  final String allFriends = '/friend/all-friends';
-
   final String rankData = '/compareCourse/rank-data';
 
   final String createCompareCourse = '/compareCourse/create';
@@ -72,4 +70,7 @@ class ApiEndPoint {
   final String coursePost = '/course/post';
 
   final String postDetails = '/post';
+
+  //
+  final String allFriends = '/friend/all-friends';
 }

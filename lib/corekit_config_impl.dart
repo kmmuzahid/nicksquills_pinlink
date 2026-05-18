@@ -23,6 +23,8 @@ class CoreKitConfigImpl extends CoreKitConfig with CoreKitConfigDefaults {
     return DioServiceConfig(
       baseUrl: ApiEndPoint.instance.baseUrl,
       refreshTokenEndpoint: ApiEndPoint.instance.refreshTokenEndpoint,
+      refreshTokenHeaderKey: 'refreshToken',
+      refreshTokenRequestMethod: .POST,
       onLogout: () {
         context.read<AuthCubit>().clearTokens();
       },
@@ -36,17 +38,14 @@ class CoreKitConfigImpl extends CoreKitConfig with CoreKitConfigDefaults {
       accessToken: () async =>
           (await StorageService.instance.accessToken) ?? '',
       refreshToken: () async {
-        AppLogger.debug(
-          (await StorageService.instance.refreshToken).toString(),
-          tag: 'refreshToken',
-        );
-        return (await StorageService.instance.refreshToken) ?? '';
+        final token = await StorageService.instance.refreshToken;
+
+        return token ?? '';
       },
       updateTokens: (data) async {
-        AppLogger.debug('Update Tokens', tag: 'updateTokens');
         await context.read<AuthCubit>().updateTokens(
           data['accessToken'],
-          data['refreshToken'],
+          (await StorageService.instance.refreshToken) ?? '',
         );
       },
     );

@@ -36,6 +36,8 @@ import 'package:pinlink/coreFeature/terms/privacy_policy_screen.dart' as _i16;
 import 'package:pinlink/coreFeature/terms/terms_of_use_screen.dart' as _i23;
 import 'package:pinlink/features/course_comparision/cubit/add_course_cubit.dart'
     as _i27;
+import 'package:pinlink/features/course_comparision/model/course_model.dart'
+    as _i29;
 import 'package:pinlink/features/course_comparision/screens/add_course_screen.dart'
     as _i2;
 import 'package:pinlink/features/course_comparision/screens/comparison_screen.dart'
@@ -44,7 +46,7 @@ import 'package:pinlink/features/leaderboard/screens/build_tournament_screen.dar
     as _i3;
 import 'package:pinlink/features/leaderboard/screens/friend_screen.dart'
     as _i10;
-import 'package:pinlink/features/social/model/post_model.dart' as _i29;
+import 'package:pinlink/features/social/model/post_model.dart' as _i30;
 import 'package:pinlink/features/social/screens/create_post_screen.dart' as _i6;
 import 'package:pinlink/features/social/screens/post_details_screen.dart'
     as _i15;
@@ -254,18 +256,51 @@ class ComparisonRouteArgs {
 
 /// generated route for
 /// [_i6.CreatePostScreen]
-class CreatePostRoute extends _i25.PageRouteInfo<void> {
-  const CreatePostRoute({List<_i25.PageRouteInfo>? children})
-    : super(CreatePostRoute.name, initialChildren: children);
+class CreatePostRoute extends _i25.PageRouteInfo<CreatePostRouteArgs> {
+  CreatePostRoute({
+    _i26.Key? key,
+    _i29.CourseModel? courseModel,
+    List<_i25.PageRouteInfo>? children,
+  }) : super(
+         CreatePostRoute.name,
+         args: CreatePostRouteArgs(key: key, courseModel: courseModel),
+         initialChildren: children,
+       );
 
   static const String name = 'CreatePostRoute';
 
   static _i25.PageInfo page = _i25.PageInfo(
     name,
     builder: (data) {
-      return const _i6.CreatePostScreen();
+      final args = data.argsAs<CreatePostRouteArgs>(
+        orElse: () => const CreatePostRouteArgs(),
+      );
+      return _i6.CreatePostScreen(key: args.key, courseModel: args.courseModel);
     },
   );
+}
+
+class CreatePostRouteArgs {
+  const CreatePostRouteArgs({this.key, this.courseModel});
+
+  final _i26.Key? key;
+
+  final _i29.CourseModel? courseModel;
+
+  @override
+  String toString() {
+    return 'CreatePostRouteArgs{key: $key, courseModel: $courseModel}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! CreatePostRouteArgs) return false;
+    return key == other.key && courseModel == other.courseModel;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ courseModel.hashCode;
 }
 
 /// generated route for
@@ -436,7 +471,7 @@ class PostDetailsRoute extends _i25.PageRouteInfo<PostDetailsRouteArgs> {
     _i26.Key? key,
     required String? postId,
     required void Function() reportPost,
-    required void Function(_i29.PostModel) onChanged,
+    required void Function(_i30.PostModel) onChanged,
     List<_i25.PageRouteInfo>? children,
   }) : super(
          PostDetailsRoute.name,
@@ -479,7 +514,7 @@ class PostDetailsRouteArgs {
 
   final void Function() reportPost;
 
-  final void Function(_i29.PostModel) onChanged;
+  final void Function(_i30.PostModel) onChanged;
 
   @override
   String toString() {
