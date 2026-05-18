@@ -33,6 +33,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
         create: () => LeaderboardCubit()..fetchLeaderboard(),
         builder: (context, cubit, state) {
           return SmartListLoader(
+            padding: .only(bottom: 40.h, left: 16.w, right: 16.w),
             isLoading: state.isLeaderBoardLoading,
             onRefresh: () {
               cubit.fetchLeaderboard(page: 1, isRefresh: true);
@@ -46,7 +47,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                       (state.leaderboardList.length > 3
                           ? state.leaderboardList.length - 3
                           : 0),
-            padding: const EdgeInsets.symmetric(horizontal: 16),
             itemBuilder: (context, index) {
               if (index == 0) {
                 return _topChild(context, state, cubit);

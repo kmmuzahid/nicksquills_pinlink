@@ -184,108 +184,6 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  void showReRankDailoge(
-    BuildContext context, {
-    bool isPinlin5 = false,
-    required UserCourseModel course,
-  }) {
-    final title = isPinlin5
-        ? 'Hey! You just played a PinLinks 5.'
-        : 'Course Completed!';
-    final subtitle = isPinlin5
-        ? 'Join Pro & get 100 points.'
-        : 'Would you like to rate this course now?';
-
-    final primaryButtonTitle = isPinlin5 ? 'Get Pro' : 'Later';
-    final primaryButtonAction = isPinlin5
-        ? () {
-            appRouter.push(SubscriptionsRoute());
-          }
-        : () {};
-
-    final widget = Container(
-      decoration: BoxDecoration(
-        color: context.colors.bACKGROUND_darkCard,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      padding: const EdgeInsets.only(top: 8, bottom: 10, left: 16, right: 16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(Icons.close, color: context.colors.tEXT_subDark),
-          ).end,
-          CommonText(
-            text: title,
-            fontSize: 24,
-            maxLines: 2,
-            textAlign: TextAlign.center,
-            textColor: context.colors.tEXT_white,
-            fontWeight: FontWeight.w500,
-          ),
-          16.height,
-          CommonText(
-            text: subtitle,
-            fontSize: 14,
-            maxLines: 5,
-            textAlign: TextAlign.center,
-            textColor: context.colors.tEXT_sub,
-            fontWeight: FontWeight.w500,
-          ),
-          20.height,
-
-          Row(
-            children: [
-              Expanded(
-                child: CommonButton(
-                  buttonWidth: .infinity,
-                  titleText: primaryButtonTitle,
-                  onTap: () {
-                    Navigator.pop(context);
-                    primaryButtonAction();
-                  },
-                ),
-              ),
-              10.width,
-              Expanded(
-                child: CommonButton(
-                  titleColor: context.colors.tEXT_dark,
-                  buttonColor: context.colors.ratingPremiumTags_goldAccent,
-                  buttonWidth: .infinity,
-                  titleText: 'Add Rank',
-                  onTap: () {
-                    Navigator.pop(context);
-                    context.read<AddCourseCubit>().selectCourse(
-                      CourseModel(
-                        id: course.courseId?.id,
-                        name: course.courseId?.name,
-                        locationName: course.courseId?.locationName,
-                        image: course.courseId?.image,
-                        latitude: course.courseId?.latitude,
-                        longitude: course.courseId?.longitude,
-                        isPinkLink5: course.isPinkLink5,
-                      ),
-                    );
-                    context.read<NavigationCubit>().changeIndex(2);
-                  },
-                ),
-              ),
-              20.height,
-            ],
-          ),
-        ],
-      ),
-    );
-    showDialog(
-      context: context,
-      builder: (context) =>
-          Dialog(insetPadding: const EdgeInsets.all(16), child: widget),
-    );
-  }
-
   Container _subHeaderForPost(BuildContext context) {
     return Container(
       color: context.colors.background,
@@ -585,4 +483,106 @@ class ProfileScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+void showReRankDailoge(
+  BuildContext context, {
+  bool isPinlin5 = false,
+  required UserCourseModel course,
+}) {
+  final title = isPinlin5
+      ? 'Hey! You just played a PinLinks 5.'
+      : 'Course Completed!';
+  final subtitle = isPinlin5
+      ? 'Join Pro & get 100 points.'
+      : 'Would you like to rate this course now?';
+
+  final primaryButtonTitle = isPinlin5 ? 'Get Pro' : 'Later';
+  final primaryButtonAction = isPinlin5
+      ? () {
+          appRouter.push(SubscriptionsRoute());
+        }
+      : () {};
+
+  final widget = Container(
+    decoration: BoxDecoration(
+      color: context.colors.bACKGROUND_darkCard,
+      borderRadius: BorderRadius.circular(16),
+    ),
+    padding: const EdgeInsets.only(top: 8, bottom: 10, left: 16, right: 16),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.close, color: context.colors.tEXT_subDark),
+        ).end,
+        CommonText(
+          text: title,
+          fontSize: 24,
+          maxLines: 2,
+          textAlign: TextAlign.center,
+          textColor: context.colors.tEXT_white,
+          fontWeight: FontWeight.w500,
+        ),
+        16.height,
+        CommonText(
+          text: subtitle,
+          fontSize: 14,
+          maxLines: 5,
+          textAlign: TextAlign.center,
+          textColor: context.colors.tEXT_sub,
+          fontWeight: FontWeight.w500,
+        ),
+        20.height,
+
+        Row(
+          children: [
+            Expanded(
+              child: CommonButton(
+                buttonWidth: .infinity,
+                titleText: primaryButtonTitle,
+                onTap: () {
+                  Navigator.pop(context);
+                  primaryButtonAction();
+                },
+              ),
+            ),
+            10.width,
+            Expanded(
+              child: CommonButton(
+                titleColor: context.colors.tEXT_dark,
+                buttonColor: context.colors.ratingPremiumTags_goldAccent,
+                buttonWidth: .infinity,
+                titleText: 'Add Rank',
+                onTap: () {
+                  Navigator.pop(context);
+                  context.read<AddCourseCubit>().selectCourse(
+                    CourseModel(
+                      id: course.courseId?.id,
+                      name: course.courseId?.name,
+                      locationName: course.courseId?.locationName,
+                      image: course.courseId?.image,
+                      latitude: course.courseId?.latitude,
+                      longitude: course.courseId?.longitude,
+                      isPinkLink5: course.isPinkLink5,
+                    ),
+                  );
+                  context.read<NavigationCubit>().changeIndex(2);
+                },
+              ),
+            ),
+            20.height,
+          ],
+        ),
+      ],
+    ),
+  );
+  showDialog(
+    context: context,
+    builder: (context) =>
+        Dialog(insetPadding: const EdgeInsets.all(16), child: widget),
+  );
 }

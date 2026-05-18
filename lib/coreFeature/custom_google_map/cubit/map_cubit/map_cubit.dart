@@ -20,7 +20,7 @@ import 'package:pinlink/gen/assets.gen.dart';
 import 'package:widget_to_marker/widget_to_marker.dart';
 
 class MapCubit extends SafeCubit<MapState> {
-  MapCubit()
+  MapCubit({this.enableFilter = false})
     : locationInitUseCase = const LocationInitializationUseCase('last_gps'),
       markerCreationUseCase = MarkerCreationUseCase(),
       polylineUseCase = const PolylineUseCase(),
@@ -32,6 +32,7 @@ class MapCubit extends SafeCubit<MapState> {
   final PlaceDetailsUseCase placeDetailsUseCase;
   late MapRenderingUseCase mapRenderingUseCase;
   late GoogleMapController mapController;
+  final bool enableFilter;
 
   void onTravelModeChange(TravelMode mode) {
     emit(state.copyWith(travelMode: mode));
@@ -44,10 +45,7 @@ class MapCubit extends SafeCubit<MapState> {
     }
   }
 
-  Future<void> onMapCreated(
-    GoogleMapController controller, {
-    required MapFilters? mapFilters,
-  }) async {
+  Future<void> onMapCreated(GoogleMapController controller) async {
     if (state.isLoading) return;
     emit(state.copyWith(isLoading: true));
     mapController = controller;
@@ -70,7 +68,7 @@ class MapCubit extends SafeCubit<MapState> {
     await setCurrentPosition();
     emit(state.copyWith(initializing: false, isLoading: false));
     //app logic
-    if (mapFilters != null) onCameraIdle(mapFilters);
+    if (enableFilter) onCameraIdle();
   }
 
   Future<void> setCurrentPosition() async {
@@ -190,7 +188,7 @@ class MapCubit extends SafeCubit<MapState> {
           starting: details,
           markers: updatedMarkers,
           mapRoute: {},
-          courseId: '',
+          selectedCourse: MapPointModel(),
         ),
       );
 
@@ -241,20 +239,32 @@ class MapCubit extends SafeCubit<MapState> {
     await setPoint(coordinate: placeDetails.coordinate);
   }
 
-  void clearCourseId() {
-    emit(state.copyWith(courseId: ''));
+  void clearSelectedCourse() {
+    _ignoreCameraIdle = false;
+    emit(state.copyWith(selectedCourse: MapPointModel()));
   }
 
   // app based
   bool _isLoading = false;
   bool _ignoreCameraIdle = false;
   final _mapBusinessRepository = getIt<MapBusinessRepository>();
+  CancelToken? _cancelToken;
 
-  Future<void> onCameraIdle(MapFilters mapFilters) async {
-    if (_isLoading || state.initializing || _ignoreCameraIdle) return;
+  Future<void> onCameraIdle({bool isFirstLoad = false}) async {
+    if (_isLoading ||
+        state.initializing ||
+        _ignoreCameraIdle ||
+        state.isFirstTimeFetch) {
+      return;
+    }
     _isLoading = true;
+    if (isFirstLoad) {
+      emit(state.copyWith(isInitalLoading: true, markers: {}, mapRoute: {}));
+    }
 
     try {
+      _cancelToken?.cancel();
+      _cancelToken = CancelToken();
       final bounds = await mapController.getVisibleRegion();
 
       final result = await _mapBusinessRepository.getCourseMap(
@@ -262,8 +272,12 @@ class MapCubit extends SafeCubit<MapState> {
         bottomLat: bounds.southwest.latitude,
         leftLng: bounds.southwest.longitude,
         rightLng: bounds.northeast.longitude,
-        mapFilters: mapFilters,
+        mapFilters: state.selectedFilter,
+        cancelToken: _cancelToken!,
       );
+      _cancelToken = null;
+      _isLoading = false;
+      if (isFirstLoad) emit(state.copyWith(isInitalLoading: false));
 
       if (result.isSuccess && result.data?.value != null) {
         final dataList = result.data?.value as List<MapPointModel>;
@@ -271,7 +285,9 @@ class MapCubit extends SafeCubit<MapState> {
 
         // Function to build marker for a parking point
         Future<Marker> buildMarker(MapPointModel data) async {
-          final bitmap = await markerWidget(mapFilters).toBitmapDescriptor();
+          final bitmap = await markerWidget(
+            state.selectedFilter,
+          ).toBitmapDescriptor();
 
           final position = LatLng(data.latitude!, data.longitude!);
 
@@ -282,9 +298,9 @@ class MapCubit extends SafeCubit<MapState> {
             consumeTapEvents: true,
             onTap: () async {
               _ignoreCameraIdle = true;
-              emit(state.copyWith(courseId: ''));
+              emit(state.copyWith(selectedCourse: MapPointModel()));
               await Future.delayed(const Duration(milliseconds: 100));
-              emit(state.copyWith(courseId: data.id ?? ''));
+              emit(state.copyWith(selectedCourse: data));
             },
           );
         }
@@ -320,6 +336,8 @@ class MapCubit extends SafeCubit<MapState> {
       debugPrint('Error in onCameraIdle: $e\n$st');
     } finally {
       _isLoading = false;
+      _cancelToken = null;
+      emit(state.copyWith(isInitalLoading: false));
     }
   }
 
@@ -331,5 +349,18 @@ class MapCubit extends SafeCubit<MapState> {
       height: 35.h,
       imageColor: color,
     );
+  }
+
+  Future<void> changeFilter(MapFilters selectedFilter) async {
+    _ignoreCameraIdle = false;
+    emit(
+      state.copyWith(
+        selectedFilter: selectedFilter,
+        totalCourse: 0,
+        selectedCourse: MapPointModel(),
+        isInitalLoading: false,
+      ),
+    );
+    onCameraIdle(isFirstLoad: true);
   }
 }

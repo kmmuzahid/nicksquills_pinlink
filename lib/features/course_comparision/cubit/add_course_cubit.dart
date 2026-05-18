@@ -258,7 +258,7 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
     final stars = _calculateStarRatings(courseId);
 
     final userCourse = UserCourseModel(
-      courseId: CourseId(
+      courseId: Course(
         id: course.id,
         name: course.name,
         locationName: course.locationName,

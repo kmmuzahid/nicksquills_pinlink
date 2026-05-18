@@ -2,6 +2,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:pinlink/constant/enums.dart';
+import 'package:pinlink/coreFeature/custom_google_map/model/business_model/map_point_model.dart';
 import 'package:pinlink/coreFeature/custom_google_map/model/place_details.dart';
 
 enum PointType { starting, destination }
@@ -18,7 +20,9 @@ class MapState extends Equatable {
     required this.isLoading,
     this.destination,
     required this.totalCourse,
-    required this.courseId,
+    required this.selectedCourse,
+    required this.selectedFilter,
+    required this.isFirstTimeFetch,
   });
 
   // Create an initial state
@@ -34,12 +38,15 @@ class MapState extends Equatable {
         coordinate: LatLng(51.165691, 10.451526),
       ),
       totalCourse = 0,
-      courseId = '',
+      selectedCourse = MapPointModel(),
       destination = null,
+      selectedFilter = MapFilters.Played,
+      isFirstTimeFetch = false,
       // destination = const PlaceDetails(address: 'Merul Badda', coordinate: LatLng(23.772109, 90.419656)),
       initializing = true;
   final int totalCourse; // business related
-  final String courseId; //
+  final MapPointModel selectedCourse; // business related
+  final MapFilters selectedFilter; // business related
   final PointType lastPikedPointType;
   final PlaceDetails starting;
   final PlaceDetails? destination;
@@ -49,6 +56,7 @@ class MapState extends Equatable {
   final TravelMode travelMode;
   final bool initialized;
   final bool initializing;
+  final bool isFirstTimeFetch;
 
   // Copy constructor for state update
 
@@ -65,7 +73,9 @@ class MapState extends Equatable {
       initializing,
       lastPikedPointType,
       totalCourse,
-      courseId,
+      selectedCourse,
+      isFirstTimeFetch,
+      selectedFilter,
     ];
   }
 
@@ -80,9 +90,13 @@ class MapState extends Equatable {
     bool? initialized,
     bool? initializing,
     int? totalCourse,
-    String? courseId,
+    MapPointModel? selectedCourse,
+    bool? isInitalLoading,
+    MapFilters? selectedFilter,
   }) {
     return MapState(
+      isFirstTimeFetch: isInitalLoading ?? isFirstTimeFetch,
+      selectedFilter: selectedFilter ?? this.selectedFilter,
       lastPikedPointType: lastPikedPointType ?? this.lastPikedPointType,
       starting: starting ?? this.starting,
       destination: destination ?? this.destination,
@@ -93,7 +107,7 @@ class MapState extends Equatable {
       initialized: initialized ?? this.initialized,
       initializing: initializing ?? this.initializing,
       totalCourse: totalCourse ?? this.totalCourse,
-      courseId: courseId ?? this.courseId,
+      selectedCourse: selectedCourse ?? this.selectedCourse,
     );
   }
 }

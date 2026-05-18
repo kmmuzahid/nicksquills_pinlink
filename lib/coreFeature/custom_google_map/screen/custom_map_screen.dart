@@ -5,11 +5,9 @@
  */
 import 'package:auto_route/auto_route.dart';
 import 'package:core_kit/app_bar/common_app_bar.dart';
-import 'package:core_kit/text/common_text.dart';
 import 'package:core_kit/utils/core_screen_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pinlink/config/bloc/cubit_scope_value.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/constant/enums.dart';
@@ -23,7 +21,7 @@ class CustomMapScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => BlocProvider(
-    create: (context) => MapCubit(),
+    create: (context) => MapCubit(enableFilter: mapFilters != null),
     child: LayoutBuilder(
       builder: (context, _) {
         return Scaffold(
@@ -68,20 +66,20 @@ class CustomMapScreen extends StatelessWidget {
                       ),
                     ]
                   : [
-                      CubitScopeValue(
-                        cubit: context.read<MapCubit>(),
-                        builder: (contex, cubit, state) => CommonText(
-                          text: 'Total: ${state.totalCourse}',
-                          fontWeight: .bold,
-                          fontSize: 18,
-                          textColor: contex.colors.tEXT_white,
-                        ),
-                      ),
+                      // CubitScopeValue(
+                      //   cubit: context.read<MapCubit>(),
+                      //   builder: (contex, cubit, state) => CommonText(
+                      //     text: 'Total: ${state.totalCourse}',
+                      //     fontWeight: .bold,
+                      //     fontSize: 18,
+                      //     textColor: contex.colors.tEXT_white,
+                      //   ),
+                      // ),
                     ],
             ),
           ),
           body: CustomGoogleMap(
-            mapFilters: mapFilters,
+            filterPlayedModeOnlyEnabled: mapFilters != null,
             widgets: (contex, state) => [],
           ),
         );

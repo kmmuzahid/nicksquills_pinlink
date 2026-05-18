@@ -9,7 +9,7 @@ class UserCourseModel {
   @JsonKey(name: 'userId')
   final String? userId;
   @JsonKey(name: 'courseId')
-  final CourseId? courseId;
+  final Course? courseId;
   @JsonKey(name: 'favorite')
   final double? favorite;
   @JsonKey(name: 'scenery')
@@ -59,7 +59,7 @@ class UserCourseModel {
   UserCourseModel copyWith({
     String? id,
     String? userId,
-    CourseId? courseId,
+    Course? courseId,
     double? favorite,
     double? scenery,
     double? difficulty,
@@ -99,7 +99,7 @@ class UserCourseModel {
 }
 
 @JsonSerializable()
-class CourseId {
+class Course {
   @JsonKey(name: '_id')
   final String? id;
   @JsonKey(name: 'name')
@@ -115,7 +115,7 @@ class CourseId {
   @JsonKey(name: 'longitude')
   final double? longitude;
 
-  CourseId({
+  Course({
     this.id,
     this.name,
     this.locationName,
@@ -125,7 +125,6 @@ class CourseId {
     this.longitude,
   });
 
-  factory CourseId.fromJson(Map<String, dynamic> json) =>
-      _$CourseIdFromJson(json);
-  Map<String, dynamic> toJson() => _$CourseIdToJson(this);
+  factory Course.fromJson(Map<String, dynamic> json) => _$CourseFromJson(json);
+  Map<String, dynamic> toJson() => _$CourseToJson(this);
 }

@@ -117,30 +117,39 @@ class NavigationScreen extends StatelessWidget {
                 ),
 
                 body: Stack(
-                  children: getpage(socialCubit).asMap().entries.map((entry) {
-                    final index = entry.key;
-                    final item = entry.value;
-                    final isActive = state.currentIndex == index;
-                    return IgnorePointer(
-                      ignoring: !isActive,
-                      child: AnimatedOpacity(
-                        opacity: isActive ? 1.0 : 0.0,
-                        duration: const Duration(milliseconds: 350),
-                        curve: Curves.easeOutCubic,
-                        child: item.screen,
+                  children: [
+                    ...getpage(socialCubit).asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final item = entry.value;
+                      final isActive = state.currentIndex == index;
+                      return IgnorePointer(
+                        ignoring: !isActive,
+                        child: AnimatedOpacity(
+                          opacity: isActive ? 1.0 : 0.0,
+                          duration: const Duration(milliseconds: 350),
+                          curve: Curves.easeOutCubic,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 80),
+                            child: item.screen,
+                          ),
+                        ),
+                      );
+                    }),
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: CustomBottomNavBar(
+                        currentIndex: state.currentIndex,
+                        onTap: (index) => cubit.changeIndex(index),
+                        items: getpage(socialCubit),
+                        onCenterTap: () {
+                          cubit.changeIndex(2);
+                        },
                       ),
-                    );
-                  }).toList(),
+                    ),
+                  ],
                 ),
-                bottomNavigationBar: CustomBottomNavBar(
-                  currentIndex: state.currentIndex,
-                  onTap: (index) => cubit.changeIndex(index),
-                  items: getpage(socialCubit),
-                  onCenterTap: () {
-                    cubit.changeIndex(2);
-                  },
-                ),
-                // drawer: const DrawerWidget(),
               );
             },
           );
@@ -304,92 +313,82 @@ class CustomBottomNavBar extends StatelessWidget {
     final leftItems = items.sublist(0, 2);
     final rightItems = items.sublist(3, 5);
 
-    return SafeArea(
-      top: false,
-      bottom: true,
-      child: Container(
-        height: 120,
-        width: MediaQuery.of(context).size.width - 8,
-        color: Colors.transparent,
-        child: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            // The Custom Background Shape
-            CustomPaint(
-              size: Size(MediaQuery.of(context).size.width - 8, 110),
-              painter: WaveNavBarPainter(
-                color: navBgColor,
-                borderColor: context.colors.bACKGROUND_darkCardBoarder,
+    return Container(
+      height: 120,
+      margin: const EdgeInsets.only(bottom: 10),
+      width: MediaQuery.of(context).size.width - 8,
+      color: Colors.transparent,
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          // The Custom Background Shape
+          CustomPaint(
+            size: Size(MediaQuery.of(context).size.width - 8, 110),
+            painter: WaveNavBarPainter(
+              color: navBgColor,
+              borderColor: context.colors.bACKGROUND_darkCardBoarder,
+            ),
+
+            child: Container(
+              height: 100,
+
+              padding: const EdgeInsets.only(bottom: 20),
+              child: Row(
+                crossAxisAlignment: .end,
+                children: [
+                  ..._buildNavGroup(leftItems, 0, activeColor, inactiveColor),
+                  const SizedBox(width: 80), // Space for center button
+                  ..._buildNavGroup(rightItems, 3, activeColor, inactiveColor),
+                ],
               ),
+            ),
+          ),
 
+          // The Floating Center Action Button
+          Positioned(
+            top: 10,
+            child: GestureDetector(
+              onTap: onCenterTap,
               child: Container(
-                height: 100,
-
-                padding: const EdgeInsets.only(bottom: 20),
-                child: Row(
-                  crossAxisAlignment: .end,
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: navBgColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: glowColor.withOpacity(0.5),
+                      blurRadius: 20,
+                      spreadRadius: 2,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisAlignment: .center,
+                  crossAxisAlignment: .center,
                   children: [
-                    ..._buildNavGroup(leftItems, 0, activeColor, inactiveColor),
-                    const SizedBox(width: 80), // Space for center button
-                    ..._buildNavGroup(
-                      rightItems,
-                      3,
-                      activeColor,
-                      inactiveColor,
+                    Icon(
+                      Icons.golf_course,
+                      color: currentIndex == 2 ? activeColor : inactiveColor,
+                      size: 30,
+                    ),
+                    const SizedBox(height: 4),
+                    CommonText(
+                      text: 'Ranking',
+                      style: TextStyle(
+                        color: currentIndex == 2 ? activeColor : inactiveColor,
+                        fontSize: 11,
+                        fontWeight: currentIndex == 2
+                            ? FontWeight.bold
+                            : FontWeight.w400,
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
-
-            // The Floating Center Action Button
-            Positioned(
-              top: 10,
-              child: GestureDetector(
-                onTap: onCenterTap,
-                child: Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: navBgColor,
-                    boxShadow: [
-                      BoxShadow(
-                        color: glowColor.withOpacity(0.5),
-                        blurRadius: 20,
-                        spreadRadius: 2,
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisAlignment: .center,
-                    crossAxisAlignment: .center,
-                    children: [
-                      Icon(
-                        Icons.golf_course,
-                        color: currentIndex == 2 ? activeColor : inactiveColor,
-                        size: 30,
-                      ),
-                      const SizedBox(height: 4),
-                      CommonText(
-                        text: 'Ranking',
-                        style: TextStyle(
-                          color: currentIndex == 2
-                              ? activeColor
-                              : inactiveColor,
-                          fontSize: 11,
-                          fontWeight: currentIndex == 2
-                              ? FontWeight.bold
-                              : FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -480,36 +479,39 @@ class WaveNavBarPainter extends CustomPainter {
 
     path.moveTo(offset + radius, offset);
 
-    path.lineTo(offset + w - radius, offset);
+    // Draw the custom top edge curve with a dip/wave in the middle
+    path.quadraticBezierTo(
+      offset + w * .5,
+      offset + h - 40,
+      offset + w - radius,
+      offset,
+    );
+
+    // Draw top-right corner
     path.arcToPoint(
       Offset(offset + w, offset + radius),
       radius: Radius.circular(radius),
     );
 
+    // Draw right side down
     path.lineTo(offset + w, offset + h - radius);
     path.arcToPoint(
       Offset(offset + w - radius, offset + h),
       radius: Radius.circular(radius),
     );
 
+    // Draw bottom edge
     path.lineTo(offset + radius, offset + h);
     path.arcToPoint(
       Offset(offset, offset + h - radius),
       radius: Radius.circular(radius),
     );
 
+    // Draw left side up
     path.lineTo(offset, offset + radius);
     path.arcToPoint(
       Offset(offset + radius, offset),
       radius: Radius.circular(radius),
-    );
-
-    // your custom curve
-    path.quadraticBezierTo(
-      offset + w * .5,
-      offset + h - 40,
-      offset + w - radius,
-      offset,
     );
 
     path.close();

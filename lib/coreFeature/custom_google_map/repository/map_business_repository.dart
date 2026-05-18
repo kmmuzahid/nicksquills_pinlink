@@ -13,11 +13,13 @@ class MapBusinessRepository {
     required double rightLng,
     String? searchQuery,
     required MapFilters mapFilters,
+    required CancelToken cancelToken,
   }) async {
     return DioService.instance.request(
       input: RequestInput(
         endpoint: ApiEndPoint.instance.courseMap,
         method: .GET,
+        cancelToken: cancelToken,
         queryParams: {
           "type": mapFilters.value,
           "topLat": topLat,

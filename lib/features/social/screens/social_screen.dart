@@ -25,6 +25,7 @@ class SocialScreen extends StatelessWidget {
         cubit: socialCubit,
         builder: (context, cubit, state) {
           return SmartStaggeredLoader(
+            padding: .only(bottom: 40.h),
             appbar: _topWidget(context, cubit),
             onColapsAppbar: Container(
               padding: const .only(bottom: 4),

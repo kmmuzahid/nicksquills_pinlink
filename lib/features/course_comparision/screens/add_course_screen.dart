@@ -169,6 +169,7 @@ class AddCourseScreen extends StatelessWidget {
                 ),
               ),
               if (enableSafeArea) 16.height,
+              if (isInNavigation) 40.height,
             ],
           );
         },
