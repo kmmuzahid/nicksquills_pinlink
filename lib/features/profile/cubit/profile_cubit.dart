@@ -26,16 +26,13 @@ class ProfileCubit extends SafeCubit<ProfileCubitState> {
     if (state.isPostLoading) return;
     emit(state.copyWith(isPostLoading: true, posts: isRefresh ? [] : null));
     final result = await _repository.getAllPost(page: page, userPostOnly: true);
-    if (result.isSuccess) {
-      emit(
-        state.copyWith(
-          posts: [...state.posts, ...(result.data ?? [])],
-          isPostLoading: false,
-        ),
-      );
-    } else {
-      emit(state.copyWith(isPostLoading: false));
-    }
+
+    emit(
+      state.copyWith(
+        posts: [...state.posts, ...(result.data ?? [])],
+        isPostLoading: false,
+      ),
+    );
   }
 
   Future<void> getUserPlayedCourse(int page, {bool isRefresh = false}) async {

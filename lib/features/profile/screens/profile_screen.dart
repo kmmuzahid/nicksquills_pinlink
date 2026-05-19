@@ -51,153 +51,156 @@ class ProfileScreen extends StatelessWidget {
                 cubit.getUserPosts(1, isRefresh: true);
               }
             },
-            child: Builder(builder: (context) {
-          final hasSubscription =
-              context
-                  .read<AuthCubit>()
-                  .state
-                  .profile
-                  ?.subscription
-                  ?.where((e) => (e?.amount ?? 0) > 0)
-                  .isNotEmpty ??
-              false;
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final fixedWidth = (constraints.maxWidth * 0.42);
-              final rattingWidth = (constraints.maxWidth - fixedWidth) / 4;
-              return SmartTabListLoader(
-                onLoadMore: (ctx, page) {
-                  if (ctx.tab == .MyPosts) {
-                    cubit.getUserPosts(page);
-                  } else if (ctx.tab == .MyCourses) {
-                    cubit.getUserPlayedCourse(page);
-                  } else if (ctx.tab == .MyWishlist) {
-                    cubit.getUserWishlistCourse(page);
-                  }
-                },
-                onRefresh: (ctx) async {
-                  if (ctx.tab == .MyPosts) {
-                    cubit.getUserPosts(1, isRefresh: true);
-                  } else if (ctx.tab == .MyCourses) {
-                    cubit.getUserPlayedCourse(1, isRefresh: true);
-                  } else if (ctx.tab == .MyWishlist) {
-                    cubit.getUserWishlistCourse(1, isRefresh: true);
-                  }
-                },
-                appbar: _appbar(context, cubit, state),
-
-                onColapsAppbar: _onColupseGenral(context, cubit, state),
-                padding: .only(bottom: 45.h, left: 16.w, right: 16.w),
-                tabs: [
-                  SmartTabConfig(
-                    isLoading: state.isPostLoading,
-                    onReorder: (oldIndex, newIndex) {
-                      cubit.reorderCourses(oldIndex, newIndex);
-                    },
-                    subAppBar: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Column(
-                        children: [
-                          _headline(context, state),
-                          10.height,
-                          _subHeader(
-                            cubit,
-                            state.selectedFilter,
-                            fixedWidth: fixedWidth,
-                            rattingWidth: rattingWidth,
-                          ),
-                          8.height,
-                        ],
-                      ),
-                    ),
-                    subOnColapsAppbar: Container(
-                      color: context.colors.background,
-                      padding: const EdgeInsets.only(
-                        left: 16,
-                        right: 16,
-                        bottom: 4,
-                      ),
-                      child: Column(
-                        children: [
-                          _headline(context, state),
-                          10.height,
-                          _subHeader(
-                            cubit,
-                            state.selectedFilter,
-                            fixedWidth: fixedWidth,
-                            rattingWidth: rattingWidth,
-                          ),
-                          8.height,
-                        ],
-                      ),
-                    ),
-                    tab: FilterProfile.MyCourses,
-                    itemCount: state.userCourses.length,
-                  ),
-                  SmartTabConfig(
-                    isLoading: state.isUserPlayedCourseLoading,
-                    tab: FilterProfile.MyPosts,
-                    subOnColapsAppbar: _subHeaderForPost(context),
-                    subAppBar: _subHeaderForPost(context),
-                    itemCount: state.posts.length,
-                    gridConfig: GridConfig(itemInRow: 2),
-                  ),
-                  SmartTabConfig(
-                    isLoading: state.isWishListLoading,
-                    subOnColapsAppbar: Container(
-                      color: context.colors.background,
-                      padding: const EdgeInsets.only(
-                        left: 16,
-                        right: 16,
-                        bottom: 4,
-                      ),
-                      child: _headline(context, state),
-                    ),
-                    tab: FilterProfile.MyWishlist,
-                    itemCount: state.wishListCourses.length,
-                  ),
-                ],
-                itemBuilder: (tab, index) {
-                  if (tab.tab == FilterProfile.MyCourses) {
-                    final course = state.userCourses[index];
-                    return GolfCoursePlayedItem(
-                      key: ValueKey(course.courseId?.name),
-                      controllers: cubit.controllers,
-                      fixedWidth: fixedWidth,
-                      rattingWidth: rattingWidth,
-                      course: course,
-                      selectedFilter: null,
-                      index: index,
-                      hasSubscription: hasSubscription,
-                    );
-                  } else if (tab.tab == FilterProfile.MyPosts) {
-                    return _buildRowItem(
-                      context,
-                      postModel: state.posts[index],
-                      cubit: cubit,
-                    );
-                  } else {
-                    final course = state.wishListCourses[index];
-                    return GolfCourseWishListItem(
-                      onMarkPlayed: () {
-                        showReRankDailoge(
-                          context,
-                          isPinlin5: course.isPinkLink5 ?? false,
-                          course: course,
-                        );
+            child: Builder(
+              builder: (context) {
+                final hasSubscription =
+                    context
+                        .read<AuthCubit>()
+                        .state
+                        .profile
+                        ?.subscription
+                        ?.where((e) => (e?.amount ?? 0) > 0)
+                        .isNotEmpty ??
+                    false;
+                return LayoutBuilder(
+                  builder: (context, constraints) {
+                    final fixedWidth = (constraints.maxWidth * 0.42);
+                    final rattingWidth =
+                        (constraints.maxWidth - fixedWidth) / 4;
+                    return SmartTabListLoader(
+                      onLoadMore: (ctx, page) {
+                        if (ctx.tab == .MyPosts) {
+                          cubit.getUserPosts(page);
+                        } else if (ctx.tab == .MyCourses) {
+                          cubit.getUserPlayedCourse(page);
+                        } else if (ctx.tab == .MyWishlist) {
+                          cubit.getUserWishlistCourse(page);
+                        }
                       },
-                      course: course,
-                      selectedFilter: null,
-                      index: index,
-                      fixedWidth: fixedWidth,
+                      onRefresh: (ctx) async {
+                        if (ctx.tab == .MyPosts) {
+                          cubit.getUserPosts(1, isRefresh: true);
+                        } else if (ctx.tab == .MyCourses) {
+                          cubit.getUserPlayedCourse(1, isRefresh: true);
+                        } else if (ctx.tab == .MyWishlist) {
+                          cubit.getUserWishlistCourse(1, isRefresh: true);
+                        }
+                      },
+                      appbar: _appbar(context, cubit, state),
+
+                      onColapsAppbar: _onColupseGenral(context, cubit, state),
+                      padding: .only(bottom: 45.h, left: 16.w, right: 16.w),
+                      tabs: [
+                        SmartTabConfig(
+                          isLoading: state.isUserPlayedCourseLoading,
+                          onReorder: (oldIndex, newIndex) {
+                            cubit.reorderCourses(oldIndex, newIndex);
+                          },
+                          subAppBar: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Column(
+                              children: [
+                                _headline(context, state),
+                                10.height,
+                                _subHeader(
+                                  cubit,
+                                  state.selectedFilter,
+                                  fixedWidth: fixedWidth,
+                                  rattingWidth: rattingWidth,
+                                ),
+                                8.height,
+                              ],
+                            ),
+                          ),
+                          subOnColapsAppbar: Container(
+                            color: context.colors.background,
+                            padding: const EdgeInsets.only(
+                              left: 16,
+                              right: 16,
+                              bottom: 4,
+                            ),
+                            child: Column(
+                              children: [
+                                _headline(context, state),
+                                10.height,
+                                _subHeader(
+                                  cubit,
+                                  state.selectedFilter,
+                                  fixedWidth: fixedWidth,
+                                  rattingWidth: rattingWidth,
+                                ),
+                                8.height,
+                              ],
+                            ),
+                          ),
+                          tab: FilterProfile.MyCourses,
+                          itemCount: state.userCourses.length,
+                        ),
+                        SmartTabConfig(
+                          isLoading: state.isPostLoading,
+                          tab: FilterProfile.MyPosts,
+                          subOnColapsAppbar: _subHeaderForPost(context),
+                          subAppBar: _subHeaderForPost(context),
+                          itemCount: state.posts.length,
+                          gridConfig: GridConfig(itemInRow: 2),
+                        ),
+                        SmartTabConfig(
+                          isLoading: state.isWishListLoading,
+                          subOnColapsAppbar: Container(
+                            color: context.colors.background,
+                            padding: const EdgeInsets.only(
+                              left: 16,
+                              right: 16,
+                              bottom: 4,
+                            ),
+                            child: _headline(context, state),
+                          ),
+                          tab: FilterProfile.MyWishlist,
+                          itemCount: state.wishListCourses.length,
+                        ),
+                      ],
+                      itemBuilder: (tab, index) {
+                        if (tab.tab == FilterProfile.MyCourses) {
+                          final course = state.userCourses[index];
+                          return GolfCoursePlayedItem(
+                            key: ValueKey(course.courseId?.name),
+                            controllers: cubit.controllers,
+                            fixedWidth: fixedWidth,
+                            rattingWidth: rattingWidth,
+                            course: course,
+                            selectedFilter: null,
+                            index: index,
+                            hasSubscription: hasSubscription,
+                          );
+                        } else if (tab.tab == FilterProfile.MyPosts) {
+                          return _buildRowItem(
+                            context,
+                            postModel: state.posts[index],
+                            cubit: cubit,
+                          );
+                        } else {
+                          final course = state.wishListCourses[index];
+                          return GolfCourseWishListItem(
+                            onMarkPlayed: () {
+                              showReRankDailoge(
+                                context,
+                                isPinlin5: course.isPinkLink5 ?? false,
+                                course: course,
+                              );
+                            },
+                            course: course,
+                            selectedFilter: null,
+                            index: index,
+                            fixedWidth: fixedWidth,
+                          );
+                        }
+                      },
+                      value: state.selectedFilter,
                     );
-                  }
-                },
-                value: state.selectedFilter,
-              );
-            },
-          );
-            }),
+                  },
+                );
+              },
+            ),
           );
         },
       ),
