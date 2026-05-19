@@ -3,12 +3,16 @@
  * @Date: 2026-01-07 14:10:08
  * @Email: km.muzahid@gmail.com
  */
+import 'package:core_kit/core_kit.dart';
+import 'package:core_kit/network/request_input.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pinlink/config/api/api_end_point.dart';
 import 'package:pinlink/config/bloc/safe_cubit.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart'
     show LoginRoute, SubscriptionsRoute, OnboardingRoute;
 import 'package:pinlink/config/storage/storage_key.dart';
+import 'package:pinlink/constant/enums.dart';
 import 'package:pinlink/constant/subscriptions.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_state.dart';
 import 'package:pinlink/coreFeature/auth/repository/auth_repository.dart';
@@ -31,15 +35,62 @@ class AuthCubit extends SafeCubit<AuthState> {
     }
 
     appRouter.replace(const OnboardingRoute());
+  }
 
-    // final accessToken = await StorageService.instance.accessToken;
-    // final refreshToken = await StorageService.instance.refreshToken;
-    // if ((accessToken?.isNotEmpty ?? false) && (refreshToken?.isNotEmpty ?? false)) {
-    //   emit(AuthState(accessToken: accessToken!, refreshToken: refreshToken!, role: Role.));
-    //   appRouter.replaceAll([const NavigationRoute()]);
-    // } else {
-    //   appRouter.replace(const OnboardingRoute());
-    // }
+  Future<void> changeUserSettings(UserSettings userSettings) async {
+    emit(
+      state.copyWith(
+        profile: state.profile?.copyWith(
+          isHandicap: userSettings == UserSettings.isHandicap
+              ? !(state.profile?.isHandicap ?? false)
+              : null,
+          isFriendRequest: userSettings == UserSettings.isFriendRequest
+              ? !(state.profile?.isFriendRequest ?? false)
+              : null,
+          isLeaderBoardUpdate: userSettings == UserSettings.isLeaderBoardUpdate
+              ? !(state.profile?.isLeaderBoardUpdate ?? false)
+              : null,
+          isTournamentInvite: userSettings == UserSettings.isTournamentInvite
+              ? !(state.profile?.isTournamentInvite ?? false)
+              : null,
+          isScoreUpdate: userSettings == UserSettings.isScoreUpdate
+              ? !(state.profile?.isScoreUpdate ?? false)
+              : null,
+          isPlayCourse: userSettings == UserSettings.isPlayCourse
+              ? !(state.profile?.isPlayCourse ?? false)
+              : null,
+        ),
+      ),
+    );
+
+    final result = await DioService.instance.request(
+      input: RequestInput(
+        endpoint: ApiEndPoint.instance.settingsOnOff,
+        method: .POST,
+        jsonBody: {'type': userSettings.name},
+      ),
+      responseBuilder: (json) => json,
+    );
+
+    if (result.isSuccess) {
+      getProfile();
+    }
+  }
+
+  Future<void> deleteAccount({required String password}) async {
+    final result = await DioService.instance.request(
+      showMessage: true,
+      input: RequestInput(
+        endpoint: ApiEndPoint.instance.deleteAccount,
+        method: .DELETE,
+        jsonBody: {'password': password},
+      ),
+      responseBuilder: (json) => json,
+    );
+
+    if (result.isSuccess) {
+      logout();
+    }
   }
 
   Future<void> updateTokens(String accessToken, String refreshToken) async {

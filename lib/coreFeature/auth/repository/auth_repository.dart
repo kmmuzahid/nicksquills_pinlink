@@ -6,6 +6,7 @@
 import 'package:core_kit/core_kit.dart';
 import 'package:core_kit/network/request_input.dart';
 import 'package:pinlink/config/api/api_end_point.dart';
+import 'package:pinlink/coreFeature/auth/entity/change_password_entity.dart';
 import 'package:pinlink/coreFeature/auth/entity/forget_pass_entity.dart';
 import 'package:pinlink/coreFeature/auth/entity/login_entity.dart';
 import 'package:pinlink/coreFeature/auth/entity/signup_entity.dart';
@@ -49,24 +50,22 @@ class AuthRepository {
     );
   }
 
-  // Future<ResponseState<dynamic>> logout({
-  //   required String refreshToken,
-  //   required String accessToken,
-  // }) {
-  //   return DioService.instance.request(
-  //     input: RequestInput(
-  //       headers: {
-  //         'refreshtoken': refreshToken,
-  //         'authorization': 'Bearer $accessToken',
-  //       },
-  //       endpoint: ApiEndPoint.instance.logout,
-  //       method: .POST,
-  //     ),
-  //     responseBuilder: (data) {
-  //       return data;
-  //     },
-  //   );
-  // }
+  Future<ResponseState<dynamic>> changePassword(ChangePasswordEntity entity) {
+    return DioService.instance.request(
+      showMessage: true,
+      input: RequestInput(
+        endpoint: ApiEndPoint.instance.changePassword,
+        method: .POST,
+        jsonBody: {
+          "oldPassword": entity.oldPassword,
+          "newPassword": entity.newPassword,
+        },
+      ),
+      responseBuilder: (data) {
+        return data;
+      },
+    );
+  }
 
   Future<ResponseState<dynamic>> sendOtp(
     String email, {

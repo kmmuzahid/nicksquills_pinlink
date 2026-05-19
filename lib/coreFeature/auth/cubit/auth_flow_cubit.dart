@@ -6,6 +6,7 @@ import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_flow_state.dart';
+import 'package:pinlink/coreFeature/auth/entity/change_password_entity.dart';
 import 'package:pinlink/coreFeature/auth/entity/forget_pass_entity.dart';
 import 'package:pinlink/coreFeature/auth/entity/login_entity.dart';
 import 'package:pinlink/coreFeature/auth/entity/signup_entity.dart';
@@ -48,6 +49,15 @@ class AuthFlowCubit extends SafeCubit<AuthFlowState> {
           ),
         );
       }
+    }
+  }
+
+  Future<void> changePassword(ChangePasswordEntity entity) async {
+    emit(state.copyWith(isLoading: true));
+    final result = await _authRepository.changePassword(entity);
+    emit(state.copyWith(isLoading: false));
+    if (result.isSuccess) {
+      authCubit.logout();
     }
   }
 

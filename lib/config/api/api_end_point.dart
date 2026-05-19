@@ -26,7 +26,7 @@ class ApiEndPoint {
 
   // final String logout = '/auth/logout';
 
-  final String deleteAccount = '/user/delete-account';
+  final String deleteAccount = '/users/delete-my-account';
 
   //app based
 
@@ -75,4 +75,10 @@ class ApiEndPoint {
   final String allFriends = '/friend/all-friends';
 
   final String createTournament = '/tournament/create-tournament';
+
+  final String getTournament = '/tournament/user';
+
+  final String settingsOnOff = '/users/settings-on-off';
+
+  final String support = '/support';
 }

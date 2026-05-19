@@ -4,6 +4,16 @@
  * @Email: km.muzahid@gmail.com
  */
 // ignore_for_file: constant_identifier_names
+
+enum UserSettings {
+  isHandicap,
+  isFriendRequest,
+  isLeaderBoardUpdate,
+  isTournamentInvite,
+  isScoreUpdate,
+  isPlayCourse,
+}
+
 enum SubscriptionType {
   Free("Free"),
   PIN_LINKS_CLUB_MEMBER("PinLinks Club Member"),
