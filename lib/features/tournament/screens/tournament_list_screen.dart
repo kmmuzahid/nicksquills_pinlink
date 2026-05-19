@@ -22,7 +22,7 @@ class TournamentListScreen extends StatelessWidget {
             child: Scaffold(
               extendBodyBehindAppBar: true,
               body: SmartListLoader(
-                itemCount: 20 + 1,
+                itemCount: 14 + 1,
                 appbar: Column(
                   mainAxisSize: .min,
                   children: [

@@ -49,24 +49,24 @@ class AuthRepository {
     );
   }
 
-  Future<ResponseState<dynamic>> logout({
-    required String refreshToken,
-    required String accessToken,
-  }) {
-    return DioService.instance.request(
-      input: RequestInput(
-        headers: {
-          'refreshtoken': refreshToken,
-          'authorization': 'Bearer $accessToken',
-        },
-        endpoint: ApiEndPoint.instance.logout,
-        method: .POST,
-      ),
-      responseBuilder: (data) {
-        return data;
-      },
-    );
-  }
+  // Future<ResponseState<dynamic>> logout({
+  //   required String refreshToken,
+  //   required String accessToken,
+  // }) {
+  //   return DioService.instance.request(
+  //     input: RequestInput(
+  //       headers: {
+  //         'refreshtoken': refreshToken,
+  //         'authorization': 'Bearer $accessToken',
+  //       },
+  //       endpoint: ApiEndPoint.instance.logout,
+  //       method: .POST,
+  //     ),
+  //     responseBuilder: (data) {
+  //       return data;
+  //     },
+  //   );
+  // }
 
   Future<ResponseState<dynamic>> sendOtp(
     String email, {

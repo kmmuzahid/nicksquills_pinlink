@@ -18,7 +18,7 @@ class FriendsScreen extends StatelessWidget {
     return SimpleBackground(
       appBar: const CommonAppBar(),
       body: CubitScope(
-        create: () => FriendCubit()..getAllFrendList(),
+        create: () => FriendCubit()..getAllFrendList(isTournament: false),
         builder: (context, cubit, state) {
           return SmartListLoader(
             itemCount: state.frendList.length + 1,

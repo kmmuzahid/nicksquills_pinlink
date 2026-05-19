@@ -76,11 +76,11 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
 
   final Debouncer _debouncer = Debouncer(milliseconds: 300);
 
-  final String query = '';
+  String? query;
 
   void searchCourse({String? query, int page = 1, bool isRefresh = false}) {
     _debouncer.run(() {
-      query = '';
+      this.query = query;
       getAllCourses(page: page, isRefresh: isRefresh);
     });
   }

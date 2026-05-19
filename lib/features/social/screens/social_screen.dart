@@ -33,7 +33,7 @@ class SocialScreen extends StatelessWidget {
               child: _header(cubit),
             ),
             isLoading: state.isPostLoaing,
-            gridConfig: GridConfig(aspectRatio: 0.65),
+            gridConfig: GridConfig(aspectRatio: 0.8),
             itemCount: state.posts.length,
             onRefresh: () {
               cubit.getAllPost(isRefresh: true, page: 1);

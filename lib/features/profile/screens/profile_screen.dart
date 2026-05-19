@@ -69,8 +69,8 @@ class ProfileScreen extends StatelessWidget {
                   }
                 },
                 appbar: _appbar(context, cubit, state),
-                onColapsAppbar: _onColupseGenral(context, cubit, state),
 
+                onColapsAppbar: _onColupseGenral(context, cubit, state),
                 padding: .only(bottom: 45.h, left: 16.w, right: 16.w),
                 tabs: [
                   SmartTabConfig(

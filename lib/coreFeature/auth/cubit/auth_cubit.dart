@@ -57,13 +57,13 @@ class AuthCubit extends SafeCubit<AuthState> {
   }
 
   Future<void> logout() async {
-    final result = await _authRepository.logout(
-      refreshToken: state.refreshToken,
-      accessToken: state.accessToken,
-    );
-    if (result.isSuccess) {
-      clearTokens();
-    }
+    // final result = await _authRepository.logout(
+    //   refreshToken: state.refreshToken,
+    //   accessToken: state.accessToken,
+    // );
+    // if (result.isSuccess) {
+    clearTokens();
+    // }
   }
 
   Future<void> updateSubscriptionPlan(Plan plan) async {

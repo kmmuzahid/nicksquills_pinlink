@@ -36,7 +36,7 @@ class CourseRepository {
         endpoint: ApiEndPoint.instance.courseUser,
         method: .GET,
         queryParams: {
-          'searchText': ?query,
+          'searchTerm': ?query,
           'page': page,
           'limit': 10,
           'sort': 'rank',

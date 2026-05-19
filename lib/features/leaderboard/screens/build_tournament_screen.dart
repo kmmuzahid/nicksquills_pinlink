@@ -7,6 +7,7 @@ import 'package:pinlink/common_widgets/simple_background.dart';
 import 'package:pinlink/config/bloc/cubit_scope.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/constant/constants.dart';
+import 'package:pinlink/features/course_comparision/entity/tournament_entity.dart';
 import 'package:pinlink/features/leaderboard/cubit/friend_cubit.dart';
 import 'package:pinlink/features/leaderboard/cubit/friend_state.dart';
 import 'package:pinlink/features/leaderboard/widgets/friend_list_item_widget.dart';
@@ -19,53 +20,68 @@ class BuildTournamentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SimpleBackground(
       appBar: const CommonAppBar(),
-      body: CubitScope(
-        create: () => FriendCubit()..getAllFrendList(),
-        builder: (context, cubit, state) {
-          return Column(
-            children: [
-              Expanded(
-                child: SmartListLoader(
-                  isLoading: state.isFrendListLoading,
-                  onLoadMore: (page) {
-                    cubit.getAllFrendList(page: page);
-                  },
-                  onRefresh: () {
-                    cubit.getAllFrendList(page: 1, isRefresh: true);
-                  },
-                  padding: Constants.bodyPadding,
-                  itemCount: state.frendList.length,
-                  appbar: _appBar(context, cubit, state),
-                  onColapsAppbar: Container(
-                    padding: Constants.bodyPadding,
-                    color: context.colors.background,
-                    child: _onColupse(context, cubit, state),
-                  ),
-                  itemBuilder: (context, index) {
-                    final friend = state.frendList[index];
-                    final isSelected = state.selectedFriends.any(
-                      (e) => e.id == friend.id,
-                    );
-                    return GestureDetector(
-                      onTap: () => cubit.toggleFriendSelection(friend),
-                      child: FriendListItemWidget(
-                        friend: friend,
-                        isSelected: isSelected,
+      body: FormBuilder(
+        scrollPhysics: const NeverScrollableScrollPhysics(),
+        entity: TournamentEntity(),
+        builder: (context, formKey, entity) {
+          return CubitScope(
+            create: () => FriendCubit()..getAllFrendList(isTournament: true),
+            builder: (context, cubit, state) {
+              return Column(
+                children: [
+                  Expanded(
+                    child: SmartListLoader(
+                      isLoading: state.isFrendListLoading,
+                      onLoadMore: (page) {
+                        cubit.getAllFrendList(page: page, isTournament: true);
+                      },
+                      onRefresh: () {
+                        cubit.getAllFrendList(
+                          page: 1,
+                          isRefresh: true,
+                          isTournament: true,
+                        );
+                      },
+                      padding: Constants.bodyPadding,
+                      itemCount: state.frendList.length,
+                      appbar: _appBar(context, cubit, state, entity),
+                      onColapsAppbar: Container(
+                        padding: Constants.bodyPadding,
+                        color: context.colors.background,
+                        child: _onColupse(context, cubit, state),
                       ),
-                    );
-                  },
-                ),
-              ),
+                      itemBuilder: (context, index) {
+                        final friend = state.frendList[index];
+                        final isSelected = state.selectedFriends.any(
+                          (e) => e.id == friend.id,
+                        );
+                        return GestureDetector(
+                          onTap: () => cubit.toggleFriendSelection(friend),
+                          child: FriendListItemWidget(
+                            friend: friend,
+                            isSelected: isSelected,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
 
-              _bottomSections(),
-            ],
+                  _bottomSections(context, formKey, entity, cubit),
+                ],
+              );
+            },
           );
         },
       ),
     );
   }
 
-  Widget _bottomSections() {
+  Widget _bottomSections(
+    BuildContext context,
+    GlobalKey<FormState> formKey,
+    TournamentEntity entity,
+    FriendCubit cubit,
+  ) {
     return SafeArea(
       top: false,
       child: Padding(
@@ -78,7 +94,35 @@ class BuildTournamentScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       const BuildLabel('Start Date'),
-                      CommonDateInputTextField(borderRadius: 40),
+                      CommonDateInputTextField(
+                        isValidationRequired: true,
+                        validation: (val) {
+                          final startDate = DateTime.tryParse(val ?? '');
+                          if (val == null || val.isEmpty) {
+                            return 'Start date is required';
+                          }
+                          if (startDate != null) {
+                            final now = DateTime.now();
+                            final today = DateTime(
+                              now.year,
+                              now.month,
+                              now.day,
+                            );
+                            final start = DateTime(
+                              startDate.year,
+                              startDate.month,
+                              startDate.day,
+                            );
+                            if (start.isBefore(today)) {
+                              return 'Start date must be today or in the future';
+                            }
+                          }
+                          return null;
+                        },
+                        borderRadius: 40,
+                        onChanged: (date) => entity.startDate = date,
+                        onSave: (date) => entity.startDate = date,
+                      ),
                     ],
                   ),
                 ),
@@ -87,7 +131,37 @@ class BuildTournamentScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       const BuildLabel('End Date'),
-                      CommonDateInputTextField(borderRadius: 40),
+                      CommonDateInputTextField(
+                        borderRadius: 40,
+                        validation: (val) {
+                          if (val == null || val.isEmpty) {
+                            return 'End date is required';
+                          }
+                          if (entity.startDate == null) {
+                            return 'Start date is required';
+                          }
+                          final endDate = DateTime.tryParse(val);
+                          if (endDate != null) {
+                            final start = DateTime(
+                              entity.startDate!.year,
+                              entity.startDate!.month,
+                              entity.startDate!.day,
+                            );
+                            final end = DateTime(
+                              endDate.year,
+                              endDate.month,
+                              endDate.day,
+                            );
+                            if (end.isBefore(start)) {
+                              return 'End date must be on or after start date';
+                            }
+                          }
+                          return null;
+                        },
+                        isValidationRequired: true,
+                        onChanged: (date) => entity.endDate = date,
+                        onSave: (date) => entity.endDate = date,
+                      ),
                     ],
                   ),
                 ),
@@ -97,7 +171,16 @@ class BuildTournamentScreen extends StatelessWidget {
             CommonButton(
               buttonWidth: .infinity,
               titleText: 'Create Tournament',
-              onTap: () {},
+              onTap: () {
+                if (formKey.validate()) {
+                  formKey.save();
+                  if (cubit.state.selectedFriends.isEmpty) {
+                    showSnackBar('No Friends Selected', type: .warning);
+                    return;
+                  }
+                  cubit.createTournament(entity: entity);
+                }
+              },
             ),
           ],
         ),
@@ -105,7 +188,12 @@ class BuildTournamentScreen extends StatelessWidget {
     );
   }
 
-  Widget _appBar(BuildContext context, FriendCubit cubit, FriendState state) {
+  Widget _appBar(
+    BuildContext context,
+    FriendCubit cubit,
+    FriendState state,
+    TournamentEntity entity,
+  ) {
     return Padding(
       padding: Constants.bodyPadding,
       child: Column(
@@ -127,10 +215,11 @@ class BuildTournamentScreen extends StatelessWidget {
           10.height,
           const BuildLabel('Tournament Name'),
           CommonTextField(
-            validationType: .notRequired,
+            validationType: .validateRequired,
             borderColor: context.colors.bACKGROUND_darkCardBoarder,
             backgroundColor: Colors.transparent,
             hintText: 'e.g., Summer Golf Challenge',
+            onSaved: (value, controller) => entity.tournamentName = value,
           ),
           _onColupse(context, cubit, state),
         ],
@@ -261,7 +350,7 @@ class BuildTournamentScreen extends StatelessWidget {
           borderColor: context.colors.bACKGROUND_darkCardBoarder,
           hintText: 'Search',
           onChanged: (value) {
-            cubit.search(value);
+            cubit.search(value, isTournament: true);
           },
         ),
         4.height,

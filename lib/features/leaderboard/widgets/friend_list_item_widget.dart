@@ -1,6 +1,7 @@
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:pinlink/common_widgets/custom_card.dart';
+import 'package:pinlink/common_widgets/text_to_avater.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/features/leaderboard/model/friend_model.dart';
 
@@ -28,18 +29,13 @@ class FriendListItemWidget extends StatelessWidget {
           children: [
             Row(
               children: [
-                friend.profile != null || friend.profile?.isNotEmpty == true
+                friend.profile != null && friend.profile?.isNotEmpty == true
                     ? CommonImage(src: friend.profile!, borderRadius: 22)
-                    : CircleAvatar(
-                        radius: 22.r,
-                        backgroundColor: Colors.teal,
-                        child: Text(
-                          friend.fullName ?? '',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                    : TextToAvatar(
+                        text: friend.fullName ?? '',
+                        color: Colors.teal,
+                        limit: 1,
+                        fontSize: 16,
                       ),
                 const SizedBox(width: 12),
                 Expanded(

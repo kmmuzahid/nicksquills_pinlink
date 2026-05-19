@@ -24,7 +24,7 @@ class ApiEndPoint {
 
   final String changePassword = '/auth/change-password';
 
-  final String logout = '/auth/logout';
+  // final String logout = '/auth/logout';
 
   final String deleteAccount = '/user/delete-account';
 
@@ -73,4 +73,6 @@ class ApiEndPoint {
 
   //
   final String allFriends = '/friend/all-friends';
+
+  final String createTournament = '/tournament/create-tournament';
 }
