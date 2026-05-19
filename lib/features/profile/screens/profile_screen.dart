@@ -15,6 +15,7 @@ import 'package:pinlink/constant/constants.dart';
 import 'package:pinlink/constant/enums.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/coreFeature/navigation/cubit/navigation_cubit.dart';
+import 'package:pinlink/coreFeature/navigation/cubit/navigation_state.dart';
 import 'package:pinlink/features/course_comparision/cubit/add_course_cubit.dart';
 import 'package:pinlink/features/course_comparision/model/course_model.dart';
 import 'package:pinlink/features/profile/cubit/profile_cubit.dart';
@@ -36,6 +37,21 @@ class ProfileScreen extends StatelessWidget {
       body: CubitScope(
         create: () => ProfileCubit()..getUserPlayedCourse(1),
         builder: (context, cubit, state) {
+          return BlocListener<NavigationCubit, NavigationState>(
+            listenWhen: (prev, curr) => prev.filter != curr.filter,
+            listener: (context, navState) {
+              final filter = navState.filter;
+              cubit.changeFilter(filter);
+              // Trigger refresh so user sees latest data
+              if (filter == FilterProfile.MyCourses) {
+                cubit.getUserPlayedCourse(1, isRefresh: true);
+              } else if (filter == FilterProfile.MyWishlist) {
+                cubit.getUserWishlistCourse(1, isRefresh: true);
+              } else if (filter == FilterProfile.MyPosts) {
+                cubit.getUserPosts(1, isRefresh: true);
+              }
+            },
+            child: Builder(builder: (context) {
           final hasSubscription =
               context
                   .read<AuthCubit>()
@@ -90,6 +106,7 @@ class ProfileScreen extends StatelessWidget {
                             fixedWidth: fixedWidth,
                             rattingWidth: rattingWidth,
                           ),
+                          8.height,
                         ],
                       ),
                     ),
@@ -110,6 +127,7 @@ class ProfileScreen extends StatelessWidget {
                             fixedWidth: fixedWidth,
                             rattingWidth: rattingWidth,
                           ),
+                          8.height,
                         ],
                       ),
                     ),
@@ -178,6 +196,8 @@ class ProfileScreen extends StatelessWidget {
                 value: state.selectedFilter,
               );
             },
+          );
+            }),
           );
         },
       ),

@@ -160,7 +160,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           entity: PostEntity(),
           builder: (context, formKey, entity) {
             return CubitScope(
-              create: () => SocialCubit(courseModel: widget.courseModel),
+              create: () => SocialCubit()..onInit(widget.courseModel),
               builder: (context, cubit, state) {
                 return SingleChildScrollView(
                   child: Column(

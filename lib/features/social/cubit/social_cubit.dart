@@ -21,8 +21,7 @@ import 'package:pinlink/features/social/repository/social_repository.dart';
 import 'package:video_player/video_player.dart';
 
 class SocialCubit extends SafeCubit<SocialState> {
-  final CourseModel? courseModel;
-  SocialCubit({this.courseModel}) : super(const SocialState());
+  SocialCubit() : super(const SocialState());
 
   final courseRepository = getIt<CourseRepository>();
 
@@ -34,11 +33,11 @@ class SocialCubit extends SafeCubit<SocialState> {
 
   String searchTex = '';
 
-  void onInit() {
+  void onInit(CourseModel? courseModel) {
     if (courseModel != null) {
       addCourse(
         UserCourseModel(
-          courseId: Course(id: courseModel!.id, name: courseModel!.name),
+          courseId: Course(id: courseModel.id, name: courseModel.name),
         ),
       );
     }

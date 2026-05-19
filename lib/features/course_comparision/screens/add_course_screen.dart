@@ -130,10 +130,23 @@ class AddCourseScreen extends StatelessWidget {
                           ? (profile?.allCompareCourseCount ?? 0)
                           : (profile?.allWishlishCount ?? 0);
 
-                      final canContinue =
-                          state.selectedCourses.length >= 2 ||
-                          (state.selectedCourses.length == 1 &&
-                              existingCount >= 1);
+                      // Course ranking rules:
+                      //   allCompareCourseCount == 0  → need exactly 2 courses
+                      //   allCompareCourseCount >= 1  → need exactly 1 course
+                      // Wishlist ranking: 1 if existing, otherwise 2
+                      final bool canContinue;
+                      if (state.rankingType == RankingType.courseRanking) {
+                        if (existingCount == 0) {
+                          canContinue = state.selectedCourses.length >= 2;
+                        } else {
+                          canContinue = state.selectedCourses.length == 1;
+                        }
+                      } else {
+                        canContinue =
+                            state.selectedCourses.length >= 2 ||
+                            (state.selectedCourses.length == 1 &&
+                                existingCount >= 1);
+                      }
 
                       return CommonButton(
                         borderColor: canContinue
@@ -189,13 +202,22 @@ class AddCourseScreen extends StatelessWidget {
             ? (profile?.allCompareCourseCount ?? 0)
             : (profile?.allWishlishCount ?? 0);
 
-        final requiredCount = existingCount >= 1 ? 1 : 2;
+        final int requiredCount;
+        final int maxCount;
+        if (state.rankingType == RankingType.courseRanking) {
+          requiredCount = existingCount >= 1 ? 1 : 2;
+          maxCount = existingCount >= 1 ? 1 : 2;
+        } else {
+          requiredCount = existingCount >= 1 ? 1 : 2;
+          maxCount = 999; // no upper limit for wishlist
+        }
 
         return Column(
           children: [
             CommonText(
-              text:
-                  "Add at least $requiredCount course${requiredCount > 1 ? 's' : ''} to continue",
+              text: state.rankingType == RankingType.courseRanking
+                  ? "Add $requiredCount course${requiredCount > 1 ? 's' : ''} to continue"
+                  : "Add at least $requiredCount course${requiredCount > 1 ? 's' : ''} to continue",
               fontSize: 16,
               bottom: 20,
               textColor: context.colors.pRIMARY_priSoft,
@@ -325,6 +347,21 @@ class AddCourseScreen extends StatelessWidget {
           cubit.unselectCourse(course);
           return;
         }
+
+        // Enforce max selection for course ranking
+        if (rankingType == RankingType.courseRanking) {
+          final profile = context.read<AuthCubit>().state.profile;
+          final existingCount = profile?.allCompareCourseCount ?? 0;
+          final maxAllowed = existingCount >= 1 ? 1 : 2;
+          if (cubit.state.selectedCourses.length >= maxAllowed) {
+            showSnackBar(
+              'You can only add $maxAllowed course${maxAllowed > 1 ? 's' : ''} at a time',
+              type: SnackBarType.warning,
+            );
+            return;
+          }
+        }
+
         if (!isInNavigation) {
           cubit.selectCourse(course);
           return;

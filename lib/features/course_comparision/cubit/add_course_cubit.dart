@@ -114,6 +114,10 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
     _ratingTotals.clear();
     _matchupCounts.clear();
     _rankCache.clear();
+    _matchupPairs.clear();
+    _matchupAnswers.clear();
+    _currentMatchupIdx = 0;
+    _isInRatingPhase = false;
 
     _currentTotalExisting = state.rankingType == RankingType.courseRanking
         ? (authCubit.state.profile?.allCompareCourseCount ?? 0)
@@ -124,36 +128,47 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
     _processNextCourse(authCubit);
   }
 
+  int get _maxQuestionIndex =>
+      state.rankingType == RankingType.wishlistRanking ? 0 : 7;
+
+  // ── Stored matchup history for rating phase ──
+  final List<List<CourseModel>> _matchupPairs = [];
+  final List<List<int>> _matchupAnswers = [];
+  int _currentMatchupIdx = 0;
+  bool _isInRatingPhase = false;
+  int _pendingInsertionRank = 0;
+
   void onSelectComparisonCourse(
     int pickedIndex,
     VoidCallback onSuccess,
     AuthCubit authCubit,
   ) {
     _onComplete = onSuccess;
-    _matchupWinners.add(pickedIndex);
 
-    if (state.currentQuestionIndex < 7) {
-      emit(
-        state.copyWith(currentQuestionIndex: state.currentQuestionIndex + 1),
-      );
-      return;
+    if (!_isInRatingPhase) {
+      // Binary search phase — record Q1 answer and continue search
+      _matchupAnswers.last.add(pickedIndex);
+      _onMatchupComplete(authCubit);
+    } else {
+      // Rating phase — record answer and advance
+      _matchupAnswers[_currentMatchupIdx].add(pickedIndex);
+      _advanceRatingPhase(authCubit);
     }
-
-    _onMatchupComplete(authCubit);
   }
 
   void onSkipComparisonQuestion(VoidCallback onSuccess, AuthCubit authCubit) {
     _onComplete = onSuccess;
-    _matchupWinners.add(-1);
 
-    if (state.currentQuestionIndex < 7) {
-      emit(
-        state.copyWith(currentQuestionIndex: state.currentQuestionIndex + 1),
-      );
-      return;
+    if (!_isInRatingPhase) {
+      // Binary search phase — skip Q1
+      _matchupAnswers.last.add(-1);
+      _onMatchupComplete(authCubit);
+    } else {
+      // Rating phase — skip remaining rating questions, save now
+      _recordAllRatings();
+      _isInRatingPhase = false;
+      _finalizeCourseRank(_pendingInsertionRank, authCubit);
     }
-
-    _onMatchupComplete(authCubit);
   }
 
   void _processNextCourse(AuthCubit authCubit) {
@@ -164,6 +179,10 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
 
     final course = state.selectedCourses[_courseIndex];
     _rankCache.clear();
+    _matchupPairs.clear();
+    _matchupAnswers.clear();
+    _currentMatchupIdx = 0;
+    _isInRatingPhase = false;
 
     if (_currentTotalExisting == 0) {
       _saveCourseDirect(course, 1000.0, 0, authCubit);
@@ -177,7 +196,7 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
 
   Future<void> _binarySearchStep(AuthCubit authCubit) async {
     if (_bsLow > _bsHigh) {
-      await _finalizeCourseRank(_bsLow, authCubit);
+      _onBinarySearchDone(authCubit);
       return;
     }
 
@@ -189,12 +208,23 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
 
     if (existingCourse == null) {
       emit(state.copyWith(isComparisonLoading: false));
-      await _finalizeCourseRank(_bsLow, authCubit);
+      _onBinarySearchDone(authCubit);
       return;
     }
 
     final newCourse = state.selectedCourses[_courseIndex];
     final existingAsModel = _userCourseToModel(existingCourse);
+
+    // Skip comparison if both courses are the same (re-ranking scenario)
+    if (newCourse.id == existingAsModel.id) {
+      _bsHigh = mid - 1;
+      _binarySearchStep(authCubit);
+      return;
+    }
+
+    // Store this matchup pair for later rating questions
+    _matchupPairs.add([newCourse, existingAsModel]);
+    _matchupAnswers.add([]);
 
     emit(
       state.copyWith(
@@ -205,13 +235,35 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
     );
   }
 
+  /// Called after binary search completes (rank determined).
+  /// If there are rating questions left (Q2-Q8), enter rating phase.
+  /// Otherwise finalize immediately.
+  void _onBinarySearchDone(AuthCubit authCubit) {
+    _pendingInsertionRank = _bsLow;
+
+    // If only 1 question needed (wishlist) or no matchups happened, save now
+    if (_maxQuestionIndex == 0 || _matchupPairs.isEmpty) {
+      _recordAllRatings();
+      _finalizeCourseRank(_pendingInsertionRank, authCubit);
+      return;
+    }
+
+    // Enter rating phase starting at Q2 (index 1)
+    _isInRatingPhase = true;
+    _currentMatchupIdx = 0;
+
+    emit(
+      state.copyWith(
+        currentQuestionIndex: 1,
+        comparison: _matchupPairs[0],
+        isComparisonLoading: false,
+      ),
+    );
+  }
+
   void _onMatchupComplete(AuthCubit authCubit) {
-    final q1Winner = _matchupWinners[0];
-
-    _recordRatings(state.comparison[0], state.comparison[1]);
-
+    final q1Winner = _matchupAnswers.last[0];
     _matchupWinners = [];
-
     _handleBinarySearchAnswer(q1Winner, authCubit);
   }
 
@@ -225,6 +277,35 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
     }
 
     _binarySearchStep(authCubit);
+  }
+
+  /// Advance through the rating phase: next matchup or next question.
+  void _advanceRatingPhase(AuthCubit authCubit) {
+    _currentMatchupIdx++;
+
+    if (_currentMatchupIdx >= _matchupPairs.length) {
+      // All matchups answered for this question — move to next question
+      _currentMatchupIdx = 0;
+      final nextQuestion = state.currentQuestionIndex + 1;
+
+      if (nextQuestion > _maxQuestionIndex) {
+        // All rating questions done — record and finalize
+        _recordAllRatings();
+        _isInRatingPhase = false;
+        _finalizeCourseRank(_pendingInsertionRank, authCubit);
+        return;
+      }
+
+      emit(
+        state.copyWith(
+          currentQuestionIndex: nextQuestion,
+          comparison: _matchupPairs[0],
+        ),
+      );
+    } else {
+      // Show next matchup pair for the same question
+      emit(state.copyWith(comparison: _matchupPairs[_currentMatchupIdx]));
+    }
   }
 
   Future<void> _finalizeCourseRank(
@@ -292,34 +373,50 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
     _processNextCourse(authCubit);
   }
 
-  void _onAllCoursesRanked(AuthCubit authCubit) {
-    emit(state.copyWith(comparison: const [], isRankingInProgress: false));
+  Future<void> _onAllCoursesRanked(AuthCubit authCubit) async {
+    // Call onComplete BEFORE clearing selectedCourses so the callback
+    // can still read the last ranked course from state.
     _onComplete?.call();
+
+    emit(
+      state.copyWith(
+        comparison: const [],
+        isRankingInProgress: false,
+        selectedCourses: [],
+      ),
+    );
     authCubit.getProfile();
+
     showSnackBar(
       '${state.rankingType == RankingType.wishlistRanking ? 'Wishlist' : 'Course'} ranked successfully',
       type: .success,
     );
   }
 
-  void _recordRatings(CourseModel course1, CourseModel course2) {
-    final id1 = course1.id ?? '';
-    final id2 = course2.id ?? '';
+  /// Records all matchup answers into the rating maps after all questions
+  /// have been answered across all stored matchup pairs.
+  void _recordAllRatings() {
+    for (var m = 0; m < _matchupPairs.length; m++) {
+      final course1 = _matchupPairs[m][0];
+      final course2 = _matchupPairs[m][1];
+      final answers = _matchupAnswers[m];
 
-    _ratingWins.putIfAbsent(id1, () => List.filled(8, 0));
-    _ratingWins.putIfAbsent(id2, () => List.filled(8, 0));
-    _ratingTotals.putIfAbsent(id1, () => List.filled(8, 0));
-    _ratingTotals.putIfAbsent(id2, () => List.filled(8, 0));
-    _matchupCounts[id1] = (_matchupCounts[id1] ?? 0) + 1;
-    _matchupCounts[id2] = (_matchupCounts[id2] ?? 0) + 1;
+      final id1 = course1.id ?? '';
+      final id2 = course2.id ?? '';
 
-    for (var i = 0; i < 8; i++) {
-      if (i < _matchupWinners.length) {
-        if (_matchupWinners[i] == 0) {
+      _ratingWins.putIfAbsent(id1, () => List.filled(8, 0));
+      _ratingWins.putIfAbsent(id2, () => List.filled(8, 0));
+      _ratingTotals.putIfAbsent(id1, () => List.filled(8, 0));
+      _ratingTotals.putIfAbsent(id2, () => List.filled(8, 0));
+      _matchupCounts[id1] = (_matchupCounts[id1] ?? 0) + 1;
+      _matchupCounts[id2] = (_matchupCounts[id2] ?? 0) + 1;
+
+      for (var i = 0; i < answers.length && i < 8; i++) {
+        if (answers[i] == 0) {
           _ratingWins[id1]![i]++;
           _ratingTotals[id1]![i]++;
           _ratingTotals[id2]![i]++;
-        } else if (_matchupWinners[i] == 1) {
+        } else if (answers[i] == 1) {
           _ratingWins[id2]![i]++;
           _ratingTotals[id1]![i]++;
           _ratingTotals[id2]![i]++;
@@ -334,7 +431,12 @@ class AddCourseCubit extends SafeCubit<AddCourseState> {
     final totalMatchups = _matchupCounts[courseId] ?? 0;
     if (totalMatchups == 0) return List.filled(8, 3);
 
+    // For wishlist ranking, only the first question (favorite) is answered.
+    // All other ratings default to 0.
+    final isWishlist = state.rankingType == RankingType.wishlistRanking;
+
     return List.generate(8, (i) {
+      if (isWishlist && i > 0) return 0;
       final total = totals[i];
       if (total == 0) return 0;
       final winRate = wins[i] / total;

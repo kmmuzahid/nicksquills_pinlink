@@ -58,19 +58,7 @@ class ComparisonScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       cubit.onSkipComparisonQuestion(() {
-                        if (!isNaviagtion) {
-                          appRouter.replaceAll([const NavigationRoute()]);
-                        } else {
-                          appRouter.popUntil(
-                            (r) => r.settings.name == NavigationRoute.name,
-                          );
-                        }
-                        context.read<NavigationCubit>().changeIndex(
-                          4,
-                          filter: rankingType == RankingType.courseRanking
-                              ? .MyCourses
-                              : .MyWishlist,
-                        );
+                        _onRankingComplete(context, cubit);
                       }, context.read<AuthCubit>());
                     },
                     child: _skipButton(context),
@@ -250,18 +238,110 @@ class ComparisonScreen extends StatelessWidget {
     int index,
   ) {
     cubit.onSelectComparisonCourse(index, () {
-      if (!isNaviagtion) {
-        appRouter.replaceAll([const NavigationRoute()]);
-      } else {
-        appRouter.popUntil((r) => r.settings.name == NavigationRoute.name);
-      }
-      context.read<NavigationCubit>().changeIndex(
-        4,
-        filter: rankingType == RankingType.courseRanking
-            ? .MyCourses
-            : .MyWishlist,
-      );
+      _onRankingComplete(context, cubit);
     }, context.read<AuthCubit>());
+  }
+
+  void _onRankingComplete(BuildContext context, AddCourseCubit cubit) {
+    _navigateToProfile(context);
+
+    if (rankingType == RankingType.courseRanking) {
+      // Show dialog on next frame using navigator context (comparison screen
+      // context is disposed after navigation).
+      final lastCourse = cubit.state.selectedCourses.isNotEmpty
+          ? cubit.state.selectedCourses.first
+          : null;
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final navContext = coreKitInstance.navigatorKey.currentContext;
+        if (navContext != null) {
+          _showPostDialog(navContext, lastCourse);
+        }
+      });
+    }
+  }
+
+  void _navigateToProfile(BuildContext context) {
+    if (!isNaviagtion) {
+      appRouter.replaceAll([const NavigationRoute()]);
+    } else {
+      appRouter.popUntil((r) => r.settings.name == NavigationRoute.name);
+    }
+    context.read<NavigationCubit>().changeIndex(
+      4,
+      filter: rankingType == RankingType.courseRanking
+          ? .MyCourses
+          : .MyWishlist,
+    );
+  }
+
+  void _showPostDialog(BuildContext context, CourseModel? lastCourse) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: ctx.colors.bACKGROUND_darkCard,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: ctx.colors.bACKGROUND_darkCardBoarder,
+              width: 1.4,
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.share_rounded,
+                color: ctx.colors.pRIMARY_priSoft,
+                size: 48,
+              ),
+              16.height,
+              CommonText(
+                text: 'Share Your Ranking?',
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                textColor: ctx.colors.tEXT_white,
+              ),
+              8.height,
+              CommonText(
+                text: 'Let your friends know about your latest course ranking!',
+                fontSize: 14,
+                textColor: ctx.colors.tEXT_subDark,
+                textAlign: TextAlign.center,
+              ),
+              24.height,
+              CommonButton(
+                buttonWidth: double.infinity,
+                titleText: 'Post Now',
+                buttonColor: ctx.colors.pRIMARY_priSoft,
+                titleColor: ctx.colors.tEXT_white,
+                buttonRadius: 12,
+                onTap: () {
+                  Navigator.of(ctx).pop();
+                  appRouter.push(CreatePostRoute(courseModel: lastCourse));
+                },
+              ),
+              12.height,
+              CommonButton(
+                buttonWidth: double.infinity,
+                titleText: 'Later',
+                buttonColor: Colors.transparent,
+                borderColor: ctx.colors.bACKGROUND_darkCardBoarder,
+                titleColor: ctx.colors.tEXT_white,
+                buttonRadius: 12,
+                onTap: () {
+                  Navigator.of(ctx).pop();
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Container _skipButton(BuildContext context) {
