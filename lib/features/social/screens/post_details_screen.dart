@@ -8,6 +8,7 @@ import 'package:pinlink/common_widgets/simple_background.dart';
 import 'package:pinlink/common_widgets/text_to_avater.dart';
 import 'package:pinlink/config/bloc/cubit_scope.dart';
 import 'package:pinlink/config/color/app_color.dart';
+import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/constant/constants.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/features/social/cubit/post_details_cubit.dart';
@@ -22,10 +23,12 @@ class PostDetailsScreen extends StatelessWidget {
     required this.postId,
     required this.reportPost,
     required this.onChanged,
+    this.onDeletePost,
   });
   final String? postId;
   final void Function() reportPost;
   final void Function(PostModel postModel) onChanged;
+  final VoidCallback? onDeletePost;
 
   @override
   Widget build(BuildContext context) {
@@ -144,26 +147,49 @@ class PostDetailsScreen extends StatelessWidget {
                                 ).end,
                               ),
                               const SizedBox(height: 20),
-                              CommonPopupMenu(
-                                triggerBuilder: (property) => const Icon(
-                                  Icons.more_vert_outlined,
-                                  color: Colors.white,
-                                  size: 30,
-                                ),
-                                menuBackgroundColor:
-                                    context.colors.bACKGROUND_page,
-                                separator: const PopupMenuDivider(
-                                  thickness: 0,
-                                  height: 10,
-                                ),
+                              Builder(
+                                builder: (context) {
+                                  final isOwner =
+                                      context
+                                          .read<AuthCubit>()
+                                          .state
+                                          .profile
+                                          ?.id ==
+                                      postStateModel?.userId?.id;
+                                  return CommonPopupMenu(
+                                    triggerBuilder: (property) => const Icon(
+                                      Icons.more_vert_outlined,
+                                      color: Colors.white,
+                                      size: 30,
+                                    ),
+                                    menuBackgroundColor:
+                                        context.colors.bACKGROUND_page,
+                                    separator: const PopupMenuDivider(
+                                      thickness: 0,
+                                      height: 10,
+                                    ),
 
-                                items: const ['Report Post'],
-                                itemBuilder: (property) => CommonText(
-                                  text: property.item ?? '',
-                                  textColor: context.colors.tEXT_white,
-                                ),
-                                onItemSelected: (value) {
-                                  reportPost();
+                                    items: [
+                                      isOwner ? 'Delete Post' : 'Report Post',
+                                    ],
+                                    itemBuilder: (property) => CommonText(
+                                      text: property.item ?? '',
+                                      textColor: context.colors.tEXT_white,
+                                    ),
+                                    onItemSelected: (value) async {
+                                      if (value == 'Delete Post') {
+                                        final success = await cubit.deletePost(
+                                          postStateModel?.id ?? '',
+                                        );
+                                        if (success) {
+                                          appRouter.pop();
+                                          onDeletePost?.call();
+                                        }
+                                      } else {
+                                        reportPost();
+                                      }
+                                    },
+                                  );
                                 },
                               ),
                             ],

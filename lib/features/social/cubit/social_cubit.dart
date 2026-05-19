@@ -232,4 +232,9 @@ class SocialCubit extends SafeCubit<SocialState> {
       emit(state.copyWith(posts: updatedPosts));
     }
   }
+
+  void deletePostLocally(String postId) {
+    final updatedPosts = state.posts.where((e) => e.id != postId).toList();
+    emit(state.copyWith(posts: updatedPosts));
+  }
 }

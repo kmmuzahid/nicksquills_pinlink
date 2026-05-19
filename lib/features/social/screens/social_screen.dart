@@ -47,6 +47,9 @@ class SocialScreen extends StatelessWidget {
               onChanged: (postModel) {
                 cubit.updatePost(postModel);
               },
+              onDeletePost: () {
+                cubit.deletePostLocally(state.posts[index].id ?? '');
+              },
               onReportPost: () {
                 showDialog(
                   context: context,

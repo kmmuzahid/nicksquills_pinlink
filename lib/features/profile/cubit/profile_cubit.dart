@@ -93,6 +93,12 @@ class ProfileCubit extends SafeCubit<ProfileCubitState> {
     }
   }
 
+  void deletePostLocally(String postId) {
+    final posts = List<PostModel>.from(state.posts);
+    posts.removeWhere((e) => e.id == postId);
+    emit(state.copyWith(posts: posts));
+  }
+
   void changeFilter(FilterProfile filter) {
     emit(state.copyWith(selectedFilter: filter));
     if (filter == FilterProfile.MyPosts && state.posts.isEmpty) {

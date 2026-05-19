@@ -14,7 +14,7 @@ class SocialRepository {
       input: RequestInput(
         endpoint: userPostOnly
             ? ApiEndPoint.instance.userPost
-            : ApiEndPoint.instance.user,
+            : ApiEndPoint.instance.post,
         method: .GET,
         queryParams: {
           'page': page,
@@ -98,6 +98,20 @@ class SocialRepository {
       ),
       responseBuilder: (data) {
         return PostModel.fromJson(data);
+      },
+    );
+  }
+
+  Future<ResponseState<dynamic>> deletePost(String postId) async {
+    return DioService.instance.request(
+      showMessage: true,
+      input: RequestInput(
+        endpoint: ApiEndPoint.instance.post,
+        method: .DELETE,
+        pathParams: [postId],
+      ),
+      responseBuilder: (data) {
+        return data;
       },
     );
   }

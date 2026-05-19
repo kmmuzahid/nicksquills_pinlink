@@ -249,6 +249,9 @@ class ProfileScreen extends StatelessWidget {
               onChanged: (postModel) {
                 cubit.onChangePost(postModel);
               },
+              onDeletePost: () {
+                cubit.deletePostLocally(postModel.id ?? '');
+              },
               onReportPost: () {
                 showDialog(
                   context: context,

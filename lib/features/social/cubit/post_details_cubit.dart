@@ -96,6 +96,15 @@ class PostDetailsCubit extends SafeCubit<PostDetailsState> {
     socialRepository.sharePost(postId);
   }
 
+  Future<bool> deletePost(String postId) async {
+    final response = await socialRepository.deletePost(postId);
+    if (response.isSuccess) {
+      showSnackBar("Post deleted successfully", type: .success);
+      return true;
+    }
+    return false;
+  }
+
   @override
   Future<void> close() {
     for (var controller in state.videoControllers.values) {

@@ -472,6 +472,7 @@ class PostDetailsRoute extends _i25.PageRouteInfo<PostDetailsRouteArgs> {
     required String? postId,
     required void Function() reportPost,
     required void Function(_i30.PostModel) onChanged,
+    _i26.VoidCallback? onDeletePost,
     List<_i25.PageRouteInfo>? children,
   }) : super(
          PostDetailsRoute.name,
@@ -480,6 +481,7 @@ class PostDetailsRoute extends _i25.PageRouteInfo<PostDetailsRouteArgs> {
            postId: postId,
            reportPost: reportPost,
            onChanged: onChanged,
+           onDeletePost: onDeletePost,
          ),
          initialChildren: children,
        );
@@ -495,6 +497,7 @@ class PostDetailsRoute extends _i25.PageRouteInfo<PostDetailsRouteArgs> {
         postId: args.postId,
         reportPost: args.reportPost,
         onChanged: args.onChanged,
+        onDeletePost: args.onDeletePost,
       );
     },
   );
@@ -506,6 +509,7 @@ class PostDetailsRouteArgs {
     required this.postId,
     required this.reportPost,
     required this.onChanged,
+    this.onDeletePost,
   });
 
   final _i26.Key? key;
@@ -516,20 +520,24 @@ class PostDetailsRouteArgs {
 
   final void Function(_i30.PostModel) onChanged;
 
+  final _i26.VoidCallback? onDeletePost;
+
   @override
   String toString() {
-    return 'PostDetailsRouteArgs{key: $key, postId: $postId, reportPost: $reportPost, onChanged: $onChanged}';
+    return 'PostDetailsRouteArgs{key: $key, postId: $postId, reportPost: $reportPost, onChanged: $onChanged, onDeletePost: $onDeletePost}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! PostDetailsRouteArgs) return false;
-    return key == other.key && postId == other.postId;
+    return key == other.key &&
+        postId == other.postId &&
+        onDeletePost == other.onDeletePost;
   }
 
   @override
-  int get hashCode => key.hashCode ^ postId.hashCode;
+  int get hashCode => key.hashCode ^ postId.hashCode ^ onDeletePost.hashCode;
 }
 
 /// generated route for
