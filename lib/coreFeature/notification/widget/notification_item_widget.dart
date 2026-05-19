@@ -34,9 +34,9 @@ class NotificationItemWidget extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       child: Container(
         padding: const EdgeInsets.all(14),
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: context.colors.bACKGROUND_darkCard,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
@@ -51,7 +51,9 @@ class NotificationItemWidget extends StatelessWidget {
               ),
               child: Icon(
                 icon,
-                color: isUnread ? context.colors.pRIMARY_priSoft : theme.colorScheme.primary,
+                color: isUnread
+                    ? context.colors.pRIMARY_priSoft
+                    : theme.colorScheme.primary,
                 size: 22,
               ),
             ),
@@ -69,8 +71,10 @@ class NotificationItemWidget extends StatelessWidget {
                           text: title,
                           maxLines: 1,
                           style: theme.textTheme.titleMedium?.copyWith(
-                            color: !isUnread ? Colors.black : context.colors.pRIMARY_priSoft,
-                            fontWeight: isUnread ? FontWeight.w600 : FontWeight.w500,
+                            color: context.colors.pRIMARY_priSoft,
+                            fontWeight: isUnread
+                                ? FontWeight.w600
+                                : FontWeight.w500,
                           ),
                         ),
                       ),
@@ -78,7 +82,9 @@ class NotificationItemWidget extends StatelessWidget {
                       CommonText(
                         text: time,
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: !isUnread ? Colors.black : context.colors.tEXT_white,
+                          color: !isUnread
+                              ? context.colors.tEXT_subDark
+                              : context.colors.tEXT_white,
                           fontSize: 12,
                         ),
                       ),
@@ -92,7 +98,9 @@ class NotificationItemWidget extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: !isUnread ? Colors.black : context.colors.tEXT_white,
+                      color: !isUnread
+                          ? context.colors.tEXT_subDark
+                          : context.colors.tEXT_white,
                     ),
                   ),
                 ],

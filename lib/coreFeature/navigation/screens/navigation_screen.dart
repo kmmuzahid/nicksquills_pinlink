@@ -26,6 +26,7 @@ import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/coreFeature/navigation/cubit/navigation_cubit.dart';
 import 'package:pinlink/coreFeature/navigation/cubit/navigation_state.dart';
 import 'package:pinlink/coreFeature/navigation/nav_utils/navigator_item.dart';
+import 'package:pinlink/coreFeature/notification/notification_button.dart';
 import 'package:pinlink/features/course_comparision/screens/add_course_screen.dart';
 import 'package:pinlink/features/golf_map/screens/golf_map_screen.dart';
 import 'package:pinlink/features/leaderboard/screens/leaderboard_screen.dart';
@@ -220,20 +221,21 @@ class NavigationScreen extends StatelessWidget {
             ),
           ),
           8.width,
-          GestureDetector(
-            onTap: () {},
-            child: SizedBox(
-              width: 25,
-              height: 25,
-              child: Badge.count(
-                count: 1,
-                child: CommonImage(
-                  src: Assets.images.notificationIcon,
-                  fill: .contain,
-                ),
-              ),
-            ),
-          ),
+          const NotificationIconWidget(),
+          // GestureDetector(
+          //   onTap: () {},
+          //   child: SizedBox(
+          //     width: 25,
+          //     height: 25,
+          //     child: Badge.count(
+          //       count: 1,
+          //       child: CommonImage(
+          //         src: Assets.images.notificationIcon,
+          //         fill: .contain,
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

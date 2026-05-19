@@ -3,13 +3,14 @@
  * @Date: 2026-01-12 17:24:24
  * @Email: km.muzahid@gmail.com
  */
+import 'package:core_kit/image/common_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinlink/config/bloc/cubit_scope_value.dart';
-import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/coreFeature/notification/cubit/notification_cubit.dart';
+import 'package:pinlink/gen/assets.gen.dart';
 
 class NotificationIconWidget extends StatelessWidget {
   const NotificationIconWidget({super.key});
@@ -23,23 +24,26 @@ class NotificationIconWidget extends StatelessWidget {
           onTap: () {
             appRouter.push(const NotificationRoute());
           },
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+          child: SizedBox(
+            width: 25,
+            height: 25,
             child: state.unreadCount > 0
                 ? Badge(
                     label: Text(state.unreadCount.toString()),
                     backgroundColor: Colors.red,
                     textColor: Colors.white,
-                    child: Icon(
-                      Icons.notifications_outlined,
-                      color: context.colors.pRIMARY_brandClr,
+                    child: CommonImage(
+                      src: Assets.images.notificationIcon,
+                      fill: .contain,
                     ),
                   )
-                : Icon(Icons.notifications_outlined, color: context.colors.pRIMARY_brandClr),
+                : CommonImage(
+                    src: Assets.images.notificationIcon,
+                    fill: .contain,
+                  ),
           ),
         );
       },
-    ); 
+    );
   }
 }

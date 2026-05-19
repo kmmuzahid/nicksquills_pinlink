@@ -254,9 +254,9 @@ class _GolfCoursePlayedItemState extends State<GolfCoursePlayedItem> {
       ),
     );
 
-    if (widget.selectedFilter == MapFilters.Played) {
-      return ReorderableDragStartListener(index: index, child: child);
-    }
+    // if (widget.selectedFilter == MapFilters.Played) {
+    //   return ReorderableDragStartListener(index: index, child: child);
+    // }
     return child;
   }
 

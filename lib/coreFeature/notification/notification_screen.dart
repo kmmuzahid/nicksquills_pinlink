@@ -8,6 +8,7 @@ import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinlink/config/bloc/cubit_scope_value.dart';
+import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/constant/app_string.dart';
 import 'package:pinlink/coreFeature/notification/cubit/notification_cubit.dart';
 import 'package:pinlink/coreFeature/notification/widget/notification_item_widget.dart';
@@ -16,14 +17,18 @@ import 'package:pinlink/coreFeature/notification/widget/notification_item_widget
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CommonAppBar(
         title: AppString.notifications,
         appbarConfig: AppbarConfig(
-          actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.checklist_rtl))],
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.checklist_rtl, color: context.colors.tEXT_white),
+            ),
+          ],
         ),
       ),
       body: CubitScopeValue(
@@ -48,7 +53,7 @@ class NotificationScreen extends StatelessWidget {
               );
             },
           );
-        }
+        },
       ),
     );
   }
