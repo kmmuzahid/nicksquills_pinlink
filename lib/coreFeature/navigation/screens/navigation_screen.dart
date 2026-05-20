@@ -185,7 +185,9 @@ class NavigationScreen extends StatelessWidget {
         actions: [
           if (index == 1)
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                //show share
+              },
               child: SizedBox(
                 width: 25,
                 height: 25,

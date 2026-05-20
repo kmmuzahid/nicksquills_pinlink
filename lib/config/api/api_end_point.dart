@@ -92,4 +92,6 @@ class ApiEndPoint {
   final String acceptFriendRequest = '/friend/accept-friend-request'; //post
 
   final String rejectFriendRequest = '/friend/reject-friend-request'; //post
+
+  final String faq = '/faq'; //get
 }

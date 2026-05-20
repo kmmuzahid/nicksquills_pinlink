@@ -38,32 +38,32 @@ class ProfileCardWidget extends StatelessWidget {
                       size: 46,
                     ),
                   const SizedBox(width: 16),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        state.profile?.fullName ?? "",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: context.colors.tEXT_white,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CommonText(
+                          text: state.profile?.fullName ?? "",
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: context.colors.tEXT_white,
+                          ),
                         ),
-                      ),
-                      Row(
-                        children: [
-                          Icon(
+                        CommonText(
+                          preffix: Icon(
                             Icons.location_on_outlined,
                             color: textGrey,
                             size: 16,
                           ),
-                          const SizedBox(width: 4),
-                          Text(
-                            state.profile?.address ?? "",
-                            style: TextStyle(color: textGrey, fontSize: 14),
-                          ),
-                        ],
-                      ),
-                    ],
+                          textAlign: .left,
+                          text: state.profile?.address ?? "",
+                          style: TextStyle(color: textGrey, fontSize: 14),
+                          maxLines: 2,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

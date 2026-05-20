@@ -44,30 +44,31 @@ class AuthCubit extends SafeCubit<AuthState> {
   }
 
   Future<void> changeUserSettings(UserSettings userSettings) async {
-    emit(
-      state.copyWith(
-        profile: state.profile?.copyWith(
-          isHandicap: userSettings == UserSettings.isHandicap
-              ? !(state.profile?.isHandicap ?? false)
-              : null,
-          isFriendRequest: userSettings == UserSettings.isFriendRequest
-              ? !(state.profile?.isFriendRequest ?? false)
-              : null,
-          isLeaderBoardUpdate: userSettings == UserSettings.isLeaderBoardUpdate
-              ? !(state.profile?.isLeaderBoardUpdate ?? false)
-              : null,
-          isTournamentInvite: userSettings == UserSettings.isTournamentInvite
-              ? !(state.profile?.isTournamentInvite ?? false)
-              : null,
-          isScoreUpdate: userSettings == UserSettings.isScoreUpdate
-              ? !(state.profile?.isScoreUpdate ?? false)
-              : null,
-          isPlayCourse: userSettings == UserSettings.isPlayCourse
-              ? !(state.profile?.isPlayCourse ?? false)
-              : null,
-        ),
-      ),
+    final updatedProfile = state.profile?.copyWith(
+      isHandicap: userSettings == UserSettings.isHandicap
+          ? !(state.profile?.isHandicap ?? false)
+          : null,
+      isFriendRequest: userSettings == UserSettings.isFriendRequest
+          ? !(state.profile?.isFriendRequest ?? false)
+          : null,
+      isLeaderBoardUpdate: userSettings == UserSettings.isLeaderBoardUpdate
+          ? !(state.profile?.isLeaderBoardUpdate ?? false)
+          : null,
+      isTournamentInvite: userSettings == UserSettings.isTournamentInvite
+          ? !(state.profile?.isTournamentInvite ?? false)
+          : null,
+      isScoreUpdate: userSettings == UserSettings.isScoreUpdate
+          ? !(state.profile?.isScoreUpdate ?? false)
+          : null,
+      isPlayCourse: userSettings == UserSettings.isPlayCourse
+          ? !(state.profile?.isPlayCourse ?? false)
+          : null,
     );
+
+    if (updatedProfile != null) {
+      emit(state.copyWith(profile: updatedProfile));
+      await Storage.instance.write('profile', jsonEncode(updatedProfile.toJson()));
+    }
 
     final result = await DioService.instance.request(
       input: RequestInput(
@@ -78,8 +79,31 @@ class AuthCubit extends SafeCubit<AuthState> {
       responseBuilder: (json) => json,
     );
 
-    if (result.isSuccess) {
-      getProfile();
+    if (!result.isSuccess) {
+      final revertedProfile = state.profile?.copyWith(
+        isHandicap: userSettings == UserSettings.isHandicap
+            ? !(state.profile?.isHandicap ?? false)
+            : null,
+        isFriendRequest: userSettings == UserSettings.isFriendRequest
+            ? !(state.profile?.isFriendRequest ?? false)
+            : null,
+        isLeaderBoardUpdate: userSettings == UserSettings.isLeaderBoardUpdate
+            ? !(state.profile?.isLeaderBoardUpdate ?? false)
+            : null,
+        isTournamentInvite: userSettings == UserSettings.isTournamentInvite
+            ? !(state.profile?.isTournamentInvite ?? false)
+            : null,
+        isScoreUpdate: userSettings == UserSettings.isScoreUpdate
+            ? !(state.profile?.isScoreUpdate ?? false)
+            : null,
+        isPlayCourse: userSettings == UserSettings.isPlayCourse
+            ? !(state.profile?.isPlayCourse ?? false)
+            : null,
+      );
+      if (revertedProfile != null) {
+        emit(state.copyWith(profile: revertedProfile));
+        await Storage.instance.write('profile', jsonEncode(revertedProfile.toJson()));
+      }
     }
   }
 

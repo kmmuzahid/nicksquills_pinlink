@@ -78,6 +78,7 @@ class ProfileScreen extends StatelessWidget {
                         }
                       },
                       onRefresh: (ctx) async {
+                        context.read<AuthCubit>().getProfile();
                         if (ctx.tab == .MyPosts) {
                           cubit.getUserPosts(1, isRefresh: true);
                         } else if (ctx.tab == .MyCourses) {

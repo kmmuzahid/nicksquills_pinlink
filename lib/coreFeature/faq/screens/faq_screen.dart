@@ -8,8 +8,10 @@ import 'package:core_kit/app_bar/common_app_bar.dart';
 import 'package:core_kit/list_loader/smart_list_loader.dart';
 import 'package:core_kit/text/common_text.dart';
 import 'package:flutter/material.dart';
+import 'package:pinlink/config/bloc/cubit_scope.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/constant/app_string.dart';
+import 'package:pinlink/coreFeature/faq/cubit/faq_cubit.dart';
 import 'package:pinlink/coreFeature/faq/model/faq_model.dart';
 
 @RoutePage()
@@ -19,17 +21,17 @@ class FaqScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CommonAppBar(title: AppString.faq_help),
-      body: SmartListLoader(
-        onRefresh: () {},
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return _faqBuilder(
-            context,
-            const FaqModel(
-              question: 'What is PinLink?',
-              answer:
-                  'PinLink is a platform that allows you to share your electric vehicle charging station with other EV owners.',
-            ),
+      body: CubitScope(
+        create: () => FaqCubit()..getFaqs(),
+        builder: (context, cubit, state) {
+          return SmartListLoader(
+            onRefresh: () => cubit.getFaqs(isRefresh: true),
+            onLoadMore: (page) => cubit.getFaqs(page: page),
+            limit: 30,
+            itemCount: state.faqs.length,
+            itemBuilder: (context, index) {
+              return _faqBuilder(context, state.faqs[index]);
+            },
           );
         },
       ),
@@ -47,21 +49,31 @@ class FaqScreen extends StatelessWidget {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
           child: ExpansionTile(
             title: CommonText(
-              text: faq.question,
+              text: faq.question ?? '',
               textAlign: TextAlign.left,
               maxLines: 4,
               style: TextStyle(fontSize: 16, color: context.colors.tEXT_white),
             ),
-            childrenPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+            childrenPadding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 4.0,
+            ),
             expandedCrossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Divider(height: 1, color: context.colors.bACKGROUND_darkCardBoarder),
+              Divider(
+                height: 1,
+                color: context.colors.bACKGROUND_darkCardBoarder,
+              ),
               const SizedBox(height: 12),
               CommonText(
-                text: faq.answer,
+                text: faq.answer ?? '',
                 maxLines: 20,
                 textAlign: TextAlign.left,
-                style: TextStyle(color: context.colors.tEXT_subDark, fontSize: 14, height: 1.5),
+                style: TextStyle(
+                  color: context.colors.tEXT_subDark,
+                  fontSize: 14,
+                  height: 1.5,
+                ),
               ),
               const SizedBox(height: 4),
             ],
