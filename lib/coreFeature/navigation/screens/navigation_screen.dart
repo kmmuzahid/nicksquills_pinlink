@@ -36,6 +36,7 @@ import 'package:pinlink/features/social/cubit/social_cubit.dart';
 import 'package:pinlink/features/social/cubit/social_state.dart';
 import 'package:pinlink/features/social/screens/social_screen.dart';
 import 'package:pinlink/gen/assets.gen.dart';
+import 'package:share_plus/share_plus.dart';
 
 final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
@@ -186,7 +187,29 @@ class NavigationScreen extends StatelessWidget {
           if (index == 1)
             GestureDetector(
               onTap: () {
-                //show share
+                final profile = context.read<AuthCubit>().state.profile;
+                if (profile == null) return;
+
+                final name = profile.fullName ?? 'PinLinks User';
+                final hcp = profile.handicap ?? '0';
+                final points = profile.pointCount?.toString() ?? '0';
+                final followers = profile.followerCount?.toString() ?? '0';
+                final following = profile.followingCount?.toString() ?? '0';
+                final homeCourse = profile.homeCourse ?? 'Not set';
+                final profileLink =
+                    'https://pinlinks.com/profile/${profile.id ?? ''}';
+
+                final shareText =
+                    '🏌️ $name on PinLinks\n\n'
+                    '📊 Stats:\n'
+                    '• HCP: $hcp\n'
+                    '• Points: $points\n'
+                    '• Followers: $followers\n'
+                    '• Following: $following\n'
+                    '• Home Course: $homeCourse\n\n'
+                    'Check out my profile: $profileLink';
+
+                SharePlus.instance.share(ShareParams(text: shareText));
               },
               child: SizedBox(
                 width: 25,
@@ -243,53 +266,6 @@ class NavigationScreen extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  BottomNavigationBarItem _navBuilder({
-    required int index,
-    required String image,
-    required NavigationState state,
-    required BuildContext context,
-  }) {
-    final isSelected = index == state.currentIndex;
-
-    final icon = AnimatedScale(
-      scale: isSelected ? 1.05 : 1.0,
-      duration: const Duration(milliseconds: 260),
-      curve: Curves.easeOutBack,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 280),
-        padding: isSelected ? const EdgeInsets.all(8) : EdgeInsets.zero,
-        margin: const EdgeInsets.only(top: 2),
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(25),
-            topRight: Radius.circular(25),
-            bottomLeft: Radius.circular(25),
-          ),
-          color: isSelected
-              ? context.colors.tEXT_white
-              : context.colors.tEXT_sub,
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: context.colors.pRIMARY_priLight.withOpacity(0.35),
-                    blurRadius: 12,
-                    offset: const Offset(0, 6),
-                  ),
-                ]
-              : [],
-        ),
-        child: CommonImage(
-          size: isSelected ? 25 : 30,
-          fill: BoxFit.contain,
-          src: image,
-          imageColor: isSelected ? Colors.white : Colors.grey,
-        ),
-      ),
-    );
-
-    return BottomNavigationBarItem(label: '', icon: icon);
   }
 }
 
