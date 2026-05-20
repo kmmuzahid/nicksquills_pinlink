@@ -4,7 +4,7 @@
  * @Email: km.muzahid@gmail.com
  */
 
-String _domain = 'http://10.10.7.65:6000';
+String _domain = 'http://10.10.7.65:7000';
 
 class ApiEndPoint {
   ApiEndPoint._();
@@ -81,4 +81,15 @@ class ApiEndPoint {
   final String settingsOnOff = '/users/settings-on-off';
 
   final String support = '/support';
+
+  //notification
+  final String notification = '/notification'; //get
+
+  final String notificationReadSingle = '/notification/read'; //patch
+
+  final String notificationAllRead = '/notification/all-read'; //post
+
+  final String acceptFriendRequest = '/friend/accept-friend-request'; //post
+
+  final String rejectFriendRequest = '/friend/reject-friend-request'; //post
 }

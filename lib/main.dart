@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinlink/config/bloc/app_bloc_observer.dart';
 import 'package:pinlink/config/dependency/dependency_injection.dart';
+import 'package:pinlink/coreFeature/notification/local_notification_service.dart';
 import 'package:pinlink/my_app..dart';
 
 void main() async {
@@ -30,6 +31,7 @@ void main() async {
 
 Future<void> init() async {
   _diInit();
+  await LocalNotificationService.instance.init();
   // await Future.wait([dotenv.load()]);
 }
 

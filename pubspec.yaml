@@ -32,6 +32,8 @@ dependencies:
   widget_to_marker:
   json_annotation:
   json_serializable:
+  socket_io_client: 
+  flutter_local_notifications: ^21.0.0
     # intl_utils:   # to generate from arb 
 
 

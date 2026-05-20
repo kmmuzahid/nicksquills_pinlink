@@ -3,6 +3,8 @@
  * @Date: 2026-01-07 14:10:08
  * @Email: km.muzahid@gmail.com
  */
+import 'dart:convert';
+
 import 'package:core_kit/core_kit.dart';
 import 'package:core_kit/network/request_input.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,12 +13,15 @@ import 'package:pinlink/config/bloc/safe_cubit.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart'
     show LoginRoute, SubscriptionsRoute, OnboardingRoute;
+import 'package:pinlink/config/storage/storage.dart';
 import 'package:pinlink/config/storage/storage_key.dart';
 import 'package:pinlink/constant/enums.dart';
 import 'package:pinlink/constant/subscriptions.dart';
 import 'package:pinlink/coreFeature/auth/cubit/auth_state.dart';
+import 'package:pinlink/coreFeature/auth/model/profile_model.dart';
 import 'package:pinlink/coreFeature/auth/repository/auth_repository.dart';
 import 'package:pinlink/coreFeature/navigation/cubit/navigation_cubit.dart';
+import 'package:pinlink/coreFeature/socket/socket_service.dart';
 
 class AuthCubit extends SafeCubit<AuthState> {
   AuthCubit() : super(AuthState(subscriptionPlan: creatorPlan));
@@ -30,6 +35,7 @@ class AuthCubit extends SafeCubit<AuthState> {
     final token = await StorageService.instance.accessToken;
     if (token != null && token.isNotEmpty) {
       await getProfile();
+      SocketService.instance.connect(id: state.profile?.id ?? '');
       appRouter.replaceAll([SubscriptionsRoute(isBackDisabled: true)]);
       return;
     }
@@ -108,13 +114,7 @@ class AuthCubit extends SafeCubit<AuthState> {
   }
 
   Future<void> logout() async {
-    // final result = await _authRepository.logout(
-    //   refreshToken: state.refreshToken,
-    //   accessToken: state.accessToken,
-    // );
-    // if (result.isSuccess) {
     clearTokens();
-    // }
   }
 
   Future<void> updateSubscriptionPlan(Plan plan) async {
@@ -122,6 +122,7 @@ class AuthCubit extends SafeCubit<AuthState> {
   }
 
   Future<void> clearTokens() async {
+    SocketService.instance.disconnect();
     await StorageService.instance.clearDb();
     emit(AuthState(subscriptionPlan: freePlan));
     appRouter.replaceAll([const LoginRoute()]);
@@ -131,9 +132,16 @@ class AuthCubit extends SafeCubit<AuthState> {
   }
 
   Future<void> getProfile() async {
+    await Storage.instance.read('profile').then((value) {
+      if (value != null) {
+        emit(state.copyWith(profile: ProfileModel.fromJson(jsonDecode(value))));
+      }
+    });
+
     final result = await _authRepository.getProfile();
-    if (result.isSuccess) {
+    if (result.isSuccess && result.data != null) {
       emit(state.copyWith(profile: result.data));
+      Storage.instance.write('profile', jsonEncode(result.data?.toJson()));
     }
   }
 }

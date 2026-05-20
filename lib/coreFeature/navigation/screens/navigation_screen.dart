@@ -26,6 +26,7 @@ import 'package:pinlink/coreFeature/auth/cubit/auth_cubit.dart';
 import 'package:pinlink/coreFeature/navigation/cubit/navigation_cubit.dart';
 import 'package:pinlink/coreFeature/navigation/cubit/navigation_state.dart';
 import 'package:pinlink/coreFeature/navigation/nav_utils/navigator_item.dart';
+import 'package:pinlink/coreFeature/notification/cubit/notification_cubit.dart';
 import 'package:pinlink/coreFeature/notification/notification_button.dart';
 import 'package:pinlink/features/course_comparision/screens/add_course_screen.dart';
 import 'package:pinlink/features/golf_map/screens/golf_map_screen.dart';
@@ -82,6 +83,7 @@ class NavigationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       context.read<AuthCubit>().getProfile();
+      context.read<NotificationCubit>().init();
     });
     return BlocProvider(
       create: (context) => SocialCubit()..getAllPost(),

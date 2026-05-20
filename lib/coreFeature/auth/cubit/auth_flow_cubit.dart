@@ -25,13 +25,13 @@ class AuthFlowCubit extends SafeCubit<AuthFlowState> {
   Future<void> login(LoginEntity entity) async {
     emit(state.copyWith(isLoading: true));
     final result = await _authRepository.login(entity);
-    emit(state.copyWith(isLoading: false));
+
     if (result.isSuccess) {
       await authCubit.updateTokens(
         result.data?['accessToken'] ?? '',
         result.data?['refreshToken'] ?? '',
       );
-      appRouter.replaceAll([const NavigationRoute()]);
+      await authCubit.init();
     } else {
       showSnackBar(result.message ?? '', type: SnackBarType.error);
       if (result.statusCode == 424) {
@@ -50,6 +50,7 @@ class AuthFlowCubit extends SafeCubit<AuthFlowState> {
         );
       }
     }
+    emit(state.copyWith(isLoading: false));
   }
 
   Future<void> changePassword(ChangePasswordEntity entity) async {

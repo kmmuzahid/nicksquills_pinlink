@@ -7,10 +7,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:core_kit/core_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinlink/config/color/app_color.dart';
 import 'package:pinlink/config/route/app_router.dart';
 import 'package:pinlink/config/route/app_router.gr.dart';
 import 'package:pinlink/constant/app_string.dart' show AppString;
+import 'package:pinlink/coreFeature/notification/cubit/notification_cubit.dart';
 import 'package:pinlink/gen/assets.gen.dart';
 
 @RoutePage()
@@ -21,7 +23,7 @@ class OnboardingScreen extends StatefulWidget {
   State<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen> { 
+class _OnboardingScreenState extends State<OnboardingScreen> {
   bool showPages = false;
   List<Map<String, String>> pages = [
     {
@@ -32,17 +34,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     },
     {
       'title': 'Rate by Comparison.',
-      'subtitle': 'Simply choose which course you liked more — we’ll do the rest.',
+      'subtitle':
+          'Simply choose which course you liked more — we’ll do the rest.',
       'image': Assets.images.oboarding2.path,
     },
     {
       'title': 'Your Golf World on the Map',
-      'subtitle': 'See played courses, wishlist spots, and friends’ journeys — all in one map.',
+      'subtitle':
+          'See played courses, wishlist spots, and friends’ journeys — all in one map.',
       'image': Assets.images.onboarding3.path,
     },
     {
       'title': 'Compete, Connect, and Climb the Leaderboard',
-      'subtitle': 'Travel farther, play better courses, and rise among fellow golfers.',
+      'subtitle':
+          'Travel farther, play better courses, and rise among fellow golfers.',
       'image': Assets.images.onboarding4.path,
     },
   ];
@@ -55,6 +60,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void initState() {
     super.initState();
     pageController = PageController(initialPage: 0);
+
     pageController.addListener(() {
       setState(() {
         pageIndex = pageController.page!.round();
@@ -70,11 +76,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
- 
     return Scaffold(
-
-   
-      body: SizedBox(height: double.infinity, width: double.infinity, child: _page()),
+      body: SizedBox(
+        height: double.infinity,
+        width: double.infinity,
+        child: _page(),
+      ),
     );
   }
 
@@ -89,7 +96,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white, width: 1.5),
             borderRadius: BorderRadius.circular(15),
-            color: pageIndex == index ? ThemeColor.dark.pRIMARY_brandClr : Colors.white,
+            color: pageIndex == index
+                ? ThemeColor.dark.pRIMARY_brandClr
+                : Colors.white,
           ),
         );
       }),
@@ -104,7 +113,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             controller: pageController,
             itemCount: pages.length,
             itemBuilder: (context, index) {
-              return CommonImage(src: pages[index]['image']!, fill: BoxFit.fill);
+              return CommonImage(
+                src: pages[index]['image']!,
+                fill: BoxFit.fill,
+              );
             },
           ),
         ),
@@ -130,7 +142,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               children: [
                 80.height,
                 const Spacer(),
-                CommonImage(src: Assets.images.globe.path, height: 117, width: 86),
+                CommonImage(
+                  src: Assets.images.globe.path,
+                  height: 117,
+                  width: 86,
+                ),
                 20.height,
                 CommonText(
                   text: pages[pageIndex]['title']!,
@@ -166,17 +182,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 6),
                     child: AspectRatio(
                       aspectRatio: 1,
-                      child: CommonImage(src: Assets.images.onBoardingNextButtonPrefix),
+                      child: CommonImage(
+                        src: Assets.images.onBoardingNextButtonPrefix,
+                      ),
                     ),
                   ),
 
-                  titleText: pageIndex == pages.length - 1 ? AppString.letsStart : 'Next',
+                  titleText: pageIndex == pages.length - 1
+                      ? AppString.letsStart
+                      : 'Next',
                 ),
                 200.height,
               ],
             ),
           ),
-        )
+        ),
       ],
     );
   }

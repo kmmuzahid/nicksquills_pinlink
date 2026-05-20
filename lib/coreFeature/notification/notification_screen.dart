@@ -19,25 +19,30 @@ class NotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CommonAppBar(
-        title: AppString.notifications,
-        appbarConfig: AppbarConfig(
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.checklist_rtl, color: context.colors.tEXT_white),
+    return CubitScopeValue(
+      cubit: context.read<NotificationCubit>()..fetch(isRefresh: true),
+      builder: (context, cubit, state) {
+        return Scaffold(
+          appBar: CommonAppBar(
+            title: AppString.notifications,
+            appbarConfig: AppbarConfig(
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    cubit.notificationReadAll();
+                  },
+                  icon: Icon(
+                    Icons.checklist_rtl,
+                    color: context.colors.tEXT_white,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-      body: CubitScopeValue(
-        cubit: context.read<NotificationCubit>()..init(),
-        builder: (context, cubit, state) {
-          return SmartListLoader(
+          ),
+          body: SmartListLoader(
             itemCount: state.notifications.length,
             isLoading: state.isLoading,
-            limit: state.notifications.length,
+            limit: 20,
             onRefresh: () {
               cubit.fetch(isRefresh: true);
             },
@@ -45,16 +50,25 @@ class NotificationScreen extends StatelessWidget {
               cubit.fetch(page: page);
             },
             itemBuilder: (context, int index) {
+              final notification = state.notifications[index];
               return NotificationItemWidget(
-                title: state.notifications[index].title,
-                message: state.notifications[index].message,
-                time: state.notifications[index].time,
-                isUnread: state.notifications[index].isUnread,
+                notificationModel: notification,
+                onTap: () {
+                  cubit.notificationReadSingle(
+                    notificationId: notification.id ?? '',
+                  );
+                },
+                onReject: () {
+                  cubit.rejectFriendRequest(index: index);
+                },
+                onAccept: () {
+                  cubit.acceptFriendRequest(index: index);
+                },
               );
             },
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

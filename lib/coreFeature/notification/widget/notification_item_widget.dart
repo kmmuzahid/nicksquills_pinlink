@@ -3,31 +3,34 @@
  * @Date: 2026-01-17 09:51:26
  * @Email: km.muzahid@gmail.com
  */
+import 'package:core_kit/core_kit_internal.dart';
 import 'package:core_kit/text/common_text.dart';
+import 'package:core_kit/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:pinlink/config/color/app_color.dart';
+import 'package:pinlink/coreFeature/notification/model/notification_model.dart';
 
 class NotificationItemWidget extends StatelessWidget {
-  final String title;
-  final String message;
-  final String time;
-  final bool isUnread;
+  final NotificationModel notificationModel;
   final IconData icon;
   final VoidCallback? onTap;
+  final VoidCallback onReject;
+  final VoidCallback onAccept;
 
   const NotificationItemWidget({
     super.key,
-    required this.title,
-    required this.message,
-    required this.time,
-    this.isUnread = false,
+    required this.notificationModel,
     this.icon = Icons.notifications,
     this.onTap,
+    required this.onReject,
+    required this.onAccept,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    final isFriendRequest = notificationModel.type == 'friend_request';
 
     return InkWell(
       onTap: onTap,
@@ -42,21 +45,29 @@ class NotificationItemWidget extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              height: 44,
-              width: 44,
-              decoration: BoxDecoration(
-                color: theme.colorScheme.primary.withOpacity(.15),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                icon,
-                color: isUnread
-                    ? context.colors.pRIMARY_priSoft
-                    : theme.colorScheme.primary,
-                size: 22,
-              ),
-            ),
+            isFriendRequest &&
+                    notificationModel.profile != null &&
+                    notificationModel.profile!.isNotEmpty
+                ? CommonImage(
+                    size: 44,
+                    src: notificationModel.profile!,
+                    borderRadius: 44,
+                  )
+                : Container(
+                    height: 44,
+                    width: 44,
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primary.withOpacity(.15),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      icon,
+                      color: !notificationModel.isRead
+                          ? context.colors.pRIMARY_priSoft
+                          : theme.colorScheme.primary,
+                      size: 22,
+                    ),
+                  ),
 
             const SizedBox(width: 12),
 
@@ -68,11 +79,11 @@ class NotificationItemWidget extends StatelessWidget {
                     children: [
                       Expanded(
                         child: CommonText(
-                          text: title,
+                          text: notificationModel.title ?? '',
                           maxLines: 1,
                           style: theme.textTheme.titleMedium?.copyWith(
                             color: context.colors.pRIMARY_priSoft,
-                            fontWeight: isUnread
+                            fontWeight: notificationModel.isRead
                                 ? FontWeight.w600
                                 : FontWeight.w500,
                           ),
@@ -80,9 +91,9 @@ class NotificationItemWidget extends StatelessWidget {
                       ),
 
                       CommonText(
-                        text: time,
+                        text: notificationModel.createdAt?.ago ?? '',
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: !isUnread
+                          color: notificationModel.isRead
                               ? context.colors.tEXT_subDark
                               : context.colors.tEXT_white,
                           fontSize: 12,
@@ -94,15 +105,48 @@ class NotificationItemWidget extends StatelessWidget {
                   const SizedBox(height: 4),
 
                   Text(
-                    message,
+                    notificationModel.message ?? '',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: !isUnread
+                      color: notificationModel.isRead
                           ? context.colors.tEXT_subDark
                           : context.colors.tEXT_white,
                     ),
                   ),
+
+                  if (isFriendRequest) ...[
+                    8.height,
+                    Row(
+                      mainAxisAlignment: .center,
+                      children: [
+                        CommonButton(
+                          buttonColor: Colors.transparent,
+                          borderColor:
+                              context.colors.bACKGROUND_darkCardBoarder,
+                          titleColor: context.colors.sTATUS_error,
+                          buttonHeight: 40,
+                          onTap: () {
+                            onReject();
+                          },
+                          titleText: 'Reject',
+                        ),
+
+                        const SizedBox(width: 12),
+                        CommonButton(
+                          buttonColor: Colors.transparent,
+                          borderColor:
+                              context.colors.bACKGROUND_darkCardBoarder,
+                          titleColor: context.colors.tEXT_white,
+                          buttonHeight: 40,
+                          onTap: () {
+                            onAccept();
+                          },
+                          titleText: 'Accept',
+                        ),
+                      ],
+                    ),
+                  ],
                 ],
               ),
             ),
